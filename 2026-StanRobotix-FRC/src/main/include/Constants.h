@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <rev/SparkMax.h>
+
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants.  This should not be used for any other
@@ -19,3 +21,10 @@ namespace OperatorConstants {
 inline constexpr int kDriverControllerPort = 0;
 
 }  // namespace OperatorConstants
+
+namespace ClimbConstants {
+    constexpr int deviceIDSparkMax1 = 1;
+    constexpr int deviceIDSparkMax2 = 2;
+    constexpr rev::spark::SparkLowLevel::MotorType motorTypeSparkMax1 = rev::spark::SparkLowLevel::MotorType::kBrushless;
+    constexpr rev::spark::SparkLowLevel::MotorType motorTypeSparkMax2 = rev::spark::SparkLowLevel::MotorType::kBrushless;
+}
