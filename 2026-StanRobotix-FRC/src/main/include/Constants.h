@@ -38,6 +38,20 @@ namespace PathPlannerConstants {
     constexpr double kPathPlannerSpeedModulation = 1.0;
 }
 
+namespace SwerveModuleConstants {
+    constexpr rev::spark::SparkLowLevel::MotorType kNeoMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+    constexpr rev::spark::SparkBase::ResetMode kNeoResetMode = rev::spark::SparkBase::ResetMode::kNoResetSafeParameters;
+    constexpr rev::spark::SparkBase::PersistMode kNeoPersistMode = rev::spark::SparkBase::PersistMode::kPersistParameters;
+
+    constexpr rev::spark::SparkLowLevel::MotorType kNeo550MotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+    constexpr rev::spark::SparkBase::ResetMode kNeo550ResetMode = rev::spark::SparkBase::ResetMode::kNoResetSafeParameters;
+    constexpr rev::spark::SparkBase::PersistMode kNeo550PersistMode = rev::spark::SparkBase::PersistMode::kPersistParameters;
+
+    constexpr double kP = 3.0;
+    constexpr double kI = 0.1;
+    constexpr double kD = 0.05;
+}
+
 namespace DriveTrainConstants {
     constexpr int kBackRightMotorID = 6;
     constexpr int kBackRightMotor550ID = 5;
@@ -48,22 +62,19 @@ namespace DriveTrainConstants {
     constexpr int kBackLeftMotorID = 4;
     constexpr int kBackLeftMotor550ID = 3;
 
+    // We take for granted a rectangular frame 
+    // TODO: Input the new offset for the frame
     constexpr units::meter_t kSwerveModuleOffsetFront = 0.3683_m;
     constexpr units::meter_t kSwerveModuleOffsetBack = -0.3683_m;
     constexpr units::meter_t kSwerveModuleOffsetRight = -0.3556_m;
     constexpr units::meter_t kSwerveModuleOffsetLeft = 0.3556_m;
 
-    constexpr double kSecToMinFactor = 60; // 60 seconds in a minute (to convert from RPM et rotation per second)
-    constexpr units::meters_per_second_t kSpeedConstant = 0.5_mps;
-    constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 0.2_rad_per_s;
-    constexpr double kGearRatio = 5.08;                               // 5.08 rotations of the motor for 1 rotation of the ouput
-    constexpr double kWheelPerimeter = 3 * 0.0254 * std::numbers::pi; // in meters
+    constexpr units::meters_per_second_t kSpeedConstant = 0.5_mps;                            // Temporary value
+    constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 0.2_rad_per_s; // Temporary value
 
-    namespace PIDs {
-        constexpr double kP = 3.0;
-        constexpr double kI = 0.1;
-        constexpr double kD = 0.05;
-    }
+    constexpr double kSecToMinFactor = 60;                            // 60 seconds in a minute (to convert from RPM et rotation per second)
+    constexpr double kGearRatio = 5.08;                               // 5.08 rotations of the motor for 1 rotation of the ouput
+    constexpr double kWheelPerimeter = 3 * 0.0254 * std::numbers::pi; // in meters (diametre in inches * convertion to meters * pi)
 }
 
 namespace LimelightConstants {

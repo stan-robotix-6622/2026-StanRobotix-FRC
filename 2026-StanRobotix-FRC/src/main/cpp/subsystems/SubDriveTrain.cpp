@@ -85,7 +85,7 @@ void SubDriveTrain::Periodic()
     
     m_poseEstimator->Update(gyroAngle, SubDriveTrain::getSwerveModulePositions());
 
-    // Update de la rotation du robot
+    // Update la rotation du robot pour la Limelight
     LimelightHelpers::SetRobotOrientation("", mIMU->getAngleYaw(), mIMU->getYawRate(), 0, 0, 0, 0);
 
     mt2 = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("");
