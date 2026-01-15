@@ -19,3 +19,12 @@ namespace OperatorConstants {
 inline constexpr int kDriverControllerPort = 0;
 
 }  // namespace OperatorConstants
+
+namespace IntakeConstants {
+    constexpr int kMotorid = 0;
+    constexpr int kSpeed = 0;
+}
+
+namespace XboxConstants {
+    constexpr int kXboxPort = 0;
+}

@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "RobotContainer.h"
-
 #include <frc2/command/button/Trigger.h>
 
 #include "commands/Autos.h"
@@ -12,6 +11,8 @@
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
 
+  m_xboxController = new frc::XboxController(XboxConstants::kXboxPort);
+  m_SubIntake = new SubIntake;
   // Configure the button bindings
   ConfigureBindings();
 }
@@ -19,6 +20,11 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
+  frc2::Trigger([this] {
+    return m_xboxController->GetAButtonPressed();
+  }).ToggleOnTrue(frc2::RunCommand([this] {
+    m_SubIntake->Keep();
+  }, {m_SubIntake}).ToPtr());
   // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
   frc2::Trigger([this] {
     return m_subsystem.ExampleCondition();
@@ -27,6 +33,7 @@ void RobotContainer::ConfigureBindings() {
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.
   m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
+
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
