@@ -4,14 +4,14 @@
 
 #include "subsystems/SwerveModule.h"
 
-SwerveModule::SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iSetInveryed = false)
+SwerveModule::SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iSetInverted)
 {
     // Initialization of the motor controllers with the motorID constructor input
-    m_MotorNeo = new rev::spark::SparkMax{iNeoMotorID, SwerveModuleConstants::kNeoMotorType};
-    m_MotorNeo550 = new rev::spark::SparkMax{iNeo550MotorID, SwerveModuleConstants::kNeo550MotorType};
+    m_MotorNeo = new rev::spark::SparkMax{iNeoMotorID, rev::spark::SparkLowLevel::MotorType::kBrushless};
+    m_MotorNeo550 = new rev::spark::SparkMax{iNeo550MotorID, rev::spark::SparkLowLevel::MotorType::kBrushless};
 
     m_NeoConfig = new rev::spark::SparkMaxConfig{};
-    m_NeoConfig->Inverted(iSetInveryed);
+    m_NeoConfig->Inverted(iSetInverted);
     m_NeoConfig->alternateEncoder.PositionConversionFactor(1 / DriveTrainConstants::kGearRatio);
     m_NeoConfig->alternateEncoder.VelocityConversionFactor(1 / DriveTrainConstants::kGearRatio); // Multiply the results of the encoder by about 0.1968503937
 
@@ -20,8 +20,8 @@ SwerveModule::SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iSetInverye
     m_Neo550Config->absoluteEncoder.PositionConversionFactor(2 * std::numbers::pi); // To get the position in radians
     m_Neo550Config->absoluteEncoder.VelocityConversionFactor(2 * std::numbers::pi); // To get the velocity in radians per second
 
-    m_MotorNeo->Configure(*m_NeoConfig, SwerveModuleConstants::kNeoResetMode, SwerveModuleConstants::kNeoPersistMode);
-    m_MotorNeo550->Configure(*m_Neo550Config, SwerveModuleConstants::kNeo550ResetMode, SwerveModuleConstants::kNeo550PersistMode);
+    m_MotorNeo->Configure(*m_NeoConfig, rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kPersistParameters);
+    m_MotorNeo550->Configure(*m_Neo550Config, rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kPersistParameters);
 
     // Initialization of the PIDController with the P,I and D constants and a continuous input from -pi to pi
     m_Neo550PID = new frc::PIDController{SwerveModuleConstants::kP, SwerveModuleConstants::kI, SwerveModuleConstants::kD};
@@ -41,9 +41,10 @@ SwerveModule::SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iSetInverye
 frc::SwerveModuleState SwerveModule::optimizeState(frc::SwerveModuleState iDesiredState)
 {
     frc::Rotation2d Neo550CurrentAngle(units::radian_t(m_Neo550AbsoluteEncoder->GetPosition()));
-    frc::SwerveModuleState OptimizedState = frc::SwerveModuleState::Optimize(iDesiredState, Neo550CurrentAngle);
-    OptimizedState.CosineScale(Neo550CurrentAngle);
-    return OptimizedState;
+    frc::SwerveModuleState oOptimizedState = iDesiredState;
+    oOptimizedState.Optimize(Neo550CurrentAngle);
+    oOptimizedState.CosineScale(Neo550CurrentAngle);
+    return oOptimizedState;
 }
 
 void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState, double SpeedModulation)

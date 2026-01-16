@@ -76,7 +76,7 @@ class SubDriveTrain : public frc2::SubsystemBase {
   // Declaring my swerve kinematics object
   frc::SwerveDriveKinematics<4> * m_kinematics;
   // Declaring the robot starting pose object
-  frc::Pose2d * m_startingRobotPose;
+  frc::Pose2d * m_startingRobotPose = new frc::Pose2d{0_m, 0_m, 0_rad};
   // Declaring the swerve odometry object
   frc::SwerveDriveOdometry<4> * m_odometry;
   // Declaring the pose estimator
@@ -84,8 +84,6 @@ class SubDriveTrain : public frc2::SubsystemBase {
 
   wpi::array<double, 3> * visionMeasurementStdDevs;
   wpi::array<double, 3> * stateStdDevs;
-
-  frc::Pose2d * m_startingRobotPose = new frc::Pose2d{0_m, 0_m, 0_rad};
 
   // Declaring the IMU object
   SubIMU * mIMU = nullptr;

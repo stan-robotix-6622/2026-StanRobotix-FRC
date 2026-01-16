@@ -39,13 +39,13 @@ namespace PathPlannerConstants {
 }
 
 namespace SwerveModuleConstants {
-    constexpr rev::spark::SparkLowLevel::MotorType kNeoMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
-    constexpr rev::spark::SparkBase::ResetMode kNeoResetMode = rev::spark::SparkBase::ResetMode::kNoResetSafeParameters;
-    constexpr rev::spark::SparkBase::PersistMode kNeoPersistMode = rev::spark::SparkBase::PersistMode::kPersistParameters;
+    // constexpr rev::spark::SparkLowLevel::MotorType kNeoMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+    // constexpr revz::ResetMode kNeoResetMode = revz::ResetMode::kNoResetSafeParameters;
+    // constexpr revz::PersistMode kNeoPersistMode = revz::PersistMode::kPersistParameters;
 
-    constexpr rev::spark::SparkLowLevel::MotorType kNeo550MotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
-    constexpr rev::spark::SparkBase::ResetMode kNeo550ResetMode = rev::spark::SparkBase::ResetMode::kNoResetSafeParameters;
-    constexpr rev::spark::SparkBase::PersistMode kNeo550PersistMode = rev::spark::SparkBase::PersistMode::kPersistParameters;
+    // constexpr rev::spark::SparkLowLevel::MotorType kNeo550MotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+    // constexpr revz::ResetMode kNeo550ResetMode = revz::ResetMode::kNoResetSafeParameters;
+    // constexpr revz::PersistMode kNeo550PersistMode = revz::PersistMode::kPersistParameters;
 
     constexpr double kP = 3.0;
     constexpr double kI = 0.1;
