@@ -19,3 +19,14 @@ namespace OperatorConstants {
 inline constexpr int kDriverControllerPort = 0;
 
 }  // namespace OperatorConstants
+
+namespace ShooterConstants {
+
+
+    constexpr units::volt_t kVoltage = 1_V; //its a placeholder
+
+    constexpr int kCANid = 1;//its a placeholder too :)
+
+
+
+}

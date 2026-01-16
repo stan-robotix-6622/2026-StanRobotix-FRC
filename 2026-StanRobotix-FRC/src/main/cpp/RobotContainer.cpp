@@ -5,12 +5,18 @@
 #include "RobotContainer.h"
 
 #include <frc2/command/button/Trigger.h>
+#include <frc2/command/Commands.h>
+
+
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
+#include "Constants.h"
+
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
+  mShooter = new Shooter;
 
   // Configure the button bindings
   ConfigureBindings();
@@ -18,6 +24,7 @@ RobotContainer::RobotContainer() {
 
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
+
 
   // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
   frc2::Trigger([this] {
@@ -27,9 +34,15 @@ void RobotContainer::ConfigureBindings() {
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.
   m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
-}
+
+  m_driverController.X().WhileTrue(frc2::cmd::RunEnd(
+    [this] {mShooter->setVoltage(ShooterConstants::kVoltage);},
+    [this]{mShooter->setVoltage(0_V);}, {mShooter}));
+};
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
   return autos::ExampleAuto(&m_subsystem);
 }
+
+
