@@ -7,8 +7,8 @@
 SwerveModule::SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iSetInverted)
 {
     // Initialization of the motor controllers with the motorID constructor input
-    m_MotorNeo = new rev::spark::SparkMax{iNeoMotorID, rev::spark::SparkLowLevel::MotorType::kBrushless};
-    m_MotorNeo550 = new rev::spark::SparkMax{iNeo550MotorID, rev::spark::SparkLowLevel::MotorType::kBrushless};
+    m_MotorNeo = new rev::spark::SparkMax{iNeoMotorID, SwerveModuleConstants::kNeoMotorType};
+    m_MotorNeo550 = new rev::spark::SparkMax{iNeo550MotorID, SwerveModuleConstants::kNeo550MotorType};
 
     m_NeoConfig = new rev::spark::SparkMaxConfig{};
     m_NeoConfig->Inverted(iSetInverted);
@@ -20,8 +20,8 @@ SwerveModule::SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iSetInverte
     m_Neo550Config->absoluteEncoder.PositionConversionFactor(2 * std::numbers::pi); // To get the position in radians
     m_Neo550Config->absoluteEncoder.VelocityConversionFactor(2 * std::numbers::pi); // To get the velocity in radians per second
 
-    m_MotorNeo->Configure(*m_NeoConfig, rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kPersistParameters);
-    m_MotorNeo550->Configure(*m_Neo550Config, rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kPersistParameters);
+    m_MotorNeo->Configure(*m_NeoConfig, SwerveModuleConstants::kNeoResetMode, SwerveModuleConstants::kNeoPersistMode);
+    m_MotorNeo550->Configure(*m_Neo550Config, SwerveModuleConstants::kNeo550ResetMode, SwerveModuleConstants::kNeo550PersistMode);
 
     // Initialization of the PIDController with the P,I and D constants and a continuous input from -pi to pi
     m_Neo550PID = new frc::PIDController{SwerveModuleConstants::kP, SwerveModuleConstants::kI, SwerveModuleConstants::kD};

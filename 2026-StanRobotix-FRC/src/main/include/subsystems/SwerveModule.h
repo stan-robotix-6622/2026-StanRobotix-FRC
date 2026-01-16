@@ -5,12 +5,12 @@
 #pragma once
 
 #include <rev/SparkMax.h>
-#include <rev/RelativeEncoder.h>
 #include <rev/AbsoluteEncoder.h>
+#include <rev/RelativeEncoder.h>
 #include <rev/config/SparkMaxConfig.h>
-#include <frc/kinematics/SwerveModuleState.h>
-#include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/controller/PIDController.h>
+#include <frc/kinematics/SwerveModulePosition.h>
+#include <frc/kinematics/SwerveModuleState.h>
 #include <units/velocity.h>
 #include <units/angle.h>
 
