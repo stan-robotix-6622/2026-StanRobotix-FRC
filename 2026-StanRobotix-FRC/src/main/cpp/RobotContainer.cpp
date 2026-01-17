@@ -12,11 +12,13 @@
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
 #include "Constants.h"
+#include "commands/Index.h"
 
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
-  mShooter = new Shooter;
+  m_subShooter = new subShooter;
+  m_subIndexer = new subIndexer;
 
   // Configure the button bindings
   ConfigureBindings();
@@ -36,8 +38,12 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
 
   m_driverController.X().WhileTrue(frc2::cmd::RunEnd(
-    [this] {mShooter->setVoltage(ShooterConstants::kVoltage);},
-    [this]{mShooter->setVoltage(0_V);}, {mShooter}));
+    [this] {m_subShooter->setVoltage(subShooterConstants::kVoltage);},
+    [this]{m_subShooter->setVoltage(0_V);}, {m_subShooter}));
+
+  frc2::Trigger([this] {
+    return m_XboxController.GetAButtonPressed();
+  }).OnTrue(Index(m_subIndexer).ToPtr());
 };
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

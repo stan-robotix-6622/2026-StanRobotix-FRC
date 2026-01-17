@@ -9,9 +9,9 @@
 #include "Constants.h"
 
 
-class Shooter : public frc2::SubsystemBase {
+class subShooter : public frc2::SubsystemBase {
  public:
-  Shooter();
+  subShooter();
 
   void setVoltage(units::volt_t iOutput);
 

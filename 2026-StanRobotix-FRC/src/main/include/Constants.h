@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #pragma once
+#include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -20,13 +21,15 @@ inline constexpr int kDriverControllerPort = 0;
 
 }  // namespace OperatorConstants
 
-namespace ShooterConstants {
-
+namespace subShooterConstants {
 
     constexpr units::volt_t kVoltage = 1_V; //its a placeholder
 
     constexpr int kCANid = 1;//its a placeholder too :)
+}
 
-
-
+namespace subIndexConstants {
+    
+    constexpr units::volt_t kVoltage = 2_V; //placeholder
+    constexpr int kCANid = 69; //PLACEHOLDEERR
 }
