@@ -33,9 +33,11 @@ SwerveModule::SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iSetInverte
     m_Neo550AbsoluteEncoder = new rev::spark::SparkAbsoluteEncoder{m_MotorNeo550->GetAbsoluteEncoder()};
 
     // Initialization of the molule's SwerveModulePosition and SwerveModuleState from the encoder's velocity and position
-    SwerveModule::refreshModule();
-    m_ModuleState = getModuleState();
-    m_ModulePosition = getModulePosition();
+    // SwerveModule::refreshModule();
+    m_ModuleState = new frc::SwerveModuleState{units::meters_per_second_t(m_NeoEncoder->GetVelocity() * DriveTrainConstants::kWheelPerimeter / DriveTrainConstants::kSecToMinFactor),
+                                            frc::Rotation2d(units::radian_t(m_Neo550AbsoluteEncoder->GetPosition()))};
+    m_ModulePosition = new frc::SwerveModulePosition{units::meter_t(m_NeoEncoder->GetPosition() * DriveTrainConstants::kWheelPerimeter),
+                                                  frc::Rotation2d(units::radian_t(m_Neo550AbsoluteEncoder->GetPosition()))};
 }
 
 frc::SwerveModuleState SwerveModule::optimizeState(frc::SwerveModuleState iDesiredState)

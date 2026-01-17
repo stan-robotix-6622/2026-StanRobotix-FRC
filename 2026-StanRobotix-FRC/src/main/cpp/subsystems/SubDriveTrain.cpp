@@ -31,7 +31,7 @@ SubDriveTrain::SubDriveTrain(SubIMU * iIMU)
     m_kinematics = new frc::SwerveDriveKinematics<4>{*m_frontLeftLocation, *m_frontRightLocation, *m_backLeftLocation, *m_backRightLocation};
 
     // Initialization of the swerve pose estimator with the kinematics, the robot's rotation, an array of the SwerveModules' position, and the robot's pose
-    m_poseEstimator = new frc::SwerveDrivePoseEstimator<4>{*m_kinematics, mIMU->getRotation2d(), SubDriveTrain::getSwerveModulePositions(), *m_startingRobotPose};
+    m_poseEstimator = new frc::SwerveDrivePoseEstimator<4>{*m_kinematics, frc::Rotation2d(0_rad), SubDriveTrain::getSwerveModulePositions(), *m_startingRobotPose};
 
 	// Initialization des standard deviations de la vision
     visionMeasurementStdDevs = new wpi::array<double, 3>{LimelightConstants::kPoseEstimatorStandardDeviationX,
@@ -39,36 +39,36 @@ SubDriveTrain::SubDriveTrain(SubIMU * iIMU)
                                                          LimelightConstants::kPoseEstimatorStandardDeviationYaw};
     m_poseEstimator->SetVisionMeasurementStdDevs(*visionMeasurementStdDevs);
 
-    // pathplanner::AutoBuilder::configure(
-    //     [this]()
-    //     { return getPose(); }, // Robot pose supplier
-    //     [this](frc::Pose2d pose)
-    //     { resetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
-    //     [this]()
-    //     { return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    //     [this](auto speeds, auto feedforwards)
-    //     { driveRobotRelative(speeds, PathPlannerConstants::kPathPlannerSpeedModulation); },                                                                                                           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-    //     std::make_shared<pathplanner::PPHolonomicDriveController>(                                                                                    // PPHolonomicController is the built in path following controller for holonomic drive trains
-    //         pathplanner::PIDConstants(PathPlannerConstants::kPTranslation, PathPlannerConstants::kITranslation, PathPlannerConstants::kDTranslation), // Translation PID constants
-    //         pathplanner::PIDConstants(PathPlannerConstants::kPRotation, PathPlannerConstants::kIRotation, PathPlannerConstants::kDRotation)           // Rotation PID constants
-    //         ),
-    //     config, // The robot configuration
-    //     []()
-    //     {
-    //         // Boolean supplier that controls when the path will be mirrored for the red alliance
-    //         // This will flip the path being followed to the red side of the field.
-    //         // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+//     pathplanner::AutoBuilder::configure(
+//         [this]()
+//         { return getPose(); }, // Robot pose supplier
+//         [this](frc::Pose2d pose)
+//         { resetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
+//         [this]()
+//         { return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+//         [this](auto speeds, auto feedforwards)
+//         { driveRobotRelative(speeds, PathPlannerConstants::kPathPlannerSpeedModulation); },                                                                                                           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+//         std::make_shared<pathplanner::PPHolonomicDriveController>(                                                                                    // PPHolonomicController is the built in path following controller for holonomic drive trains
+//             pathplanner::PIDConstants(PathPlannerConstants::kPTranslation, PathPlannerConstants::kITranslation, PathPlannerConstants::kDTranslation), // Translation PID constants
+//             pathplanner::PIDConstants(PathPlannerConstants::kPRotation, PathPlannerConstants::kIRotation, PathPlannerConstants::kDRotation)           // Rotation PID constants
+//             ),
+//         config, // The robot configuration
+//         []()
+//         {
+//             // Boolean supplier that controls when the path will be mirrored for the red alliance
+//             // This will flip the path being followed to the red side of the field.
+//             // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-    //         std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
-    //         std::cout << alliance.value() << std::endl;
-    //         if (alliance) {
-    //             std::cout << alliance.value() << std::endl;
-    //             return alliance.value() == frc::DriverStation::Alliance::kRed;
-    //         }
-    //         return false;
-    //     },
-    //     this // Reference to this subsystem to set requirements
-    // );
+//             std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
+//             std::cout << alliance.value() << std::endl;
+//             if (alliance) {
+//                 std::cout << alliance.value() << std::endl;
+//                 return alliance.value() == frc::DriverStation::Alliance::kRed;
+//             }
+//             return false;
+//         },
+//         this // Reference to this subsystem to set requirements
+//     );
 }
 
 // This method will be called once per scheduler run
@@ -86,29 +86,29 @@ void SubDriveTrain::Periodic()
     m_poseEstimator->Update(gyroAngle, SubDriveTrain::getSwerveModulePositions());
 
     // Update la rotation du robot pour la Limelight
-    // LimelightHelpers::SetRobotOrientation("", mIMU->getAngleYaw(), mIMU->getYawRate(), 0, 0, 0, 0);
+    LimelightHelpers::SetRobotOrientation("", mIMU->getAngleYaw(), mIMU->getYawRate(), 0, 0, 0, 0);
 
-    // mt2 = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("");
+    mt2 = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("");
 
-    // bool rejectUpdate = false;
+    bool rejectUpdate = false;
 
-    // if (abs(mIMU->getYawRate()) > 360)
-    // {
-    //     rejectUpdate = true;
-    // }
-    // else if (mt2.tagCount == 0)
-    // {
-    //     rejectUpdate = true;
-    // }
-    // else if (mt2.pose == frc::Pose2d(0_m, 0_m, 0_rad))
-    // {
-    //     rejectUpdate = true;
-    // }
+    if (abs(mIMU->getYawRate()) > 360)
+    {
+        rejectUpdate = true;
+    }
+    else if (mt2.tagCount == 0)
+    {
+        rejectUpdate = true;
+    }
+    else if (mt2.pose == frc::Pose2d(0_m, 0_m, 0_rad))
+    {
+        rejectUpdate = true;
+    }
 
-    // if (!rejectUpdate)
-    // {
-    //     m_poseEstimator->AddVisionMeasurement(mt2.pose, frc::Timer::GetFPGATimestamp());
-    // }
+    if (!rejectUpdate)
+    {
+        m_poseEstimator->AddVisionMeasurement(mt2.pose, frc::Timer::GetFPGATimestamp());
+    }
     
     // Publication de valeurs sur le NetworkTables
     m_currentChassisSpeedsPublisher.Set(getRobotRelativeSpeeds());

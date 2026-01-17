@@ -26,7 +26,7 @@ namespace OperatorConstants {
 } // namespace OperatorConstants
 
 namespace IMUConstants {
-    constexpr int kCanID = 1;
+    constexpr int kCanID = 10;
 }
 
 namespace PathPlannerConstants {
