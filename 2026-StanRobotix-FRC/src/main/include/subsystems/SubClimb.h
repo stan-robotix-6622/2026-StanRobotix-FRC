@@ -5,12 +5,14 @@
 #pragma once
 #include <rev/SparkMax.h>
 #include <frc2/command/SubsystemBase.h>
-#include <Constants.h>
+#include "Constants.h"
+#include <rev/SparkMaxConfig.h>
 
 class SubClimb : public frc2::SubsystemBase {
  public:
   SubClimb();
   void SetSpeed(double iSpeed);
+  void StopMotor();
   
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -23,4 +25,6 @@ class SubClimb : public frc2::SubsystemBase {
 
   rev::spark::SparkMax * mSparkMax1;
   rev::spark::SparkMax * mSparkMax2;
+  rev::spark::SparkMaxConfig * mSparkMaxConfig1;
+  rev::spark::SparkMaxConfig * mSparkMaxConfig2;
 };
