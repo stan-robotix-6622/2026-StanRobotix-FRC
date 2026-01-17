@@ -13,6 +13,8 @@ RobotContainer::RobotContainer() {
 
   m_xboxController = new frc::XboxController(XboxConstants::kXboxPort);
   m_SubIntake = new SubIntake;
+  m_stateofbutton = false;
+
   // Configure the button bindings
   ConfigureBindings();
 }
@@ -22,8 +24,15 @@ void RobotContainer::ConfigureBindings() {
 
   frc2::Trigger([this] {
     return m_xboxController->GetAButtonPressed();
-  }).ToggleOnTrue(frc2::RunCommand([this] {
-    m_SubIntake->Keep();
+  }).OnTrue(frc2::RunCommand([this] {
+    if(m_stateofbutton){
+      m_SubIntake->Keep();
+      m_stateofbutton=true;
+    }
+    else{
+      m_SubIntake->Stop();
+      m_stateofbutton=false;
+    }
   }, {m_SubIntake}).ToPtr());
   // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
   frc2::Trigger([this] {

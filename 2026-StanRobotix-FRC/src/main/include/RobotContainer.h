@@ -37,5 +37,7 @@ class RobotContainer {
 
   SubIntake * m_SubIntake;
 
+  bool m_stateofbutton;
+
   void ConfigureBindings();
 };
