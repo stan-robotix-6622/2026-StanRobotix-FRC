@@ -6,7 +6,7 @@
 #include <rev/SparkMax.h>
 #include <frc2/command/SubsystemBase.h>
 #include "Constants.h"
-#include <rev/SparkMaxConfig.h>
+#include <rev/config/SparkMaxConfig.h>
 
 class SubClimb : public frc2::SubsystemBase {
  public:
