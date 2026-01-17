@@ -8,6 +8,7 @@
 
 #include <frc/TimedRobot.h>
 #include <frc2/command/CommandPtr.h>
+#include <ctre/phoenix6/SignalLogger.hpp>
 
 #include "RobotContainer.h"
 

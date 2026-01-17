@@ -20,7 +20,6 @@ SwerveModule::SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iInverted)
 
     // Initialization of the motor's encoders and absolute encoder
     m_NeoEncoder = new rev::spark::SparkRelativeEncoder{m_MotorNeo->GetEncoder()};
-    m_Neo550Encoder = new rev::spark::SparkRelativeEncoder{m_MotorNeo550->GetEncoder()};
     m_Neo550AbsoluteEncoder = new rev::spark::SparkAbsoluteEncoder{m_MotorNeo550->GetAbsoluteEncoder()};
 
     // Initialization of the molule's SwerveModulePosition and SwerveModuleState from the encoder's velocity and position
@@ -32,20 +31,18 @@ SwerveModule::SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iInverted)
 
 frc::SwerveModuleState SwerveModule::optimizeState(frc::SwerveModuleState iDesiredState)
 {
-    frc::SwerveModuleState OptimizedState = iDesiredState;
-    frc::Rotation2d Neo550CurrentAngle(units::degree_t(m_Neo550AbsoluteEncoder->GetPosition() - 0.5) * 360);
-    OptimizedState.Optimize(Neo550CurrentAngle);
-    OptimizedState.CosineScale(Neo550CurrentAngle);
-    return OptimizedState;
+    mNeo550CurrentAngle = (units::degree_t(m_Neo550AbsoluteEncoder->GetPosition() - 0.5) * 360);
+    iDesiredState.Optimize(mNeo550CurrentAngle);
+    iDesiredState.CosineScale(mNeo550CurrentAngle);
+    return iDesiredState;
 }
 
 void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState, double SpeedModulation)
 {
-    frc::SwerveModuleState OptimizedState = optimizeState(iDesiredState);
-    m_Neo550PID->SetSetpoint(double(OptimizedState.angle.Radians() / (2 * std::numbers::pi)) + 0.5);
+    mOptimizedState = optimizeState(iDesiredState);
+    m_Neo550PID->SetSetpoint(double(mOptimizedState.angle.Radians() / (2 * std::numbers::pi)) + 0.5);
     m_MotorNeo550->Set(m_Neo550PID->Calculate(m_Neo550AbsoluteEncoder->GetPosition()));
-    m_MotorNeo->Set(double(OptimizedState.speed * SpeedModulation));
-    // std::cout << m_Neo550PID->Calculate(m_Neo550AbsoluteEncoder->GetPosition()) << std::endl;
+    m_MotorNeo->Set(double(mOptimizedState.speed * SpeedModulation));
 }
 
 void SwerveModule::setNeoInverted(bool iInverted)

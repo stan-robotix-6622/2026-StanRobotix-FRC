@@ -48,10 +48,12 @@ class SwerveModule{
   rev::spark::SparkMaxConfig * m_Neo550Config;
 
   rev::spark::SparkRelativeEncoder * m_NeoEncoder;
-  rev::spark::SparkRelativeEncoder * m_Neo550Encoder;
   rev::spark::SparkAbsoluteEncoder * m_Neo550AbsoluteEncoder;
   frc::PIDController * m_Neo550PID;
 
-  frc::SwerveModuleState * m_ModuleState;
-  frc::SwerveModulePosition * m_ModulePosition;
+  frc::Rotation2d mNeo550CurrentAngle;
+  frc::SwerveModuleState mOptimizedState;
+
+  frc::SwerveModuleState * m_ModuleState = nullptr;
+  frc::SwerveModulePosition * m_ModulePosition = nullptr;
 };

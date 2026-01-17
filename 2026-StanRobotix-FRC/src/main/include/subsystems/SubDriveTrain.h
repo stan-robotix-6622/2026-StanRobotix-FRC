@@ -89,7 +89,17 @@ class SubDriveTrain : public frc2::SubsystemBase {
   SubIMU * mIMU = nullptr;
 
   LimelightHelpers::PoseEstimate mt2;
+  bool rejectCameraUpdate;
 
+  frc::ChassisSpeeds mDesiredChassisSpeeds;
+  frc::ChassisSpeeds mCurrentChassisSpeeds;
+
+  frc::Rotation2d mCurrentRotation2d;
+
+  wpi::array<frc::SwerveModuleState, 4> mSwerveDesiredStates = {frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
+                                                                frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
+                                                                frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
+                                                                frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)}};
   // Load the RobotConfig from the GUI settings. You should probably
   // store this in your Constants file
   // pathplanner::RobotConfig config = pathplanner::RobotConfig::fromGUISettings();

@@ -11,7 +11,6 @@
 // #include <pathplanner/lib/auto/AutoBuilder.h>
 
 #include "Constants.h"
-#include "subsystems/ExampleSubsystem.h"
 #include "subsystems/SubDriveTrain.h"
 #include "subsystems/SubIMU.h"
 
@@ -30,12 +29,11 @@ class RobotContainer {
 
  private:
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  frc2::CommandXboxController * mCommandXboxController;;
+  frc2::CommandXboxController * mCommandXboxController;
 
   // The robot's subsystems are defined here...
   SubIMU * mIMU = nullptr;
   SubDriveTrain * mDriveTrain = nullptr;
-  ExampleSubsystem m_subsystem;
 
   void ConfigureBindings();
 };
