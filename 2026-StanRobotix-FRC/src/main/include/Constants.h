@@ -9,6 +9,8 @@
 #include <units/angular_velocity.h>
 #include <units/velocity.h>
 
+#include <rev/SparkMax.h> // Include SparkMax variable types
+
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants.  This should not be used for any other
@@ -39,13 +41,13 @@ namespace PathPlannerConstants {
 }
 
 namespace SwerveModuleConstants {
-    // constexpr rev::spark::SparkLowLevel::MotorType kNeoMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
-    // constexpr revz::ResetMode kNeoResetMode = revz::ResetMode::kNoResetSafeParameters;
-    // constexpr revz::PersistMode kNeoPersistMode = revz::PersistMode::kPersistParameters;
+    constexpr rev::spark::SparkLowLevel::MotorType kNeoMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+    constexpr rev::ResetMode kNeoResetMode = rev::ResetMode::kNoResetSafeParameters;
+    constexpr rev::PersistMode kNeoPersistMode = rev::PersistMode::kPersistParameters;
 
-    // constexpr rev::spark::SparkLowLevel::MotorType kNeo550MotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
-    // constexpr revz::ResetMode kNeo550ResetMode = revz::ResetMode::kNoResetSafeParameters;
-    // constexpr revz::PersistMode kNeo550PersistMode = revz::PersistMode::kPersistParameters;
+    constexpr rev::spark::SparkLowLevel::MotorType kNeo550MotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+    constexpr rev::ResetMode kNeo550ResetMode = rev::ResetMode::kNoResetSafeParameters;
+    constexpr rev::PersistMode kNeo550PersistMode = rev::PersistMode::kPersistParameters;
 
     constexpr double kP = 3.0;
     constexpr double kI = 0.1;

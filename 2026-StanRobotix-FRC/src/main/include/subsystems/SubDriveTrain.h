@@ -60,7 +60,7 @@ class SubDriveTrain : public frc2::SubsystemBase {
   frc::Translation2d * m_backRightLocation;
 
   nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
-  std::shared_ptr<nt::NetworkTable> table = inst.GetTable("Swerve");
+  std::shared_ptr<nt::NetworkTable> table = inst.GetTable("DriveTrain");
 
   nt::StructArrayPublisher<frc::SwerveModuleState> m_currentModuleStatesPublisher;
   nt::StructPublisher<frc::ChassisSpeeds> m_currentChassisSpeedsPublisher;
