@@ -41,19 +41,19 @@ class SwerveModule{
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  rev::spark::SparkMax * m_MotorNeo;
-  rev::spark::SparkMax * m_MotorNeo550;
+  rev::spark::SparkMax * mMotorNeo;
+  rev::spark::SparkMax * mMotorNeo550;
 
-  rev::spark::SparkMaxConfig * m_NeoConfig;
-  rev::spark::SparkMaxConfig * m_Neo550Config;
+  rev::spark::SparkMaxConfig * mNeoConfig;
+  rev::spark::SparkMaxConfig * mNeo550Config;
 
-  rev::spark::SparkRelativeEncoder * m_NeoEncoder;
-  rev::spark::SparkAbsoluteEncoder * m_Neo550AbsoluteEncoder;
-  frc::PIDController * m_Neo550PID;
+  rev::spark::SparkRelativeEncoder * mNeoEncoder;
+  rev::spark::SparkAbsoluteEncoder * mNeo550AbsoluteEncoder;
+  frc::PIDController * mNeo550PID;
 
   frc::Rotation2d mNeo550CurrentAngle;
   frc::SwerveModuleState mOptimizedState;
 
-  frc::SwerveModuleState * m_ModuleState = nullptr;
-  frc::SwerveModulePosition * m_ModulePosition = nullptr;
+  frc::SwerveModuleState * mModuleState = nullptr;
+  frc::SwerveModulePosition * mModulePosition = nullptr;
 };
