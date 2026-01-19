@@ -146,10 +146,11 @@ void SubDriveTrain::driveFieldRelative(float iX, float iY, float i0, double Spee
     mSwerveDesiredStates = m_kinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
 
     // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
-    m_frontLeftModule->setDesiredState(mSwerveDesiredStates[0], SpeedModulation);
-    m_frontRightModule->setDesiredState(mSwerveDesiredStates[1], SpeedModulation);
-    m_backLeftModule->setDesiredState(mSwerveDesiredStates[2], SpeedModulation);
-    m_backRightModule->setDesiredState(mSwerveDesiredStates[3], SpeedModulation);
+    // m_frontLeftModule->setDesiredState(mSwerveDesiredStates[0], SpeedModulation);
+    m_frontLeftModule->setDesiredState(frc::SwerveModuleState(0_mps, 0_rad), SpeedModulation);
+    // m_frontRightModule->setDesiredState(mSwerveDesiredStates[1], SpeedModulation);
+    // m_backLeftModule->setDesiredState(mSwerveDesiredStates[2], SpeedModulation);
+    // m_backRightModule->setDesiredState(mSwerveDesiredStates[3], SpeedModulation);
 }
 
 frc::Pose2d SubDriveTrain::getPose()
