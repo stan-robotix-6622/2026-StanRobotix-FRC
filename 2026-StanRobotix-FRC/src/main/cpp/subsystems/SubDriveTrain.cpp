@@ -47,7 +47,7 @@ SubDriveTrain::SubDriveTrain(SubIMU * iIMU)
     //     [this]()
     //     { return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
     //     [this](auto speeds, auto feedforwards)
-    //     { driveRobotRelative(speeds, PathPlannerConstants::kPathPlannerSpeedModulation); },                                                                                                           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+    //     { driveRobotRelative(speeds, PathPlannerConstants::kPathPlannerSpeedModulation); },                                                           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
     //     std::make_shared<pathplanner::PPHolonomicDriveController>(                                                                                    // PPHolonomicController is the built in path following controller for holonomic drive trains
     //         pathplanner::PIDConstants(PathPlannerConstants::kPTranslation, PathPlannerConstants::kITranslation, PathPlannerConstants::kDTranslation), // Translation PID constants
     //         pathplanner::PIDConstants(PathPlannerConstants::kPRotation, PathPlannerConstants::kIRotation, PathPlannerConstants::kDRotation)           // Rotation PID constants
@@ -75,15 +75,15 @@ SubDriveTrain::SubDriveTrain(SubIMU * iIMU)
 void SubDriveTrain::Periodic()
 {
     // Refreshing the SwerveModules' position and states
-    m_frontLeftModule->refreshModule();
+    // m_frontLeftModule->refreshModule();
     m_frontRightModule->refreshModule();
-    m_backLeftModule->refreshModule();
-    m_backRightModule->refreshModule();
+    // m_backLeftModule->refreshModule();
+    // m_backRightModule->refreshModule();
 
     // Update of the robot's pose with the robot's rotation and an array of the SwerveModules' position
     mCurrentRotation2d = mIMU->getRotation2d();
     
-    m_poseEstimator->Update(mCurrentRotation2d, getSwerveModulePositions());
+    // m_poseEstimator->Update(mCurrentRotation2d, getSwerveModulePositions());
 
     // Update la rotation du robot pour la Limelight
   
@@ -112,10 +112,10 @@ void SubDriveTrain::Periodic()
     }*/
     
     // Publication de valeurs sur le NetworkTables
-    m_currentChassisSpeedsPublisher.Set(getRobotRelativeSpeeds());
-    m_rotation2dPublisher.Set(mCurrentRotation2d.Degrees());
-    m_pose2dPublisher.Set(m_poseEstimator->GetEstimatedPosition());
-    m_currentModuleStatesPublisher.Set(getSwerveModuleStates());
+    // m_currentChassisSpeedsPublisher.Set(getRobotRelativeSpeeds());
+    // m_rotation2dPublisher.Set(mCurrentRotation2d.Degrees());
+    // m_pose2dPublisher.Set(m_poseEstimator->GetEstimatedPosition());
+    // m_currentModuleStatesPublisher.Set(getSwerveModuleStates());
 }
 
 std::array<frc::SwerveModuleState, 4> SubDriveTrain::getSwerveModuleStates()

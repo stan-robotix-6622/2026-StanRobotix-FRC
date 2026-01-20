@@ -8,6 +8,8 @@
 
 Robot::Robot() {
   ctre::phoenix6::SignalLogger::Stop();
+  StatusLogger::DisableAutoLogging();
+  StatusLogger::Stop();
 }
 
 /**

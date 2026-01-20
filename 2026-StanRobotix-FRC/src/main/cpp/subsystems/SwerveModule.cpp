@@ -48,7 +48,7 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState, double 
 
     mNeo550PID->SetSetpoint(mOptimizedState.angle.Radians().value());
     mMotorNeo550->Set(mNeo550PID->Calculate(mNeo550CurrentAngle.Radians().value()));
-    mMotorNeo->Set(mOptimizedState.speed.value());
+    // mMotorNeo->Set(mOptimizedState.speed.value());
 }
 
 frc::SwerveModuleState * SwerveModule::getModuleState()
