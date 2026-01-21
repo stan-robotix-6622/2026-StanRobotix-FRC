@@ -36,11 +36,12 @@ SwerveModule::SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iNeoInverte
     mNeo550AbsoluteEncoder = new rev::spark::SparkAbsoluteEncoder{mMotorNeo550->GetAbsoluteEncoder()};
 
     // Initialization of the molule's SwerveModulePosition and SwerveModuleState from the encoder's velocity and position
-    mModuleState = new frc::SwerveModuleState{units::meters_per_second_t(mNeoEncoder->GetVelocity() * DriveTrainConstants::kGearRatio * DriveTrainConstants::kWheelPerimeter),
-                                               frc::Rotation2d(units::radian_t(mNeo550AbsoluteEncoder->GetPosition() - 0.5) * 2 * std::numbers::pi)};
-    mModulePosition = new frc::SwerveModulePosition{units::meter_t(mNeoEncoder->GetPosition() * DriveTrainConstants::kGearRatio * DriveTrainConstants::kWheelPerimeter),
-                                                     frc::Rotation2d(units::radian_t(mNeo550AbsoluteEncoder->GetPosition() - 0.5) * 2 * std::numbers::pi)};
+    mModuleState = frc::SwerveModuleState{units::meters_per_second_t(mNeoEncoder->GetVelocity() * DriveTrainConstants::kWheelPerimeter),
+                                              frc::Rotation2d(units::radian_t(mNeo550AbsoluteEncoder->GetPosition() - 0.5))};
+    mModulePosition = frc::SwerveModulePosition{units::meter_t(mNeoEncoder->GetPosition() * DriveTrainConstants::kWheelPerimeter),
+                                                    frc::Rotation2d(units::radian_t(mNeo550AbsoluteEncoder->GetPosition() - 0.5))};
 }
+
 void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState, double SpeedModulation)
 {
     mNeo550CurrentAngle = units::radian_t(mNeo550AbsoluteEncoder->GetPosition());
@@ -53,20 +54,20 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState, double 
     // mMotorNeo->Set(mOptimizedState.speed.value());
 }
 
-frc::SwerveModuleState * SwerveModule::getModuleState()
+frc::SwerveModuleState SwerveModule::getModuleState()
 {
     return mModuleState;
 }
 
-frc::SwerveModulePosition * SwerveModule::getModulePosition()
+frc::SwerveModulePosition SwerveModule::getModulePosition()
 {
     return mModulePosition;
 }
 
 void SwerveModule::refreshModule()
 {
-    *mModuleState = frc::SwerveModuleState{units::meters_per_second_t(mNeoEncoder->GetVelocity() * DriveTrainConstants::kGearRatio * DriveTrainConstants::kWheelPerimeter),
-                                            frc::Rotation2d(units::radian_t(mNeo550AbsoluteEncoder->GetPosition() - 0.5) * 2 * std::numbers::pi)};
-    *mModulePosition = frc::SwerveModulePosition{units::meter_t(mNeoEncoder->GetPosition() * DriveTrainConstants::kGearRatio * DriveTrainConstants::kWheelPerimeter),
-                                                  frc::Rotation2d(units::radian_t(mNeo550AbsoluteEncoder->GetPosition() - 0.5) * 2 * std::numbers::pi)};
+    mModuleState = frc::SwerveModuleState{units::meters_per_second_t(mNeoEncoder->GetVelocity() * DriveTrainConstants::kWheelPerimeter),
+                                           frc::Rotation2d(units::radian_t(mNeo550AbsoluteEncoder->GetPosition() - 0.5))};
+    mModulePosition = frc::SwerveModulePosition{units::meter_t(mNeoEncoder->GetPosition() * DriveTrainConstants::kWheelPerimeter),
+                                                 frc::Rotation2d(units::radian_t(mNeo550AbsoluteEncoder->GetPosition() - 0.5))};
 }

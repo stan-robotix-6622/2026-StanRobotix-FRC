@@ -120,18 +120,18 @@ void SubDriveTrain::Periodic()
 
 std::array<frc::SwerveModuleState, 4> SubDriveTrain::getSwerveModuleStates()
 {
-    return std::array<frc::SwerveModuleState, 4> {*m_frontLeftModule->getModuleState(),
-                                                  *m_frontRightModule->getModuleState(),
-                                                  *m_backLeftModule->getModuleState(),
-                                                  *m_backRightModule->getModuleState()};
+    return std::array<frc::SwerveModuleState, 4> {m_frontLeftModule->getModuleState(),
+                                                  m_frontRightModule->getModuleState(),
+                                                  m_backLeftModule->getModuleState(),
+                                                  m_backRightModule->getModuleState()};
 }
 
 std::array<frc::SwerveModulePosition, 4> SubDriveTrain::getSwerveModulePositions()
 {
-    return std::array<frc::SwerveModulePosition, 4> {*m_frontLeftModule->getModulePosition(),
-                                                     *m_frontRightModule->getModulePosition(),
-                                                     *m_backLeftModule->getModulePosition(),
-                                                     *m_backRightModule->getModulePosition()};
+    return std::array<frc::SwerveModulePosition, 4> {m_frontLeftModule->getModulePosition(),
+                                                     m_frontRightModule->getModulePosition(),
+                                                     m_backLeftModule->getModulePosition(),
+                                                     m_backRightModule->getModulePosition()};
 }
 
 void SubDriveTrain::driveFieldRelative(float iX, float iY, float i0, double SpeedModulation)
