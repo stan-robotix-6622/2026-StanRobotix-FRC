@@ -16,11 +16,13 @@ SwerveModule::SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iNeoInverte
     mNeo550PID = new frc::PIDController{SwerveModuleConstants::kP, SwerveModuleConstants::kI, SwerveModuleConstants::kD};
     mNeo550PID->EnableContinuousInput(0, 2 * std::numbers::pi);
 
+    mNeoConfig = new rev::spark::SparkMaxConfig{};
     mNeoConfig->Inverted(iNeoInverted);
     mNeoConfig->SetIdleMode(rev::spark::SparkBaseConfig::kBrake);
     mNeoConfig->absoluteEncoder.VelocityConversionFactor(1 / DriveTrainConstants::kGearRatio);
     mNeoConfig->absoluteEncoder.PositionConversionFactor(1 / DriveTrainConstants::kGearRatio);
 
+    mNeo550Config = new rev::spark::SparkMaxConfig{};
     mNeo550Config->Inverted(false);
     mNeo550Config->SetIdleMode(rev::spark::SparkBaseConfig::kCoast);
     mNeo550Config->absoluteEncoder.VelocityConversionFactor(2 * std::numbers::pi);
