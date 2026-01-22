@@ -19,10 +19,13 @@ SubDriveTrain::SubDriveTrain(SubIMU * iIMU)
     m_backRightModule  = new SwerveModule{DriveTrainConstants::kBackRightMotorID , DriveTrainConstants::kBackRightMotor550ID};
 
     // Initialization of the Swerve Data Publishers
-    m_currentModuleStatesPublisher = table->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
-    m_currentChassisSpeedsPublisher = table->GetStructTopic<frc::ChassisSpeeds>("Current ChassisSpeeds").Publish();
-    m_rotation2dPublisher = table->GetStructTopic<frc::Rotation2d>("Current Rotation2d").Publish();
-    m_pose2dPublisher = table->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
+    m_currentModuleStatesPublisher = mNTDriveTrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
+    m_currentChassisSpeedsPublisher = mNTDriveTrainTable->GetStructTopic<frc::ChassisSpeeds>("Current ChassisSpeeds").Publish();
+    m_rotation2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Rotation2d>("Current Rotation2d").Publish();
+    m_pose2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
+    mPConstantSubscriber = mNTSwervePIDTable->GetDoubleTopic("kP").Subscribe(SwerveModuleConstants::kP);
+    mIConstantSubscriber = mNTSwervePIDTable->GetDoubleTopic("kI").Subscribe(SwerveModuleConstants::kI);
+    mDConstantSubscriber = mNTSwervePIDTable->GetDoubleTopic("kD").Subscribe(SwerveModuleConstants::kD);
 
     // Initialization of the IMU
     mIMU = iIMU;
@@ -47,7 +50,7 @@ SubDriveTrain::SubDriveTrain(SubIMU * iIMU)
     //     [this]()
     //     { return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
     //     [this](auto speeds, auto feedforwards)
-    //     { driveRobotRelative(speeds, PathPlannerConstants::kPathPlannerSpeedModulation); },                                                                                                           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+    //     { driveRobotRelative(speeds, PathPlannerConstants::kPathPlannerSpeedModulation); },                                                           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
     //     std::make_shared<pathplanner::PPHolonomicDriveController>(                                                                                    // PPHolonomicController is the built in path following controller for holonomic drive trains
     //         pathplanner::PIDConstants(PathPlannerConstants::kPTranslation, PathPlannerConstants::kITranslation, PathPlannerConstants::kDTranslation), // Translation PID constants
     //         pathplanner::PIDConstants(PathPlannerConstants::kPRotation, PathPlannerConstants::kIRotation, PathPlannerConstants::kDRotation)           // Rotation PID constants
@@ -80,7 +83,12 @@ void SubDriveTrain::Periodic()
     m_backLeftModule->refreshModule();
     m_backRightModule->refreshModule();
 
-    // Update of the robot's pose with the robot's rotation and an array of the SwerveModules' position
+    m_frontLeftModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
+    m_frontRightModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
+    m_backLeftModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
+    m_backRightModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
+
+    // // Update of the robot's pose with the robot's rotation and an array of the SwerveModules' position
     mCurrentRotation2d = mIMU->getRotation2d();
     
     m_poseEstimator->Update(mCurrentRotation2d, getSwerveModulePositions());
@@ -120,26 +128,27 @@ void SubDriveTrain::Periodic()
 
 std::array<frc::SwerveModuleState, 4> SubDriveTrain::getSwerveModuleStates()
 {
-    return std::array<frc::SwerveModuleState, 4> {*m_frontLeftModule->getModuleState(),
-                                                  *m_frontRightModule->getModuleState(),
-                                                  *m_backLeftModule->getModuleState(),
-                                                  *m_backRightModule->getModuleState()};
+    return std::array<frc::SwerveModuleState, 4> {m_frontLeftModule->getModuleState(),
+                                                  m_frontRightModule->getModuleState(),
+                                                  m_backLeftModule->getModuleState(),
+                                                  m_backRightModule->getModuleState()};
 }
 
 std::array<frc::SwerveModulePosition, 4> SubDriveTrain::getSwerveModulePositions()
 {
-    return std::array<frc::SwerveModulePosition, 4> {*m_frontLeftModule->getModulePosition(),
-                                                     *m_frontRightModule->getModulePosition(),
-                                                     *m_backLeftModule->getModulePosition(),
-                                                     *m_backRightModule->getModulePosition()};
+    return std::array<frc::SwerveModulePosition, 4> {m_frontLeftModule->getModulePosition(),
+                                                     m_frontRightModule->getModulePosition(),
+                                                     m_backLeftModule->getModulePosition(),
+                                                     m_backRightModule->getModulePosition()};
 }
 
 void SubDriveTrain::driveFieldRelative(float iX, float iY, float i0, double SpeedModulation)
 {
     // Creating a ChassisSpeeds from the wanted speeds and the robot's rotation
-    mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(DriveTrainConstants::kSpeedConstant * iX,
-                                                                        DriveTrainConstants::kSpeedConstant * iY,
-                                                                        DriveTrainConstants::kSpeedConstant0 * i0,
+    mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(0.1_mps, 0.0_mps, 0.0_rad_per_s,
+        // DriveTrainConstants::kSpeedConstant * iX,
+        //                                                                 DriveTrainConstants::kSpeedConstant * iY,
+        //                                                                 DriveTrainConstants::kSpeedConstant0 * i0,
                                                                         mIMU->getRotation2d());
 
     // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule

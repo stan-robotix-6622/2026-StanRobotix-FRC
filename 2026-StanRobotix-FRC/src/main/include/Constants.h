@@ -26,7 +26,7 @@ namespace OperatorConstants {
 } // namespace OperatorConstants
 
 namespace IMUConstants {
-    constexpr int kCanID = 10;
+    constexpr int kCanID = 0;
 }
 
 namespace PathPlannerConstants {
@@ -49,9 +49,9 @@ namespace SwerveModuleConstants {
     constexpr rev::ResetMode kNeo550ResetMode = rev::ResetMode::kNoResetSafeParameters;
     constexpr rev::PersistMode kNeo550PersistMode = rev::PersistMode::kPersistParameters;
 
-    constexpr double kP = 3.0;
-    constexpr double kI = 0.1;
-    constexpr double kD = 0.05;
+    constexpr double kP = 0.075;
+    constexpr double kI = 0.02;
+    constexpr double kD = 0.01;
 }
 
 namespace DriveTrainConstants {

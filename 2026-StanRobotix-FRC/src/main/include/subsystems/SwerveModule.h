@@ -19,20 +19,17 @@
 class SwerveModule{
  public:
 // Constructeur de la classe avec un motorID pour le Neo et un pour le Neo550
-  SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iSetInveryed = false);
-
-  void setNeoInverted(bool iInverted);
+  SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iNeoInveryed = false);
 
 // Méthode qui retourne le SwerveModulePosition du module
-  frc::SwerveModulePosition * getModulePosition();
+  frc::SwerveModulePosition getModulePosition();
 // Méthode qui retourne le SwerveModuleState du module
-  frc::SwerveModuleState * getModuleState();
-
-// Méthode qui retourne un SwerveModuleState optimisé à partir du SwerveModuleState désiré
-  frc::SwerveModuleState optimizeState(frc::SwerveModuleState iDesiredState);
+  frc::SwerveModuleState getModuleState();
 
 // Méthode qui fait rouler le module à partir du SwerveModuleState désiré
   void setDesiredState(frc::SwerveModuleState iDesiredState, double SpeedModulation);
+
+  void setPIDValues(double kP, double kI, double kD);
 
 // Méthode qui met à jour le SwerveModulePosition et le SwerveModuleState du module
   void refreshModule();
@@ -54,6 +51,6 @@ class SwerveModule{
   frc::Rotation2d mNeo550CurrentAngle;
   frc::SwerveModuleState mOptimizedState;
 
-  frc::SwerveModuleState * mModuleState = nullptr;
-  frc::SwerveModulePosition * mModulePosition = nullptr;
+  frc::SwerveModuleState mModuleState;
+  frc::SwerveModulePosition mModulePosition;
 };

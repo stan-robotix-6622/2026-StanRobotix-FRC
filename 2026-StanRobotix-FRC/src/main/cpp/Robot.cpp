@@ -7,7 +7,9 @@
 #include <frc2/command/CommandScheduler.h>
 
 Robot::Robot() {
-  ctre::phoenix6::SignalLogger::Stop();
+  // ctre::phoenix6::SignalLogger::Stop();
+  // StatusLogger::DisableAutoLogging();
+  // StatusLogger::Stop();
 }
 
 /**
