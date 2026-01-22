@@ -8,6 +8,7 @@
 #include <rev/AbsoluteEncoder.h>
 #include <rev/RelativeEncoder.h>
 #include <rev/config/SparkMaxConfig.h>
+#include <rev/SparkClosedLoopController.h>
 #include <frc/controller/PIDController.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
@@ -43,6 +44,8 @@ class SwerveModule{
 
   rev::spark::SparkMaxConfig * mNeoConfig;
   rev::spark::SparkMaxConfig * mNeo550Config;
+
+  rev::spark::SparkClosedLoopController * mNeo550ClosedLoopController;
 
   rev::spark::SparkRelativeEncoder * mNeoEncoder;
   rev::spark::SparkAbsoluteEncoder * mNeo550AbsoluteEncoder;
