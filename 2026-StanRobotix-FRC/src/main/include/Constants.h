@@ -27,4 +27,9 @@ namespace ClimbConstants {
     constexpr int deviceIDSparkMax2 = 2;
     constexpr rev::spark::SparkLowLevel::MotorType motorTypeSparkMax1 = rev::spark::SparkLowLevel::MotorType::kBrushless;
     constexpr rev::spark::SparkLowLevel::MotorType motorTypeSparkMax2 = rev::spark::SparkLowLevel::MotorType::kBrushless;
+    constexpr double kp = 0.1;
+    constexpr double ki = 0;
+    constexpr double kd = 0;
+    constexpr double kSpeedMultiplier = 0.5;
+    constexpr double kPoseUp = 0;
 }

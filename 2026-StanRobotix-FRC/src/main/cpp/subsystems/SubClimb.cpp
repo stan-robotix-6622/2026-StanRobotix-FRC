@@ -16,8 +16,10 @@ SubClimb::SubClimb() {
 
     mSparkMax1->Configure(*mSparkMaxConfig1, rev::spark::SparkBase::ResetMode::kNoResetSafeParameters, rev::spark::SparkBase::PersistMode::kPersistParameters);
     mSparkMax2->Configure(*mSparkMaxConfig2, rev::spark::SparkBase::ResetMode::kNoResetSafeParameters, rev::spark::SparkBase::PersistMode::kPersistParameters);
-}
 
+    mSparkRelativeEncoder1 = new rev::spark::SparkRelativeEncoder{mSparkMax1->GetEncoder()};
+    mSparkRelativeEncoder2 = new rev::spark::SparkRelativeEncoder{mSparkMax2->GetEncoder()};
+}
 
 // This method will be called once per scheduler run;
 void SubClimb::Periodic() {}
@@ -30,4 +32,14 @@ void SubClimb::SetSpeed(double iSpeed) {
 void SubClimb::StopMotor() {
     mSparkMax1->StopMotor();
     mSparkMax2->StopMotor();
+}
+
+double SubClimb::GetPosition() {
+   // return mSparkRelativeEncoder1->GetPosition();
+   return (mSparkRelativeEncoder1->GetPosition() + mSparkRelativeEncoder2->GetPosition()) / 2;
+}
+
+void SubClimb::ResetPosition() {
+    mSparkRelativeEncoder1->SetPosition(0);
+    mSparkRelativeEncoder2->SetPosition(0);
 }

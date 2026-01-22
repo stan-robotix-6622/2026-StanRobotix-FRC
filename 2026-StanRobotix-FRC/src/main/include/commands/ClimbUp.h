@@ -7,6 +7,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include "subsystems/SubClimb.h"
+#include <frc/controller/PIDController.h>
 
 /**
  * An example command.
@@ -15,13 +16,13 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class Climb
-    : public frc2::CommandHelper<frc2::Command, Climb> {
+class ClimbUp
+    : public frc2::CommandHelper<frc2::Command, ClimbUp> {
  public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  Climb(SubClimb * iSubClimb);
+  ClimbUp(SubClimb * iSubClimb);
 
   void Initialize() override;
 
@@ -33,4 +34,6 @@ class Climb
 
   private:
   SubClimb * mSubClimb;
+
+  frc::PIDController * mPIDController;
 };

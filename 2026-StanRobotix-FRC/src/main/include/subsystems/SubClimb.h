@@ -7,12 +7,15 @@
 #include <frc2/command/SubsystemBase.h>
 #include "Constants.h"
 #include <rev/config/SparkMaxConfig.h>
+#include <rev/SparkRelativeEncoder.h>
 
 class SubClimb : public frc2::SubsystemBase {
  public:
   SubClimb();
   void SetSpeed(double iSpeed);
   void StopMotor();
+  void ResetPosition();
+  double GetPosition();
   
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -27,4 +30,6 @@ class SubClimb : public frc2::SubsystemBase {
   rev::spark::SparkMax * mSparkMax2;
   rev::spark::SparkMaxConfig * mSparkMaxConfig1;
   rev::spark::SparkMaxConfig * mSparkMaxConfig2;
+  rev::spark::SparkRelativeEncoder * mSparkRelativeEncoder1;
+  rev::spark::SparkRelativeEncoder * mSparkRelativeEncoder2;
 };
