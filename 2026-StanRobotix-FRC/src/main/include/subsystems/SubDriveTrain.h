@@ -16,6 +16,7 @@
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
+#include <networktables/DoubleTopic.h>
 // #include <pathplanner/lib/auto/AutoBuilder.h>
 // #include <pathplanner/lib/config/RobotConfig.h>
 // #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
@@ -60,12 +61,16 @@ class SubDriveTrain : public frc2::SubsystemBase {
   frc::Translation2d * m_backRightLocation;
 
   nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
-  std::shared_ptr<nt::NetworkTable> table = inst.GetTable("DriveTrain");
+  std::shared_ptr<nt::NetworkTable> mNTDriveTrainTable = inst.GetTable("DriveTrain");
+  std::shared_ptr<nt::NetworkTable> mNTSwervePIDTable = inst.GetTable("Swerve");
 
   nt::StructArrayPublisher<frc::SwerveModuleState> m_currentModuleStatesPublisher;
   nt::StructPublisher<frc::ChassisSpeeds> m_currentChassisSpeedsPublisher;
   nt::StructPublisher<frc::Rotation2d> m_rotation2dPublisher;
   nt::StructPublisher<frc::Pose2d> m_pose2dPublisher;
+  nt::DoubleSubscriber mPConstantSubscriber;
+  nt::DoubleSubscriber mIConstantSubscriber;
+  nt::DoubleSubscriber mDConstantSubscriber;
 
   // Declaring the four SwerveModule objects
   SwerveModule * m_frontLeftModule;

@@ -54,6 +54,11 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState, double 
     // mMotorNeo->Set(mOptimizedState.speed.value());
 }
 
+void SwerveModule::setPIDValues(double kP, double kI, double kD)
+{
+    mNeo550PID->SetPID(kP, kI, kD);
+}
+
 frc::SwerveModuleState SwerveModule::getModuleState()
 {
     return mModuleState;

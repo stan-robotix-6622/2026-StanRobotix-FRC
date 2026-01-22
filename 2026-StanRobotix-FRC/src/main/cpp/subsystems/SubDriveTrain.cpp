@@ -19,10 +19,13 @@ SubDriveTrain::SubDriveTrain(SubIMU * iIMU)
     m_backRightModule  = new SwerveModule{DriveTrainConstants::kBackRightMotorID , DriveTrainConstants::kBackRightMotor550ID};
 
     // Initialization of the Swerve Data Publishers
-    m_currentModuleStatesPublisher = table->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
-    m_currentChassisSpeedsPublisher = table->GetStructTopic<frc::ChassisSpeeds>("Current ChassisSpeeds").Publish();
-    m_rotation2dPublisher = table->GetStructTopic<frc::Rotation2d>("Current Rotation2d").Publish();
-    m_pose2dPublisher = table->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
+    m_currentModuleStatesPublisher = mNTDriveTrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
+    m_currentChassisSpeedsPublisher = mNTDriveTrainTable->GetStructTopic<frc::ChassisSpeeds>("Current ChassisSpeeds").Publish();
+    m_rotation2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Rotation2d>("Current Rotation2d").Publish();
+    m_pose2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
+    mPConstantSubscriber = mNTSwervePIDTable->GetDoubleTopic("kP").Subscribe(SwerveModuleConstants::kP);
+    mIConstantSubscriber = mNTSwervePIDTable->GetDoubleTopic("kI").Subscribe(SwerveModuleConstants::kI);
+    mDConstantSubscriber = mNTSwervePIDTable->GetDoubleTopic("kD").Subscribe(SwerveModuleConstants::kD);
 
     // Initialization of the IMU
     mIMU = iIMU;
@@ -79,6 +82,11 @@ void SubDriveTrain::Periodic()
     m_frontRightModule->refreshModule();
     m_backLeftModule->refreshModule();
     m_backRightModule->refreshModule();
+
+    m_frontLeftModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
+    m_frontRightModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
+    m_backLeftModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
+    m_backRightModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
 
     // // Update of the robot's pose with the robot's rotation and an array of the SwerveModules' position
     mCurrentRotation2d = mIMU->getRotation2d();

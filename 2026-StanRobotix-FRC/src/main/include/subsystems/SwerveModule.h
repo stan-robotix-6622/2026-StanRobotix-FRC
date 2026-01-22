@@ -29,6 +29,8 @@ class SwerveModule{
 // Méthode qui fait rouler le module à partir du SwerveModuleState désiré
   void setDesiredState(frc::SwerveModuleState iDesiredState, double SpeedModulation);
 
+  void setPIDValues(double kP, double kI, double kD);
+
 // Méthode qui met à jour le SwerveModulePosition et le SwerveModuleState du module
   void refreshModule();
 
