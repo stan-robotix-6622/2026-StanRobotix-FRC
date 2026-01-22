@@ -48,5 +48,3 @@ timothee.laberge@stanislas.qc.ca <br>
 raphael.pothier@stanislas.ca <br>
 wojcik.andre2.0@gmail.com <br>
 micha.reneault@gmail.com <br>
-
-2026
