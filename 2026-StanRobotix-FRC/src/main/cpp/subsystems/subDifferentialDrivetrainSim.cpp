@@ -2,9 +2,37 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "subsystems/subDifferentialDrivetrainSim.h"
+#include "subsystems/SubDifferentialDrivetrainSim.h"
 
-subDifferentialDrivetrainSim::subDifferentialDrivetrainSim() = default;
+SubDifferentialDrivetrainSim::SubDifferentialDrivetrainSim()
+{
+    frc::SmartDashboard::PutData("Field", &m_field);
+};
 
 // This method will be called once per scheduler run
-void subDifferentialDrivetrainSim::Periodic() {}
+void SubDifferentialDrivetrainSim::Periodic() 
+{
+    m_odometry.Update(m_gyro.GetRotation2d(),
+                    units::meter_t(m_leftEncoder.GetDistance()),
+                    units::meter_t(m_rightEncoder.GetDistance()));
+    m_field.SetRobotPose(m_odometry.GetPose());
+}
+
+void SubDifferentialDrivetrainSim::SimulationPeriodic() {
+  // Set the inputs to the system. Note that we need to convert
+  // the [-1, 1] PWM signal to voltage by multiplying it by the
+  // robot controller voltage.
+  m_driveSim.SetInputs(
+    m_leftMotor.Get() * units::volt_t(frc::RobotController::GetInputVoltage()),
+    m_rightMotor.Get() * units::volt_t(frc::RobotController::GetInputVoltage()));
+  // Advance the model by 20 ms. Note that if you are running this
+  // subsystem in a separate thread or have changed the nominal timestep
+  // of TimedRobot, this value needs to match it.
+  m_driveSim.Update(20_ms);
+  // Update all of our sensors.
+  m_leftEncoderSim.SetDistance(m_driveSim.GetLeftPosition().value());
+  m_leftEncoderSim.SetRate(m_driveSim.GetLeftVelocity().value());
+  m_rightEncoderSim.SetDistance(m_driveSim.GetRightPosition().value());
+  m_rightEncoderSim.SetRate(m_driveSim.GetRightVelocity().value());
+  m_gyroSim.SetAngle(-m_driveSim.GetHeading().Degrees().value());
+}

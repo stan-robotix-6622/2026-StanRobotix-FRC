@@ -11,6 +11,7 @@
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
+  mDrivetrainSim = new SubDifferentialDrivetrainSim{};
 
   // Configure the button bindings
   ConfigureBindings();

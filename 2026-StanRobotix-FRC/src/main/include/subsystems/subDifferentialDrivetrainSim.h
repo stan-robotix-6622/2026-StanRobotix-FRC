@@ -6,27 +6,38 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc/Encoder.h>
+#include <frc/RobotController.h>
 #include <frc/simulation/EncoderSim.h>
 #include <frc/simulation/DifferentialDrivetrainSim.h>
+#include <ctre/phoenix/motorcontrol/can/WPI_BaseMotorController.h>
+#include <frc/AnalogGyro.h>
+#include <frc/simulation/AnalogGyroSim.h>
+#include <frc/smartdashboard/Field2d.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/kinematics/DifferentialDriveOdometry.h>
 
 
-
-class subDifferentialDrivetrainSim : public frc2::SubsystemBase {
+class SubDifferentialDrivetrainSim : public frc2::SubsystemBase {
  public:
-  subDifferentialDrivetrainSim();
+  SubDifferentialDrivetrainSim();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
+  void SimulationPeriodic();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
+  ctre::phoenix::motorcontrol::can::WPI_BaseMotorController m_leftMotor{0 , "T"};
+  ctre::phoenix::motorcontrol::can::WPI_BaseMotorController m_rightMotor{1, "T"};
 
+  frc::AnalogGyro m_gyro{1};
+  frc::sim::AnalogGyroSim m_gyroSim{m_gyro};
 
   // These represent our regular encoder objects, which we would
-  // create to use on a real robot.
+  // create to use on a real robot. 
   frc::Encoder m_leftEncoder{0, 1};
   frc::Encoder m_rightEncoder{2, 3};
   // These are our EncoderSim objects, which we will only use in
@@ -36,6 +47,11 @@ class subDifferentialDrivetrainSim : public frc2::SubsystemBase {
   frc::sim::EncoderSim m_rightEncoderSim{m_rightEncoder};
   
 // Create the simulation model of our drivetrain.
+
+  frc::DifferentialDriveOdometry m_odometry{
+      m_gyro.GetRotation2d(), units::meter_t{m_leftEncoder.GetDistance()},
+      units::meter_t{m_rightEncoder.GetDistance()}};
+frc::Field2d m_field;
 frc::sim::DifferentialDrivetrainSim m_driveSim{
   frc::DCMotor::CIM(2), // 2 CIM motors on each side of the drivetrain.
   7.29,               // 7.29:1 gearing reduction.
@@ -51,9 +67,9 @@ frc::sim::DifferentialDrivetrainSim m_driveSim{
   {0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005}};
 
 };
-frc::sim::DifferentialDrivetrainSim m_driveSim =
-  frc::sim::DifferentialDrivetrainSim::CreateKitbotSim(
-    frc::sim::DifferentialDrivetrainSim::KitbotMotor::DualCIMPerSide, // 2 CIMs per side.
-    frc::sim::DifferentialDrivetrainSim::KitbotGearing::k10p71,       // 10.71:1
-    frc::sim::DifferentialDrivetrainSim::KitbotWheelSize::kSixInch    // 6" diameter wheels.
-);
+// frc::sim::DifferentialDrivetrainSim m_driveSim =
+//   frc::sim::DifferentialDrivetrainSim::CreateKitbotSim(
+//     frc::sim::DifferentialDrivetrainSim::KitbotMotor::DualCIMPerSide, // 2 CIMs per side.
+//     frc::sim::DifferentialDrivetrainSim::KitbotGearing::k10p71,       // 10.71:1
+//     frc::sim::DifferentialDrivetrainSim::KitbotWheelSize::kSixInch    // 6" diameter wheels.
+// );

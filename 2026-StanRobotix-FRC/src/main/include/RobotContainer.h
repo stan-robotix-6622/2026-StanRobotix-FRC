@@ -9,6 +9,7 @@
 
 #include "Constants.h"
 #include "subsystems/ExampleSubsystem.h"
+#include "subsystems/SubDifferentialDrivetrainSim.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -30,6 +31,8 @@ class RobotContainer {
 
   // The robot's subsystems are defined here...
   ExampleSubsystem m_subsystem;
+  SubDifferentialDrivetrainSim *mDrivetrainSim;
+
 
   void ConfigureBindings();
 };
