@@ -37,8 +37,8 @@ class SubDriveTrain : public frc2::SubsystemBase {
 // Method that drives the robot in field relative drive
   void driveFieldRelative(float iX, float iY, float i0, double SpeedModulation);
 
-  std::array<frc::SwerveModuleState, 4> getSwerveModuleStates();
-  std::array<frc::SwerveModulePosition, 4> getSwerveModulePositions();
+  wpi::array<frc::SwerveModuleState, 4> getSwerveModuleStates();
+  wpi::array<frc::SwerveModulePosition, 4> getSwerveModulePositions();
 
 // Method that returns a ChassisSpeeds from the robot relative speeds
   frc::ChassisSpeeds getRobotRelativeSpeeds();
@@ -93,6 +93,7 @@ class SubDriveTrain : public frc2::SubsystemBase {
   // Declaring the IMU object
   SubIMU * mIMU = nullptr;
 
+  // These attributes are used to not create new variables every time a function is called
   // LimelightHelpers::PoseEstimate mt2;
   bool rejectCameraUpdate;
 
@@ -101,6 +102,7 @@ class SubDriveTrain : public frc2::SubsystemBase {
 
   frc::Rotation2d mCurrentRotation2d;
 
+  // The values are meant to be changed before being used
   wpi::array<frc::SwerveModuleState, 4> mSwerveDesiredStates = {frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
                                                                 frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
                                                                 frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},

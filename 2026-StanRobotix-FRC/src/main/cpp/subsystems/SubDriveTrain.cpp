@@ -126,17 +126,17 @@ void SubDriveTrain::Periodic()
     m_currentModuleStatesPublisher.Set(getSwerveModuleStates());
 }
 
-std::array<frc::SwerveModuleState, 4> SubDriveTrain::getSwerveModuleStates()
+wpi::array<frc::SwerveModuleState, 4> SubDriveTrain::getSwerveModuleStates()
 {
-    return std::array<frc::SwerveModuleState, 4> {m_frontLeftModule->getModuleState(),
+    return wpi::array<frc::SwerveModuleState, 4> {m_frontLeftModule->getModuleState(),
                                                   m_frontRightModule->getModuleState(),
                                                   m_backLeftModule->getModuleState(),
                                                   m_backRightModule->getModuleState()};
 }
 
-std::array<frc::SwerveModulePosition, 4> SubDriveTrain::getSwerveModulePositions()
+wpi::array<frc::SwerveModulePosition, 4> SubDriveTrain::getSwerveModulePositions()
 {
-    return std::array<frc::SwerveModulePosition, 4> {m_frontLeftModule->getModulePosition(),
+    return wpi::array<frc::SwerveModulePosition, 4> {m_frontLeftModule->getModulePosition(),
                                                      m_frontRightModule->getModulePosition(),
                                                      m_backLeftModule->getModulePosition(),
                                                      m_backRightModule->getModulePosition()};
@@ -174,7 +174,7 @@ void SubDriveTrain::resetPose(frc::Pose2d iRobotPose)
 frc::ChassisSpeeds SubDriveTrain::getRobotRelativeSpeeds()
 {
     // Getting the current chassis speeds from the SwerveModules' state
-    mCurrentChassisSpeeds = m_kinematics->ToChassisSpeeds(wpi::array<frc::SwerveModuleState, 4>(getSwerveModuleStates()));
+    mCurrentChassisSpeeds = m_kinematics->ToChassisSpeeds(getSwerveModuleStates());
     return mCurrentChassisSpeeds;
 }
 
