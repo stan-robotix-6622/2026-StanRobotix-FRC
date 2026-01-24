@@ -18,9 +18,9 @@ RobotContainer::RobotContainer() {
 
   mDriveTrain->SetDefaultCommand(frc2::cmd::Run(
       [this] {
-      mDriveTrain->driveFieldRelative(0,
-                                      0,
-                                      0,
+      mDriveTrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
+                                      -mCommandXboxController->GetLeftX(),
+                                      -mCommandXboxController->GetRightX(),
                                       0.3);
      },
      {mDriveTrain}));

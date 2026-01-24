@@ -15,8 +15,8 @@ SubDriveTrain::SubDriveTrain(SubIMU * iIMU)
     // Initialization of the SwerveModules with the motor IDs
     m_frontLeftModule  = new SwerveModule{DriveTrainConstants::kFrontLeftMotorID , DriveTrainConstants::kFrontLeftMotor550ID, true};
     m_frontRightModule = new SwerveModule{DriveTrainConstants::kFrontRightMotorID, DriveTrainConstants::kFrontRightMotor550ID, true};
-    m_backLeftModule   = new SwerveModule{DriveTrainConstants::kBackLeftMotorID  , DriveTrainConstants::kBackLeftMotor550ID};
-    m_backRightModule  = new SwerveModule{DriveTrainConstants::kBackRightMotorID , DriveTrainConstants::kBackRightMotor550ID};
+    m_backLeftModule   = new SwerveModule{DriveTrainConstants::kBackLeftMotorID  , DriveTrainConstants::kBackLeftMotor550ID, false};
+    m_backRightModule  = new SwerveModule{DriveTrainConstants::kBackRightMotorID , DriveTrainConstants::kBackRightMotor550ID, false};
 
     // Initialization of the Swerve Data Publishers
     m_currentModuleStatesPublisher = mNTDriveTrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
@@ -83,10 +83,10 @@ void SubDriveTrain::Periodic()
     m_backLeftModule->refreshModule();
     m_backRightModule->refreshModule();
 
-    m_frontLeftModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
-    m_frontRightModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
-    m_backLeftModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
-    m_backRightModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
+    // m_frontLeftModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
+    // m_frontRightModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
+    // m_backLeftModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
+    // m_backRightModule->setPIDValues(mPConstantSubscriber.Get(), mIConstantSubscriber.Get(), mDConstantSubscriber.Get());
 
     // // Update of the robot's pose with the robot's rotation and an array of the SwerveModules' position
     mCurrentRotation2d = mIMU->getRotation2d();
@@ -142,23 +142,22 @@ wpi::array<frc::SwerveModulePosition, 4> SubDriveTrain::getSwerveModulePositions
                                                      m_backRightModule->getModulePosition()};
 }
 
-void SubDriveTrain::driveFieldRelative(float iX, float iY, float i0, double SpeedModulation)
+void SubDriveTrain::driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation)
 {
     // Creating a ChassisSpeeds from the wanted speeds and the robot's rotation
-    mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(0.1_mps, 0.0_mps, 0.0_rad_per_s,
-        // DriveTrainConstants::kSpeedConstant * iX,
-        //                                                                 DriveTrainConstants::kSpeedConstant * iY,
-        //                                                                 DriveTrainConstants::kSpeedConstant0 * i0,
+    mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(DriveTrainConstants::kSpeedConstant * iX,
+                                                                        DriveTrainConstants::kSpeedConstant * iY,
+                                                                        DriveTrainConstants::kSpeedConstant0 * i0,
                                                                         mIMU->getRotation2d());
 
     // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
     mSwerveDesiredStates = m_kinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
 
     // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
-    m_frontLeftModule->setDesiredState(mSwerveDesiredStates[0], SpeedModulation);
-    m_frontRightModule->setDesiredState(mSwerveDesiredStates[1], SpeedModulation);
-    m_backLeftModule->setDesiredState(mSwerveDesiredStates[2], SpeedModulation);
-    m_backRightModule->setDesiredState(mSwerveDesiredStates[3], SpeedModulation);
+    m_frontLeftModule->setDesiredState(mSwerveDesiredStates[0], iSpeedModulation);
+    m_frontRightModule->setDesiredState(mSwerveDesiredStates[1], iSpeedModulation);
+    m_backLeftModule->setDesiredState(mSwerveDesiredStates[2], iSpeedModulation);
+    m_backRightModule->setDesiredState(mSwerveDesiredStates[3], iSpeedModulation);
 }
 
 frc::Pose2d SubDriveTrain::getPose()
@@ -178,14 +177,14 @@ frc::ChassisSpeeds SubDriveTrain::getRobotRelativeSpeeds()
     return mCurrentChassisSpeeds;
 }
 
-void SubDriveTrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds, double SpeedModulation)
+void SubDriveTrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds, double iSpeedModulation)
 {
     // Tansforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
     mSwerveDesiredStates = m_kinematics->ToSwerveModuleStates(iDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
 
     // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
-    m_frontLeftModule->setDesiredState(mSwerveDesiredStates[0], SpeedModulation);
-    m_frontRightModule->setDesiredState(mSwerveDesiredStates[1], SpeedModulation);
-    m_backLeftModule->setDesiredState(mSwerveDesiredStates[2], SpeedModulation);
-    m_backRightModule->setDesiredState(mSwerveDesiredStates[3], SpeedModulation);
+    m_frontLeftModule->setDesiredState(mSwerveDesiredStates[0], iSpeedModulation);
+    m_frontRightModule->setDesiredState(mSwerveDesiredStates[1], iSpeedModulation);
+    m_backLeftModule->setDesiredState(mSwerveDesiredStates[2], iSpeedModulation);
+    m_backRightModule->setDesiredState(mSwerveDesiredStates[3], iSpeedModulation);
 }

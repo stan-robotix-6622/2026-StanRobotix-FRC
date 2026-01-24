@@ -35,7 +35,7 @@ class SubDriveTrain : public frc2::SubsystemBase {
   void Periodic() override;
 
 // Method that drives the robot in field relative drive
-  void driveFieldRelative(float iX, float iY, float i0, double SpeedModulation);
+  void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
 
   wpi::array<frc::SwerveModuleState, 4> getSwerveModuleStates();
   wpi::array<frc::SwerveModulePosition, 4> getSwerveModulePositions();
@@ -43,7 +43,7 @@ class SubDriveTrain : public frc2::SubsystemBase {
 // Method that returns a ChassisSpeeds from the robot relative speeds
   frc::ChassisSpeeds getRobotRelativeSpeeds();
 // Method that drives the robot in robot relative drive
-  void driveRobotRelative(frc::ChassisSpeeds speeds, double SpeedModulation);
+  void driveRobotRelative(frc::ChassisSpeeds iSpeeds, double SpeedModulation);
 
 // Method that returns the robot's pose
   frc::Pose2d getPose();

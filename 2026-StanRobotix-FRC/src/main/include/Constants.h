@@ -51,9 +51,9 @@ namespace SwerveModuleConstants {
 
     constexpr rev::spark::SparkLowLevel::ControlType kNeo550ControlType = rev::spark::SparkLowLevel::ControlType::kPosition;
 
-    constexpr double kP = 0.075;
-    constexpr double kI = 0.02;
-    constexpr double kD = 0.01;
+    constexpr double kP = 0.048;
+    constexpr double kI = 0.0016;
+    constexpr double kD = 0.0008;
 }
 
 namespace DriveTrainConstants {
