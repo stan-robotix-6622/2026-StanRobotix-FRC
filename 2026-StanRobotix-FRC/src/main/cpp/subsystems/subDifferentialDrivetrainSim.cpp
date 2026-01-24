@@ -4,8 +4,8 @@
 
 #include "subsystems/SubDifferentialDrivetrainSim.h"
 
-SubDifferentialDrivetrainSim::SubDifferentialDrivetrainSim()
-{
+SubDifferentialDrivetrainSim::SubDifferentialDrivetrainSim(){
+  std::cout << "i am heerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrreeeeeeeeeeeeeeeeeeeeeeeeeee\n";
     frc::SmartDashboard::PutData("Field", &m_field);
 };
 
@@ -30,6 +30,16 @@ void SubDifferentialDrivetrainSim::SimulationPeriodic() {
   // of TimedRobot, this value needs to match it.
   m_driveSim.Update(20_ms);
   // Update all of our sensors.
+  m_leftEncoderSim.SetDistance(m_driveSim.GetLeftPosition().value());
+  m_leftEncoderSim.SetRate(m_driveSim.GetLeftVelocity().value());
+  m_rightEncoderSim.SetDistance(m_driveSim.GetRightPosition().value());
+  m_rightEncoderSim.SetRate(m_driveSim.GetRightVelocity().value());
+  m_gyroSim.SetAngle(-m_driveSim.GetHeading().Degrees().value());
+}
+
+void SubDifferentialDrivetrainSim::Drive(double xSpeed, double ySpeed){
+  m_driveSim.SetInputs(3_V, 3_V);
+  m_driveSim.Update(20_ms);
   m_leftEncoderSim.SetDistance(m_driveSim.GetLeftPosition().value());
   m_leftEncoderSim.SetRate(m_driveSim.GetLeftVelocity().value());
   m_rightEncoderSim.SetDistance(m_driveSim.GetRightPosition().value());

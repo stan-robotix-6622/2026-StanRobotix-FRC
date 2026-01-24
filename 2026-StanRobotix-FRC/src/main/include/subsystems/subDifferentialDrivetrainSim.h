@@ -15,6 +15,11 @@
 #include <frc/smartdashboard/Field2d.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/kinematics/DifferentialDriveOdometry.h>
+#include <frc/drive/DifferentialDrive.h>
+#include <iostream>
+#include <frc/kinematics/DifferentialDriveKinematics.h>
+
+
 
 
 class SubDifferentialDrivetrainSim : public frc2::SubsystemBase {
@@ -26,8 +31,12 @@ class SubDifferentialDrivetrainSim : public frc2::SubsystemBase {
    */
   void Periodic() override;
   void SimulationPeriodic();
+  void Drive(double	xSpeed, double ySpeed);
+
 
  private:
+
+ 
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
   ctre::phoenix::motorcontrol::can::WPI_BaseMotorController m_leftMotor{0 , "T"};
@@ -58,7 +67,7 @@ frc::sim::DifferentialDrivetrainSim m_driveSim{
   7.5_kg_sq_m,        // MOI of 7.5 kg m^2 (from CAD model).
   60_kg,              // The mass of the robot is 60 kg.
   3_in,               // The robot uses 3" radius wheels.
-  0.7112_m,           // The track width is 0.7112 meters.
+  0.7112_m,     // The track width is 0.7112 meters.
   // The standard deviations for measurement noise:
   // x and y:          0.001 m
   // heading:          0.001 rad
@@ -66,10 +75,7 @@ frc::sim::DifferentialDrivetrainSim m_driveSim{
   // l and r position: 0.005 m
   {0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005}};
 
+  frc::DifferentialDrive mRobotDrive {m_leftMotor, m_rightMotor};
+ 
+
 };
-// frc::sim::DifferentialDrivetrainSim m_driveSim =
-//   frc::sim::DifferentialDrivetrainSim::CreateKitbotSim(
-//     frc::sim::DifferentialDrivetrainSim::KitbotMotor::DualCIMPerSide, // 2 CIMs per side.
-//     frc::sim::DifferentialDrivetrainSim::KitbotGearing::k10p71,       // 10.71:1
-//     frc::sim::DifferentialDrivetrainSim::KitbotWheelSize::kSixInch    // 6" diameter wheels.
-// );
