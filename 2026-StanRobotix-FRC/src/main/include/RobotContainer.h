@@ -7,6 +7,7 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc/XboxController.h>
+
 #include "subsystems/SubClimb.h"
 #include "Constants.h"
 #include "subsystems/ExampleSubsystem.h"
@@ -32,6 +33,8 @@ class RobotContainer {
   // The robot's subsystems are defined here...
   ExampleSubsystem m_subsystem;
   SubClimb * m_SubClimb;
+
+  frc::XboxController * mXboxController;
 
   void ConfigureBindings();
 

@@ -33,3 +33,7 @@ namespace ClimbConstants {
     constexpr double kSpeedMultiplier = 0.5;
     constexpr double kPoseUp = 0;
 }
+
+namespace XboxControllerConstants {
+    constexpr int deviceIDXboxController = 3;
+}
