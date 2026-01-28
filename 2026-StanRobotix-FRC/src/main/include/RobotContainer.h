@@ -32,11 +32,9 @@ class RobotContainer {
 
   // The robot's subsystems are defined here...
   ExampleSubsystem m_subsystem;
-  SubClimb * m_SubClimb;
+  SubClimb * mClimb;
 
   frc::XboxController * mXboxController;
 
   void ConfigureBindings();
-
-  frc::XboxController * mController;
 };

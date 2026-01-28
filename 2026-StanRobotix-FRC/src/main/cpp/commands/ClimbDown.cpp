@@ -13,13 +13,12 @@ ClimbDown::ClimbDown(SubClimb * iSubClimb) {
 
 // Called when the command is initially scheduled.
 void ClimbDown::Initialize() {
-  mSubClimb->ResetPosition();
-  mPIDController->SetSetpoint(mSubClimb->GetPosition() + ClimbConstants::kPoseUp);
+  mPIDController->SetSetpoint(mSubClimb->GetPosition() - ClimbConstants::kPoseUp);
 }
 
 // Called repeatedly when this Command is scheduled to run
 void ClimbDown::Execute() {
-  mSubClimb->SetSpeed(-mPIDController->Calculate(mSubClimb->GetPosition()) * ClimbConstants::kSpeedMultiplier);
+  mSubClimb->SetSpeed(mPIDController->Calculate(mSubClimb->GetPosition()) * ClimbConstants::kSpeedMultiplier);
 }
 
 // Called once the command ends or is interrupted.

@@ -14,7 +14,6 @@ class SubClimb : public frc2::SubsystemBase {
   SubClimb();
   void SetSpeed(double iSpeed);
   void StopMotor();
-  void ResetPosition();
   double GetPosition();
   
   /**

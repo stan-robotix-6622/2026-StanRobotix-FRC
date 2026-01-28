@@ -5,8 +5,8 @@
 #include "subsystems/SubClimb.h"
 
 SubClimb::SubClimb() {
-    mSparkMax1 = new rev::spark::SparkMax(ClimbConstants::deviceIDSparkMax1, ClimbConstants::motorTypeSparkMax1);
-    mSparkMax2 = new rev::spark::SparkMax(ClimbConstants::deviceIDSparkMax2, ClimbConstants::motorTypeSparkMax2);
+    mSparkMax1 = new rev::spark::SparkMax(ClimbConstants::kDeviceIDSparkMax1, ClimbConstants::kMotorTypeSparkMax1);
+    mSparkMax2 = new rev::spark::SparkMax(ClimbConstants::kDeviceIDSparkMax2, ClimbConstants::kMotorTypeSparkMax2);
 
     mSparkMaxConfig1 = new rev::spark::SparkMaxConfig;
     mSparkMaxConfig2 = new rev::spark::SparkMaxConfig;
@@ -36,10 +36,5 @@ void SubClimb::StopMotor() {
 
 double SubClimb::GetPosition() {
    // return mSparkRelativeEncoder1->GetPosition();
-   return (mSparkRelativeEncoder1->GetPosition() + mSparkRelativeEncoder2->GetPosition()) / 2;
-}
-
-void SubClimb::ResetPosition() {
-    mSparkRelativeEncoder1->SetPosition(0);
-    mSparkRelativeEncoder2->SetPosition(0);
+   return (abs(mSparkRelativeEncoder1->GetPosition()) + abs(mSparkRelativeEncoder2->GetPosition())) / 2;
 }

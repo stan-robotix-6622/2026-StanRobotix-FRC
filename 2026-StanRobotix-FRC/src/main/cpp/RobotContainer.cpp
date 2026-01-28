@@ -12,7 +12,7 @@
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
-  m_SubClimb = new SubClimb;
+  mClimb = new SubClimb;
   mXboxController = new frc::XboxController(XboxControllerConstants::deviceIDXboxController);
   
   // Configure the button bindings
@@ -29,11 +29,11 @@ void RobotContainer::ConfigureBindings() {
 
    frc2::Trigger([this] {
     return mXboxController->GetYButtonPressed();
-  }).OnTrue(ClimbUp(m_SubClimb).ToPtr());
+  }).OnTrue(ClimbUp(mClimb).ToPtr());
 
   frc2::Trigger([this] {
     return mXboxController->GetAButtonPressed();
-  }).OnTrue(ClimbDown(m_SubClimb).ToPtr());
+  }).OnTrue(ClimbDown(mClimb).ToPtr());
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.

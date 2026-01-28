@@ -13,7 +13,6 @@ ClimbUp::ClimbUp(SubClimb * iSubClimb) {
 
 // Called when the command is initially scheduled.
 void ClimbUp::Initialize() {
-  mSubClimb->ResetPosition();
   mPIDController->SetSetpoint(mSubClimb->GetPosition() + ClimbConstants::kPoseUp);
 }
 
