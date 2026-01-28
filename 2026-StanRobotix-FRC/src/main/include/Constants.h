@@ -50,6 +50,7 @@ namespace SwerveModuleConstants {
     constexpr rev::PersistMode kNeo550PersistMode = rev::PersistMode::kPersistParameters;
 
     constexpr rev::spark::SparkLowLevel::ControlType kNeo550ControlType = rev::spark::SparkLowLevel::ControlType::kPosition;
+    constexpr rev::spark::FeedbackSensor kNeo550FeedbackSensor = rev::spark::FeedbackSensor::kAbsoluteEncoder;
 
     constexpr double kP = 0.048;
     constexpr double kI = 0.0016;
