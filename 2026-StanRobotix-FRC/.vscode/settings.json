@@ -92,6 +92,17 @@
     "typeinfo": "cpp",
     "valarray": "cpp",
     "variant": "cpp",
-    "xtr1common": "cpp"
+    "xtr1common": "cpp",
+    "ios": "cpp",
+    "xfacet": "cpp",
+    "xhash": "cpp",
+    "xiosbase": "cpp",
+    "xlocale": "cpp",
+    "xlocinfo": "cpp",
+    "xlocnum": "cpp",
+    "xmemory": "cpp",
+    "xstring": "cpp",
+    "xtree": "cpp",
+    "xutility": "cpp"
   }
 }
