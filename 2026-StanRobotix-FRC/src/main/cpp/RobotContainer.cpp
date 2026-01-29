@@ -27,7 +27,7 @@ RobotContainer::RobotContainer() {
 
   mIMU->SetDefaultCommand(frc2::cmd::Run(
     [this] {
-      std::cout << mIMU->getRotation2d().Degrees().value() << std::endl;
+      // std::cout << mIMU->getRotation2d().Degrees().value() << std::endl;
     }, {mIMU}));
 
   // Configure the button bindings

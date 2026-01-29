@@ -19,8 +19,8 @@ SwerveModule::SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iNeoInverte
     mNeoConfig = new rev::spark::SparkMaxConfig{};
     mNeoConfig->Inverted(iNeoInverted);
     mNeoConfig->SetIdleMode(rev::spark::SparkBaseConfig::kCoast);
-    mNeoConfig->absoluteEncoder.VelocityConversionFactor(1 / DriveTrainConstants::kGearRatio);
-    mNeoConfig->absoluteEncoder.PositionConversionFactor(1 / DriveTrainConstants::kGearRatio);
+    mNeoConfig->absoluteEncoder.VelocityConversionFactor(1 / DriveTrainConstants::kDriveMotorGearRatio);
+    mNeoConfig->absoluteEncoder.PositionConversionFactor(1 / DriveTrainConstants::kDriveMotorGearRatio);
 
     mNeo550Config = new rev::spark::SparkMaxConfig{};
     mNeo550Config->Inverted(false);
@@ -61,14 +61,13 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState, double 
 {
     mNeo550CurrentAngle = units::radian_t(mNeo550AbsoluteEncoder->GetPosition());
     mOptimizedState = iDesiredState;
-    mOptimizedState.Optimize(mNeo550CurrentAngle);
-    mOptimizedState.CosineScale(mNeo550CurrentAngle);
-
+    // mOptimizedState.Optimize(mNeo550CurrentAngle);
+    // mOptimizedState.CosineScale(mNeo550CurrentAngle);
 
     mNeo550PID->SetSetpoint(mOptimizedState.angle.Radians().value());
     mMotorNeo550->Set(mNeo550PID->Calculate(mNeo550CurrentAngle.Radians().value()));
     // mNeo550ClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), SwerveModuleConstants::kNeo550ControlType);
-    mMotorNeo->Set(mOptimizedState.speed.value() * iSpeedModulation);
+    // mMotorNeo->Set(mOptimizedState.speed.value() * iSpeedModulation);
 }
 
 void SwerveModule::setPIDValues(double kP, double kI, double kD)

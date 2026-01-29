@@ -78,7 +78,7 @@ namespace DriveTrainConstants {
     constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 0.2_rad_per_s; // Temporary value
 
     constexpr double kSecToMinFactor = 60;                            // 60 seconds in a minute (to convert from RPM et rotation per second)
-    constexpr double kGearRatio = 5.08;                               // 5.08 rotations of the motor for 1 rotation of the ouput
+    constexpr double kDriveMotorGearRatio = 5.08;                     // 5.08 rotations of the motor for 1 rotation of the ouput
     constexpr double kWheelPerimeter = 3 * 0.0254 * std::numbers::pi; // in meters (diametre in inches * convertion to meters * pi)
 }
 

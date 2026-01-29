@@ -12,11 +12,12 @@
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
-#include <networktables/DoubleTopic.h>
+// #include <networktables/DoubleTopic.h>
 // #include <pathplanner/lib/auto/AutoBuilder.h>
 // #include <pathplanner/lib/config/RobotConfig.h>
 // #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
@@ -36,6 +37,8 @@ class SubDriveTrain : public frc2::SubsystemBase {
 
 // Method that drives the robot in field relative drive
   void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
+
+  void refreshSwervePID();
 
   wpi::array<frc::SwerveModuleState, 4> getSwerveModuleStates();
   wpi::array<frc::SwerveModulePosition, 4> getSwerveModulePositions();
@@ -68,9 +71,9 @@ class SubDriveTrain : public frc2::SubsystemBase {
   nt::StructPublisher<frc::ChassisSpeeds> m_currentChassisSpeedsPublisher;
   nt::StructPublisher<frc::Rotation2d> m_rotation2dPublisher;
   nt::StructPublisher<frc::Pose2d> m_pose2dPublisher;
-  nt::DoubleSubscriber mPConstantSubscriber;
-  nt::DoubleSubscriber mIConstantSubscriber;
-  nt::DoubleSubscriber mDConstantSubscriber;
+  // nt::DoubleSubscriber mPConstantSubscriber;
+  // nt::DoubleSubscriber mIConstantSubscriber;
+  // nt::DoubleSubscriber mDConstantSubscriber;
 
   // Declaring the four SwerveModule objects
   SwerveModule * m_frontLeftModule;
