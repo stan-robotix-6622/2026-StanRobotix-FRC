@@ -18,6 +18,13 @@
 #include <frc/drive/DifferentialDrive.h>
 #include <iostream>
 #include <frc/kinematics/DifferentialDriveKinematics.h>
+#include <frc/controller/SimpleMotorFeedforward.h>
+#include <frc/controller/PIDController.h>
+#include <frc/kinematics/DifferentialDriveKinematics.h>
+#include <frc/kinematics/DifferentialDriveOdometry.h>
+
+#include "Constants.h"
+
 
 
 
@@ -29,9 +36,19 @@ class SubDifferentialDrivetrainSim : public frc2::SubsystemBase {
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
+
+   
+  void SetSpeeds(const frc::DifferentialDriveWheelSpeeds& speeds);
+  void Drive2(units::meters_per_second_t xSpeed,
+             units::radians_per_second_t rot);
+  void UpdateOdometry();
+  void ResetOdometry(const frc::Pose2d& pose);
+
+  frc::Pose2d GetPose() const { return m_odometry.GetPose(); }
+
   void Periodic() override;
   void SimulationPeriodic();
-  void Drive(double	xSpeed, double ySpeed);
+  void Drive(double	LSpeed, double RSpeed);
 
 
  private:
@@ -76,6 +93,13 @@ frc::sim::DifferentialDrivetrainSim m_driveSim{
   {0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005}};
 
   frc::DifferentialDrive mRobotDrive {m_leftMotor, m_rightMotor};
+
+  frc::SimpleMotorFeedforward<units::meters> m_feedforward{1_V, 3_V / 1_mps};
+
+  frc::PIDController m_leftPIDController{8.5, 0.0, 0.0};
+  frc::PIDController m_rightPIDController{8.5, 0.0, 0.0};
+
+  frc::DifferentialDriveKinematics m_kinematics{SubDifferentialDrivetrainSimConstants::kTrackWidth};
  
 
 };

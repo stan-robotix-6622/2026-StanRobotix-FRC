@@ -19,3 +19,10 @@ namespace OperatorConstants {
 inline constexpr int kDriverControllerPort = 0;
 
 }  // namespace OperatorConstants
+
+namespace SubDifferentialDrivetrainSimConstants
+{
+    static constexpr units::meter_t kTrackWidth = 0.381_m * 2;
+  static constexpr double kWheelRadius = 0.0508;  // meters
+  static constexpr int kEncoderResolution = 4096;
+}

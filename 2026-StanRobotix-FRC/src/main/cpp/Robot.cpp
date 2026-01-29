@@ -17,7 +17,7 @@ Robot::Robot() {}
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
-  frc2::CommandScheduler::GetInstance().Run();
+
 }
 
 /**
@@ -71,7 +71,9 @@ void Robot::SimulationInit() {}
 /**
  * This function is called periodically whilst in simulation.
  */
-void Robot::SimulationPeriodic() {}
+void Robot::SimulationPeriodic() {
+    frc2::CommandScheduler::GetInstance().Run();
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main() {

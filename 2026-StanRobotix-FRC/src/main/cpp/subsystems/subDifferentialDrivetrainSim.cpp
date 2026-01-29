@@ -6,8 +6,41 @@
 
 SubDifferentialDrivetrainSim::SubDifferentialDrivetrainSim(){
   std::cout << "i am heerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrreeeeeeeeeeeeeeeeeeeeeeeeeee\n";
+
     frc::SmartDashboard::PutData("Field", &m_field);
 };
+
+
+void SubDifferentialDrivetrainSim::SetSpeeds(const frc::DifferentialDriveWheelSpeeds& speeds) {
+  auto leftFeedforward = m_feedforward.Calculate(speeds.left);
+  auto rightFeedforward = m_feedforward.Calculate(speeds.right);
+  double leftOutput = m_leftPIDController.Calculate(m_leftEncoder.GetRate(),
+                                                    speeds.left.value());
+  double rightOutput = m_rightPIDController.Calculate(m_rightEncoder.GetRate(),
+                                                      speeds.right.value());
+
+  m_leftMotor.SetVoltage(units::volt_t{leftOutput} + leftFeedforward);
+  m_rightMotor.SetVoltage(units::volt_t{rightOutput} + rightFeedforward);
+}
+
+void SubDifferentialDrivetrainSim::Drive2(units::meters_per_second_t xSpeed,
+                       units::radians_per_second_t rot) {
+  SetSpeeds(m_kinematics.ToWheelSpeeds({xSpeed, 0_mps, rot}));
+}
+
+void SubDifferentialDrivetrainSim::UpdateOdometry() {
+  m_odometry.Update(m_gyro.GetRotation2d(),
+                    units::meter_t{m_leftEncoder.GetDistance()},
+                    units::meter_t{m_rightEncoder.GetDistance()});
+}
+
+void SubDifferentialDrivetrainSim::ResetOdometry(const frc::Pose2d& pose) {
+  m_driveSim.SetPose(pose);
+  m_odometry.ResetPosition(m_gyro.GetRotation2d(),
+                           units::meter_t{m_leftEncoder.GetDistance()},
+                           units::meter_t{m_rightEncoder.GetDistance()}, pose);
+}
+
 
 // This method will be called once per scheduler run
 void SubDifferentialDrivetrainSim::Periodic() 
@@ -22,27 +55,26 @@ void SubDifferentialDrivetrainSim::SimulationPeriodic() {
   // Set the inputs to the system. Note that we need to convert
   // the [-1, 1] PWM signal to voltage by multiplying it by the
   // robot controller voltage.
-  m_driveSim.SetInputs(
-    m_leftMotor.Get() * units::volt_t(frc::RobotController::GetInputVoltage()),
-    m_rightMotor.Get() * units::volt_t(frc::RobotController::GetInputVoltage()));
-  // Advance the model by 20 ms. Note that if you are running this
-  // subsystem in a separate thread or have changed the nominal timestep
-  // of TimedRobot, this value needs to match it.
-  m_driveSim.Update(20_ms);
-  // Update all of our sensors.
-  m_leftEncoderSim.SetDistance(m_driveSim.GetLeftPosition().value());
-  m_leftEncoderSim.SetRate(m_driveSim.GetLeftVelocity().value());
-  m_rightEncoderSim.SetDistance(m_driveSim.GetRightPosition().value());
-  m_rightEncoderSim.SetRate(m_driveSim.GetRightVelocity().value());
-  m_gyroSim.SetAngle(-m_driveSim.GetHeading().Degrees().value());
+  // m_driveSim.SetInputs(
+  //   m_leftMotor.Get() * units::volt_t(frc::RobotController::GetInputVoltage()),
+  //   m_rightMotor.Get() * units::volt_t(frc::RobotController::GetInputVoltage()));
+  // // Advance the model by 20 ms. Note that if you are running this
+  // // subsystem in a separate thread or have changed the nominal timestep
+  // // of TimedRobot, this value needs to match it.
+  // m_driveSim.Update(20_ms);
+  // // Update all of our sensors.
+  // m_leftEncoderSim.SetDistance(m_driveSim.GetLeftPosition().value());
+  // m_leftEncoderSim.SetRate(m_driveSim.GetLeftVelocity().value());
+  // m_rightEncoderSim.SetDistance(m_driveSim.GetRightPosition().value());
+  // m_rightEncoderSim.SetRate(m_driveSim.GetRightVelocity().value());
+  // m_gyroSim.SetAngle(-m_driveSim.GetHeading().Degrees().value());
+
+  // m_odometry.Update(m_gyro.GetRotation2d(),
+  //               units::meter_t(m_leftEncoder.GetDistance()),
+  //               units::meter_t(m_rightEncoder.GetDistance()));
+  // m_field.SetRobotPose(m_odometry.GetPose());
 }
 
-void SubDifferentialDrivetrainSim::Drive(double xSpeed, double ySpeed){
-  m_driveSim.SetInputs(3_V, 3_V);
-  m_driveSim.Update(20_ms);
-  m_leftEncoderSim.SetDistance(m_driveSim.GetLeftPosition().value());
-  m_leftEncoderSim.SetRate(m_driveSim.GetLeftVelocity().value());
-  m_rightEncoderSim.SetDistance(m_driveSim.GetRightPosition().value());
-  m_rightEncoderSim.SetRate(m_driveSim.GetRightVelocity().value());
-  m_gyroSim.SetAngle(-m_driveSim.GetHeading().Degrees().value());
+void SubDifferentialDrivetrainSim::Drive(double LSpeed, double RSpeed){
+  mRobotDrive.TankDrive(-LSpeed, -RSpeed);
 }
