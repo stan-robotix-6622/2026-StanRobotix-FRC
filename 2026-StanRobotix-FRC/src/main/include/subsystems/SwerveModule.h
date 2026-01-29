@@ -20,7 +20,7 @@
 class SwerveModule{
  public:
 // Constructeur de la classe avec un motorID pour le Neo et un pour le Neo550
-  SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iNeoInveryed = false, bool i90Deg = false);
+  SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iNeoInveryed = false, bool iNeo550Inverted = true);
 
 // Méthode qui retourne le SwerveModulePosition du module
   frc::SwerveModulePosition getModulePosition();
