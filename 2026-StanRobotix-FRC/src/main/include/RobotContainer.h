@@ -33,7 +33,7 @@ class RobotContainer {
 
   // The robot's subsystems are defined here...
   SubIMU * mIMU = nullptr;
-  SubDrivetrain * mDrivingtrain = nullptr;
+  SubDrivetrain * mDrivetrain = nullptr;
 
   void ConfigureBindings();
 };

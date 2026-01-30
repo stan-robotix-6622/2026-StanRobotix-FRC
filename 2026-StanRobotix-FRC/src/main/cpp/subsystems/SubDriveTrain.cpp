@@ -4,7 +4,7 @@
 
 #include "subsystems/SubDrivetrain.h"
 
-SubDriveTrain::SubDriveTrain(SubIMU * iIMU)
+SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
 {
     // Initialization of the SwerveModules' location relative to the robot center
     m_frontLeftLocation  = new frc::Translation2d{DriveTrainConstants::kSwerveModuleOffsetFront, DriveTrainConstants::kSwerveModuleOffsetLeft};
@@ -78,7 +78,7 @@ SubDriveTrain::SubDriveTrain(SubIMU * iIMU)
 }
 
 // This method will be called once per scheduler run
-void SubDriveTrain::Periodic()
+void SubDrivetrain::Periodic()
 {
     // Refreshing the SwerveModules' position and states
     m_frontLeftModule->refreshModule();
@@ -126,7 +126,7 @@ void SubDriveTrain::Periodic()
     m_currentModuleStatesPublisher.Set(getSwerveModuleStates());
 }
 
-void SubDriveTrain::refreshSwervePID()
+void SubDrivetrain::refreshSwervePID()
 {
     double wP = frc::SmartDashboard::GetNumber("Drivetrain/kP", SwerveConstants::kP);
     double wI = frc::SmartDashboard::GetNumber("Drivetrain/kI", SwerveConstants::kI);
@@ -138,7 +138,7 @@ void SubDriveTrain::refreshSwervePID()
     m_backRightModule->setPIDValues(wP, wI, wD);
 }
 
-wpi::array<frc::SwerveModuleState, 4> SubDriveTrain::getSwerveModuleStates()
+wpi::array<frc::SwerveModuleState, 4> SubDrivetrain::getSwerveModuleStates()
 {
     return wpi::array<frc::SwerveModuleState, 4> {m_frontLeftModule->getModuleState(),
                                                   m_frontRightModule->getModuleState(),
@@ -146,7 +146,7 @@ wpi::array<frc::SwerveModuleState, 4> SubDriveTrain::getSwerveModuleStates()
                                                   m_backRightModule->getModuleState()};
 }
 
-wpi::array<frc::SwerveModulePosition, 4> SubDriveTrain::getSwerveModulePositions()
+wpi::array<frc::SwerveModulePosition, 4> SubDrivetrain::getSwerveModulePositions()
 {
     return wpi::array<frc::SwerveModulePosition, 4> {m_frontLeftModule->getModulePosition(),
                                                      m_frontRightModule->getModulePosition(),
@@ -154,7 +154,7 @@ wpi::array<frc::SwerveModulePosition, 4> SubDriveTrain::getSwerveModulePositions
                                                      m_backRightModule->getModulePosition()};
 }
 
-void SubDriveTrain::driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation)
+void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation)
 {
     // Creating a ChassisSpeeds from the wanted speeds and the robot's rotation
     mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(DriveTrainConstants::kSpeedConstant * iX,
@@ -174,24 +174,24 @@ void SubDriveTrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
     m_backRightModule->setDesiredState(mSwerveDesiredStates[3], iSpeedModulation);
 }
 
-frc::Pose2d SubDriveTrain::getPose()
+frc::Pose2d SubDrivetrain::getPose()
 {
     return m_poseEstimator->GetEstimatedPosition();
 }
 
-void SubDriveTrain::resetPose(frc::Pose2d iRobotPose)
+void SubDrivetrain::resetPose(frc::Pose2d iRobotPose)
 {
     m_poseEstimator->ResetPose(iRobotPose);
 }
 
-frc::ChassisSpeeds SubDriveTrain::getRobotRelativeSpeeds()
+frc::ChassisSpeeds SubDrivetrain::getRobotRelativeSpeeds()
 {
     // Getting the current chassis speeds from the SwerveModules' state
     mCurrentChassisSpeeds = m_kinematics->ToChassisSpeeds(getSwerveModuleStates());
     return mCurrentChassisSpeeds;
 }
 
-void SubDriveTrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds, double iSpeedModulation)
+void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds, double iSpeedModulation)
 {
     // Tansforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
     mSwerveDesiredStates = m_kinematics->ToSwerveModuleStates(iDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br

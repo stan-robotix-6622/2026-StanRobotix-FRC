@@ -28,9 +28,9 @@
 #include "subsystems/SwerveModule.h"
 #include "subsystems/SwerveModuleSim.h"
 
-class SubDriveTrain : public frc2::SubsystemBase {
+class SubDrivetrain : public frc2::SubsystemBase {
  public:
-  SubDriveTrain(SubIMU * iIMU);
+  SubDrivetrain(SubIMU * iIMU);
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
