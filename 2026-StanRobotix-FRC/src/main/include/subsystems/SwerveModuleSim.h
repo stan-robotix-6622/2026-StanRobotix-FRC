@@ -60,14 +60,14 @@ class SwerveModuleSim{
   rev::spark::SparkMaxSim * mTurningMotorSim;
   rev::spark::SparkMaxSim * mDriveMotorSim;
   
-  rev::spark::SparkMaxConfig * mNeoConfig;
-  rev::spark::SparkMaxConfig * mNeo550Config;
+  rev::spark::SparkMaxConfig * mDriveConfig;
+  rev::spark::SparkMaxConfig * mTurningConfig;
 
-  rev::spark::SparkRelativeEncoderSim * mNeoEncoderSim;
-  rev::spark::SparkAbsoluteEncoderSim * mNeo550AbsoluteEncoderSim;
-  rev::spark::SparkClosedLoopController * mNeo550ClosedLoopController;
+  rev::spark::SparkRelativeEncoderSim * mDriveEncoderSim;
+  rev::spark::SparkAbsoluteEncoderSim * mTurningAbsoluteEncoderSim;
+  rev::spark::SparkClosedLoopController * mTurningClosedLoopController;
   
-  frc::Rotation2d mNeo550CurrentAngle;
+  frc::Rotation2d mTurningCurrentAngle;
   frc::SwerveModuleState mOptimizedState;
 
   frc::SwerveModuleState mModuleState;

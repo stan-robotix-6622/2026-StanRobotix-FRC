@@ -12,47 +12,50 @@ SwerveModuleSim::SwerveModuleSim(int iNeoMotorID, int iNeo550MotorID, bool iNeoI
     mTurningGearBox = new frc::DCMotor{frc::DCMotor::NEO550()};
     mDriveGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
     
-    mTurningMotor = new rev::spark::SparkMax{1, SwerveConstants::kNeoMotorType};
-    mDriveMotor = new rev::spark::SparkMax{2, SwerveConstants::kNeo550MotorType};
+    mTurningMotor = new rev::spark::SparkMax{iNeo550MotorID, SwerveConstants::kNeoMotorType};
+    mDriveMotor = new rev::spark::SparkMax{iNeoMotorID, SwerveConstants::kNeo550MotorType};
+    
+    mDriveConfig = new rev::spark::SparkMaxConfig{};
+    mDriveConfig->Inverted(iNeoInverted);
+    mDriveConfig->SetIdleMode(SwerveConstants::kNeoIdleMode);
+    mDriveConfig->absoluteEncoder.VelocityConversionFactor(SwerveConstants::kNeoVelocityConversionFactor);
+    mDriveConfig->absoluteEncoder.PositionConversionFactor(SwerveConstants::kNeoPositionConversionFactor);
 
+    mTurningConfig = new rev::spark::SparkMaxConfig{};
+    mTurningConfig->Inverted(iNeo550Inverted);
+    mTurningConfig->SetIdleMode(SwerveConstants::kNeo550IdleMode);
+    mTurningConfig->absoluteEncoder.VelocityConversionFactor(SwerveConstants::kNeo550VelocityConversionFactor);
+    mTurningConfig->absoluteEncoder.PositionConversionFactor(SwerveConstants::kNeo550PositionConversionFactor);
+    mTurningConfig->closedLoop.SetFeedbackSensor(SwerveConstants::kNeo550ClosedLoopFeedbackSensor);
+    mTurningConfig->closedLoop.Pid(SwerveConstants::kP, SwerveConstants::kI, SwerveConstants::kD);
+    mTurningConfig->closedLoop.PositionWrappingEnabled(SwerveConstants::kNeo550ClosedLoopPositionWrapping);
+    mTurningConfig->closedLoop.PositionWrappingInputRange(SwerveConstants::kNeo550ClosedLoopMinInput, SwerveConstants::kNeo550ClosedLoopMaxInput);
+    mTurningConfig->closedLoop.maxMotion.AllowedClosedLoopError(SwerveConstants::kNeo550ClosedLoopTolerance);
+
+    mDriveMotor->Configure(*mDriveConfig, SwerveConstants::kNeoResetMode, SwerveConstants::kNeoPersistMode);
+    mTurningMotor->Configure(*mTurningConfig, SwerveConstants::kNeo550ResetMode, SwerveConstants::kNeo550PersistMode);
+
+    mTurningClosedLoopController = new rev::spark::SparkClosedLoopController{mTurningMotor->GetClosedLoopController()};
+    
     mTurningMotorSim = new rev::spark::SparkMaxSim{mTurningMotor, mTurningGearBox};
     mDriveMotorSim = new rev::spark::SparkMaxSim{mDriveMotor, mDriveGearBox};
-    
-    mNeoConfig = new rev::spark::SparkMaxConfig{};
-    mNeoConfig->Inverted(iNeoInverted);
-    mNeoConfig->SetIdleMode(SwerveConstants::kNeoIdleMode);
-    mNeoConfig->absoluteEncoder.VelocityConversionFactor(SwerveConstants::kNeoVelocityConversionFactor);
-    mNeoConfig->absoluteEncoder.PositionConversionFactor(SwerveConstants::kNeoPositionConversionFactor);
 
-    mNeo550Config = new rev::spark::SparkMaxConfig{};
-    mNeo550Config->Inverted(iNeo550Inverted);
-    mNeo550Config->SetIdleMode(SwerveConstants::kNeo550IdleMode);
-    mNeo550Config->absoluteEncoder.VelocityConversionFactor(SwerveConstants::kNeo550VelocityConversionFactor);
-    mNeo550Config->absoluteEncoder.PositionConversionFactor(SwerveConstants::kNeo550PositionConversionFactor);
-    mNeo550Config->closedLoop.SetFeedbackSensor(SwerveConstants::kNeo550ClosedLoopFeedbackSensor);
-    mNeo550Config->closedLoop.Pid(SwerveConstants::kP, SwerveConstants::kI, SwerveConstants::kD);
-    mNeo550Config->closedLoop.PositionWrappingEnabled(SwerveConstants::kNeo550ClosedLoopPositionWrapping);
-    mNeo550Config->closedLoop.PositionWrappingInputRange(SwerveConstants::kNeo550ClosedLoopMinInput, SwerveConstants::kNeo550ClosedLoopMaxInput);
-    mNeo550Config->closedLoop.maxMotion.AllowedClosedLoopError(SwerveConstants::kNeo550ClosedLoopTolerance);
-
-    mDriveMotor->Configure(*mNeoConfig, SwerveConstants::kNeoResetMode, SwerveConstants::kNeoPersistMode);
-    mTurningMotor->Configure(*mNeo550Config, SwerveConstants::kNeo550ResetMode, SwerveConstants::kNeo550PersistMode);
-
-    mNeoEncoderSim = new rev::spark::SparkRelativeEncoderSim{mDriveMotorSim->GetRelativeEncoderSim()};
-    mNeo550AbsoluteEncoderSim = new rev::spark::SparkAbsoluteEncoderSim{mTurningMotorSim->GetAbsoluteEncoderSim()};
-
-    mNeo550ClosedLoopController = new rev::spark::SparkClosedLoopController{mTurningMotor->GetClosedLoopController()};
+    mDriveEncoderSim = new rev::spark::SparkRelativeEncoderSim{mDriveMotorSim->GetRelativeEncoderSim()};
+    mTurningAbsoluteEncoderSim = new rev::spark::SparkAbsoluteEncoderSim{mTurningMotorSim->GetAbsoluteEncoderSim()};
 }
 
 void SwerveModuleSim::setDesiredState(frc::SwerveModuleState iDesiredState, double iSpeedModulation)
 {
-    mNeo550CurrentAngle = units::radian_t(mNeo550AbsoluteEncoderSim->GetPosition());
+    mTurningCurrentAngle = units::radian_t(mTurningAbsoluteEncoderSim->GetPosition());
     mOptimizedState = iDesiredState;
-    mOptimizedState.Optimize(mNeo550CurrentAngle);
-    mOptimizedState.CosineScale(mNeo550CurrentAngle);
+    mOptimizedState.Optimize(mTurningCurrentAngle);
+    mOptimizedState.CosineScale(mTurningCurrentAngle);
 
-    mNeo550ClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), SwerveConstants::kNeo550ClosedLoopControlType);
+    mTurningClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), SwerveConstants::kNeo550ClosedLoopControlType);
     mDriveMotorSim->SetVelocity(mOptimizedState.speed.value() * iSpeedModulation);
+
+    mDriveEncoderSim->SetVelocity(mOptimizedState.speed.value() * iSpeedModulation);
+    mTurningAbsoluteEncoderSim->SetVelocity(mTurningMotorSim->GetVelocity());
 }
 
 void SwerveModuleSim::setPIDValues(double iP, double iI, double iD)
@@ -60,25 +63,25 @@ void SwerveModuleSim::setPIDValues(double iP, double iI, double iD)
     bool wUpdateConfig = false;
     if (iP != kP)
     {
-        mNeo550Config->closedLoop.P(iP);
+        mTurningConfig->closedLoop.P(iP);
         wUpdateConfig = true;
         kP = iP;
     }
     if (iI != kI)
     {
-        mNeo550Config->closedLoop.I(iI);
+        mTurningConfig->closedLoop.I(iI);
         wUpdateConfig = true;
         kI = iI;
     }
     if (iD != kD)
     {
-        mNeo550Config->closedLoop.D(iD);
+        mTurningConfig->closedLoop.D(iD);
         wUpdateConfig = true;
         kD = iD;
     }
     if (wUpdateConfig)
     {
-        mTurningMotor->Configure(*mNeo550Config, rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kNoPersistParameters);
+        mTurningMotor->Configure(*mTurningConfig, rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kNoPersistParameters);
     }
 }
 
@@ -94,8 +97,8 @@ frc::SwerveModulePosition SwerveModuleSim::getModulePosition()
 
 void SwerveModuleSim::refreshModule()
 {
-    mModuleState = frc::SwerveModuleState{units::meters_per_second_t(mNeoEncoderSim->GetVelocity() * DriveTrainConstants::kWheelPerimeter),
-                                           frc::Rotation2d(units::radian_t(mNeo550AbsoluteEncoderSim->GetPosition() - std::numbers::pi))};
-    mModulePosition = frc::SwerveModulePosition{units::meter_t(mNeoEncoderSim->GetPosition() * DriveTrainConstants::kWheelPerimeter),
-                                                 frc::Rotation2d(units::radian_t(mNeo550AbsoluteEncoderSim->GetPosition() - std::numbers::pi))};
+    mModuleState = frc::SwerveModuleState{units::meters_per_second_t(mDriveEncoderSim->GetVelocity() * DriveTrainConstants::kWheelPerimeter),
+                                           frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoderSim->GetPosition() - std::numbers::pi))};
+    mModulePosition = frc::SwerveModulePosition{units::meter_t(mDriveEncoderSim->GetPosition() * DriveTrainConstants::kWheelPerimeter),
+                                                 frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoderSim->GetPosition() - std::numbers::pi))};
 }
