@@ -10,6 +10,7 @@
 #include <units/velocity.h>
 
 #include <rev/SparkBase.h> // Include Spark variable types
+#include <rev/config/SparkBaseConfig.h>
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
