@@ -22,9 +22,9 @@
 #include <frc/controller/PIDController.h>
 #include <frc/kinematics/DifferentialDriveKinematics.h>
 #include <frc/kinematics/DifferentialDriveOdometry.h>
+#include <frc/motorcontrol/PWMSparkMax.h>
 
 #include "Constants.h"
-
 
 
 
@@ -39,8 +39,8 @@ class SubDifferentialDrivetrainSim : public frc2::SubsystemBase {
 
    
   void SetSpeeds(const frc::DifferentialDriveWheelSpeeds& speeds);
-  void Drive2(units::meters_per_second_t xSpeed,
-             units::radians_per_second_t rot);
+  //void Drive2(units::meters_per_second_t xSpeed,
+  //           units::radians_per_second_t rot);
   void UpdateOdometry();
   void ResetOdometry(const frc::Pose2d& pose);
 
@@ -56,8 +56,10 @@ class SubDifferentialDrivetrainSim : public frc2::SubsystemBase {
  
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  ctre::phoenix::motorcontrol::can::WPI_BaseMotorController m_leftMotor{0 , "T"};
-  ctre::phoenix::motorcontrol::can::WPI_BaseMotorController m_rightMotor{1, "T"};
+  frc::PWMSparkMax m_leftLeader{1};
+  frc::PWMSparkMax m_leftFollower{2};
+  frc::PWMSparkMax m_rightLeader{3};
+  frc::PWMSparkMax m_rightFollower{4};
 
   frc::AnalogGyro m_gyro{1};
   frc::sim::AnalogGyroSim m_gyroSim{m_gyro};
@@ -92,7 +94,7 @@ frc::sim::DifferentialDrivetrainSim m_driveSim{
   // l and r position: 0.005 m
   {0.001, 0.001, 0.001, 0.1, 0.1, 0.005, 0.005}};
 
-  frc::DifferentialDrive mRobotDrive {m_leftMotor, m_rightMotor};
+  frc::DifferentialDrive mRobotDrive {m_leftLeader, m_rightLeader};
 
   frc::SimpleMotorFeedforward<units::meters> m_feedforward{1_V, 3_V / 1_mps};
 

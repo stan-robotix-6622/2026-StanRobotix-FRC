@@ -4,6 +4,8 @@
 
 #pragma once
 
+
+#include <units/length.h>
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants.  This should not be used for any other
@@ -22,7 +24,7 @@ inline constexpr int kDriverControllerPort = 0;
 
 namespace SubDifferentialDrivetrainSimConstants
 {
-    static constexpr units::meter_t kTrackWidth = 0.381_m * 2;
-  static constexpr double kWheelRadius = 0.0508;  // meters
-  static constexpr int kEncoderResolution = 4096;
+  constexpr units::meter_t kTrackWidth = 0.381_m * 2;
+  constexpr double kWheelRadius = 0.0508;  // meters
+  constexpr int kEncoderResolution = 4096;
 }
