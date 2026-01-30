@@ -1,4 +1,4 @@
-# 2026-StanRobotix-FRC ![star](https://github.com/stan-robotix-6622/2026-StanRobotix-FRC))
+# 2026-StanRobotix-FRC ![star](https://github.com/stan-robotix-6622/2026-StanRobotix-FRC)
 Dépôt officiel de l'équipe [Stan Robotix 6622](https://stanrobotix6622.com/) pour l'édition 2026 de [FRC](https://www.firstinspires.org/robotics/frc)
 
 ## Conventions de structure
