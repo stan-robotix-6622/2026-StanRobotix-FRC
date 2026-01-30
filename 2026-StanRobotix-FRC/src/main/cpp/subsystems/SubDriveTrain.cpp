@@ -13,22 +13,22 @@ SubDriveTrain::SubDriveTrain(SubIMU * iIMU)
     m_backRightLocation  = new frc::Translation2d{DriveTrainConstants::kSwerveModuleOffsetBack, DriveTrainConstants::kSwerveModuleOffsetRight};
 
     // Initialization of the SwerveModules with the motor IDs
-    m_frontLeftModule  = new SwerveModule{DriveTrainConstants::kFrontLeftMotorID , DriveTrainConstants::kFrontLeftMotor550ID, true};
-    m_frontRightModule = new SwerveModule{DriveTrainConstants::kFrontRightMotorID, DriveTrainConstants::kFrontRightMotor550ID, true};
-    m_backLeftModule   = new SwerveModule{DriveTrainConstants::kBackLeftMotorID  , DriveTrainConstants::kBackLeftMotor550ID, false};
-    m_backRightModule  = new SwerveModule{DriveTrainConstants::kBackRightMotorID , DriveTrainConstants::kBackRightMotor550ID, false};
+    m_frontLeftModule  = new SwerveModuleSim{DriveTrainConstants::kFrontLeftMotorID , DriveTrainConstants::kFrontLeftMotor550ID, true};
+    m_frontRightModule = new SwerveModuleSim{DriveTrainConstants::kFrontRightMotorID, DriveTrainConstants::kFrontRightMotor550ID, true};
+    m_backLeftModule   = new SwerveModuleSim{DriveTrainConstants::kBackLeftMotorID  , DriveTrainConstants::kBackLeftMotor550ID, false};
+    m_backRightModule  = new SwerveModuleSim{DriveTrainConstants::kBackRightMotorID , DriveTrainConstants::kBackRightMotor550ID, false};
 
     // Initialization of the Swerve Data Publishers
     m_currentModuleStatesPublisher = mNTDriveTrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
     m_currentChassisSpeedsPublisher = mNTDriveTrainTable->GetStructTopic<frc::ChassisSpeeds>("Current ChassisSpeeds").Publish();
     m_rotation2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Rotation2d>("Current Rotation2d").Publish();
     m_pose2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
-    frc::SmartDashboard::PutNumber("Drivetrain/kP", SwerveModuleConstants::kP);
-    frc::SmartDashboard::PutNumber("Drivetrain/kI", SwerveModuleConstants::kI);
-    frc::SmartDashboard::PutNumber("Drivetrain/kD", SwerveModuleConstants::kD);
-    // mPConstantSubscriber = mNTSwervePIDTable->GetDoubleTopic("kP").Subscribe(SwerveModuleConstants::kP);
-    // mIConstantSubscriber = mNTSwervePIDTable->GetDoubleTopic("kI").Subscribe(SwerveModuleConstants::kI);
-    // mDConstantSubscriber = mNTSwervePIDTable->GetDoubleTopic("kD").Subscribe(SwerveModuleConstants::kD);
+    frc::SmartDashboard::PutNumber("Drivetrain/kP", SwerveConstants::kP);
+    frc::SmartDashboard::PutNumber("Drivetrain/kI", SwerveConstants::kI);
+    frc::SmartDashboard::PutNumber("Drivetrain/kD", SwerveConstants::kD);
+    // mPConstantSubscriber = mNTSwervePIDTable->GetDoubleTopic("kP").Subscribe(SwerveConstants::kP);
+    // mIConstantSubscriber = mNTSwervePIDTable->GetDoubleTopic("kI").Subscribe(SwerveConstants::kI);
+    // mDConstantSubscriber = mNTSwervePIDTable->GetDoubleTopic("kD").Subscribe(SwerveConstants::kD);
 
     // Initialization of the IMU
     mIMU = iIMU;
@@ -128,9 +128,9 @@ void SubDriveTrain::Periodic()
 
 void SubDriveTrain::refreshSwervePID()
 {
-    double wP = frc::SmartDashboard::GetNumber("Drivetrain/kP", SwerveModuleConstants::kP);
-    double wI = frc::SmartDashboard::GetNumber("Drivetrain/kI", SwerveModuleConstants::kI);
-    double wD = frc::SmartDashboard::GetNumber("Drivetrain/kD", SwerveModuleConstants::kD);
+    double wP = frc::SmartDashboard::GetNumber("Drivetrain/kP", SwerveConstants::kP);
+    double wI = frc::SmartDashboard::GetNumber("Drivetrain/kI", SwerveConstants::kI);
+    double wD = frc::SmartDashboard::GetNumber("Drivetrain/kD", SwerveConstants::kD);
 
     m_frontLeftModule->setPIDValues(wP, wI, wD);
     m_frontRightModule->setPIDValues(wP, wI, wD);
