@@ -19,11 +19,14 @@
 #include <units/area.h>
 #include <units/mass.h>
 
+#include <numbers>
+
+
 #include "Constants.h"
 
 class SwerveModuleSim{
  public:
-  SwerveModuleSim(int iNeoMotorID, int iNeo550MotorID, bool iNeoInverted = false, bool iNeo550Inverted = true);
+  SwerveModuleSim(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInverted = false, bool iTurningInverted = true);
 
 // Méthode qui retourne le SwerveModulePosition du module
   frc::SwerveModulePosition getModulePosition();
@@ -52,18 +55,18 @@ class SwerveModuleSim{
   double kD = SwerveConstants::kD;
 
   frc::DCMotor * mTurningGearBox;
-  frc::DCMotor * mDriveGearBox;
+  frc::DCMotor * mDrivingGearBox;
   
   rev::spark::SparkMax * mTurningMotor;
-  rev::spark::SparkMax * mDriveMotor;
+  rev::spark::SparkMax * mDrivingMotor;
 
   rev::spark::SparkMaxSim * mTurningMotorSim;
-  rev::spark::SparkMaxSim * mDriveMotorSim;
+  rev::spark::SparkMaxSim * mDrivingMotorSim;
   
-  rev::spark::SparkMaxConfig * mDriveConfig;
+  rev::spark::SparkMaxConfig * mDrivingConfig;
   rev::spark::SparkMaxConfig * mTurningConfig;
 
-  rev::spark::SparkRelativeEncoderSim * mDriveEncoderSim;
+  rev::spark::SparkRelativeEncoderSim * mDrivingEncoderSim;
   rev::spark::SparkAbsoluteEncoderSim * mTurningAbsoluteEncoderSim;
   rev::spark::SparkClosedLoopController * mTurningClosedLoopController;
   

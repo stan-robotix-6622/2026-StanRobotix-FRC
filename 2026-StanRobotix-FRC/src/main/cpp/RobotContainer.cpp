@@ -10,20 +10,20 @@
 #include <frc2/command/Commands.h>
 
 RobotContainer::RobotContainer() {
-  mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
+  mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDrivingrControllerPort};
 
   // Initialize all of your commands and subsystems here
   mIMU = new SubIMU{};
-  mDriveTrain = new SubDriveTrain{mIMU};
+  mDrivetrain = new SubDrivetrain{mIMU};
 
-  mDriveTrain->SetDefaultCommand(frc2::cmd::Run(
+  mDrivingTrain->SetDefaultCommand(frc2::cmd::Run(
       [this] {
-      mDriveTrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
+      mDrivingTrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
                                       -mCommandXboxController->GetLeftX(),
                                       -mCommandXboxController->GetRightX(),
                                       0.3);
      },
-     {mDriveTrain}));
+     {mDrivingTrain}));
 
   mIMU->SetDefaultCommand(frc2::cmd::Run(
     [this] {

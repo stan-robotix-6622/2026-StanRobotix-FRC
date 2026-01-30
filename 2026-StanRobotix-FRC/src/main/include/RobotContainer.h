@@ -11,7 +11,7 @@
 // #include <pathplanner/lib/auto/AutoBuilder.h>
 
 #include "Constants.h"
-#include "subsystems/SubDriveTrain.h"
+#include "subsystems/SubDrivetrain.h"
 #include "subsystems/SubIMU.h"
 
 /**
@@ -33,7 +33,7 @@ class RobotContainer {
 
   // The robot's subsystems are defined here...
   SubIMU * mIMU = nullptr;
-  SubDriveTrain * mDriveTrain = nullptr;
+  SubDrivetrain * mDrivingtrain = nullptr;
 
   void ConfigureBindings();
 };

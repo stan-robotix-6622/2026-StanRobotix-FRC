@@ -19,8 +19,8 @@
 
 class SwerveModule{
  public:
-// Constructeur de la classe avec un motorID pour le Neo et un pour le Neo550
-  SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iNeoInveryed = false, bool iNeo550Inverted = true);
+// Constructeur de la classe avec un motorID pour le Driving et un pour le Turning
+  SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInveryed = false, bool iTurningInverted = true);
 
 // Méthode qui retourne le SwerveModulePosition du module
   frc::SwerveModulePosition getModulePosition();
@@ -39,19 +39,19 @@ class SwerveModule{
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  rev::spark::SparkMax * mMotorNeo;
-  rev::spark::SparkMax * mMotorNeo550;
+  rev::spark::SparkMax * mDrivingMotor;
+  rev::spark::SparkMax * mTurningMotor;
 
-  rev::spark::SparkMaxConfig * mNeoConfig;
-  rev::spark::SparkMaxConfig * mNeo550Config;
+  rev::spark::SparkMaxConfig * mDrivingConfig;
+  rev::spark::SparkMaxConfig * mTurningConfig;
 
-  rev::spark::SparkClosedLoopController * mNeo550ClosedLoopController;
+  rev::spark::SparkClosedLoopController * mTurningClosedLoopController;
 
-  rev::spark::SparkRelativeEncoder * mNeoEncoder;
-  rev::spark::SparkAbsoluteEncoder * mNeo550AbsoluteEncoder;
-  frc::PIDController * mNeo550PID;
+  rev::spark::SparkRelativeEncoder * mDrivingEncoder;
+  rev::spark::SparkAbsoluteEncoder * mTurningAbsoluteEncoder;
+  frc::PIDController * mTurningPID;
 
-  frc::Rotation2d mNeo550CurrentAngle;
+  frc::Rotation2d mTurningCurrentAngle;
   frc::SwerveModuleState mOptimizedState;
 
   frc::SwerveModuleState mModuleState;

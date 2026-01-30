@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "subsystems/SubDriveTrain.h"
+#include "subsystems/SubDrivetrain.h"
 
 SubDriveTrain::SubDriveTrain(SubIMU * iIMU)
 {
@@ -165,7 +165,7 @@ void SubDriveTrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
     // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
     mSwerveDesiredStates = m_kinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
     
-    frc::SmartDashboard::PutNumber("Drivetrain/SetPoint", mSwerveDesiredStates[0].angle.Radians().value() + std::numbers::pi / 2);
+    frc::SmartDashboard::PutNumber("Drivetrain/SetPoint", mSwerveDesiredStates[0].angle.Radians().value());
     frc::SmartDashboard::PutNumber("Drivetrain/Position", m_frontLeftModule->getModuleState().angle.Radians().value());
     // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
     m_frontLeftModule->setDesiredState(mSwerveDesiredStates[0], iSpeedModulation);

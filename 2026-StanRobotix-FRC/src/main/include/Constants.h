@@ -9,8 +9,10 @@
 #include <units/angular_velocity.h>
 #include <units/velocity.h>
 
+#include <numbers>
+
 #include <rev/SparkBase.h> // Include Spark variable types
-#include <rev/config/SparkBaseConfig.h>
+#include <rev/config/SparkBaseConfig.h> // For the spark IdleMode
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -23,7 +25,7 @@
  */
 
 namespace OperatorConstants {
-    inline constexpr int kDriverControllerPort = 0;
+    inline constexpr int kDrivingrControllerPort = 0;
 } // namespace OperatorConstants
 
 namespace IMUConstants {
@@ -62,33 +64,33 @@ namespace DriveTrainConstants {
     constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 0.2_rad_per_s; // Temporary value
 
     constexpr double kSecToMinFactor = 60;                            // 60 seconds in a minute (to convert from RPM et rotation per second)
-    constexpr double kDriveMotorGearRatio = 5.08;                     // 5.08 rotations of the motor for 1 rotation of the ouput
+    constexpr double kDrivingMotorGearRatio = 5.08;                     // 5.08 rotations of the motor for 1 rotation of the ouput
     constexpr double kWheelPerimeter = 3 * 0.0254 * std::numbers::pi; // in meters (diametre in inches * convertion to meters * pi)
 }
 
 namespace SwerveConstants {
-    constexpr rev::spark::SparkLowLevel::MotorType kNeoMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
-    constexpr rev::spark::SparkBaseConfig::IdleMode kNeoIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
-    constexpr rev::ResetMode kNeoResetMode = rev::ResetMode::kResetSafeParameters;
-    constexpr rev::PersistMode kNeoPersistMode = rev::PersistMode::kPersistParameters;
+    constexpr rev::spark::SparkLowLevel::MotorType kDrivingMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+    constexpr rev::spark::SparkBaseConfig::IdleMode kDrivingIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
+    constexpr rev::ResetMode kDrivingResetMode = rev::ResetMode::kResetSafeParameters;
+    constexpr rev::PersistMode kDrivingPersistMode = rev::PersistMode::kPersistParameters;
     
-    constexpr rev::spark::SparkLowLevel::MotorType kNeo550MotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
-    constexpr rev::spark::SparkBaseConfig::IdleMode kNeo550IdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
-    constexpr rev::ResetMode kNeo550ResetMode = rev::ResetMode::kResetSafeParameters;
-    constexpr rev::PersistMode kNeo550PersistMode = rev::PersistMode::kPersistParameters;
+    constexpr rev::spark::SparkLowLevel::MotorType kTurningMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+    constexpr rev::spark::SparkBaseConfig::IdleMode kTurningIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
+    constexpr rev::ResetMode kTurningResetMode = rev::ResetMode::kResetSafeParameters;
+    constexpr rev::PersistMode kTurningPersistMode = rev::PersistMode::kPersistParameters;
 
     
-    constexpr double kNeo550VelocityConversionFactor = 2 * std::numbers::pi;
-    constexpr double kNeo550PositionConversionFactor = 2 * std::numbers::pi;
-    constexpr double kNeoVelocityConversionFactor = 1 / DriveTrainConstants::kDriveMotorGearRatio;
-    constexpr double kNeoPositionConversionFactor = 1 / DriveTrainConstants::kDriveMotorGearRatio;
+    constexpr double kTurningVelocityConversionFactor = 2 * std::numbers::pi;
+    constexpr double kTurningPositionConversionFactor = 2 * std::numbers::pi;
+    constexpr double kDrivingVelocityConversionFactor = 1 / DriveTrainConstants::kDrivingMotorGearRatio;
+    constexpr double kDrivingPositionConversionFactor = 1 / DriveTrainConstants::kDrivingMotorGearRatio;
     
-    constexpr rev::spark::SparkLowLevel::ControlType kNeo550ClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kMAXMotionPositionControl;
-    constexpr rev::spark::FeedbackSensor kNeo550ClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kAbsoluteEncoder;
-    constexpr bool kNeo550ClosedLoopPositionWrapping = true;
-    constexpr double kNeo550ClosedLoopMinInput = 0;
-    constexpr double kNeo550ClosedLoopMaxInput = kNeo550PositionConversionFactor;
-    constexpr double kNeo550ClosedLoopTolerance =  0.01 * kNeo550PositionConversionFactor;
+    constexpr rev::spark::SparkLowLevel::ControlType kTurningClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kMAXMotionPositionControl;
+    constexpr rev::spark::FeedbackSensor kTurningClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kAbsoluteEncoder;
+    constexpr bool kTurningClosedLoopPositionWrapping = true;
+    constexpr double kTurningClosedLoopMinInput = 0;
+    constexpr double kTurningClosedLoopMaxInput = kTurningPositionConversionFactor;
+    constexpr double kTurningClosedLoopTolerance =  0.01 * kTurningPositionConversionFactor;
 
     constexpr double kP = 0.048;
     constexpr double kI = 0.0016;
