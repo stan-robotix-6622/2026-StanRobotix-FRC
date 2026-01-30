@@ -4,13 +4,11 @@
 
 #include "subsystems/SwerveModuleSim.h"
 
-#include <iostream>
-
 SwerveModuleSim::SwerveModuleSim(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInverted, bool iTurningInverted)
 {
     
-    mTurningGearBox = new frc::DCMotor{frc::DCMotor::Turning()};
-    mDrivingGearBox = new frc::DCMotor{frc::DCMotor::Driving()};
+    mTurningGearBox = new frc::DCMotor{frc::DCMotor::NEO550()};
+    mDrivingGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
     
     mTurningMotor = new rev::spark::SparkMax{iTurningMotorID, SwerveConstants::kDrivingMotorType};
     mDrivingMotor = new rev::spark::SparkMax{iDrivingMotorID, SwerveConstants::kTurningMotorType};
