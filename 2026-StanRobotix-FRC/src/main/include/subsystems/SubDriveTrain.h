@@ -26,6 +26,7 @@
 // #include "LimelightHelpers.h"
 #include "subsystems/SubIMU.h"
 #include "subsystems/SwerveModule.h"
+#include "subsystems/SwerveModuleSim.h"
 
 class SubDriveTrain : public frc2::SubsystemBase {
  public:
@@ -76,10 +77,10 @@ class SubDriveTrain : public frc2::SubsystemBase {
   // nt::DoubleSubscriber mDConstantSubscriber;
 
   // Declaring the four SwerveModule objects
-  SwerveModule * m_frontLeftModule;
-  SwerveModule * m_frontRightModule;
-  SwerveModule * m_backLeftModule;
-  SwerveModule * m_backRightModule;
+  SwerveModuleSim * m_frontLeftModule;
+  SwerveModuleSim * m_frontRightModule;
+  SwerveModuleSim * m_backLeftModule;
+  SwerveModuleSim * m_backRightModule;
 
   // Declaring my swerve kinematics object
   frc::SwerveDriveKinematics<4> * m_kinematics;
