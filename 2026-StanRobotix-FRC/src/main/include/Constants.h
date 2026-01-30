@@ -10,6 +10,7 @@
 #include <units/velocity.h>
 
 #include <rev/SparkBase.h> // Include Spark variable types
+#include <rev/config/SparkBaseConfig.h>
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -40,23 +41,6 @@ namespace PathPlannerConstants {
     constexpr double kPathPlannerSpeedModulation = 1.0;
 }
 
-namespace SwerveModuleConstants {
-    constexpr rev::spark::SparkLowLevel::MotorType kNeoMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
-    constexpr rev::ResetMode kNeoResetMode = rev::ResetMode::kResetSafeParameters;
-    constexpr rev::PersistMode kNeoPersistMode = rev::PersistMode::kPersistParameters;
-
-    constexpr rev::spark::SparkLowLevel::MotorType kNeo550MotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
-    constexpr rev::ResetMode kNeo550ResetMode = rev::ResetMode::kResetSafeParameters;
-    constexpr rev::PersistMode kNeo550PersistMode = rev::PersistMode::kPersistParameters;
-
-    constexpr rev::spark::SparkLowLevel::ControlType kNeo550ControlType = rev::spark::SparkLowLevel::ControlType::kPosition;
-    constexpr rev::spark::FeedbackSensor kNeo550FeedbackSensor = rev::spark::FeedbackSensor::kAbsoluteEncoder;
-
-    constexpr double kP = 0.048;
-    constexpr double kI = 0.0016;
-    constexpr double kD = 0.0008;
-}
-
 namespace DriveTrainConstants {
     constexpr int kBackRightMotorID = 6;
     constexpr int kBackRightMotor550ID = 5;
@@ -80,6 +64,35 @@ namespace DriveTrainConstants {
     constexpr double kSecToMinFactor = 60;                            // 60 seconds in a minute (to convert from RPM et rotation per second)
     constexpr double kDriveMotorGearRatio = 5.08;                     // 5.08 rotations of the motor for 1 rotation of the ouput
     constexpr double kWheelPerimeter = 3 * 0.0254 * std::numbers::pi; // in meters (diametre in inches * convertion to meters * pi)
+}
+
+namespace SwerveConstants {
+    constexpr rev::spark::SparkLowLevel::MotorType kNeoMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+    constexpr rev::spark::SparkBaseConfig::IdleMode kNeoIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
+    constexpr rev::ResetMode kNeoResetMode = rev::ResetMode::kResetSafeParameters;
+    constexpr rev::PersistMode kNeoPersistMode = rev::PersistMode::kPersistParameters;
+    
+    constexpr rev::spark::SparkLowLevel::MotorType kNeo550MotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+    constexpr rev::spark::SparkBaseConfig::IdleMode kNeo550IdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
+    constexpr rev::ResetMode kNeo550ResetMode = rev::ResetMode::kResetSafeParameters;
+    constexpr rev::PersistMode kNeo550PersistMode = rev::PersistMode::kPersistParameters;
+
+    
+    constexpr double kNeo550VelocityConversionFactor = 2 * std::numbers::pi;
+    constexpr double kNeo550PositionConversionFactor = 2 * std::numbers::pi;
+    constexpr double kNeoVelocityConversionFactor = 1 / DriveTrainConstants::kDriveMotorGearRatio;
+    constexpr double kNeoPositionConversionFactor = 1 / DriveTrainConstants::kDriveMotorGearRatio;
+    
+    constexpr rev::spark::SparkLowLevel::ControlType kNeo550ClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kMAXMotionPositionControl;
+    constexpr rev::spark::FeedbackSensor kNeo550ClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kAbsoluteEncoder;
+    constexpr bool kNeo550ClosedLoopPositionWrapping = true;
+    constexpr double kNeo550ClosedLoopMinInput = 0;
+    constexpr double kNeo550ClosedLoopMaxInput = kNeo550PositionConversionFactor;
+    constexpr double kNeo550ClosedLoopTolerance =  0.01 * kNeo550PositionConversionFactor;
+
+    constexpr double kP = 0.048;
+    constexpr double kI = 0.0016;
+    constexpr double kD = 0.0008;
 }
 
 namespace LimelightConstants {
