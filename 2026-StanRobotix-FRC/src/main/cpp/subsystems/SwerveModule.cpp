@@ -23,7 +23,7 @@ SwerveModule::SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iNeoInverte
     mNeoConfig->absoluteEncoder.PositionConversionFactor(1 / DriveTrainConstants::kDriveMotorGearRatio);
 
     mNeo550Config = new rev::spark::SparkMaxConfig{};
-    mNeo550Config->Inverted(false);
+    mNeo550Config->Inverted(true);
     mNeo550Config->SetIdleMode(rev::spark::SparkBaseConfig::kCoast);
     mNeo550Config->absoluteEncoder.VelocityConversionFactor(2 * std::numbers::pi);
     mNeo550Config->absoluteEncoder.PositionConversionFactor(2 * std::numbers::pi);
