@@ -60,14 +60,14 @@ namespace DriveTrainConstants {
     constexpr units::meter_t kSwerveModuleOffsetRight = -0.3556_m;
     constexpr units::meter_t kSwerveModuleOffsetLeft = 0.3556_m;
 
-    constexpr units::meters_per_second_t kSpeedConstant = 5_mps;                            // Temporary value
+    constexpr units::meters_per_second_t kSpeedConstant = 5_mps;                              // Temporary value
     constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 0.2_rad_per_s; // Temporary value
 
 }
 
 namespace ModuleConstants {
     constexpr double kDrivingMotorGearRatio = 5.08;                     // 5.08 rotations of the motor for 1 rotation of the ouput
-    constexpr double kDriveWheelFreeSpeedRps = 40; // TODO: Mesure
+    constexpr double kDriveWheelFreeSpeedRps = 40;                      // TODO: Mesure
     constexpr units::meter_t kWheelPerimeter = 3_in * std::numbers::pi; // in meters (diametre in inches * convertion to meters * pi)
 
     constexpr double kDrivingFactor = 1 / kDrivingMotorGearRatio;
@@ -91,16 +91,10 @@ namespace ModuleConstants {
     constexpr double kDrivingP = 0.04;
     constexpr double kDrivingI = 0.0;
     constexpr double kDrivingD = 0.0;
-}
+    
+    constexpr double kRPMtoRPSFactor = 60;
 
-namespace LimelightConstants {
-    constexpr double kPoseEstimatorStandardDeviationX = 0.7;      // Default/Recommended values
-    constexpr double kPoseEstimatorStandardDeviationY = 0.7;      // Default/Recommended values
-    constexpr double kPoseEstimatorStandardDeviationYaw = 999999; // Default/Recommended values
-}
-
-namespace ConfigConstants {
-    namespace Swerve {
+    namespace Config {
         constexpr rev::spark::SparkBaseConfig::IdleMode kDrivingIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
         constexpr rev::spark::SparkBaseConfig::IdleMode kTurningIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
         
@@ -112,7 +106,11 @@ namespace ConfigConstants {
         constexpr double kTurningClosedLoopMinInput = 0;
         constexpr double kTurningClosedLoopMaxInput = ModuleConstants::kTurningFactor;
         constexpr double kTurningClosedLoopTolerance = 0.01 * ModuleConstants::kTurningFactor;
-        
-        constexpr double kRPMtoRPSFactor = 60;
     }
+}
+
+namespace LimelightConstants {
+    constexpr double kPoseEstimatorStandardDeviationX = 0.7;      // Default/Recommended values
+    constexpr double kPoseEstimatorStandardDeviationY = 0.7;      // Default/Recommended values
+    constexpr double kPoseEstimatorStandardDeviationYaw = 999999; // Default/Recommended values
 }

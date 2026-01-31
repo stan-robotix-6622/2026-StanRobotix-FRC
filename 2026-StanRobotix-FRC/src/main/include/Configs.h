@@ -17,13 +17,13 @@ class SwerveModule {
     constexpr double drivingVelocityFeedForward = nominalVoltage / ModuleConstants::kDriveWheelFreeSpeedRps;
 
     drivingConfig.Inverted(iDrivingInverted);
-    drivingConfig.SetIdleMode(ConfigConstants::Swerve::kDrivingIdleMode);
+    drivingConfig.SetIdleMode(ModuleConstants::Config::kDrivingIdleMode);
     drivingConfig.Apply(SparkBaseConfig::Presets::REV_NEO());
 
-    drivingConfig.encoder.VelocityConversionFactor(drivingFactor / ConfigConstants::Swerve::kRPMtoRPSFactor);
+    drivingConfig.encoder.VelocityConversionFactor(drivingFactor / ModuleConstants::kRPMtoRPSFactor);
     drivingConfig.encoder.PositionConversionFactor(drivingFactor);
 
-    drivingConfig.closedLoop.SetFeedbackSensor(ConfigConstants::Swerve::kDrivingClosedLoopFeedbackSensor);
+    drivingConfig.closedLoop.SetFeedbackSensor(ModuleConstants::Config::kDrivingClosedLoopFeedbackSensor);
     drivingConfig.closedLoop.Pid(ModuleConstants::kDrivingP, ModuleConstants::kDrivingI, ModuleConstants::kDrivingD);
     drivingConfig.closedLoop.OutputRange(-1, 1);
 
@@ -37,23 +37,23 @@ class SwerveModule {
 
     constexpr double turningFactor = ModuleConstants::kTurningFactor;
 
-    turningConfig.Inverted(ConfigConstants::Swerve::kTurningMotorInverted);
-    turningConfig.SetIdleMode(ConfigConstants::Swerve::kTurningIdleMode);
+    turningConfig.Inverted(ModuleConstants::Config::kTurningMotorInverted);
+    turningConfig.SetIdleMode(ModuleConstants::Config::kTurningIdleMode);
     turningConfig.Apply(SparkBaseConfig::Presets::REV_NEO_550());
 
-    turningConfig.absoluteEncoder.VelocityConversionFactor(turningFactor / ConfigConstants::Swerve::kRPMtoRPSFactor);
+    turningConfig.absoluteEncoder.VelocityConversionFactor(turningFactor / ModuleConstants::kRPMtoRPSFactor);
     turningConfig.absoluteEncoder.PositionConversionFactor(turningFactor);
     turningConfig.absoluteEncoder.Inverted(iEncoderInverted);
     turningConfig.absoluteEncoder.Apply(AbsoluteEncoderConfig::Presets::REV_ThroughBoreEncoder());
 
-    turningConfig.closedLoop.SetFeedbackSensor(ConfigConstants::Swerve::kTurningClosedLoopFeedbackSensor);
+    turningConfig.closedLoop.SetFeedbackSensor(ModuleConstants::Config::kTurningClosedLoopFeedbackSensor);
     turningConfig.closedLoop.Pid(ModuleConstants::kTurningP, ModuleConstants::kTurningI, ModuleConstants::kTurningD);
     turningConfig.closedLoop.OutputRange(-1, 1);
-    turningConfig.closedLoop.PositionWrappingEnabled(ConfigConstants::Swerve::kTurningClosedLoopPositionWrapping);
-    turningConfig.closedLoop.PositionWrappingMinInput(ConfigConstants::Swerve::kTurningClosedLoopMinInput);
-    turningConfig.closedLoop.PositionWrappingMaxInput(ConfigConstants::Swerve::kTurningClosedLoopMaxInput);
+    turningConfig.closedLoop.PositionWrappingEnabled(ModuleConstants::Config::kTurningClosedLoopPositionWrapping);
+    turningConfig.closedLoop.PositionWrappingMinInput(ModuleConstants::Config::kTurningClosedLoopMinInput);
+    turningConfig.closedLoop.PositionWrappingMaxInput(ModuleConstants::Config::kTurningClosedLoopMaxInput);
 
-    turningConfig.closedLoop.maxMotion.AllowedProfileError(ConfigConstants::Swerve::kTurningClosedLoopTolerance);
+    turningConfig.closedLoop.maxMotion.AllowedProfileError(ModuleConstants::Config::kTurningClosedLoopTolerance);
 
     return turningConfig;
   }

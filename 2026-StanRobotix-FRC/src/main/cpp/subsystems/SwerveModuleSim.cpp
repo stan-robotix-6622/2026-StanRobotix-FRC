@@ -21,7 +21,7 @@ SwerveModuleSim::SwerveModuleSim(int iDrivingMotorID, int iTurningMotorID, bool 
     mTurningPID = new frc::PIDController{ModuleConstants::kTurningP,
                                          ModuleConstants::kTurningI,
                                          ModuleConstants::kTurningD};
-    mTurningPID->EnableContinuousInput(ConfigConstants::Swerve::kTurningClosedLoopMinInput, ConfigConstants::Swerve::kTurningClosedLoopMaxInput);
+    mTurningPID->EnableContinuousInput(ModuleConstants::Config::kTurningClosedLoopMinInput, ModuleConstants::Config::kTurningClosedLoopMaxInput);
     
     // Configure the motors from Configs.h
     mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
