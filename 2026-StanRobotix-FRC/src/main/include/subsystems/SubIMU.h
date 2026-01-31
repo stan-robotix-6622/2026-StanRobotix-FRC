@@ -8,6 +8,9 @@
 
 #include <frc/geometry/Rotation2d.h>
 #include <ctre/phoenix6/Pigeon2.hpp>
+#include <ctre/phoenix6/sim/Pigeon2SimState.hpp>
+
+#include <units/angle.h>
 
 #include "Constants.h"
 
@@ -28,8 +31,13 @@ class SubIMU : public frc2::SubsystemBase {
   double getYawRate();
 
   void resetAngle();
+  
+  void setSimAngleYaw(units::degree_t iAngle);
+
+  void setSimYawRate(units::degrees_per_second_t iRate);
 
  private:
+  ctre::phoenix6::sim::Pigeon2SimState * mIMUSim;
   ctre::phoenix6::hardware::Pigeon2 * mIMU;
 
   // Components (e.g. motor controllers and sensors) should generally be

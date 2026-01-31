@@ -13,11 +13,12 @@
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc2/command/SubsystemBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/Field2d.h>
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
-// #include <networktables/DoubleTopic.h>
+#include <frc/RobotBase.h>
 // #include <pathplanner/lib/auto/AutoBuilder.h>
 // #include <pathplanner/lib/config/RobotConfig.h>
 // #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
@@ -40,6 +41,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
   void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
 
   void refreshSwervePID();
+  void refreshSwerveModules();
 
   wpi::array<frc::SwerveModuleState, 4> getSwerveModuleStates();
   wpi::array<frc::SwerveModulePosition, 4> getSwerveModulePositions();
@@ -77,10 +79,15 @@ class SubDrivetrain : public frc2::SubsystemBase {
   // nt::DoubleSubscriber mDConstantSubscriber;
 
   // Declaring the four SwerveModule objects
-  SwerveModuleSim * m_frontLeftModule;
-  SwerveModuleSim * m_frontRightModule;
-  SwerveModuleSim * m_backLeftModule;
-  SwerveModuleSim * m_backRightModule;
+  SwerveModule * m_frontLeftModule;
+  SwerveModule * m_frontRightModule;
+  SwerveModule * m_backLeftModule;
+  SwerveModule * m_backRightModule;
+  
+  SwerveModuleSim * m_frontLeftModuleSim;
+  SwerveModuleSim * m_frontRightModuleSim;
+  SwerveModuleSim * m_backLeftModuleSim;
+  SwerveModuleSim * m_backRightModuleSim;
 
   // Declaring my swerve kinematics object
   frc::SwerveDriveKinematics<4> * m_kinematics;
@@ -90,6 +97,8 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::SwerveDriveOdometry<4> * m_odometry;
   // Declaring the pose estimator
   frc::SwerveDrivePoseEstimator<4> * m_poseEstimator;
+
+  frc::Field2d * mField2d;
 
   wpi::array<double, 3> * visionMeasurementStdDevs;
   wpi::array<double, 3> * stateStdDevs;

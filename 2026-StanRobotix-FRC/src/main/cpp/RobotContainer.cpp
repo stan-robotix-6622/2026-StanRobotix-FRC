@@ -18,10 +18,10 @@ RobotContainer::RobotContainer() {
 
   mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
       [this] {
-      mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
-                                        -mCommandXboxController->GetLeftX(),
-                                        -mCommandXboxController->GetRightX(),
-                                        0.3);
+      mDrivetrain->driveFieldRelative(mCommandXboxController->GetLeftY(),
+                                      mCommandXboxController->GetLeftX(),
+                                      mCommandXboxController->GetRightX(),
+                                      1 - mCommandXboxController->GetRightTriggerAxis());
      },
      {mDrivetrain}));
 
@@ -38,7 +38,7 @@ void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
   // mCommandXboxController->X().OnTrue(pathplanner::AutoBuilder::followPath(pathplanner::PathPlannerPath::fromPathFile("Example Path")));
-  mCommandXboxController->Y().WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
+  // mCommandXboxController->Y().WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

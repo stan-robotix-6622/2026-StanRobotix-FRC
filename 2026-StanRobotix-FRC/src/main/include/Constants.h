@@ -60,7 +60,7 @@ namespace DriveTrainConstants {
     constexpr units::meter_t kSwerveModuleOffsetRight = -0.3556_m;
     constexpr units::meter_t kSwerveModuleOffsetLeft = 0.3556_m;
 
-    constexpr units::meters_per_second_t kSpeedConstant = 0.5_mps;                            // Temporary value
+    constexpr units::meters_per_second_t kSpeedConstant = 5_mps;                            // Temporary value
     constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 0.2_rad_per_s; // Temporary value
 
     constexpr double kSecToMinFactor = 60;                            // 60 seconds in a minute (to convert from RPM et rotation per second)
@@ -79,11 +79,10 @@ namespace SwerveConstants {
     constexpr rev::ResetMode kTurningResetMode = rev::ResetMode::kResetSafeParameters;
     constexpr rev::PersistMode kTurningPersistMode = rev::PersistMode::kPersistParameters;
 
-    
-    constexpr double kTurningVelocityConversionFactor = 2 * std::numbers::pi;
     constexpr double kTurningPositionConversionFactor = 2 * std::numbers::pi;
-    constexpr double kDrivingVelocityConversionFactor = 1 / DriveTrainConstants::kDrivingMotorGearRatio;
-    constexpr double kDrivingPositionConversionFactor = 1 / DriveTrainConstants::kDrivingMotorGearRatio;
+    constexpr double kTurningVelocityConversionFactor = 2 * std::numbers::pi / DriveTrainConstants::kSecToMinFactor;
+    constexpr double kDrivingPositionConversionFactor = DriveTrainConstants::kWheelPerimeter / DriveTrainConstants::kDrivingMotorGearRatio;
+    constexpr double kDrivingVelocityConversionFactor = DriveTrainConstants::kWheelPerimeter / (DriveTrainConstants::kDrivingMotorGearRatio * DriveTrainConstants::kSecToMinFactor);
     
     constexpr rev::spark::SparkLowLevel::ControlType kTurningClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kMAXMotionPositionControl;
     constexpr rev::spark::FeedbackSensor kTurningClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kAbsoluteEncoder;

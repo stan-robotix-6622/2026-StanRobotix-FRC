@@ -4,6 +4,8 @@
 
 #include "subsystems/SubDrivetrain.h"
 
+#include <iostream>
+
 SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
 {
     // Initialization of the SwerveModules' location relative to the robot center
@@ -13,10 +15,23 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
     m_backRightLocation  = new frc::Translation2d{DriveTrainConstants::kSwerveModuleOffsetBack, DriveTrainConstants::kSwerveModuleOffsetRight};
 
     // Initialization of the SwerveModules with the motor IDs
-    m_frontLeftModule  = new SwerveModuleSim{DriveTrainConstants::kFrontLeftMotorID , DriveTrainConstants::kFrontLeftMotor550ID, true};
-    m_frontRightModule = new SwerveModuleSim{DriveTrainConstants::kFrontRightMotorID, DriveTrainConstants::kFrontRightMotor550ID, true};
-    m_backLeftModule   = new SwerveModuleSim{DriveTrainConstants::kBackLeftMotorID  , DriveTrainConstants::kBackLeftMotor550ID, false};
-    m_backRightModule  = new SwerveModuleSim{DriveTrainConstants::kBackRightMotorID , DriveTrainConstants::kBackRightMotor550ID, false};
+    if (frc::RobotBase::IsReal())
+    {    
+        std::cout << "The robot is real" << std::endl;
+        m_frontLeftModule  = new SwerveModule{DriveTrainConstants::kFrontLeftMotorID , DriveTrainConstants::kFrontLeftMotor550ID, true};
+        m_frontRightModule = new SwerveModule{DriveTrainConstants::kFrontRightMotorID, DriveTrainConstants::kFrontRightMotor550ID, true};
+        m_backLeftModule   = new SwerveModule{DriveTrainConstants::kBackLeftMotorID  , DriveTrainConstants::kBackLeftMotor550ID, false};
+        m_backRightModule  = new SwerveModule{DriveTrainConstants::kBackRightMotorID , DriveTrainConstants::kBackRightMotor550ID, false};
+    }
+    else
+    {
+        std::cout << "The robot is simulated" << std::endl;
+        m_frontLeftModuleSim  = new SwerveModuleSim{DriveTrainConstants::kFrontLeftMotorID , DriveTrainConstants::kFrontLeftMotor550ID, true};
+        m_frontRightModuleSim = new SwerveModuleSim{DriveTrainConstants::kFrontRightMotorID, DriveTrainConstants::kFrontRightMotor550ID, true};
+        m_backLeftModuleSim   = new SwerveModuleSim{DriveTrainConstants::kBackLeftMotorID  , DriveTrainConstants::kBackLeftMotor550ID, false};
+        m_backRightModuleSim  = new SwerveModuleSim{DriveTrainConstants::kBackRightMotorID , DriveTrainConstants::kBackRightMotor550ID, false};
+    }
+    
 
     // Initialization of the Swerve Data Publishers
     m_currentModuleStatesPublisher = mNTDriveTrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
@@ -39,6 +54,7 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
     // Initialization of the swerve pose estimator with the kinematics, the robot's rotation, an array of the SwerveModules' position, and the robot's pose
     m_poseEstimator = new frc::SwerveDrivePoseEstimator<4>{*m_kinematics, mIMU->getRotation2d(), getSwerveModulePositions(), *m_startingRobotPose};
 
+    mField2d = new frc::Field2d{};
 	// Initialization des standard deviations de la vision
     visionMeasurementStdDevs = new wpi::array<double, 3>{LimelightConstants::kPoseEstimatorStandardDeviationX,
                                                          LimelightConstants::kPoseEstimatorStandardDeviationY,
@@ -81,17 +97,26 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
 void SubDrivetrain::Periodic()
 {
     // Refreshing the SwerveModules' position and states
-    m_frontLeftModule->refreshModule();
-    m_frontRightModule->refreshModule();
-    m_backLeftModule->refreshModule();
-    m_backRightModule->refreshModule();
+    refreshSwerveModules();
 
     refreshSwervePID();
 
-    // // Update of the robot's pose with the robot's rotation and an array of the SwerveModules' position
-    mCurrentRotation2d = mIMU->getRotation2d();
-    
+    // Update of the robot's pose with the robot's rotation and an array of the SwerveModules' position
+    if (frc::RobotBase::IsReal())
+    {
+        mCurrentRotation2d = mIMU->getRotation2d();
+    }
+    else
+    {
+        mIMU->setSimYawRate(m_kinematics->ToChassisSpeeds(getSwerveModuleStates()).omega);
+        mIMU->setSimAngleYaw(units::degree_t(mIMU->getAngleYaw() + mIMU->getYawRate() * 0.2));
+        mCurrentRotation2d = mIMU->getRotation2d();
+    }
+
     m_poseEstimator->Update(mCurrentRotation2d, getSwerveModulePositions());
+
+    mField2d->SetRobotPose(m_poseEstimator->GetEstimatedPosition());
+    frc::SmartDashboard::PutData("Drivetrain/Field2d", mField2d);
 
     // Update la rotation du robot pour la Limelight
   
@@ -126,32 +151,80 @@ void SubDrivetrain::Periodic()
     m_currentModuleStatesPublisher.Set(getSwerveModuleStates());
 }
 
+void SubDrivetrain::refreshSwerveModules()
+{
+    if (frc::RobotBase::IsReal())
+    {
+        m_frontLeftModule->refreshModule();
+        m_frontRightModule->refreshModule();
+        m_backLeftModule->refreshModule();
+        m_backRightModule->refreshModule();
+    }
+    else
+    {
+        m_frontLeftModuleSim->refreshModule();
+        m_frontRightModuleSim->refreshModule();
+        m_backLeftModuleSim->refreshModule();
+        m_backRightModuleSim->refreshModule();
+    }
+}
+
 void SubDrivetrain::refreshSwervePID()
 {
     double wP = frc::SmartDashboard::GetNumber("Drivetrain/kP", SwerveConstants::kP);
     double wI = frc::SmartDashboard::GetNumber("Drivetrain/kI", SwerveConstants::kI);
     double wD = frc::SmartDashboard::GetNumber("Drivetrain/kD", SwerveConstants::kD);
 
-    m_frontLeftModule->setPIDValues(wP, wI, wD);
-    m_frontRightModule->setPIDValues(wP, wI, wD);
-    m_backLeftModule->setPIDValues(wP, wI, wD);
-    m_backRightModule->setPIDValues(wP, wI, wD);
+    if (frc::RobotBase::IsReal())
+    {
+        m_frontLeftModule->setPIDValues(wP, wI, wD);
+        m_frontRightModule->setPIDValues(wP, wI, wD);
+        m_backLeftModule->setPIDValues(wP, wI, wD);
+        m_backRightModule->setPIDValues(wP, wI, wD);
+    }
+    else
+    {
+        m_frontLeftModuleSim->setPIDValues(wP, wI, wD);
+        m_frontRightModuleSim->setPIDValues(wP, wI, wD);
+        m_backLeftModuleSim->setPIDValues(wP, wI, wD);
+        m_backRightModuleSim->setPIDValues(wP, wI, wD);
+    }
 }
 
 wpi::array<frc::SwerveModuleState, 4> SubDrivetrain::getSwerveModuleStates()
 {
-    return wpi::array<frc::SwerveModuleState, 4> {m_frontLeftModule->getModuleState(),
-                                                  m_frontRightModule->getModuleState(),
-                                                  m_backLeftModule->getModuleState(),
-                                                  m_backRightModule->getModuleState()};
+    if (frc::RobotBase::IsReal())
+    {
+        return wpi::array<frc::SwerveModuleState, 4> {m_frontLeftModule->getModuleState(),
+                                                      m_frontRightModule->getModuleState(),
+                                                      m_backLeftModule->getModuleState(),
+                                                      m_backRightModule->getModuleState()};
+    }
+    else
+    {
+        return wpi::array<frc::SwerveModuleState, 4> {m_frontLeftModuleSim->getModuleState(),
+                                                      m_frontRightModuleSim->getModuleState(),
+                                                      m_backLeftModuleSim->getModuleState(),
+                                                      m_backRightModuleSim->getModuleState()};
+    }
 }
 
 wpi::array<frc::SwerveModulePosition, 4> SubDrivetrain::getSwerveModulePositions()
 {
-    return wpi::array<frc::SwerveModulePosition, 4> {m_frontLeftModule->getModulePosition(),
-                                                     m_frontRightModule->getModulePosition(),
-                                                     m_backLeftModule->getModulePosition(),
-                                                     m_backRightModule->getModulePosition()};
+    if (frc::RobotBase::IsReal())
+    {
+        return wpi::array<frc::SwerveModulePosition, 4>{m_frontLeftModule->getModulePosition(),
+                                                        m_frontRightModule->getModulePosition(),
+                                                        m_backLeftModule->getModulePosition(),
+                                                        m_backRightModule->getModulePosition()};
+    }
+    else
+    {
+        return wpi::array<frc::SwerveModulePosition, 4>{m_frontLeftModuleSim->getModulePosition(),
+                                                        m_frontRightModuleSim->getModulePosition(),
+                                                        m_backLeftModuleSim->getModulePosition(),
+                                                        m_backRightModuleSim->getModulePosition()};
+    }
 }
 
 void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation)
@@ -166,12 +239,23 @@ void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
     mSwerveDesiredStates = m_kinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
     
     frc::SmartDashboard::PutNumber("Drivetrain/SetPoint", mSwerveDesiredStates[0].angle.Radians().value());
-    frc::SmartDashboard::PutNumber("Drivetrain/Position", m_frontLeftModule->getModuleState().angle.Radians().value());
     // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
-    m_frontLeftModule->setDesiredState(mSwerveDesiredStates[0], iSpeedModulation);
-    m_frontRightModule->setDesiredState(mSwerveDesiredStates[1], iSpeedModulation);
-    m_backLeftModule->setDesiredState(mSwerveDesiredStates[2], iSpeedModulation);
-    m_backRightModule->setDesiredState(mSwerveDesiredStates[3], iSpeedModulation);
+    if (frc::RobotBase::IsReal())
+    {
+        frc::SmartDashboard::PutNumber("Drivetrain/Position", m_frontLeftModule->getModuleState().angle.Radians().value());
+        m_frontLeftModule->setDesiredState(mSwerveDesiredStates[0], iSpeedModulation);
+        m_frontRightModule->setDesiredState(mSwerveDesiredStates[1], iSpeedModulation);
+        m_backLeftModule->setDesiredState(mSwerveDesiredStates[2], iSpeedModulation);
+        m_backRightModule->setDesiredState(mSwerveDesiredStates[3], iSpeedModulation);
+    }
+    else
+    {
+        frc::SmartDashboard::PutNumber("Drivetrain/Position", m_frontLeftModuleSim->getModuleState().angle.Radians().value());
+        m_frontLeftModuleSim->setDesiredState(mSwerveDesiredStates[0], iSpeedModulation);
+        m_frontRightModuleSim->setDesiredState(mSwerveDesiredStates[1], iSpeedModulation);
+        m_backLeftModuleSim->setDesiredState(mSwerveDesiredStates[2], iSpeedModulation);
+        m_backRightModuleSim->setDesiredState(mSwerveDesiredStates[3], iSpeedModulation);
+    }
 }
 
 frc::Pose2d SubDrivetrain::getPose()
@@ -197,8 +281,18 @@ void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds,
     mSwerveDesiredStates = m_kinematics->ToSwerveModuleStates(iDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
 
     // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
-    m_frontLeftModule->setDesiredState(mSwerveDesiredStates[0], iSpeedModulation);
-    m_frontRightModule->setDesiredState(mSwerveDesiredStates[1], iSpeedModulation);
-    m_backLeftModule->setDesiredState(mSwerveDesiredStates[2], iSpeedModulation);
-    m_backRightModule->setDesiredState(mSwerveDesiredStates[3], iSpeedModulation);
+    if (frc::RobotBase::IsReal())
+    {
+        m_frontLeftModule->setDesiredState(mSwerveDesiredStates[0], iSpeedModulation);
+        m_frontRightModule->setDesiredState(mSwerveDesiredStates[1], iSpeedModulation);
+        m_backLeftModule->setDesiredState(mSwerveDesiredStates[2], iSpeedModulation);
+        m_backRightModule->setDesiredState(mSwerveDesiredStates[3], iSpeedModulation);
+    }
+    else
+    {
+        m_frontLeftModuleSim->setDesiredState(mSwerveDesiredStates[0], iSpeedModulation);
+        m_frontRightModuleSim->setDesiredState(mSwerveDesiredStates[1], iSpeedModulation);
+        m_backLeftModuleSim->setDesiredState(mSwerveDesiredStates[2], iSpeedModulation);
+        m_backRightModuleSim->setDesiredState(mSwerveDesiredStates[3], iSpeedModulation);
+    }
 }

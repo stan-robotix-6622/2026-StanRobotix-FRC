@@ -8,6 +8,7 @@
 #include <frc/system/plant/DCMotor.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
+#include <frc/controller/PIDController.h>
 #include <rev/SparkMax.h>
 #include <rev/config/SparkMaxConfig.h>
 #include <rev/SparkClosedLoopController.h>
@@ -66,9 +67,11 @@ class SwerveModuleSim{
   rev::spark::SparkMaxConfig * mDrivingConfig;
   rev::spark::SparkMaxConfig * mTurningConfig;
 
+  rev::spark::SparkClosedLoopController * mTurningClosedLoopController;
+
   rev::spark::SparkRelativeEncoderSim * mDrivingEncoderSim;
   rev::spark::SparkAbsoluteEncoderSim * mTurningAbsoluteEncoderSim;
-  rev::spark::SparkClosedLoopController * mTurningClosedLoopController;
+  frc::PIDController * mTurningPID;
   
   frc::Rotation2d mTurningCurrentAngle;
   frc::SwerveModuleState mOptimizedState;

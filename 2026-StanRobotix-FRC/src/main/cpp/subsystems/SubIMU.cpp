@@ -7,6 +7,7 @@
 SubIMU::SubIMU()
 {
     mIMU = new ctre::phoenix6::hardware::Pigeon2{IMUConstants::kCanID};
+    mIMUSim = new ctre::phoenix6::sim::Pigeon2SimState{*mIMU};
 }
 
 // This method will be called once per scheduler run
@@ -30,4 +31,14 @@ double SubIMU::getYawRate()
 void SubIMU::resetAngle()
 {
     mIMU->Reset();
+}
+
+void SubIMU::setSimAngleYaw(units::degree_t iAngle)
+{
+    mIMUSim->SetRawYaw(iAngle);
+}
+
+void SubIMU::setSimYawRate(units::degrees_per_second_t iRate)
+{
+    mIMUSim->SetAngularVelocityZ(iRate);
 }

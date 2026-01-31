@@ -4,6 +4,8 @@
 
 #include "subsystems/SwerveModuleSim.h"
 
+#include <iostream>
+
 SwerveModuleSim::SwerveModuleSim(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInverted, bool iTurningInverted)
 {
     
@@ -12,6 +14,9 @@ SwerveModuleSim::SwerveModuleSim(int iDrivingMotorID, int iTurningMotorID, bool 
     
     mTurningMotor = new rev::spark::SparkMax{iTurningMotorID, SwerveConstants::kDrivingMotorType};
     mDrivingMotor = new rev::spark::SparkMax{iDrivingMotorID, SwerveConstants::kTurningMotorType};
+    
+    mTurningPID = new frc::PIDController{SwerveConstants::kP, SwerveConstants::kI, SwerveConstants::kD};
+    mTurningPID->EnableContinuousInput(SwerveConstants::kTurningClosedLoopMinInput, SwerveConstants::kTurningClosedLoopMaxInput);
     
     mDrivingConfig = new rev::spark::SparkMaxConfig{};
     mDrivingConfig->Inverted(iDrivingInverted);
@@ -40,6 +45,8 @@ SwerveModuleSim::SwerveModuleSim(int iDrivingMotorID, int iTurningMotorID, bool 
 
     mDrivingEncoderSim = new rev::spark::SparkRelativeEncoderSim{mDrivingMotorSim->GetRelativeEncoderSim()};
     mTurningAbsoluteEncoderSim = new rev::spark::SparkAbsoluteEncoderSim{mTurningMotorSim->GetAbsoluteEncoderSim()};
+
+    refreshModule();
 }
 
 void SwerveModuleSim::setDesiredState(frc::SwerveModuleState iDesiredState, double iSpeedModulation)
@@ -49,38 +56,43 @@ void SwerveModuleSim::setDesiredState(frc::SwerveModuleState iDesiredState, doub
     mOptimizedState.Optimize(mTurningCurrentAngle);
     mOptimizedState.CosineScale(mTurningCurrentAngle);
 
-    mTurningClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), SwerveConstants::kTurningClosedLoopControlType);
-    mDrivingMotorSim->SetVelocity(mOptimizedState.speed.value() * iSpeedModulation);
-
-    mDrivingEncoderSim->SetVelocity(mOptimizedState.speed.value() * iSpeedModulation);
-    mTurningAbsoluteEncoderSim->SetVelocity(mTurningMotorSim->GetVelocity());
+    mTurningPID->SetSetpoint(mOptimizedState.angle.Radians().value());
+    mTurningMotorSim->iterate(mTurningPID->Calculate(mTurningCurrentAngle.Radians().value()), 12, 0.02);
+    mDrivingMotorSim->iterate(mOptimizedState.speed.value() * iSpeedModulation, 12, 0.02);
+    
+    mDrivingEncoderSim->SetPosition(mDrivingEncoderSim->GetPosition() + mDrivingEncoderSim->GetVelocity() * 0.02);
+    mTurningAbsoluteEncoderSim->SetPosition(mTurningAbsoluteEncoderSim->GetPosition() + mDrivingEncoderSim->GetVelocity() * 0.02);
+    // mDrivingEncoderSim->SetVelocity(mDrivingMotorSim->GetVelocity());
+    // mTurningAbsoluteEncoderSim->SetPosition(mOptimizedState.angle.Radians().value());
+    // mTurningAbsoluteEncoderSim->SetVelocity(mTurningMotorSim->GetVelocity());
 }
 
 void SwerveModuleSim::setPIDValues(double iP, double iI, double iD)
 {
-    bool wUpdateConfig = false;
-    if (iP != kP)
-    {
-        mTurningConfig->closedLoop.P(iP);
-        wUpdateConfig = true;
-        kP = iP;
-    }
-    if (iI != kI)
-    {
-        mTurningConfig->closedLoop.I(iI);
-        wUpdateConfig = true;
-        kI = iI;
-    }
-    if (iD != kD)
-    {
-        mTurningConfig->closedLoop.D(iD);
-        wUpdateConfig = true;
-        kD = iD;
-    }
-    if (wUpdateConfig)
-    {
-        mTurningMotor->Configure(*mTurningConfig, rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kNoPersistParameters);
-    }
+    mTurningPID->SetPID(iP, iI, iD);
+    // bool wUpdateConfig = false;
+    // if (iP != kP)
+    // {
+    //     mTurningConfig->closedLoop.P(iP);
+    //     wUpdateConfig = true;
+    //     kP = iP;
+    // }
+    // if (iI != kI)
+    // {
+    //     mTurningConfig->closedLoop.I(iI);
+    //     wUpdateConfig = true;
+    //     kI = iI;
+    // }
+    // if (iD != kD)
+    // {
+    //     mTurningConfig->closedLoop.D(iD);
+    //     wUpdateConfig = true;
+    //     kD = iD;
+    // }
+    // if (wUpdateConfig)
+    // {
+    //     mTurningMotor->Configure(*mTurningConfig, rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kNoPersistParameters);
+    // }
 }
 
 frc::SwerveModuleState SwerveModuleSim::getModuleState()
@@ -95,8 +107,8 @@ frc::SwerveModulePosition SwerveModuleSim::getModulePosition()
 
 void SwerveModuleSim::refreshModule()
 {
-    mModuleState = frc::SwerveModuleState{units::meters_per_second_t(mDrivingEncoderSim->GetVelocity() * DriveTrainConstants::kWheelPerimeter),
+    mModuleState = frc::SwerveModuleState{units::meters_per_second_t(mDrivingEncoderSim->GetVelocity()),
                                            frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoderSim->GetPosition() - std::numbers::pi))};
-    mModulePosition = frc::SwerveModulePosition{units::meter_t(mDrivingEncoderSim->GetPosition() * DriveTrainConstants::kWheelPerimeter),
+    mModulePosition = frc::SwerveModulePosition{units::meter_t(mDrivingEncoderSim->GetPosition()),
                                                  frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoderSim->GetPosition() - std::numbers::pi))};
 }
