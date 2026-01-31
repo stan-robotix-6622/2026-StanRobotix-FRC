@@ -4,9 +4,12 @@
 
 #include "subsystems/subShooter.h"
 
+
+
 subShooter::subShooter()
 {
-    mTalonSRX = new ctre::phoenix::motorcontrol::can::WPI_TalonSRX{subShooterConstants::kCANid};
+    mShooterController = new rev::spark::SparkMax{subShooterConstants::kCANid, rev::spark::SparkLowLevel::MotorType::kBrushless};
+    mPIDcontroller = new frc::PIDController{PIDConstants::kP, PIDConstants::kI, PIDConstants::kD};
 }
 
 // This method will be called once per scheduler run
@@ -14,5 +17,5 @@ void subShooter::Periodic() {}
 
 void subShooter::setVoltage(units::volt_t iOutput)
 {
-    mTalonSRX->SetVoltage(iOutput);
+    mShooterController->SetVoltage(iOutput);
 };

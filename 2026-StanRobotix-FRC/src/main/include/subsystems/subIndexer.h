@@ -5,7 +5,7 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>
+#include <rev/SparkMax.h>
 #include "Constants.h"
 
 
@@ -22,7 +22,7 @@ class subIndexer : public frc2::SubsystemBase {
   void Periodic() override;
 
  private:
-  ctre::phoenix::motorcontrol::can::WPI_TalonSRX* mTalonSRX;
+  rev::spark::SparkMax* mIndexerController;
  
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.

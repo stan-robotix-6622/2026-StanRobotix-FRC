@@ -8,13 +8,16 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc/XboxController.h>
 
+
 #include "Constants.h"
 
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/subShooter.h"
 #include "subsystems/subIndexer.h"
 
+#include "Constants.h"
 #include "commands/Index.h"
+#include "commands/Shoot.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since

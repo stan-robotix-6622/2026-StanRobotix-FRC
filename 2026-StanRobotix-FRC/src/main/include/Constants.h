@@ -33,3 +33,10 @@ namespace subIndexConstants {
     constexpr units::volt_t kVoltage = 2_V; //placeholder
     constexpr int kCANid = 69; //PLACEHOLDEERR
 }
+
+namespace PIDConstants {
+
+    constexpr double kP = 0.00001; //T'is be a placeholder
+    constexpr double kI = 0;
+    constexpr double kD = 0;
+}

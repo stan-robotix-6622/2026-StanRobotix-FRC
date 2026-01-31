@@ -5,7 +5,7 @@
 #include "subsystems/subIndexer.h"
 
 subIndexer::subIndexer() {
-    mTalonSRX = new ctre::phoenix::motorcontrol::can::WPI_TalonSRX{subIndexConstants::kCANid};
+    mIndexerController = new rev::spark::SparkMax{subIndexConstants::kCANid, rev::spark::SparkLowLevel::MotorType::kBrushless};
 };
 
 
@@ -15,6 +15,6 @@ void subIndexer::Periodic() {}
 
 void subIndexer::setVoltage(units::volt_t iOutput)
 {
-    mTalonSRX->SetVoltage(iOutput);
+    mIndexerController->SetVoltage(iOutput);
 };
 

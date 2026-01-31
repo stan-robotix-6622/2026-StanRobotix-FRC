@@ -5,7 +5,8 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include <ctre/phoenix/motorcontrol/can/WPI_TalonSRX.h>
+#include <rev/SparkMax.h>
+#include <frc/controller/PIDController.h>
 #include "Constants.h"
 
 
@@ -14,7 +15,6 @@ class subShooter : public frc2::SubsystemBase {
   subShooter();
 
   void setVoltage(units::volt_t iOutput);
-
   
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -25,8 +25,7 @@ class subShooter : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  ctre::phoenix::motorcontrol::can::WPI_TalonSRX* mTalonSRX;
-
-
-
+  
+  rev::spark::SparkMax* mShooterController;
+  frc::PIDController *mPIDcontroller;
 };

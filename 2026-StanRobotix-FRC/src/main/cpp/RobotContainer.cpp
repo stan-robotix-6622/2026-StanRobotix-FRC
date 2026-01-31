@@ -11,15 +11,14 @@
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
-#include "Constants.h"
-#include "commands/Index.h"
+
 
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
   m_subShooter = new subShooter;
   m_subIndexer = new subIndexer;
-
+ 
   // Configure the button bindings
   ConfigureBindings();
 }
@@ -37,15 +36,22 @@ void RobotContainer::ConfigureBindings() {
   // pressed, cancelling on release.
   m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
 
-  m_driverController.X().WhileTrue(frc2::cmd::RunEnd(
-    [this] {m_subShooter->setVoltage(subShooterConstants::kVoltage);},
-    [this]{m_subShooter->setVoltage(0_V);}, {m_subShooter}));
+  // m_driverController.X().WhileTrue(frc2::cmd::RunEnd(
+  //   [this] {m_subShooter->setVoltage(m_PIDController->Calculate(m_subShooter->GetVoltage()));},
+  //   [this] {m_subShooter->setVoltage(0_V);}, {m_subShooter}));
 
   frc2::Trigger([this] {
     return m_XboxController.GetAButtonPressed();
   }).OnTrue(Index(m_subIndexer).ToPtr());
+
+
+  frc2::Trigger([this] {
+    return m_XboxController.GetXButtonPressed();
+  }).WhileTrue(Shoot(m_subShooter).ToPtr());
 };
 
+
+  
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
   return autos::ExampleAuto(&m_subsystem);
