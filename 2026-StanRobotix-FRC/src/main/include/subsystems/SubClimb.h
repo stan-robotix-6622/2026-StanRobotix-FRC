@@ -3,9 +3,11 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #pragma once
+
+#include "Constants.h"
+
 #include <rev/SparkMax.h>
 #include <frc2/command/SubsystemBase.h>
-#include "Constants.h"
 #include <rev/config/SparkMaxConfig.h>
 #include <rev/SparkRelativeEncoder.h>
 
