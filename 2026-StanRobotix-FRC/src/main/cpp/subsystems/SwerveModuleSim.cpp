@@ -8,44 +8,41 @@
 
 SwerveModuleSim::SwerveModuleSim(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInverted, bool iTurningInverted)
 {
-    
+    // Initialization of the motor's GearBox
     mTurningGearBox = new frc::DCMotor{frc::DCMotor::NEO550()};
     mDrivingGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
     
-    mTurningMotor = new rev::spark::SparkMax{iTurningMotorID, SwerveConstants::kDrivingMotorType};
-    mDrivingMotor = new rev::spark::SparkMax{iDrivingMotorID, SwerveConstants::kTurningMotorType};
+    // Initialization of the 'real' motor
+    mTurningMotor = new rev::spark::SparkMax{iTurningMotorID, ModuleConstants::kDrivingMotorType};
+    mDrivingMotor = new rev::spark::SparkMax{iDrivingMotorID, ModuleConstants::kTurningMotorType};
     
-    mTurningPID = new frc::PIDController{SwerveConstants::kP, SwerveConstants::kI, SwerveConstants::kD};
-    mTurningPID->EnableContinuousInput(SwerveConstants::kTurningClosedLoopMinInput, SwerveConstants::kTurningClosedLoopMaxInput);
+    // Initialization of the PIDController with the P,I and D constants and 
+    // a continuous input from 0 to 2pi
+    mTurningPID = new frc::PIDController{ModuleConstants::kTurningP,
+                                         ModuleConstants::kTurningI,
+                                         ModuleConstants::kTurningD};
+    mTurningPID->EnableContinuousInput(ConfigConstants::Swerve::kTurningClosedLoopMinInput, ConfigConstants::Swerve::kTurningClosedLoopMaxInput);
     
-    mDrivingConfig = new rev::spark::SparkMaxConfig{};
-    mDrivingConfig->Inverted(iDrivingInverted);
-    mDrivingConfig->SetIdleMode(SwerveConstants::kDrivingIdleMode);
-    mDrivingConfig->absoluteEncoder.VelocityConversionFactor(SwerveConstants::kDrivingVelocityConversionFactor);
-    mDrivingConfig->absoluteEncoder.PositionConversionFactor(SwerveConstants::kDrivingPositionConversionFactor);
+    // Configure the motors from Configs.h
+    mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
+                             ModuleConstants::kDrivingResetMode,
+                             ModuleConstants::kDrivingPersistMode);
+    mTurningMotor->Configure(Configs::SwerveModule::DrivingConfig(iTurningInverted),
+                             ModuleConstants::kTurningResetMode,
+                             ModuleConstants::kTurningPersistMode);
 
-    mTurningConfig = new rev::spark::SparkMaxConfig{};
-    mTurningConfig->Inverted(iTurningInverted);
-    mTurningConfig->SetIdleMode(SwerveConstants::kTurningIdleMode);
-    mTurningConfig->absoluteEncoder.VelocityConversionFactor(SwerveConstants::kTurningVelocityConversionFactor);
-    mTurningConfig->absoluteEncoder.PositionConversionFactor(SwerveConstants::kTurningPositionConversionFactor);
-    mTurningConfig->closedLoop.SetFeedbackSensor(SwerveConstants::kTurningClosedLoopFeedbackSensor);
-    mTurningConfig->closedLoop.Pid(SwerveConstants::kP, SwerveConstants::kI, SwerveConstants::kD);
-    mTurningConfig->closedLoop.PositionWrappingEnabled(SwerveConstants::kTurningClosedLoopPositionWrapping);
-    mTurningConfig->closedLoop.PositionWrappingInputRange(SwerveConstants::kTurningClosedLoopMinInput, SwerveConstants::kTurningClosedLoopMaxInput);
-    mTurningConfig->closedLoop.maxMotion.AllowedClosedLoopError(SwerveConstants::kTurningClosedLoopTolerance);
-
-    mDrivingMotor->Configure(*mDrivingConfig, SwerveConstants::kDrivingResetMode, SwerveConstants::kDrivingPersistMode);
-    mTurningMotor->Configure(*mTurningConfig, SwerveConstants::kTurningResetMode, SwerveConstants::kTurningPersistMode);
-
+    // Initialization of the motors' ClosedLoopController
     mTurningClosedLoopController = new rev::spark::SparkClosedLoopController{mTurningMotor->GetClosedLoopController()};
+    mDrivingClosedLoopController = new rev::spark::SparkClosedLoopController{mDrivingMotor->GetClosedLoopController()};
     
+    // Initialization of the SparkMaxSims
     mTurningMotorSim = new rev::spark::SparkMaxSim{mTurningMotor, mTurningGearBox};
     mDrivingMotorSim = new rev::spark::SparkMaxSim{mDrivingMotor, mDrivingGearBox};
 
     mDrivingEncoderSim = new rev::spark::SparkRelativeEncoderSim{mDrivingMotorSim->GetRelativeEncoderSim()};
     mTurningAbsoluteEncoderSim = new rev::spark::SparkAbsoluteEncoderSim{mTurningMotorSim->GetAbsoluteEncoderSim()};
 
+    // Initialization of the molule's SwerveModulePosition and SwerveModuleState from the encoder's velocity and position
     refreshModule();
 }
 
@@ -56,17 +53,16 @@ void SwerveModuleSim::setDesiredState(frc::SwerveModuleState iDesiredState, doub
     mOptimizedState.Optimize(mTurningCurrentAngle);
     mOptimizedState.CosineScale(mTurningCurrentAngle);
 
-    mTurningPID->SetSetpoint(mOptimizedState.angle.Radians().value());
-    mTurningMotorSim->SetVelocity(mTurningPID->Calculate(mTurningCurrentAngle.Radians().value()));
-    mDrivingMotorSim->SetVelocity(mOptimizedState.speed.value() * iSpeedModulation);
-    // mTurningMotorSim->iterate(mTurningPID->Calculate(mTurningCurrentAngle.Radians().value()), 12, 0.02);
-    // mDrivingMotorSim->iterate(mOptimizedState.speed.value() * iSpeedModulation, 12, 0.02);
-    
-    mDrivingEncoderSim->SetPosition(mDrivingEncoderSim->GetPosition() + mDrivingEncoderSim->GetVelocity() * 0.02);
-    mDrivingEncoderSim->SetVelocity(mDrivingMotorSim->GetVelocity());
-    mTurningAbsoluteEncoderSim->SetPosition(mTurningAbsoluteEncoderSim->GetPosition() + mDrivingEncoderSim->GetVelocity() * 0.02);
-    mTurningAbsoluteEncoderSim->SetVelocity(mTurningMotorSim->GetVelocity());
-    // mTurningAbsoluteEncoderSim->SetPosition(mOptimizedState.angle.Radians().value());
+    // mTurningPID->SetSetpoint(mOptimizedState.angle.Radians().value());
+    // frc::SmartDashboard::PutNumber("../Drivetrain/Turning RPM", mTurningPID->Calculate(mTurningCurrentAngle.Radians().value()) / kTurningVelocityFactor);
+    frc::SmartDashboard::PutNumber("../Drivetrain/Turning RPM", mOptimizedState.angle.Radians().value() / kTurningVelocityFactor);
+    frc::SmartDashboard::PutNumber("../Drivetrain/Driving RPM", mOptimizedState.speed.value() * iSpeedModulation / kDrivingVelocityFactor);
+
+    // mTurningMotorSim->iterate(mTurningPID->Calculate(mTurningCurrentAngle.Radians().value()) / kTurningVelocityFactor, 12, 0.02);
+    // mDrivingMotorSim->iterate(mOptimizedState.speed.value() * iSpeedModulation / kDrivingVelocityFactor, 12, 0.02);
+    mDrivingEncoderSim->SetPosition(mDrivingEncoderSim->GetPosition() + mDrivingEncoderSim->GetVelocity() * 0.020);
+    mDrivingEncoderSim->SetVelocity(mOptimizedState.speed.value() * iSpeedModulation);
+    mTurningAbsoluteEncoderSim->SetPosition(mOptimizedState.angle.Radians().value());
 }
 
 void SwerveModuleSim::setPIDValues(double iP, double iI, double iD)
