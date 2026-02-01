@@ -60,40 +60,53 @@ namespace DriveTrainConstants {
     constexpr units::meter_t kSwerveModuleOffsetRight = -0.3556_m;
     constexpr units::meter_t kSwerveModuleOffsetLeft = 0.3556_m;
 
-    constexpr units::meters_per_second_t kSpeedConstant = 5_mps;                            // Temporary value
+    constexpr units::meters_per_second_t kSpeedConstant = 5_mps;                              // Temporary value
     constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 0.2_rad_per_s; // Temporary value
 
-    constexpr double kSecToMinFactor = 60;                            // 60 seconds in a minute (to convert from RPM et rotation per second)
-    constexpr double kDrivingMotorGearRatio = 5.08;                     // 5.08 rotations of the motor for 1 rotation of the ouput
-    constexpr double kWheelPerimeter = 3 * 0.0254 * std::numbers::pi; // in meters (diametre in inches * convertion to meters * pi)
 }
 
-namespace SwerveConstants {
-    constexpr rev::spark::SparkLowLevel::MotorType kDrivingMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
-    constexpr rev::spark::SparkBaseConfig::IdleMode kDrivingIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
-    constexpr rev::ResetMode kDrivingResetMode = rev::ResetMode::kResetSafeParameters;
-    constexpr rev::PersistMode kDrivingPersistMode = rev::PersistMode::kPersistParameters;
+namespace ModuleConstants {
+    constexpr double kDrivingMotorGearRatio = 5.08;                     // 5.08 rotations of the motor for 1 rotation of the ouput
+    constexpr double kDriveWheelFreeSpeedRps = 40;                      // TODO: Mesure
+    constexpr units::meter_t kWheelPerimeter = 3_in * std::numbers::pi; // in meters (diametre in inches * convertion to meters * pi)
+
+    constexpr double kDrivingFactor = 1 / kDrivingMotorGearRatio;
+    constexpr double kTurningFactor = 2 * std::numbers::pi;
     
-    constexpr rev::spark::SparkLowLevel::MotorType kTurningMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
-    constexpr rev::spark::SparkBaseConfig::IdleMode kTurningIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
+    constexpr rev::spark::SparkLowLevel::ControlType kDrivingClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kVelocity;
+    constexpr rev::spark::SparkLowLevel::ControlType kTurningClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kMAXMotionPositionControl;
+
+    constexpr rev::ResetMode kDrivingResetMode = rev::ResetMode::kResetSafeParameters;
     constexpr rev::ResetMode kTurningResetMode = rev::ResetMode::kResetSafeParameters;
+    
+    constexpr rev::spark::SparkLowLevel::MotorType kDrivingMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+    constexpr rev::spark::SparkLowLevel::MotorType kTurningMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+    
+    constexpr rev::PersistMode kDrivingPersistMode = rev::PersistMode::kPersistParameters;
     constexpr rev::PersistMode kTurningPersistMode = rev::PersistMode::kPersistParameters;
 
-    constexpr double kTurningPositionConversionFactor = 2 * std::numbers::pi;
-    constexpr double kTurningVelocityConversionFactor = 2 * std::numbers::pi / DriveTrainConstants::kSecToMinFactor;
-    constexpr double kDrivingPositionConversionFactor = DriveTrainConstants::kWheelPerimeter / DriveTrainConstants::kDrivingMotorGearRatio;
-    constexpr double kDrivingVelocityConversionFactor = DriveTrainConstants::kWheelPerimeter / (DriveTrainConstants::kDrivingMotorGearRatio * DriveTrainConstants::kSecToMinFactor);
+    constexpr double kTurningP = 0.048;
+    constexpr double kTurningI = 0.0016;
+    constexpr double kTurningD = 0.0008;
+    constexpr double kDrivingP = 0.04;
+    constexpr double kDrivingI = 0.0;
+    constexpr double kDrivingD = 0.0;
     
-    constexpr rev::spark::SparkLowLevel::ControlType kTurningClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kMAXMotionPositionControl;
-    constexpr rev::spark::FeedbackSensor kTurningClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kAbsoluteEncoder;
-    constexpr bool kTurningClosedLoopPositionWrapping = true;
-    constexpr double kTurningClosedLoopMinInput = 0;
-    constexpr double kTurningClosedLoopMaxInput = kTurningPositionConversionFactor;
-    constexpr double kTurningClosedLoopTolerance =  0.01 * kTurningPositionConversionFactor;
+    constexpr double kRPMtoRPSFactor = 60;
 
-    constexpr double kP = 0.048;
-    constexpr double kI = 0.0016;
-    constexpr double kD = 0.0008;
+    namespace Config {
+        constexpr rev::spark::SparkBaseConfig::IdleMode kDrivingIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
+        constexpr rev::spark::SparkBaseConfig::IdleMode kTurningIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
+        
+        constexpr rev::spark::FeedbackSensor kDrivingClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kPrimaryEncoder;
+        constexpr rev::spark::FeedbackSensor kTurningClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kAbsoluteEncoder;
+
+        constexpr bool kTurningMotorInverted = false;
+        constexpr bool kTurningClosedLoopPositionWrapping = true;
+        constexpr double kTurningClosedLoopMinInput = 0;
+        constexpr double kTurningClosedLoopMaxInput = ModuleConstants::kTurningFactor;
+        constexpr double kTurningClosedLoopTolerance = 0.01 * ModuleConstants::kTurningFactor;
+    }
 }
 
 namespace LimelightConstants {

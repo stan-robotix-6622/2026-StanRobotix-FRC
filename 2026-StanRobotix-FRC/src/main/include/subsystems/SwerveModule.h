@@ -7,7 +7,6 @@
 #include <rev/SparkMax.h>
 #include <rev/AbsoluteEncoder.h>
 #include <rev/RelativeEncoder.h>
-#include <rev/config/SparkMaxConfig.h>
 #include <rev/SparkClosedLoopController.h>
 #include <frc/controller/PIDController.h>
 #include <frc/kinematics/SwerveModulePosition.h>
@@ -15,6 +14,7 @@
 #include <units/velocity.h>
 #include <units/angle.h>
 
+#include "Configs.h"
 #include "Constants.h"
 
 class SwerveModule{
@@ -42,16 +42,15 @@ class SwerveModule{
   rev::spark::SparkMax * mDrivingMotor;
   rev::spark::SparkMax * mTurningMotor;
 
-  rev::spark::SparkMaxConfig * mDrivingConfig;
-  rev::spark::SparkMaxConfig * mTurningConfig;
-
+  rev::spark::SparkClosedLoopController * mDrivingClosedLoopController; // Not used currently (please do)
   rev::spark::SparkClosedLoopController * mTurningClosedLoopController;
+  frc::PIDController * mTurningPID; // TODO: Remove if ClosedLoop working
 
   rev::spark::SparkRelativeEncoder * mDrivingEncoder;
   rev::spark::SparkAbsoluteEncoder * mTurningAbsoluteEncoder;
-  frc::PIDController * mTurningPID;
 
   frc::Rotation2d mTurningCurrentAngle;
+
   frc::SwerveModuleState mOptimizedState;
 
   frc::SwerveModuleState mModuleState;

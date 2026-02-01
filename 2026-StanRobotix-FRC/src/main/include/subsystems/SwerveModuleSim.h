@@ -9,8 +9,8 @@
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc/controller/PIDController.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <rev/SparkMax.h>
-#include <rev/config/SparkMaxConfig.h>
 #include <rev/SparkClosedLoopController.h>
 #include <rev/sim/SparkMaxSim.h>
 #include <rev/sim/SparkRelativeEncoderSim.h>
@@ -22,9 +22,10 @@
 
 #include <numbers>
 
-
+#include "Configs.h"
 #include "Constants.h"
 
+// TODO: Merge into SwerveModule
 class SwerveModuleSim{
  public:
   SwerveModuleSim(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInverted = false, bool iTurningInverted = true);
@@ -51,29 +52,31 @@ class SwerveModuleSim{
   const units::kilogram_square_meter_t kWheelDensity = kWheelSurface * kWheelMass;
   const double kTurningMotorGearBox = 12.0;
 
-  double kP = SwerveConstants::kP;
-  double kI = SwerveConstants::kI;
-  double kD = SwerveConstants::kD;
+  double kP = ModuleConstants::kTurningP;
+  double kI = ModuleConstants::kTurningI;
+  double kD = ModuleConstants::kTurningD;
 
-  frc::DCMotor * mTurningGearBox;
+  double kDrivingVelocityFactor = ModuleConstants::kDrivingFactor / ModuleConstants::kRPMtoRPSFactor;
+  double kTurningVelocityFactor = ModuleConstants::kTurningFactor / ModuleConstants::kRPMtoRPSFactor;
+
   frc::DCMotor * mDrivingGearBox;
+  frc::DCMotor * mTurningGearBox;
   
-  rev::spark::SparkMax * mTurningMotor;
   rev::spark::SparkMax * mDrivingMotor;
+  rev::spark::SparkMax * mTurningMotor;
 
-  rev::spark::SparkMaxSim * mTurningMotorSim;
   rev::spark::SparkMaxSim * mDrivingMotorSim;
-  
-  rev::spark::SparkMaxConfig * mDrivingConfig;
-  rev::spark::SparkMaxConfig * mTurningConfig;
+  rev::spark::SparkMaxSim * mTurningMotorSim;
 
+  rev::spark::SparkClosedLoopController * mDrivingClosedLoopController; // Not used currently (please do)
   rev::spark::SparkClosedLoopController * mTurningClosedLoopController;
+  frc::PIDController * mTurningPID; // TODO: Remove if ClosedLoop working
 
   rev::spark::SparkRelativeEncoderSim * mDrivingEncoderSim;
   rev::spark::SparkAbsoluteEncoderSim * mTurningAbsoluteEncoderSim;
-  frc::PIDController * mTurningPID;
   
   frc::Rotation2d mTurningCurrentAngle;
+
   frc::SwerveModuleState mOptimizedState;
 
   frc::SwerveModuleState mModuleState;

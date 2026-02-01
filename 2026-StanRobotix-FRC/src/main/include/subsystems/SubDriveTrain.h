@@ -67,11 +67,13 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::Translation2d * m_backRightLocation;
 
   nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
-  std::shared_ptr<nt::NetworkTable> mNTDriveTrainTable = inst.GetTable("DriveTrain");
+  std::shared_ptr<nt::NetworkTable> mNTDriveTrainTable = inst.GetTable("Drivetrain");
   std::shared_ptr<nt::NetworkTable> mNTSwervePIDTable = inst.GetTable("Swerve");
 
   nt::StructArrayPublisher<frc::SwerveModuleState> m_currentModuleStatesPublisher;
+  nt::StructArrayPublisher<frc::SwerveModuleState> m_desiredModuleStatesPublisher;
   nt::StructPublisher<frc::ChassisSpeeds> m_currentChassisSpeedsPublisher;
+  nt::StructPublisher<frc::ChassisSpeeds> m_desiredChassisSpeedsPublisher;
   nt::StructPublisher<frc::Rotation2d> m_rotation2dPublisher;
   nt::StructPublisher<frc::Pose2d> m_pose2dPublisher;
   // nt::DoubleSubscriber mPConstantSubscriber;
@@ -116,7 +118,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::Rotation2d mCurrentRotation2d;
 
   // The values are meant to be changed before being used
-  wpi::array<frc::SwerveModuleState, 4> mSwerveDesiredStates = {frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
+  wpi::array<frc::SwerveModuleState, 4> mDesiredSwerveStates = {frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
                                                                 frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
                                                                 frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
                                                                 frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)}};
