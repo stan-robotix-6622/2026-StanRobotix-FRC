@@ -5,9 +5,9 @@
 #pragma once
 
 #include <units/length.h>
+#include <units/velocity.h>
 #include <units/angle.h>
 #include <units/angular_velocity.h>
-#include <units/velocity.h>
 
 #include <numbers>
 
@@ -43,7 +43,7 @@ namespace PathPlannerConstants {
     constexpr double kPathPlannerSpeedModulation = 1.0;
 }
 
-namespace DriveTrainConstants {
+namespace DrivetrainConstants {
     constexpr int kBackRightMotorID = 6;
     constexpr int kBackRightMotor550ID = 5;
     constexpr int kFrontRightMotorID = 8;
@@ -67,7 +67,7 @@ namespace DriveTrainConstants {
 
 namespace ModuleConstants {
     constexpr double kDrivingMotorGearRatio = 5.08;                     // 5.08 rotations of the motor for 1 rotation of the ouput
-    constexpr double kDriveWheelFreeSpeedRps = 40;                      // TODO: Mesure
+    constexpr double kDriveWheelFreeSpeedRps = 40.0;                    // TODO: Mesure
     constexpr units::meter_t kWheelPerimeter = 3_in * std::numbers::pi; // in meters (diametre in inches * convertion to meters * pi)
 
     constexpr double kDrivingFactor = 1 / kDrivingMotorGearRatio;

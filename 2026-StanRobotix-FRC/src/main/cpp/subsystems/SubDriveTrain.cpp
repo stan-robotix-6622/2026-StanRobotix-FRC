@@ -2,34 +2,34 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "subsystems/SubDriveTrain.h"
+#include "subsystems/SubDrivetrain.h"
 
 #include <iostream>
 
 SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
 {
     // Initialization of the SwerveModules' location relative to the robot center
-    m_frontLeftLocation  = new frc::Translation2d{DriveTrainConstants::kSwerveModuleOffsetFront, DriveTrainConstants::kSwerveModuleOffsetLeft};
-    m_frontRightLocation = new frc::Translation2d{DriveTrainConstants::kSwerveModuleOffsetFront, DriveTrainConstants::kSwerveModuleOffsetRight};
-    m_backLeftLocation   = new frc::Translation2d{DriveTrainConstants::kSwerveModuleOffsetBack, DriveTrainConstants::kSwerveModuleOffsetLeft};
-    m_backRightLocation  = new frc::Translation2d{DriveTrainConstants::kSwerveModuleOffsetBack, DriveTrainConstants::kSwerveModuleOffsetRight};
+    m_frontLeftLocation  = new frc::Translation2d{DrivetrainConstants::kSwerveModuleOffsetFront, DrivetrainConstants::kSwerveModuleOffsetLeft};
+    m_frontRightLocation = new frc::Translation2d{DrivetrainConstants::kSwerveModuleOffsetFront, DrivetrainConstants::kSwerveModuleOffsetRight};
+    m_backLeftLocation   = new frc::Translation2d{DrivetrainConstants::kSwerveModuleOffsetBack, DrivetrainConstants::kSwerveModuleOffsetLeft};
+    m_backRightLocation  = new frc::Translation2d{DrivetrainConstants::kSwerveModuleOffsetBack, DrivetrainConstants::kSwerveModuleOffsetRight};
 
     // Initialization of the SwerveModules with the motor IDs
     if (frc::RobotBase::IsReal())
     {    
         std::cout << "The robot is real" << std::endl;
-        m_frontLeftModule  = new SwerveModule{DriveTrainConstants::kFrontLeftMotorID , DriveTrainConstants::kFrontLeftMotor550ID, true};
-        m_frontRightModule = new SwerveModule{DriveTrainConstants::kFrontRightMotorID, DriveTrainConstants::kFrontRightMotor550ID, true};
-        m_backLeftModule   = new SwerveModule{DriveTrainConstants::kBackLeftMotorID  , DriveTrainConstants::kBackLeftMotor550ID, false};
-        m_backRightModule  = new SwerveModule{DriveTrainConstants::kBackRightMotorID , DriveTrainConstants::kBackRightMotor550ID, false};
+        m_frontLeftModule  = new SwerveModule{DrivetrainConstants::kFrontLeftMotorID , DrivetrainConstants::kFrontLeftMotor550ID, true};
+        m_frontRightModule = new SwerveModule{DrivetrainConstants::kFrontRightMotorID, DrivetrainConstants::kFrontRightMotor550ID, true};
+        m_backLeftModule   = new SwerveModule{DrivetrainConstants::kBackLeftMotorID  , DrivetrainConstants::kBackLeftMotor550ID, false};
+        m_backRightModule  = new SwerveModule{DrivetrainConstants::kBackRightMotorID , DrivetrainConstants::kBackRightMotor550ID, false};
     }
     else
     {
         std::cout << "The robot is simulated" << std::endl;
-        m_frontLeftModuleSim  = new SwerveModuleSim{DriveTrainConstants::kFrontLeftMotorID , DriveTrainConstants::kFrontLeftMotor550ID, false, true};
-        m_frontRightModuleSim = new SwerveModuleSim{DriveTrainConstants::kFrontRightMotorID, DriveTrainConstants::kFrontRightMotor550ID, false, true};
-        m_backLeftModuleSim   = new SwerveModuleSim{DriveTrainConstants::kBackLeftMotorID  , DriveTrainConstants::kBackLeftMotor550ID, true, true};
-        m_backRightModuleSim  = new SwerveModuleSim{DriveTrainConstants::kBackRightMotorID , DriveTrainConstants::kBackRightMotor550ID, true, true};
+        m_frontLeftModuleSim  = new SwerveModuleSim{DrivetrainConstants::kFrontLeftMotorID , DrivetrainConstants::kFrontLeftMotor550ID, false, true};
+        m_frontRightModuleSim = new SwerveModuleSim{DrivetrainConstants::kFrontRightMotorID, DrivetrainConstants::kFrontRightMotor550ID, false, true};
+        m_backLeftModuleSim   = new SwerveModuleSim{DrivetrainConstants::kBackLeftMotorID  , DrivetrainConstants::kBackLeftMotor550ID, true, true};
+        m_backRightModuleSim  = new SwerveModuleSim{DrivetrainConstants::kBackRightMotorID , DrivetrainConstants::kBackRightMotor550ID, true, true};
     }
     
 
@@ -55,13 +55,13 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
 
     // Initialization of the swerve pose estimator with the kinematics, the robot's rotation, an array of the SwerveModules' position, and the robot's pose
     m_poseEstimator = new frc::SwerveDrivePoseEstimator<4>{*m_kinematics, mIMU->getRotation2d(), getSwerveModulePositions(), *m_startingRobotPose};
-
-    mField2d = new frc::Field2d{};
 	// Initialization des standard deviations de la vision
     visionMeasurementStdDevs = new wpi::array<double, 3>{LimelightConstants::kPoseEstimatorStandardDeviationX,
                                                          LimelightConstants::kPoseEstimatorStandardDeviationY,
                                                          LimelightConstants::kPoseEstimatorStandardDeviationYaw};
     m_poseEstimator->SetVisionMeasurementStdDevs(*visionMeasurementStdDevs);
+
+    mField2d = new frc::Field2d{};
 
     // pathplanner::AutoBuilder::configure(
     //     [this]()
@@ -232,9 +232,9 @@ wpi::array<frc::SwerveModulePosition, 4> SubDrivetrain::getSwerveModulePositions
 void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation)
 {
     // Creating a ChassisSpeeds from the wanted speeds and the robot's rotation
-    mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(DriveTrainConstants::kSpeedConstant * iX,
-                                                                        DriveTrainConstants::kSpeedConstant * iY,
-                                                                        DriveTrainConstants::kSpeedConstant0 * i0,
+    mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(DrivetrainConstants::kSpeedConstant * iX,
+                                                                        DrivetrainConstants::kSpeedConstant * iY,
+                                                                        DrivetrainConstants::kSpeedConstant0 * i0,
                                                                         mIMU->getRotation2d());
 
     // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule

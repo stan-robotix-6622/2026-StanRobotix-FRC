@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <frc/RobotBase.h>
 #include <frc/DriverStation.h>
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
 #include <frc/geometry/Pose2d.h>
@@ -11,14 +12,13 @@
 #include <frc/kinematics/ChassisSpeeds.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
-#include <frc2/command/SubsystemBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/smartdashboard/Field2d.h>
+#include <frc2/command/SubsystemBase.h>
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
-#include <frc/RobotBase.h>
 // #include <pathplanner/lib/auto/AutoBuilder.h>
 // #include <pathplanner/lib/config/RobotConfig.h>
 // #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
@@ -110,18 +110,17 @@ class SubDrivetrain : public frc2::SubsystemBase {
 
   // These attributes are used to not create new variables every time a function is called
   // LimelightHelpers::PoseEstimate mt2;
-  bool rejectCameraUpdate;
-
-  frc::ChassisSpeeds mDesiredChassisSpeeds;
-  frc::ChassisSpeeds mCurrentChassisSpeeds;
-
-  frc::Rotation2d mCurrentRotation2d;
+    bool rejectCameraUpdate;
+    frc::ChassisSpeeds mDesiredChassisSpeeds;
+    frc::ChassisSpeeds mCurrentChassisSpeeds;
+    frc::Rotation2d mCurrentRotation2d;
 
   // The values are meant to be changed before being used
   wpi::array<frc::SwerveModuleState, 4> mDesiredSwerveStates = {frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
                                                                 frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
                                                                 frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
                                                                 frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)}};
+
   // Load the RobotConfig from the GUI settings. You should probably
   // store this in your Constants file
   // pathplanner::RobotConfig config = pathplanner::RobotConfig::fromGUISettings();
