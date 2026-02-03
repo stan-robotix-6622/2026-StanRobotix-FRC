@@ -3,6 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "subsystems/SubDifferentialDrivetrainSim.h"
+#include <iostream>
+
 
 SubDifferentialDrivetrainSim::SubDifferentialDrivetrainSim(){
   std::cout << "i am heerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrreeeeeeeeeeeeeeeeeeeeeeeeeee\n";
@@ -49,6 +51,7 @@ void SubDifferentialDrivetrainSim::Periodic()
                     units::meter_t(m_leftEncoder.GetDistance()),
                     units::meter_t(m_rightEncoder.GetDistance()));
     m_field.SetRobotPose(m_odometry.GetPose());
+    std::cout << "Robotpose ig    " << std::endl << m_odometry.GetPose() << std::endl;
 }
 
 void SubDifferentialDrivetrainSim::SimulationPeriodic() {
