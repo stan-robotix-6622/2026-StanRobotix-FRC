@@ -86,13 +86,13 @@ namespace SwerveConstants {
     constexpr rev::spark::SparkLowLevel::ControlType kNeo550ClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kMAXMotionPositionControl;
     constexpr rev::spark::FeedbackSensor kNeo550ClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kAbsoluteEncoder;
     constexpr bool kNeo550ClosedLoopPositionWrapping = true;
-    constexpr double kNeo550ClosedLoopMinInput = 0;
-    constexpr double kNeo550ClosedLoopMaxInput = kNeo550PositionConversionFactor;
+    constexpr double kNeo550ClosedLoopMinInput = -kNeo550PositionConversionFactor / 2;
+    constexpr double kNeo550ClosedLoopMaxInput = kNeo550PositionConversionFactor / 2;
     constexpr double kNeo550ClosedLoopTolerance =  0.01 * kNeo550PositionConversionFactor;
 
-    constexpr double kP = 0.048;
-    constexpr double kI = 0.0016;
-    constexpr double kD = 0.0008;
+    constexpr double kP = 0.3;
+    constexpr double kI = 0.00;
+    constexpr double kD = 0.00;
 }
 
 namespace LimelightConstants {

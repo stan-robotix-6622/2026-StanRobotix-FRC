@@ -104,5 +104,6 @@
     "xstring": "cpp",
     "xtree": "cpp",
     "xutility": "cpp"
-  }
+  },
+  "wpilib.autoStartRioLog": false
 }

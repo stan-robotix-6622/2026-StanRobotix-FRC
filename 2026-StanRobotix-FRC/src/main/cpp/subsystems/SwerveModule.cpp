@@ -14,7 +14,7 @@ SwerveModule::SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iNeoInverte
 
     // Initialization of the PIDController with the P,I and D constants and a continuous input from 0 to 2pi
     mNeo550PID = new frc::PIDController{SwerveConstants::kP, SwerveConstants::kI, SwerveConstants::kD};
-    mNeo550PID->EnableContinuousInput(0, 2 * std::numbers::pi);
+    mNeo550PID->EnableContinuousInput(SwerveConstants::kNeo550ClosedLoopMinInput, SwerveConstants::kNeo550ClosedLoopMaxInput);
 
     mNeoConfig = new rev::spark::SparkMaxConfig{};
     mNeoConfig->Inverted(iNeoInverted);
@@ -23,35 +23,18 @@ SwerveModule::SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iNeoInverte
     mNeoConfig->absoluteEncoder.PositionConversionFactor(SwerveConstants::kNeoPositionConversionFactor);
 
     mNeo550Config = new rev::spark::SparkMaxConfig{};
-<<<<<<< HEAD
-    mNeo550Config->Inverted(true);
-    mNeo550Config->SetIdleMode(rev::spark::SparkBaseConfig::kCoast);
-    mNeo550Config->absoluteEncoder.VelocityConversionFactor(2 * std::numbers::pi);
-    mNeo550Config->absoluteEncoder.PositionConversionFactor(2 * std::numbers::pi);
-    if (i90Deg)
-    {
-        double wOffset = mMotorNeo550->configAccessor.absoluteEncoder.GetZeroOffset() + 0.25;
-        if (wOffset > 1)
-        {
-            wOffset -= 1;
-        }
-        mNeo550Config->absoluteEncoder.ZeroOffset(wOffset);
-    }
-    mNeo550Config->closedLoop.SetFeedbackSensor(SwerveModuleConstants::kNeo550FeedbackSensor);
-    mNeo550Config->closedLoop.Pid(SwerveModuleConstants::kP, SwerveModuleConstants::kI, SwerveModuleConstants::kD);
-    mNeo550Config->closedLoop.PositionWrappingEnabled(true);
-    mNeo550Config->closedLoop.PositionWrappingInputRange(0, 2 * std::numbers::pi);
-=======
     mNeo550Config->Inverted(iNeo550Inverted);
     mNeo550Config->SetIdleMode(SwerveConstants::kNeo550IdleMode);
+    mNeo550Config->absoluteEncoder.ZeroCentered(true);
     mNeo550Config->absoluteEncoder.VelocityConversionFactor(SwerveConstants::kNeo550VelocityConversionFactor);
     mNeo550Config->absoluteEncoder.PositionConversionFactor(SwerveConstants::kNeo550PositionConversionFactor);
     mNeo550Config->closedLoop.SetFeedbackSensor(SwerveConstants::kNeo550ClosedLoopFeedbackSensor);
     mNeo550Config->closedLoop.Pid(SwerveConstants::kP, SwerveConstants::kI, SwerveConstants::kD);
     mNeo550Config->closedLoop.PositionWrappingEnabled(SwerveConstants::kNeo550ClosedLoopPositionWrapping);
     mNeo550Config->closedLoop.PositionWrappingInputRange(SwerveConstants::kNeo550ClosedLoopMinInput, SwerveConstants::kNeo550ClosedLoopMaxInput);
-    mNeo550Config->closedLoop.maxMotion.AllowedClosedLoopError(SwerveConstants::kNeo550ClosedLoopTolerance);
->>>>>>> 46f7aad255218bcaf7a38490e482c106ac1594cb
+    // mNeo550Config->closedLoop.maxMotion.CruiseVelocity(0);
+    // mNeo550Config->closedLoop.maxMotion.MaxAcceleration(0);
+    mNeo550Config->closedLoop.maxMotion.AllowedProfileError(SwerveConstants::kNeo550ClosedLoopTolerance);
 
     mMotorNeo->Configure(*mNeoConfig, SwerveConstants::kNeoResetMode, SwerveConstants::kNeoPersistMode);
     mMotorNeo550->Configure(*mNeo550Config, SwerveConstants::kNeo550ResetMode, SwerveConstants::kNeo550PersistMode);
@@ -73,18 +56,29 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState, double 
 {
     mNeo550CurrentAngle = units::radian_t(mNeo550AbsoluteEncoder->GetPosition());
     mOptimizedState = iDesiredState;
-    // mOptimizedState.Optimize(mNeo550CurrentAngle);
-    // mOptimizedState.CosineScale(mNeo550CurrentAngle);
+    mOptimizedState.Optimize(mNeo550CurrentAngle);
+    mOptimizedState.CosineScale(mNeo550CurrentAngle);
 
-    // mNeo550PID->SetSetpoint(mOptimizedState.angle.Radians().value());
-    // mMotorNeo550->Set(mNeo550PID->Calculate(mNeo550CurrentAngle.Radians().value()));
-    mNeo550ClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), SwerveConstants::kNeo550ClosedLoopControlType);
-    // mMotorNeo->Set(mOptimizedState.speed.value() * iSpeedModulation);
+    mNeo550PID->SetSetpoint(mOptimizedState.angle.Radians().value());
+    mMotorNeo550->Set(mNeo550PID->Calculate(mNeo550CurrentAngle.Radians().value()));
+    mMotorNeo->Set(mOptimizedState.speed.value() * iSpeedModulation);
+    // mNeo550ClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value() * 10, SwerveConstants::kNeo550ClosedLoopControlType);
 }
 
 void SwerveModule::setPIDValues(double kP, double kI, double kD)
 {
-    mNeo550PID->SetPID(kP, kI, kD);
+    if (mNeo550PID->GetP() != kP)
+    {
+        mNeo550PID->SetP(kP);
+    }
+    if (mNeo550PID->GetI() != kI)
+    {
+        mNeo550PID->SetI(kI);
+    }
+    if (mNeo550PID->GetD() != kD)
+    {
+        mNeo550PID->SetD(kD);
+    }
 }
 
 frc::SwerveModuleState SwerveModule::getModuleState()
