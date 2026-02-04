@@ -9,6 +9,7 @@ Shoot::Shoot(subShooter* iSubShooter) {
   m_PIDController = new frc::PIDController{ PIDConstants::kP, PIDConstants::kI, PIDConstants::kD, 20_ms};
   mSubShooter = new subShooter;
   // Use addRequirements() here to declare subsystem dependencies.
+  AddRequirements(iSubShooter);
 }
 
 // Called when the command is initially scheduled.
@@ -17,13 +18,16 @@ void Shoot::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void Shoot::Execute() 
 {
-  m_PIDController->Calculate(m_AnalogSensor->GetVoltage());
+  m_PIDController->Calculate(m_AnalogSensor->GetVelocity());
+  m_PIDController->SetSetpoint(PIDConstants::setpoint);
 }
 
 // Called once the command ends or is interrupted.
 void Shoot::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool Shoot::IsFinished() {
+bool Shoot::IsFinished() 
+{
   return false;
 }
+

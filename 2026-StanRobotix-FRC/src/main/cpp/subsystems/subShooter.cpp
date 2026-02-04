@@ -19,3 +19,4 @@ void subShooter::setVoltage(units::volt_t iOutput)
 {
     mShooterController->SetVoltage(iOutput);
 };
+
