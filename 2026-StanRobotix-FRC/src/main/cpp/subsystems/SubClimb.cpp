@@ -14,8 +14,8 @@ SubClimb::SubClimb() {
     mSparkMaxConfig1->Inverted(true);
     mSparkMaxConfig2->Inverted(false);
 
-    mSparkMax1->Configure(*mSparkMaxConfig1, rev::spark::SparkBase::ResetMode::kNoResetSafeParameters, rev::spark::SparkBase::PersistMode::kPersistParameters);
-    mSparkMax2->Configure(*mSparkMaxConfig2, rev::spark::SparkBase::ResetMode::kNoResetSafeParameters, rev::spark::SparkBase::PersistMode::kPersistParameters);
+    mSparkMax1->Configure(*mSparkMaxConfig1, rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kPersistParameters);
+    mSparkMax2->Configure(*mSparkMaxConfig2, rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kPersistParameters);
 
     mSparkRelativeEncoder1 = new rev::spark::SparkRelativeEncoder{mSparkMax1->GetEncoder()};
     mSparkRelativeEncoder2 = new rev::spark::SparkRelativeEncoder{mSparkMax2->GetEncoder()};
