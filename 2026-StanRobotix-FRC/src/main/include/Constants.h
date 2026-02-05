@@ -5,9 +5,10 @@
 #pragma once
 
 #include <units/length.h>
+#include <units/velocity.h>
 #include <units/angle.h>
 #include <units/angular_velocity.h>
-#include <units/velocity.h>
+#include <units/voltage.h>
 
 #include <rev/SparkBase.h> // Include Spark variable types
 #include <rev/config/SparkBaseConfig.h>
@@ -42,14 +43,14 @@ namespace PathPlannerConstants {
 }
 
 namespace DriveTrainConstants {
-    constexpr int kBackRightMotorID = 6;
-    constexpr int kBackRightMotor550ID = 5;
-    constexpr int kFrontRightMotorID = 8;
-    constexpr int kFrontRightMotor550ID = 7;
-    constexpr int kFrontLeftMotorID = 2;
-    constexpr int kFrontLeftMotor550ID = 1;
-    constexpr int kBackLeftMotorID = 4;
-    constexpr int kBackLeftMotor550ID = 3;
+    constexpr int kBackRightMotor550ID = 1;
+    constexpr int kBackRightMotorID = 2;
+    constexpr int kFrontRightMotor550ID = 3;
+    constexpr int kFrontRightMotorID = 4;
+    constexpr int kFrontLeftMotor550ID = 5;
+    constexpr int kFrontLeftMotorID = 6;
+    constexpr int kBackLeftMotor550ID = 7;
+    constexpr int kBackLeftMotorID = 8;
 
     // We take for granted a rectangular frame 
     // TODO: Input the new offset for the frame
@@ -58,8 +59,8 @@ namespace DriveTrainConstants {
     constexpr units::meter_t kSwerveModuleOffsetRight = -0.3556_m;
     constexpr units::meter_t kSwerveModuleOffsetLeft = 0.3556_m;
 
-    constexpr units::meters_per_second_t kSpeedConstant = 0.5_mps;                            // Temporary value
-    constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 0.2_rad_per_s; // Temporary value
+    constexpr units::meters_per_second_t kSpeedConstant = 10_mps;                            // Temporary value
+    constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 2_rad_per_s; // Temporary value
 
     constexpr double kSecToMinFactor = 60;                            // 60 seconds in a minute (to convert from RPM et rotation per second)
     constexpr double kDriveMotorGearRatio = 5.08;                     // 5.08 rotations of the motor for 1 rotation of the ouput
@@ -77,6 +78,7 @@ namespace SwerveConstants {
     constexpr rev::ResetMode kNeo550ResetMode = rev::ResetMode::kResetSafeParameters;
     constexpr rev::PersistMode kNeo550PersistMode = rev::PersistMode::kPersistParameters;
 
+    constexpr bool kNeo550AbsoluteEncoderZeroCentered = true;
     
     constexpr double kNeo550VelocityConversionFactor = 2 * std::numbers::pi;
     constexpr double kNeo550PositionConversionFactor = 2 * std::numbers::pi;
@@ -89,6 +91,8 @@ namespace SwerveConstants {
     constexpr double kNeo550ClosedLoopMinInput = -kNeo550PositionConversionFactor / 2;
     constexpr double kNeo550ClosedLoopMaxInput = kNeo550PositionConversionFactor / 2;
     constexpr double kNeo550ClosedLoopTolerance =  0.01 * kNeo550PositionConversionFactor;
+
+    constexpr units::volt_t kV = 12_V / 40;
 
     constexpr double kP = 0.3;
     constexpr double kI = 0.00;

@@ -19,10 +19,12 @@ SubDriveTrain::SubDriveTrain(SubIMU * iIMU)
     m_backRightModule  = new SwerveModule{DriveTrainConstants::kBackRightMotorID , DriveTrainConstants::kBackRightMotor550ID, false};
 
     // Initialization of the Swerve Data Publishers
-    m_currentModuleStatesPublisher = mNTDriveTrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
-    m_currentChassisSpeedsPublisher = mNTDriveTrainTable->GetStructTopic<frc::ChassisSpeeds>("Current ChassisSpeeds").Publish();
-    m_rotation2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Rotation2d>("Current Rotation2d").Publish();
-    m_pose2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
+    mCurrentModuleStatesPublisher = mNTDriveTrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
+    mCurrentChassisSpeedsPublisher = mNTDriveTrainTable->GetStructTopic<frc::ChassisSpeeds>("Current ChassisSpeeds").Publish();
+    mDesiredModuleStatesPublisher = mNTDriveTrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Desired SwerveModuleStates").Publish();
+    mDesiredChassisSpeedsPublisher = mNTDriveTrainTable->GetStructTopic<frc::ChassisSpeeds>("Desired ChassisSpeeds").Publish();
+    mRotation2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Rotation2d>("Current Rotation2d").Publish();
+    mPose2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
     frc::SmartDashboard::PutNumber("Drivetrain/kP", SwerveConstants::kP);
     frc::SmartDashboard::PutNumber("Drivetrain/kI", SwerveConstants::kI);
     frc::SmartDashboard::PutNumber("Drivetrain/kD", SwerveConstants::kD);
@@ -34,7 +36,7 @@ SubDriveTrain::SubDriveTrain(SubIMU * iIMU)
     mIMU = iIMU;
 
     // Initialization of the swerve kinematics with the SwerveModules' location
-    m_kinematics = new frc::SwerveDriveKinematics<4>{*m_frontLeftLocation, *m_frontRightLocation, *m_backLeftLocation, *m_backRightLocation};
+    m_kinematics = new frc::SwerveDriveKinematics<4>{*m_frontRightLocation, *m_frontLeftLocation, *m_backRightLocation, *m_backLeftLocation};
 
     // Initialization of the swerve pose estimator with the kinematics, the robot's rotation, an array of the SwerveModules' position, and the robot's pose
     m_poseEstimator = new frc::SwerveDrivePoseEstimator<4>{*m_kinematics, mIMU->getRotation2d(), getSwerveModulePositions(), *m_startingRobotPose};
@@ -120,10 +122,10 @@ void SubDriveTrain::Periodic()
     }*/
     
     // Publication de valeurs sur le NetworkTables
-    m_currentChassisSpeedsPublisher.Set(getRobotRelativeSpeeds());
-    m_rotation2dPublisher.Set(mCurrentRotation2d.Degrees());
-    m_pose2dPublisher.Set(m_poseEstimator->GetEstimatedPosition());
-    m_currentModuleStatesPublisher.Set(getSwerveModuleStates());
+    mCurrentChassisSpeedsPublisher.Set(getRobotRelativeSpeeds());
+    mRotation2dPublisher.Set(mCurrentRotation2d.Degrees());
+    mPose2dPublisher.Set(m_poseEstimator->GetEstimatedPosition());
+    mCurrentModuleStatesPublisher.Set(getSwerveModuleStates());
 }
 
 void SubDriveTrain::refreshSwervePID()
@@ -157,16 +159,20 @@ wpi::array<frc::SwerveModulePosition, 4> SubDriveTrain::getSwerveModulePositions
 void SubDriveTrain::driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation)
 {
     // Creating a ChassisSpeeds from the wanted speeds and the robot's rotation
-    mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(DriveTrainConstants::kSpeedConstant * iX,
+    mDesiredChassisSpeeds = frc::ChassisSpeeds::FromRobotRelativeSpeeds(DriveTrainConstants::kSpeedConstant * iX,
                                                                         DriveTrainConstants::kSpeedConstant * iY,
                                                                         DriveTrainConstants::kSpeedConstant0 * i0,
                                                                         mIMU->getRotation2d());
 
     // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
     mSwerveDesiredStates = m_kinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
+
+    mDesiredChassisSpeedsPublisher.Set(mDesiredChassisSpeeds);
+    mDesiredModuleStatesPublisher.Set(mSwerveDesiredStates);
     
-    frc::SmartDashboard::PutNumber("Drivetrain/SetPoint", mSwerveDesiredStates[0].angle.Radians().value() + std::numbers::pi / 2);
+    frc::SmartDashboard::PutNumber("Drivetrain/SetPoint", mSwerveDesiredStates[0].angle.Radians().value());
     frc::SmartDashboard::PutNumber("Drivetrain/Position", m_frontLeftModule->getModuleState().angle.Radians().value());
+
     // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
     m_frontLeftModule->setDesiredState(mSwerveDesiredStates[0], iSpeedModulation);
     m_frontRightModule->setDesiredState(mSwerveDesiredStates[1], iSpeedModulation);

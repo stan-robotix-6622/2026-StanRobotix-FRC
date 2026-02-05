@@ -11,8 +11,8 @@
 #include <frc/kinematics/ChassisSpeeds.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
-#include <frc2/command/SubsystemBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/SubsystemBase.h>
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/StructArrayTopic.h>
@@ -67,10 +67,12 @@ class SubDriveTrain : public frc2::SubsystemBase {
   std::shared_ptr<nt::NetworkTable> mNTDriveTrainTable = inst.GetTable("DriveTrain");
   std::shared_ptr<nt::NetworkTable> mNTSwervePIDTable = inst.GetTable("Swerve");
 
-  nt::StructArrayPublisher<frc::SwerveModuleState> m_currentModuleStatesPublisher;
-  nt::StructPublisher<frc::ChassisSpeeds> m_currentChassisSpeedsPublisher;
-  nt::StructPublisher<frc::Rotation2d> m_rotation2dPublisher;
-  nt::StructPublisher<frc::Pose2d> m_pose2dPublisher;
+  nt::StructArrayPublisher<frc::SwerveModuleState> mCurrentModuleStatesPublisher;
+  nt::StructPublisher<frc::ChassisSpeeds> mCurrentChassisSpeedsPublisher;
+  nt::StructArrayPublisher<frc::SwerveModuleState> mDesiredModuleStatesPublisher;
+  nt::StructPublisher<frc::ChassisSpeeds> mDesiredChassisSpeedsPublisher;
+  nt::StructPublisher<frc::Rotation2d> mRotation2dPublisher;
+  nt::StructPublisher<frc::Pose2d> mPose2dPublisher;
   // nt::DoubleSubscriber mPConstantSubscriber;
   // nt::DoubleSubscriber mIConstantSubscriber;
   // nt::DoubleSubscriber mDConstantSubscriber;

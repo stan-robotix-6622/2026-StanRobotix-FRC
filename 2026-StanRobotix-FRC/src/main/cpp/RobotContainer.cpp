@@ -20,8 +20,8 @@ RobotContainer::RobotContainer() {
       [this] {
       mDriveTrain->driveFieldRelative(mCommandXboxController->GetLeftY(),
                                       -mCommandXboxController->GetLeftX(),
-                                      -mCommandXboxController->GetRightX(),
-                                      0.3);
+                                      mCommandXboxController->GetRightX(),
+                                      1);
      },
      {mDriveTrain}));
 
