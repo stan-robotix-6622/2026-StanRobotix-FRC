@@ -9,10 +9,10 @@
 SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
 {
     // Initialization of the SwerveModules' location relative to the robot center
-    m_frontLeftLocation  = new frc::Translation2d{DrivetrainConstants::kSwerveModuleOffsetFront, DrivetrainConstants::kSwerveModuleOffsetLeft};
-    m_frontRightLocation = new frc::Translation2d{DrivetrainConstants::kSwerveModuleOffsetFront, DrivetrainConstants::kSwerveModuleOffsetRight};
-    m_backLeftLocation   = new frc::Translation2d{DrivetrainConstants::kSwerveModuleOffsetBack, DrivetrainConstants::kSwerveModuleOffsetLeft};
-    m_backRightLocation  = new frc::Translation2d{DrivetrainConstants::kSwerveModuleOffsetBack, DrivetrainConstants::kSwerveModuleOffsetRight};
+    m_frontLeftLocation  = new frc::Translation2d{DrivetrainConstants::kFrontLeftTranslation};
+    m_frontRightLocation = new frc::Translation2d{DrivetrainConstants::kFrontRightTranslation};
+    m_backLeftLocation   = new frc::Translation2d{DrivetrainConstants::kBackLeftTranslation};
+    m_backRightLocation  = new frc::Translation2d{DrivetrainConstants::kBackRightTranslation};
 
     // Initialization of the SwerveModules with the motor IDs
     m_frontLeftModule  = new SwerveModule{DrivetrainConstants::kFrontLeftMotorID , DrivetrainConstants::kFrontLeftMotor550ID, true};
@@ -35,7 +35,8 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
     mIMU = iIMU;
 
     // Initialization of the swerve kinematics with the SwerveModules' location
-    m_kinematics = new frc::SwerveDriveKinematics<4>{*m_frontLeftLocation, *m_frontRightLocation, *m_backLeftLocation, *m_backRightLocation};
+    // WARNING: The order of the modules is not the same in this declaration as when it's uses
+    m_kinematics = new frc::SwerveDriveKinematics<4>{*m_frontRightLocation, *m_frontLeftLocation, *m_backRightLocation, *m_backLeftLocation};
 
     // Initialization of the swerve pose estimator with the kinematics, the robot's rotation, an array of the SwerveModules' position, and the robot's pose
     m_poseEstimator = new frc::SwerveDrivePoseEstimator<4>{*m_kinematics, mIMU->getRotation2d(), getSwerveModulePositions(), *m_startingRobotPose};
