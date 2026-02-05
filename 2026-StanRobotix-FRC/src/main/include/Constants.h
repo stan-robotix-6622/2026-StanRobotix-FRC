@@ -40,5 +40,5 @@ namespace PIDConstants {
     constexpr double kI = 0;
     constexpr double kD = 0;
 
-    constexpr double setpoint = 1;
+    constexpr double setpoint = 1; //placeholder
 }

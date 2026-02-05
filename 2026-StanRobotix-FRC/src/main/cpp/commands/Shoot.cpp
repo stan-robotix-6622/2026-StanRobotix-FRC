@@ -13,13 +13,15 @@ Shoot::Shoot(subShooter* iSubShooter) {
 }
 
 // Called when the command is initially scheduled.
-void Shoot::Initialize() {}
+void Shoot::Initialize() 
+{
+   m_PIDController->SetSetpoint(PIDConstants::setpoint);
+}
 
 // Called repeatedly when this Command is scheduled to run
 void Shoot::Execute() 
 {
-  m_PIDController->Calculate(m_AnalogSensor->GetVelocity());
-  m_PIDController->SetSetpoint(PIDConstants::setpoint);
+  mSubShooter->setVoltage(m_PIDController->Calculate(m_AnalogSensor->GetVelocity())* 1_V);
 }
 
 // Called once the command ends or is interrupted.
