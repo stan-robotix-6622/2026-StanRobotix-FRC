@@ -110,6 +110,7 @@ namespace ModuleConstants {
         constexpr rev::spark::FeedbackSensor kTurningClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kAbsoluteEncoder;
 
         constexpr bool kTurningMotorInverted = false;
+        constexpr bool kTurningEncoderZeroCentered = false;
         constexpr bool kTurningClosedLoopPositionWrapping = true;
         constexpr double kTurningClosedLoopMinInput = -ModuleConstants::kTurningFactor / 2;
         constexpr double kTurningClosedLoopMaxInput = ModuleConstants::kTurningFactor / 2;

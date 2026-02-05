@@ -44,6 +44,7 @@ class SwerveModule {
     turningConfig.absoluteEncoder.VelocityConversionFactor(turningFactor / ModuleConstants::kRPMtoRPSFactor);
     turningConfig.absoluteEncoder.PositionConversionFactor(turningFactor);
     turningConfig.absoluteEncoder.Inverted(iEncoderInverted);
+    turningConfig.absoluteEncoder.ZeroCentered(ModuleConstants::Config::kTurningEncoderZeroCentered);
     turningConfig.absoluteEncoder.Apply(AbsoluteEncoderConfig::Presets::REV_ThroughBoreEncoder());
 
     turningConfig.closedLoop.SetFeedbackSensor(ModuleConstants::Config::kTurningClosedLoopFeedbackSensor);
