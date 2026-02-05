@@ -11,6 +11,7 @@
 
 #include <numbers>
 
+#include <frc/geometry/Translation2d.h>
 #include <rev/SparkBase.h> // Include Spark variable types
 #include <rev/config/SparkBaseConfig.h> // For the spark IdleMode
 
@@ -25,7 +26,7 @@
  */
 
 namespace OperatorConstants {
-    inline constexpr int kDrivingrControllerPort = 0;
+    inline constexpr int kDriverControllerPort = 0;
 } // namespace OperatorConstants
 
 namespace IMUConstants {
@@ -53,15 +54,22 @@ namespace DrivetrainConstants {
     constexpr int kBackLeftMotorID = 4;
     constexpr int kBackLeftMotor550ID = 3;
 
+    // Left-Right
+    constexpr units::meter_t kRobotWidth = 28_in;
+    // Front-Back
+    constexpr units::meter_t kRobotLength = 26.875_in;
+    // In both directions
+    constexpr units::meter_t kModuleCornerOffset = 1.75_in;
+    
     // We take for granted a rectangular frame 
     // TODO: Input the new offset for the frame
-    constexpr units::meter_t kSwerveModuleOffsetFront = 0.3683_m;
-    constexpr units::meter_t kSwerveModuleOffsetBack = -0.3683_m;
-    constexpr units::meter_t kSwerveModuleOffsetRight = -0.3556_m;
-    constexpr units::meter_t kSwerveModuleOffsetLeft = 0.3556_m;
+    constexpr frc::Translation2d kFrontLeftTranslation  = frc::Translation2d{ (kRobotLength / 2 - kModuleCornerOffset),  (kRobotWidth / 2 - kModuleCornerOffset)};
+    constexpr frc::Translation2d kFrontRightTranslation = frc::Translation2d{ (kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
+    constexpr frc::Translation2d kBackLeftTranslation   = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset),  (kRobotWidth / 2 - kModuleCornerOffset)};
+    constexpr frc::Translation2d kBackRightTranslation  = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
 
     constexpr units::meters_per_second_t kSpeedConstant = 5_mps;                              // Temporary value
-    constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 0.2_rad_per_s; // Temporary value
+    constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 2_rad_per_s; // Temporary value
 
 }
 
@@ -85,9 +93,9 @@ namespace ModuleConstants {
     constexpr rev::PersistMode kDrivingPersistMode = rev::PersistMode::kPersistParameters;
     constexpr rev::PersistMode kTurningPersistMode = rev::PersistMode::kPersistParameters;
 
-    constexpr double kTurningP = 0.048;
-    constexpr double kTurningI = 0.0016;
-    constexpr double kTurningD = 0.0008;
+    constexpr double kTurningP = 0.3;
+    constexpr double kTurningI = 0.0;
+    constexpr double kTurningD = 0.0;
     constexpr double kDrivingP = 0.04;
     constexpr double kDrivingI = 0.0;
     constexpr double kDrivingD = 0.0;
@@ -102,9 +110,10 @@ namespace ModuleConstants {
         constexpr rev::spark::FeedbackSensor kTurningClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kAbsoluteEncoder;
 
         constexpr bool kTurningMotorInverted = false;
+        constexpr bool kTurningEncoderZeroCentered = false;
         constexpr bool kTurningClosedLoopPositionWrapping = true;
-        constexpr double kTurningClosedLoopMinInput = 0;
-        constexpr double kTurningClosedLoopMaxInput = ModuleConstants::kTurningFactor;
+        constexpr double kTurningClosedLoopMinInput = -ModuleConstants::kTurningFactor / 2;
+        constexpr double kTurningClosedLoopMaxInput = ModuleConstants::kTurningFactor / 2;
         constexpr double kTurningClosedLoopTolerance = 0.01 * ModuleConstants::kTurningFactor;
     }
 }

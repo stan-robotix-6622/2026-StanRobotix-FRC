@@ -9,10 +9,10 @@
 SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
 {
     // Initialization of the SwerveModules' location relative to the robot center
-    m_frontLeftLocation  = new frc::Translation2d{DrivetrainConstants::kSwerveModuleOffsetFront, DrivetrainConstants::kSwerveModuleOffsetLeft};
-    m_frontRightLocation = new frc::Translation2d{DrivetrainConstants::kSwerveModuleOffsetFront, DrivetrainConstants::kSwerveModuleOffsetRight};
-    m_backLeftLocation   = new frc::Translation2d{DrivetrainConstants::kSwerveModuleOffsetBack, DrivetrainConstants::kSwerveModuleOffsetLeft};
-    m_backRightLocation  = new frc::Translation2d{DrivetrainConstants::kSwerveModuleOffsetBack, DrivetrainConstants::kSwerveModuleOffsetRight};
+    m_frontLeftLocation  = new frc::Translation2d{DrivetrainConstants::kFrontLeftTranslation};
+    m_frontRightLocation = new frc::Translation2d{DrivetrainConstants::kFrontRightTranslation};
+    m_backLeftLocation   = new frc::Translation2d{DrivetrainConstants::kBackLeftTranslation};
+    m_backRightLocation  = new frc::Translation2d{DrivetrainConstants::kBackRightTranslation};
 
     // Initialization of the SwerveModules with the motor IDs
     if (frc::RobotBase::IsReal())
@@ -43,9 +43,6 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
     frc::SmartDashboard::PutNumber("Drivetrain/kP", ModuleConstants::kTurningP);
     frc::SmartDashboard::PutNumber("Drivetrain/kI", ModuleConstants::kTurningI);
     frc::SmartDashboard::PutNumber("Drivetrain/kD", ModuleConstants::kTurningD);
-    // mPConstantSubscriber = mNTSwervePIDTable->GetDoubleTopic("kP").Subscribe(ModuleConstants::kTurningP);
-    // mIConstantSubscriber = mNTSwervePIDTable->GetDoubleTopic("kI").Subscribe(ModuleConstants::kTurningI);
-    // mDConstantSubscriber = mNTSwervePIDTable->GetDoubleTopic("kD").Subscribe(ModuleConstants::kTurningD);
 
     // Initialization of the IMU
     mIMU = iIMU;

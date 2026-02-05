@@ -76,9 +76,6 @@ class SubDrivetrain : public frc2::SubsystemBase {
   nt::StructPublisher<frc::ChassisSpeeds> m_desiredChassisSpeedsPublisher;
   nt::StructPublisher<frc::Rotation2d> m_rotation2dPublisher;
   nt::StructPublisher<frc::Pose2d> m_pose2dPublisher;
-  // nt::DoubleSubscriber mPConstantSubscriber;
-  // nt::DoubleSubscriber mIConstantSubscriber;
-  // nt::DoubleSubscriber mDConstantSubscriber;
 
   // Declaring the four SwerveModule objects
   SwerveModule * m_frontLeftModule;
