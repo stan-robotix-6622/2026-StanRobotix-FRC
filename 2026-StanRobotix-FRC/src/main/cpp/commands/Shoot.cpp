@@ -21,7 +21,7 @@ void Shoot::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void Shoot::Execute() 
 {
-  mSubShooter->setVoltage(m_PIDController->Calculate(m_AnalogSensor->GetVelocity())* 1_V);
+  mSubShooter->setVelocity(m_PIDController->Calculate(m_AnalogSensor->GetVelocity())* 1_V);
 }
 
 // Called once the command ends or is interrupted.

@@ -8,7 +8,6 @@
 
 subShooter::subShooter()
 {
-    mShooterControllerSim = new rev::spark::SparkSim{subShooterConstants::kCANid, frc::DCMotor::NEO};
     mPIDcontroller = new frc::PIDController{PIDConstants::kP, PIDConstants::kI, PIDConstants::kD};
     mShooterController =  new rev::spark::SparkMax{subShooterConstants::kCANid, rev::spark::SparkLowLevel::MotorType::kBrushless};
 }
@@ -16,8 +15,8 @@ subShooter::subShooter()
 // This method will be called once per scheduler run
 void subShooter::Periodic() {}
 
-void subShooter::setVelocity(double velocity)
+void subShooter::setVelocity(units::volt_t velocity)
 {
-    mShooterControllerSim->SetVelocity(velocity);
+    mShooterControllerSim.SetVoltage(velocity);
 };
 
