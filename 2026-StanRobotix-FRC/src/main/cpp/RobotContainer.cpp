@@ -14,16 +14,16 @@ RobotContainer::RobotContainer() {
 
   // Initialize all of your commands and subsystems here
   mIMU = new SubIMU{};
-  mDriveTrain = new SubDriveTrain{mIMU};
+  mDrivetrain = new SubDrivetrain{mIMU};
 
-  mDriveTrain->SetDefaultCommand(frc2::cmd::Run(
+  mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
       [this] {
-      mDriveTrain->driveFieldRelative(mCommandXboxController->GetLeftY(),
+      mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
                                       -mCommandXboxController->GetLeftX(),
-                                      mCommandXboxController->GetRightX(),
-                                      1);
+                                      -mCommandXboxController->GetRightX(),
+                                      1 - mCommandXboxController->GetRightTriggerAxis());
      },
-     {mDriveTrain}));
+     {mDrivetrain}));
 
   mIMU->SetDefaultCommand(frc2::cmd::Run(
     [this] {

@@ -7,7 +7,6 @@
 #include <rev/SparkMax.h>
 #include <rev/AbsoluteEncoder.h>
 #include <rev/RelativeEncoder.h>
-#include <rev/config/SparkMaxConfig.h>
 #include <rev/SparkClosedLoopController.h>
 #include <frc/controller/PIDController.h>
 #include <frc/kinematics/SwerveModulePosition.h>
@@ -15,12 +14,13 @@
 #include <units/velocity.h>
 #include <units/angle.h>
 
+#include "Configs.h"
 #include "Constants.h"
 
 class SwerveModule{
  public:
-// Constructeur de la classe avec un motorID pour le Neo et un pour le Neo550
-  SwerveModule(int iNeoMotorID, int iNeo550MotorID, bool iNeoInveryed = false, bool iNeo550Inverted = true);
+// Constructeur de la classe avec un motorID pour le Driving et un pour le Turning
+  SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInveryed = false, bool iTurningInverted = true);
 
 // Méthode qui retourne le SwerveModulePosition du module
   frc::SwerveModulePosition getModulePosition();
@@ -39,19 +39,18 @@ class SwerveModule{
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  rev::spark::SparkMax * mMotorNeo;
-  rev::spark::SparkMax * mMotorNeo550;
+  rev::spark::SparkMax * mDrivingMotor;
+  rev::spark::SparkMax * mTurningMotor;
 
-  rev::spark::SparkMaxConfig * mNeoConfig;
-  rev::spark::SparkMaxConfig * mNeo550Config;
+  rev::spark::SparkClosedLoopController * mDrivingClosedLoopController; // Not used currently (please do)
+  rev::spark::SparkClosedLoopController * mTurningClosedLoopController;
+  frc::PIDController * mTurningPID; // TODO: Remove if ClosedLoop working
 
-  rev::spark::SparkClosedLoopController * mNeo550ClosedLoopController;
+  rev::spark::SparkRelativeEncoder * mDrivingEncoder;
+  rev::spark::SparkAbsoluteEncoder * mTurningAbsoluteEncoder;
 
-  rev::spark::SparkRelativeEncoder * mNeoEncoder;
-  rev::spark::SparkAbsoluteEncoder * mNeo550AbsoluteEncoder;
-  frc::PIDController * mNeo550PID;
+  frc::Rotation2d mTurningCurrentAngle;
 
-  frc::Rotation2d mNeo550CurrentAngle;
   frc::SwerveModuleState mOptimizedState;
 
   frc::SwerveModuleState mModuleState;

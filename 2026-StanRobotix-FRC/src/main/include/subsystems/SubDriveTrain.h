@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <frc/RobotBase.h>
 #include <frc/DriverStation.h>
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
 #include <frc/geometry/Pose2d.h>
@@ -12,12 +13,12 @@
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/smartdashboard/Field2d.h>
 #include <frc2/command/SubsystemBase.h>
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
-// #include <networktables/DoubleTopic.h>
 // #include <pathplanner/lib/auto/AutoBuilder.h>
 // #include <pathplanner/lib/config/RobotConfig.h>
 // #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
@@ -27,9 +28,9 @@
 #include "subsystems/SubIMU.h"
 #include "subsystems/SwerveModule.h"
 
-class SubDriveTrain : public frc2::SubsystemBase {
+class SubDrivetrain : public frc2::SubsystemBase {
  public:
-  SubDriveTrain(SubIMU * iIMU);
+  SubDrivetrain(SubIMU * iIMU);
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
@@ -39,6 +40,7 @@ class SubDriveTrain : public frc2::SubsystemBase {
   void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
 
   void refreshSwervePID();
+  void refreshSwerveModules();
 
   wpi::array<frc::SwerveModuleState, 4> getSwerveModuleStates();
   wpi::array<frc::SwerveModulePosition, 4> getSwerveModulePositions();
@@ -64,7 +66,7 @@ class SubDriveTrain : public frc2::SubsystemBase {
   frc::Translation2d * m_backRightLocation;
 
   nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
-  std::shared_ptr<nt::NetworkTable> mNTDriveTrainTable = inst.GetTable("DriveTrain");
+  std::shared_ptr<nt::NetworkTable> mNTDriveTrainTable = inst.GetTable("Drivetrain");
   std::shared_ptr<nt::NetworkTable> mNTSwervePIDTable = inst.GetTable("Swerve");
 
   nt::StructArrayPublisher<frc::SwerveModuleState> mCurrentModuleStatesPublisher;
@@ -73,9 +75,6 @@ class SubDriveTrain : public frc2::SubsystemBase {
   nt::StructPublisher<frc::ChassisSpeeds> mDesiredChassisSpeedsPublisher;
   nt::StructPublisher<frc::Rotation2d> mRotation2dPublisher;
   nt::StructPublisher<frc::Pose2d> mPose2dPublisher;
-  // nt::DoubleSubscriber mPConstantSubscriber;
-  // nt::DoubleSubscriber mIConstantSubscriber;
-  // nt::DoubleSubscriber mDConstantSubscriber;
 
   // Declaring the four SwerveModule objects
   SwerveModule * m_frontLeftModule;
@@ -92,6 +91,8 @@ class SubDriveTrain : public frc2::SubsystemBase {
   // Declaring the pose estimator
   frc::SwerveDrivePoseEstimator<4> * m_poseEstimator;
 
+  frc::Field2d * mField2d;
+
   wpi::array<double, 3> * visionMeasurementStdDevs;
   wpi::array<double, 3> * stateStdDevs;
 
@@ -101,17 +102,16 @@ class SubDriveTrain : public frc2::SubsystemBase {
   // These attributes are used to not create new variables every time a function is called
   // LimelightHelpers::PoseEstimate mt2;
   bool rejectCameraUpdate;
-
   frc::ChassisSpeeds mDesiredChassisSpeeds;
   frc::ChassisSpeeds mCurrentChassisSpeeds;
-
   frc::Rotation2d mCurrentRotation2d;
 
   // The values are meant to be changed before being used
-  wpi::array<frc::SwerveModuleState, 4> mSwerveDesiredStates = {frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
+  wpi::array<frc::SwerveModuleState, 4> mDesiredSwerveStates = {frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
                                                                 frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
                                                                 frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
                                                                 frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)}};
+
   // Load the RobotConfig from the GUI settings. You should probably
   // store this in your Constants file
   // pathplanner::RobotConfig config = pathplanner::RobotConfig::fromGUISettings();
