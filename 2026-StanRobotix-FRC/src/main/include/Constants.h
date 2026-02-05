@@ -11,6 +11,7 @@
 
 #include <numbers>
 
+#include <frc/geometry/Translation2d.h>
 #include <rev/SparkBase.h> // Include Spark variable types
 #include <rev/config/SparkBaseConfig.h> // For the spark IdleMode
 
@@ -53,12 +54,19 @@ namespace DrivetrainConstants {
     constexpr int kBackLeftMotorID = 4;
     constexpr int kBackLeftMotor550ID = 3;
 
+    // Left-Right
+    constexpr units::meter_t kRobotWidth = 28_in;
+    // Front-Back
+    constexpr units::meter_t kRobotLength = 26.875_in;
+    // In both directions
+    constexpr units::meter_t kModuleCornerOffset = 1.75_in;
+    
     // We take for granted a rectangular frame 
     // TODO: Input the new offset for the frame
-    constexpr units::meter_t kSwerveModuleOffsetFront = 0.3683_m;
-    constexpr units::meter_t kSwerveModuleOffsetBack = -0.3683_m;
-    constexpr units::meter_t kSwerveModuleOffsetRight = -0.3556_m;
-    constexpr units::meter_t kSwerveModuleOffsetLeft = 0.3556_m;
+    constexpr frc::Translation2d kFrontLeftTranslation  = frc::Translation2d{ (kRobotLength / 2 - kModuleCornerOffset),  (kRobotWidth / 2 - kModuleCornerOffset)};
+    constexpr frc::Translation2d kFrontRightTranslation = frc::Translation2d{ (kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
+    constexpr frc::Translation2d kBackLeftTranslation   = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset),  (kRobotWidth / 2 - kModuleCornerOffset)};
+    constexpr frc::Translation2d kBackRightTranslation  = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
 
     constexpr units::meters_per_second_t kSpeedConstant = 5_mps;                              // Temporary value
     constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 2_rad_per_s; // Temporary value
