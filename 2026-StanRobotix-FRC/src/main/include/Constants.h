@@ -33,4 +33,10 @@ namespace PivotConstants{
   constexpr int kMotorPivotid1 = 0;
   constexpr int kMotorPivotid2 = 0;
   constexpr double kSpeedPivot = 0.8;
+  constexpr double kOffset = 0; // en attendant
+  constexpr double kP = 0.00001; // en attendant
+  constexpr double kI = 0; // en attendant
+  constexpr double kD = 0; // en attendant
+  constexpr double setpointUp = 1; // en attendant
+  constexpr double setpointDown = 1; // en attendant
 }

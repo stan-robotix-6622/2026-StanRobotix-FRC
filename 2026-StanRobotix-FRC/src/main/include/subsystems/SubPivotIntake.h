@@ -6,6 +6,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkMax.h>
+#include <frc/controller/PIDController.h>
 #include "Constants.h"
 
 
@@ -18,14 +19,20 @@ class SubPivotIntake : public frc2::SubsystemBase {
   void Keep();
   void GoUp();
   void GoDown();
+
+  
+  void SetVoltage(double iVoltage);
+
+  double GetAngle();
+
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
 
  private:
-  rev::spark::SparkMax * mPivotMotor1 = nullptr;
-  rev::spark::SparkMax * mPivotMotor2 = nullptr;
+  rev::spark::SparkMax * mPivotMotor = nullptr;
+  frc::PIDController * mPIDController;
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 };

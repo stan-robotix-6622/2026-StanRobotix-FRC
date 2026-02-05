@@ -6,8 +6,8 @@
 
 
 SubPivotIntake::SubPivotIntake() {
-    mPivotMotor1 = new rev::spark::SparkMax(PivotConstants::kMotorPivotid1, rev::spark::SparkLowLevel::MotorType::kBrushless);
-    mPivotMotor2 = new rev::spark::SparkMax(PivotConstants::kMotorPivotid2, rev::spark::SparkLowLevel::MotorType::kBrushless);
+    mPivotMotor = new rev::spark::SparkMax{PivotConstants::kMotorPivotid1, rev::spark::SparkLowLevel::MotorType::kBrushless};
+    mPIDController = new frc::PIDController{PivotConstants::kP, PivotConstants::kI, PivotConstants::kD};
 }
 
 
@@ -17,16 +17,22 @@ void SubPivotIntake::Periodic() {}
 
 
 void SubPivotIntake::Stop() {
-    mPivotMotor1->StopMotor();
-    mPivotMotor2->StopMotor();
+    mPivotMotor->StopMotor();
 }   
 
 void SubPivotIntake::GoUp(){
-    mPivotMotor1->Set(PivotConstants::kSpeedPivot);
-    mPivotMotor2->Set(-PivotConstants::kSpeedPivot);
+    mPivotMotor->Set(PivotConstants::kSpeedPivot);
 }
 
 void SubPivotIntake::GoDown(){
-    mPivotMotor1->Set(-PivotConstants::kSpeedPivot);
-    mPivotMotor2->Set(PivotConstants::kSpeedPivot);
+    mPivotMotor->Set(-PivotConstants::kSpeedPivot);
+}
+
+void SubPivotIntake::SetVoltage(double iVoltage){
+    mPivotMotor->SetVoltage(units::volt_t(iVoltage));
+}
+
+double SubPivotIntake::GetAngle(){
+    // Gear ration (4:1)
+    return (mPivotMotor->GetEncoder().GetPosition() + PivotConstants::kOffset) / 4 * 2 * std::numbers::pi;
 }

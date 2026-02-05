@@ -19,3 +19,8 @@ void SubIntake::Keep()
 {
     mIntakeMotor->Set(IntakeConstants::kSpeed);
 }
+
+void SubIntake::SetVoltage(double iVoltage)
+{
+    mIntakeMotor->SetVoltage(units::volt_t(iVoltage));
+}

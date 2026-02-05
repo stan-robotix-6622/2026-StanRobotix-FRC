@@ -14,6 +14,8 @@ class SubIntake : public frc2::SubsystemBase {
   void Stop();
 
   void Keep();
+
+  void SetVoltage(double);
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
