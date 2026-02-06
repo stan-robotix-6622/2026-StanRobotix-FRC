@@ -45,9 +45,9 @@ void RobotContainer::ConfigureBindings() {
   }).OnTrue(Index(m_subIndexer).ToPtr());
 
 
-  frc2::Trigger([this] {
+ /* frc2::Trigger([this] {
     return m_XboxController.GetXButtonPressed();
-  }).WhileTrue(Shoot(m_subShooter).ToPtr());
+  }).WhileTrue(Shoot(m_subShooter).ToPtr()); */
 };
 
 

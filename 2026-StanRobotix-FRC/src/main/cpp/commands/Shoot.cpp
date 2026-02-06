@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -21,7 +22,7 @@ void Shoot::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void Shoot::Execute() 
 {
-  mSubShooter->setVelocity(m_PIDController->Calculate(m_AnalogSensor->GetVelocity())* 1_V);
+  mSubShooter->setVelocity(kA);
 }
 
 // Called once the command ends or is interrupted.
@@ -32,4 +33,3 @@ bool Shoot::IsFinished()
 {
   return false;
 }
-

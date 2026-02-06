@@ -9,6 +9,9 @@
 #include <frc/controller/PIDController.h>
 #include <rev/SparkSim.h>
 #include <frc/motorcontrol/PWMSparkMax.h>
+#include <frc/controller/SimpleMotorFeedforward.h>
+#include <frc/system/plant/DCMotor.h>
+
 #include "Constants.h"
 
 
@@ -16,7 +19,7 @@ class subShooter : public frc2::SubsystemBase {
  public:
   subShooter();
 
-  void setVelocity(units::volt_t velocity);
+  void setVelocity(units::turns_per_second currentVelocity, units::turns_per_second nextVelocity);
   
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -28,7 +31,12 @@ class subShooter : public frc2::SubsystemBase {
   // declared private and exposed only through public methods.
 
   
-  frc::PWMSparkMax mShooterControllerSim{subShooterConstants::kCANid};
+  //frc::PWMSparkMax mShooterControllerSim{subShooterConstants::kCANid};
+  frc::DCMotor SparkMaxGearbox = frc::DCMotor::NEO(1);
+  rev::spark::SparkSim SparkMaxSim{mShooterController, &SparkMaxGearbox};
   frc::PIDController *mPIDcontroller;
   rev::spark::SparkMax * mShooterController;
+
+  frc::SimpleMotorFeedforward<units::turns_per_second> m_feedforward{0_V, 3_V / 1_tps};
+
 };

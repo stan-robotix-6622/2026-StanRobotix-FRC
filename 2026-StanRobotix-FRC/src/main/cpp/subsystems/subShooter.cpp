@@ -15,8 +15,8 @@ subShooter::subShooter()
 // This method will be called once per scheduler run
 void subShooter::Periodic() {}
 
-void subShooter::setVelocity(units::volt_t velocity)
+void subShooter::setVelocity(kV, kA)
 {
-    mShooterControllerSim.SetVoltage(velocity);
+    m_feedforward.Calculate(SparkMaxSim.GetVelocity(), nextVelocity);
 };
 
