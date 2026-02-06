@@ -37,6 +37,7 @@ namespace PivotConstants{
   constexpr double kP = 0.00001; // en attendant
   constexpr double kI = 0; // en attendant
   constexpr double kD = 0; // en attendant
+  constexpr double kG =0;// en attendant
   constexpr double setpointUp = 1; // en attendant
   constexpr double setpointDown = 1; // en attendant
 }
