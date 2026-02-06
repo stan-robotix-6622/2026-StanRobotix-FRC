@@ -5,10 +5,12 @@
 #include "commands/PivotIntakeUp.h"
 
 
-PivotIntakeUp::PivotIntakeUp(SubPivotIntake * iPivotIntake) {
+PivotIntakeUp::PivotIntakeUp(SubIntake * iIntake, SubPivotIntake * iPivotIntake) {
+  mIntake = iIntake;
   mPivotIntake = iPivotIntake;
   mPIDController = new frc::PIDController {PivotConstants::kP, PivotConstants::kI, PivotConstants::kD, 20_ms};
 
+  AddRequirements(mIntake);
   AddRequirements(mPivotIntake);
   // Use addRequirements() here to declare subsystem dependencies.
 }
@@ -26,6 +28,8 @@ void PivotIntakeUp::Execute() {
 
 // Called once the command ends or is interrupted.
 void PivotIntakeUp::End(bool interrupted) {
+  mPivotIntake->Stop();
+  mIntake->Stop();
   std::cout << "Intake Pivot Up Fini" << std::endl;
 }
 

@@ -22,12 +22,14 @@ void PivotIntakeDown::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void PivotIntakeDown::Execute() {
-  mIntake->SetVoltage(0); // il faudra definir un nombre
+  mIntake->SetVoltage(1); // il faudra definir un nombre
   mPivotIntake->SetVoltage(mPIDController->Calculate(mPivotIntake->GetAngle()) + (0 * cos(mPivotIntake->GetAngle()))); // il faudra definir un nombre
 }
 
 // Called once the command ends or is interrupted.
 void PivotIntakeDown::End(bool interrupted) {
+  mPivotIntake->Stop();
+  mIntake->Stop();
   std::cout << "Intake Pivot Down Fini" << std::endl;
 }
 

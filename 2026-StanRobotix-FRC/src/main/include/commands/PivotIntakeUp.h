@@ -27,7 +27,7 @@ class PivotIntakeUp
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  PivotIntakeUp(SubPivotIntake*);
+  PivotIntakeUp(SubIntake * iIntake, SubPivotIntake*);
 
   void Initialize() override;
 
@@ -39,6 +39,7 @@ class PivotIntakeUp
 
   private:
 
+  SubIntake * mIntake;
   SubPivotIntake * mPivotIntake;
   frc::PIDController * mPIDController;
 };
