@@ -3,9 +3,12 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #pragma once
+<<<<<<< HEAD
 #include "units/angular_acceleration.h"
 #include "units/angle.h"
 #include "units/acceleration.h"
+=======
+>>>>>>> d4a332810b0b5dff436f11c5d3e2733ca24fb72a
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -30,15 +33,19 @@ namespace subShooterConstants {
 
     constexpr units::volt_t kVoltage = 1_V; //its a placeholder
 
+<<<<<<< HEAD
     constexpr int kCANid = 1;//its a placeholder too :)
     constexpr units::compound_unit<units::volt_t, units::inverse<units::turns_per_second>> kA = 1_V / 1_tps; //placeholder
 
+=======
+    constexpr int kCANid = 9; //its a placeholder too :)
+>>>>>>> d4a332810b0b5dff436f11c5d3e2733ca24fb72a
 }
 
 namespace subIndexConstants {
     
     constexpr units::volt_t kVoltage = 2_V; //placeholder
-    constexpr int kCANid = 69; //PLACEHOLDEERR
+    constexpr int kCANid = 10; //PLACEHOLDEERR
 }
 
 namespace PIDConstants {

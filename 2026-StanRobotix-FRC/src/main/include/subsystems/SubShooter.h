@@ -30,6 +30,7 @@ class subShooter : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
+<<<<<<< HEAD:2026-StanRobotix-FRC/src/main/include/subsystems/subShooter.h
   
   //frc::PWMSparkMax mShooterControllerSim{subShooterConstants::kCANid};
   frc::DCMotor SparkMaxGearbox = frc::DCMotor::NEO(1);
@@ -39,4 +40,8 @@ class subShooter : public frc2::SubsystemBase {
 
   frc::SimpleMotorFeedforward<units::turns_per_second> m_feedforward{0_V, 3_V / 1_tps};
 
+=======
+  rev::spark::SparkMax* mShooterController;
+  frc::PIDController* mPIDcontroller;
+>>>>>>> d4a332810b0b5dff436f11c5d3e2733ca24fb72a:2026-StanRobotix-FRC/src/main/include/subsystems/SubShooter.h
 };
