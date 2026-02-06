@@ -25,8 +25,8 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
-  m_driverController->B().ToggleOnTrue(PivotIntakeUp(m_SubIntake, m_SubPivotIntake).ToPtr());
-  m_driverController->X().ToggleOnTrue(PivotIntakeDown(m_SubIntake, m_SubPivotIntake).ToPtr());
+  m_driverController->B().ToggleOnTrue(PivotIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
+  m_driverController->X().ToggleOnTrue(PivotIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
   // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
   frc2::Trigger([this] {
     return m_subsystem.ExampleCondition();
@@ -37,6 +37,8 @@ void RobotContainer::ConfigureBindings() {
   m_driverController->B().WhileTrue(m_subsystem.ExampleMethodCommand());
 
 }
+
+
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
