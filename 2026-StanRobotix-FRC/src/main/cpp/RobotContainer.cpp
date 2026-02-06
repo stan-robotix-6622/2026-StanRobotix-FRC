@@ -16,8 +16,8 @@
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
-  m_subShooter = new subShooter;
-  m_subIndexer = new subIndexer;
+  m_subShooter = new subShooter{};
+  m_subIndexer = new subIndexer{};
  
   // Configure the button bindings
   ConfigureBindings();
@@ -36,9 +36,14 @@ void RobotContainer::ConfigureBindings() {
   // pressed, cancelling on release.
   m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
 
-  // m_driverController.X().WhileTrue(frc2::cmd::RunEnd(
-  //   [this] {m_subShooter->setVoltage(m_PIDController->Calculate(m_subShooter->GetVoltage()));},
-  //   [this] {m_subShooter->setVoltage(0_V);}, {m_subShooter}));
+  m_driverController.X().ToggleOnTrue(frc2::cmd::RunEnd(
+    [this] {m_subShooter->setVoltage(m_driverController.GetRightTriggerAxis() * 4_V);},
+    [this] {m_subShooter->setVoltage(0_V);}, {m_subShooter}));
+
+  m_driverController.Y().ToggleOnTrue(frc2::cmd::RunEnd(
+    [this] {m_subIndexer->setVoltage(m_driverController.GetLeftTriggerAxis() * 1_V);},
+    [this] {m_subIndexer->setVoltage(0_V);}, {m_subIndexer}));
+
 
   frc2::Trigger([this] {
     return m_XboxController.GetAButtonPressed();
