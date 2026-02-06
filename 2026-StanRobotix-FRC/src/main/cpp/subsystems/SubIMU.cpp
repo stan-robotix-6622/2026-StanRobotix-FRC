@@ -7,7 +7,10 @@
 SubIMU::SubIMU()
 {
     mIMU = new ctre::phoenix6::hardware::Pigeon2{IMUConstants::kCanID};
-    mIMUSim = new ctre::phoenix6::sim::Pigeon2SimState{*mIMU};
+    if (frc::RobotBase::IsSimulation())
+    {
+        mIMUSim = new ctre::phoenix6::sim::Pigeon2SimState{*mIMU};
+    }
 }
 
 // This method will be called once per scheduler run
@@ -18,14 +21,19 @@ frc::Rotation2d SubIMU::getRotation2d()
     return mIMU->GetRotation2d();
 }
 
-double SubIMU::getAngleYaw()
+void SubIMU::setAngleYaw(units::radian_t iYaw)
 {
-    return mIMU->GetYaw().GetValue().value();
+    mIMU->SetYaw(iYaw);
 }
 
-double SubIMU::getYawRate()
+units::radian_t SubIMU::getAngleYaw()
 {
-    return mIMU->GetAngularVelocityZWorld().GetValue().value();
+    return mIMU->GetYaw().GetValue();
+}
+
+units::radians_per_second_t SubIMU::getYawRate()
+{
+    return mIMU->GetAngularVelocityZWorld().GetValue();
 }
 
 void SubIMU::resetAngle()
@@ -33,12 +41,12 @@ void SubIMU::resetAngle()
     mIMU->Reset();
 }
 
-void SubIMU::setSimAngleYaw(units::degree_t iAngle)
+void SubIMU::setSimAngleYaw(units::radian_t iAngle)
 {
-    mIMUSim->SetRawYaw(iAngle);
+    mIMU->SetYaw(iAngle);
 }
 
-void SubIMU::setSimYawRate(units::degrees_per_second_t iRate)
+void SubIMU::setSimYawRate(units::radians_per_second_t iRate)
 {
     mIMUSim->SetAngularVelocityZ(iRate);
 }

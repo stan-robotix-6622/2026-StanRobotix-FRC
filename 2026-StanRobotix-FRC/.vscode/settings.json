@@ -105,5 +105,7 @@
     "xtree": "cpp",
     "xutility": "cpp",
     "charconv": "cpp"
-  }
+  },
+  "wpilib.selectDefaultSimulateExtension": true,
+  "wpilib.skipSelectSimulateExtension": true
 }

@@ -7,6 +7,7 @@
 #include <frc2/command/SubsystemBase.h> 
 
 #include <frc/geometry/Rotation2d.h>
+#include <frc/RobotBase.h>
 #include <ctre/phoenix6/Pigeon2.hpp>
 #include <ctre/phoenix6/sim/Pigeon2SimState.hpp>
 
@@ -26,15 +27,17 @@ class SubIMU : public frc2::SubsystemBase {
 
   frc::Rotation2d getRotation2d();
 
-  double getAngleYaw();
+  units::radian_t getAngleYaw();
 
-  double getYawRate();
+  void setAngleYaw(units::radian_t iYaw);
+
+  units::radians_per_second_t getYawRate();
 
   void resetAngle();
   
-  void setSimAngleYaw(units::degree_t iAngle);
+  void setSimAngleYaw(units::radian_t iAngle);
 
-  void setSimYawRate(units::degrees_per_second_t iRate);
+  void setSimYawRate(units::radians_per_second_t iRate);
 
  private:
   ctre::phoenix6::sim::Pigeon2SimState * mIMUSim;

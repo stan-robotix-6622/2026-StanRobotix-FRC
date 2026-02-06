@@ -8,9 +8,10 @@
 
 #include <frc2/command/button/Trigger.h>
 #include <frc2/command/Commands.h>
+#include <frc2/command/InstantCommand.h>
 
 RobotContainer::RobotContainer() {
-  mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDrivingrControllerPort};
+  mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
 
   // Initialize all of your commands and subsystems here
   mIMU = new SubIMU{};
@@ -24,10 +25,11 @@ RobotContainer::RobotContainer() {
                                       1 - mCommandXboxController->GetRightTriggerAxis());
      },
      {mDrivetrain}));
-
+  
   mIMU->SetDefaultCommand(frc2::cmd::Run(
     [this] {
-      // std::cout << mIMU->getRotation2d().Degrees().value() << std::endl;
+      frc::SmartDashboard::PutNumber("Drivetrain/Angle Yaw", mIMU->getAngleYaw().value());
+      frc::SmartDashboard::PutNumber("Drivetrain/Yaw Rate", mIMU->getYawRate().value());
     }, {mIMU}));
 
   // Configure the button bindings
@@ -38,7 +40,7 @@ void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
   // mCommandXboxController->X().OnTrue(pathplanner::AutoBuilder::followPath(pathplanner::PathPlannerPath::fromPathFile("Example Path")));
-  // mCommandXboxController->Y().WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
+  mCommandXboxController->Y().WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

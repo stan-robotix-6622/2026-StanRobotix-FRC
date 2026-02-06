@@ -22,6 +22,7 @@
 // #include <pathplanner/lib/auto/AutoBuilder.h>
 // #include <pathplanner/lib/config/RobotConfig.h>
 // #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
+#include <ctre/phoenix6/swerve/SwerveDrivetrain.hpp>
 
 #include "Constants.h"
 // #include "LimelightHelpers.h"

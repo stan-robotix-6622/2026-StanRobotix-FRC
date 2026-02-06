@@ -28,8 +28,8 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
         std::cout << "The robot is simulated" << std::endl;
         m_frontLeftModuleSim  = new SwerveModuleSim{DrivetrainConstants::kFrontLeftMotorID , DrivetrainConstants::kFrontLeftMotor550ID, false, true};
         m_frontRightModuleSim = new SwerveModuleSim{DrivetrainConstants::kFrontRightMotorID, DrivetrainConstants::kFrontRightMotor550ID, false, true};
-        m_backLeftModuleSim   = new SwerveModuleSim{DrivetrainConstants::kBackLeftMotorID  , DrivetrainConstants::kBackLeftMotor550ID, true, true};
-        m_backRightModuleSim  = new SwerveModuleSim{DrivetrainConstants::kBackRightMotorID , DrivetrainConstants::kBackRightMotor550ID, true, true};
+        m_backLeftModuleSim   = new SwerveModuleSim{DrivetrainConstants::kBackLeftMotorID  , DrivetrainConstants::kBackLeftMotor550ID, false, true};
+        m_backRightModuleSim  = new SwerveModuleSim{DrivetrainConstants::kBackRightMotorID , DrivetrainConstants::kBackRightMotor550ID, false, true};
     }
     
 
@@ -108,7 +108,7 @@ void SubDrivetrain::Periodic()
     else
     {
         mIMU->setSimYawRate(m_kinematics->ToChassisSpeeds(getSwerveModuleStates()).omega);
-        mIMU->setSimAngleYaw(units::degree_t(mIMU->getAngleYaw() + mIMU->getYawRate() * 0.2));
+        mIMU->setSimAngleYaw(mIMU->getAngleYaw() + mIMU->getYawRate() * 0.02_s);
         mCurrentRotation2d = mIMU->getRotation2d();
     }
 
@@ -119,7 +119,7 @@ void SubDrivetrain::Periodic()
 
     // Update la rotation du robot pour la Limelight
   
-    /* LimelightHelpers::SetRobotOrientation("", mIMU->getAngleYaw(), mIMU->getYawRate(), 0, 0, 0, 0);
+    /* LimelightHelpers::SetRobotOrientation("", mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
 
     mt2 = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("");
 
@@ -267,6 +267,7 @@ frc::Pose2d SubDrivetrain::getPose()
 void SubDrivetrain::resetPose(frc::Pose2d iRobotPose)
 {
     m_poseEstimator->ResetPose(iRobotPose);
+    mIMU->setAngleYaw(iRobotPose.Rotation().Degrees());
 }
 
 frc::ChassisSpeeds SubDrivetrain::getRobotRelativeSpeeds()
