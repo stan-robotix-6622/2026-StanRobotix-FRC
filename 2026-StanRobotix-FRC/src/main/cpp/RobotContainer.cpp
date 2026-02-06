@@ -9,8 +9,7 @@
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
-#include "commands/PivotIntakeUp.h"
-#include "commands/PivotIntakeDown.h"
+#include "commands/PivotIntake.h"
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here

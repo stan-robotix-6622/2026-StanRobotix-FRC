@@ -13,6 +13,7 @@
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubPivotIntake.h"
 
+
 /**
  * An example command.
  *
@@ -20,13 +21,19 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class PivotIntakeDown
-    : public frc2::CommandHelper<frc2::Command, PivotIntakeDown> {
+class PivotIntake
+    : public frc2::CommandHelper<frc2::Command, PivotIntake> {
  public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  PivotIntakeDown(SubIntake*, SubPivotIntake*);
+
+  enum StatePivotIntake{
+    kUp,
+    kDown
+  };
+
+  PivotIntake(SubIntake * iIntake, SubPivotIntake*, StatePivotIntake iTarget);
 
   void Initialize() override;
 
@@ -41,4 +48,6 @@ class PivotIntakeDown
   SubIntake * mIntake;
   SubPivotIntake * mPivotIntake;
   frc::PIDController * mPIDController;
+ 
+  StatePivotIntake mState;
 };

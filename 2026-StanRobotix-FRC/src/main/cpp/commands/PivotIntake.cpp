@@ -2,38 +2,47 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "commands/PivotIntakeUp.h"
+#include "commands/PivotIntake.h"
 
 
-PivotIntakeUp::PivotIntakeUp(SubIntake * iIntake, SubPivotIntake * iPivotIntake) {
-  mIntake = iIntake;
+PivotIntake::PivotIntake(SubIntake * iIntake, SubPivotIntake * iPivotIntake, StatePivotIntake iTarget) {
   mPivotIntake = iPivotIntake;
   mPIDController = new frc::PIDController {PivotConstants::kP, PivotConstants::kI, PivotConstants::kD, 20_ms};
+  mState = iTarget;
 
-  AddRequirements(mIntake);
   AddRequirements(mPivotIntake);
   // Use addRequirements() here to declare subsystem dependencies.
 }
 
 // Called when the command is initially scheduled.
-void PivotIntakeUp::Initialize() {
+void PivotIntake::Initialize() {
   mPIDController->Reset();
-  mPIDController->SetSetpoint(PivotConstants::setpointUp);
+  switch (mState){
+    case kUp:
+      mPIDController->SetSetpoint(PivotConstants::setpointUp);
+      std::cout << "Pivot du Intake Up";
+      break;
+
+    case kDown:
+      mPIDController->SetSetpoint(PivotConstants::setpointDown);
+      std::cout << "Pivot du Intake Down";
+      break;
+  }
+
+  
 }
 
 // Called repeatedly when this Command is scheduled to run
-void PivotIntakeUp::Execute() {
+void PivotIntake::Execute() {
   mPivotIntake->SetVoltage(mPIDController->Calculate(mPivotIntake->GetAngle()) + (0 * cos(mPivotIntake->GetAngle()))); // il faudra definir un nombre
 }
 
 // Called once the command ends or is interrupted.
-void PivotIntakeUp::End(bool interrupted) {
-  mPivotIntake->Stop();
-  mIntake->Stop();
+void PivotIntake::End(bool interrupted) {
   std::cout << "Intake Pivot Up Fini" << std::endl;
 }
 
 // Returns true when the command should end.
-bool PivotIntakeUp::IsFinished() {
+bool PivotIntake::IsFinished() {
   return false;
 }
