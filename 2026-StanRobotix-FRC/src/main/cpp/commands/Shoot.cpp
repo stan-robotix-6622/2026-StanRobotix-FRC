@@ -22,7 +22,7 @@ void Shoot::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void Shoot::Execute() 
 {
-  units::turns_per_second_t velocity = units::turns_per_second_t(m_AnalogSensor->GetVelocity());
+  units::turns_per_second_t velocity = units::turns_per_second_t(mSubShooter->getVelocity());
   mSubShooter->setVelocity(velocity);
 }
 
@@ -30,7 +30,7 @@ void Shoot::Execute()
 void Shoot::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool Shoot::IsFinished() 
+bool Shoot::IsFinished()
 {
   return false;
 }

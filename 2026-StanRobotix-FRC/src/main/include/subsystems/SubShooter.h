@@ -11,6 +11,7 @@
 #include <frc/motorcontrol/PWMSparkMax.h>
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/system/plant/DCMotor.h>
+#include <rev/SparkRelativeEncoder.h>
 
 #include "Constants.h"
 
@@ -20,7 +21,7 @@ class subShooter : public frc2::SubsystemBase {
   subShooter();
 
   void setVelocity(units::turns_per_second_t nextVelocity);
-  
+  double getVelocity();
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
@@ -34,4 +35,6 @@ class subShooter : public frc2::SubsystemBase {
 
   rev::spark::SparkMax* mShooterController;
   frc::PIDController* mPIDcontroller;
+  rev::spark::SparkRelativeEncoder* mRelativeEncoder;
+
 };

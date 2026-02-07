@@ -38,6 +38,6 @@ class Shoot
  private:
   subShooter* mSubShooter;
   frc::PIDController* m_PIDController;
-  rev::spark::SparkAnalogSensor* m_AnalogSensor;
+  
   
 };
