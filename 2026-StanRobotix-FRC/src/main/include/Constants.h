@@ -21,17 +21,13 @@ inline constexpr int kDriverControllerPort = 0;
 }  // namespace OperatorConstants
 
 namespace IntakeConstants {
-    constexpr int kMotorid = 0;
+    constexpr int kMotorid = 10;
     constexpr double kSpeed = 0.8;
 }
 
-namespace XboxConstants {
-    constexpr int kXboxPort = 0;
-}
-
 namespace PivotConstants{
-  constexpr int kMotorPivotid1 = 0;
-  constexpr int kMotorPivotid2 = 0;
+  constexpr int kMotorPivotid1 = 9;
+  // constexpr int kMotorPivotid2 = 10;
   constexpr double kSpeedPivot = 0.8;
   constexpr double kOffset = 0; // en attendant
   constexpr double kP = 0.00001; // en attendant
