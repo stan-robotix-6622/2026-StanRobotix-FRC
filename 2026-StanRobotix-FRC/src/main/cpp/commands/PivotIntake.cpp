@@ -32,7 +32,9 @@ void PivotIntake::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void PivotIntake::Execute() {
-  mPivotIntake->SetVoltage(mPIDController->Calculate(mPivotIntake->GetAngle()) + (PivotConstants::kG * cos(mPivotIntake->GetAngle()))); // il faudra definir un nombre
+  double wVoltage = mPIDController->Calculate(mPivotIntake->GetAngle());
+  std::cout << wVoltage << std::endl;
+  mPivotIntake->SetVoltage(wVoltage + (PivotConstants::kG * cos(mPivotIntake->GetAngle()))); // il faudra definir un nombre
 }
 
 // Called once the command ends or is interrupted.

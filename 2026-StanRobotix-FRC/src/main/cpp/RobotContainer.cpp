@@ -5,6 +5,8 @@
 #include <frc2/command/button/Trigger.h>
 #include <frc2/command/Commands.h>
 
+#include <iostream>
+
 #include "RobotContainer.h"
 
 #include "commands/Autos.h"
@@ -18,6 +20,11 @@ RobotContainer::RobotContainer() {
   m_SubIntake = new SubIntake;
   m_SubPivotIntake = new SubPivotIntake;
 
+  m_SubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this]
+  {
+    m_SubPivotIntake->SetVoltage((PivotConstants::kG * cos(m_SubPivotIntake->GetAngle())));
+  }, {m_SubPivotIntake}));
+
   // Configure the button bindings
   ConfigureBindings();
 }
@@ -25,8 +32,8 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
-  m_driverController->B().ToggleOnTrue(PivotIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
-  m_driverController->X().ToggleOnTrue(PivotIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
+  m_driverController->B().WhileTrue(PivotIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
+  m_driverController->X().WhileTrue(PivotIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
   // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
   frc2::Trigger([this] {
     return m_subsystem.ExampleCondition();
@@ -35,7 +42,6 @@ void RobotContainer::ConfigureBindings() {
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.
   m_driverController->B().WhileTrue(m_subsystem.ExampleMethodCommand());
-
 }
 
 
