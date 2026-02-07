@@ -3,12 +3,10 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #pragma once
-<<<<<<< HEAD
-#include "units/angular_acceleration.h"
-#include "units/angle.h"
-#include "units/acceleration.h"
-=======
->>>>>>> d4a332810b0b5dff436f11c5d3e2733ca24fb72a
+
+// #include "units/angular_acceleration.h"
+// #include "units/angle.h"
+// #include "units/acceleration.h"
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -20,8 +18,8 @@
  * they are needed.
  */
 
- using kA = units::compound_unit<units::volt_t, units::inverse<units::turns_per_second_squared>>; // V / turn / s^2
- using kV = units::compound_unit<units::volt_t, units::turns_per_second>; // V / turn / s
+//  typedef units::compound_unit<units::volt_t, units::inverse<units::turns_per_second_squared>> kAunit; // V / turn / s^2
+//  typedef units::compound_unit<units::volt_t, units::inverse<units::turns_per_second>> kVunit; // V / turn / s
 
 namespace OperatorConstants {
 
@@ -32,17 +30,12 @@ inline constexpr int kDriverControllerPort = 0;
 namespace subShooterConstants {
 
     constexpr units::volt_t kVoltage = 1_V; //its a placeholder
+    // constexpr kVunit kV = 1_V / 1_tps; //placeholder
 
-<<<<<<< HEAD
-    constexpr int kCANid = 1;//its a placeholder too :)
-    constexpr units::compound_unit<units::volt_t, units::inverse<units::turns_per_second>> kA = 1_V / 1_tps; //placeholder
-
-=======
     constexpr int kCANid = 9; //its a placeholder too :)
->>>>>>> d4a332810b0b5dff436f11c5d3e2733ca24fb72a
 }
 
-namespace subIndexConstants {
+namespace subFeederConstants {
     
     constexpr units::volt_t kVoltage = 2_V; //placeholder
     constexpr int kCANid = 10; //PLACEHOLDEERR

@@ -17,7 +17,7 @@
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
   m_subShooter = new subShooter{};
-  m_subIndexer = new subIndexer{};
+  m_subFeeder = new subFeeder{};
  
   // Configure the button bindings
   ConfigureBindings();
@@ -37,17 +37,17 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
 
   m_driverController.X().ToggleOnTrue(frc2::cmd::RunEnd(
-    [this] {m_subShooter->setVoltage(m_driverController.GetRightTriggerAxis() * 4_V);},
-    [this] {m_subShooter->setVoltage(0_V);}, {m_subShooter}));
+    [this] {m_subShooter->setVelocity(m_driverController.GetRightTriggerAxis() * 1_tps);},
+    [this] {m_subShooter->setVelocity(0_tps);}, {m_subShooter}));
 
   m_driverController.Y().ToggleOnTrue(frc2::cmd::RunEnd(
-    [this] {m_subIndexer->setVoltage(m_driverController.GetLeftTriggerAxis() * 1_V);},
-    [this] {m_subIndexer->setVoltage(0_V);}, {m_subIndexer}));
+    [this] {m_subFeeder->setVoltage(m_driverController.GetLeftTriggerAxis() * 1_V);},
+    [this] {m_subFeeder->setVoltage(0_V);}, {m_subFeeder}));
 
 
   frc2::Trigger([this] {
     return m_XboxController.GetAButtonPressed();
-  }).OnTrue(Index(m_subIndexer).ToPtr());
+  }).OnTrue(FeedShooter(m_subFeeder).ToPtr());
 
 
  /* frc2::Trigger([this] {

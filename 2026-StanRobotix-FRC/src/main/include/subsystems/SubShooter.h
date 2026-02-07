@@ -19,7 +19,7 @@ class subShooter : public frc2::SubsystemBase {
  public:
   subShooter();
 
-  void setVelocity(units::turns_per_second currentVelocity, units::turns_per_second nextVelocity);
+  void setVelocity(units::turns_per_second_t nextVelocity);
   
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -30,18 +30,8 @@ class subShooter : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-<<<<<<< HEAD:2026-StanRobotix-FRC/src/main/include/subsystems/subShooter.h
-  
-  //frc::PWMSparkMax mShooterControllerSim{subShooterConstants::kCANid};
-  frc::DCMotor SparkMaxGearbox = frc::DCMotor::NEO(1);
-  rev::spark::SparkSim SparkMaxSim{mShooterController, &SparkMaxGearbox};
-  frc::PIDController *mPIDcontroller;
-  rev::spark::SparkMax * mShooterController;
+  frc::SimpleMotorFeedforward<units::turns> m_feedforward{0_V, 3_V / 1_tps};
 
-  frc::SimpleMotorFeedforward<units::turns_per_second> m_feedforward{0_V, 3_V / 1_tps};
-
-=======
   rev::spark::SparkMax* mShooterController;
   frc::PIDController* mPIDcontroller;
->>>>>>> d4a332810b0b5dff436f11c5d3e2733ca24fb72a:2026-StanRobotix-FRC/src/main/include/subsystems/SubShooter.h
 };

@@ -6,7 +6,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include <subsystems/subIndexer.h>
+#include <subsystems/subFeeder.h>
 #include "Constants.h"
 
 /**
@@ -16,13 +16,13 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class Index
-    : public frc2::CommandHelper<frc2::Command, Index> {
+class FeedShooter
+    : public frc2::CommandHelper<frc2::Command, FeedShooter> {
  public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  Index(subIndexer * m_subIndexer);
+  FeedShooter(subFeeder * m_subFeeder);
 
   void Initialize() override;
 
@@ -33,6 +33,6 @@ class Index
   bool IsFinished() override;
 
 private:
-  subIndexer * m_subIndexer;
+  subFeeder * m_subFeeder;
 
 };

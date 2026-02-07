@@ -22,7 +22,8 @@ void Shoot::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void Shoot::Execute() 
 {
-  mSubShooter->setVelocity(kA);
+  units::turns_per_second_t velocity = units::turns_per_second_t(m_AnalogSensor->GetVelocity());
+  mSubShooter->setVelocity(velocity);
 }
 
 // Called once the command ends or is interrupted.

@@ -11,10 +11,10 @@
 
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/subShooter.h"
-#include "subsystems/subIndexer.h"
+#include "subsystems/subFeeder.h"
 
 #include "Constants.h"
-#include "commands/Index.h"
+#include "commands/FeedShooter.h"
 #include "commands/Shoot.h"
 
 /**
@@ -39,7 +39,7 @@ class RobotContainer {
   // The robot's subsystems are defined here...
   ExampleSubsystem m_subsystem;
   subShooter* m_subShooter;
-  subIndexer* m_subIndexer;
+  subFeeder* m_subFeeder;
 
   void ConfigureBindings();
 };
