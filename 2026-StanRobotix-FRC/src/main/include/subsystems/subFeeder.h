@@ -9,9 +9,9 @@
 #include "Constants.h"
 
 
-class subFeeder : public frc2::SubsystemBase {
+class SubFeeder : public frc2::SubsystemBase {
  public:
-  subFeeder();
+  SubFeeder();
   
   void setVoltage(units::volt_t iOutput);
 

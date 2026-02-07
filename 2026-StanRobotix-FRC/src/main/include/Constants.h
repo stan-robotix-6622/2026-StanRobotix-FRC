@@ -35,7 +35,7 @@ namespace subShooterConstants {
     constexpr int kCANid = 9; //its a placeholder too :)
 }
 
-namespace subFeederConstants {
+namespace SubFeederConstants {
     
     constexpr units::volt_t kVoltage = 2_V; //placeholder
     constexpr int kCANid = 10; //PLACEHOLDEERR

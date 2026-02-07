@@ -4,9 +4,9 @@
 
 #include "commands/FeedShooter.h"
 
-FeedShooter::FeedShooter(subFeeder * i_subFeeder) {
+FeedShooter::FeedShooter(SubFeeder * i_SubFeeder) {
   // Use addRequirements() here to declare subsystem dependencies.
-  AddRequirements(m_subFeeder);
+  AddRequirements(m_SubFeeder);
 }
 
 // Called when the command is initially scheduled.
@@ -14,13 +14,13 @@ void FeedShooter::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void FeedShooter::Execute() {
-  m_subFeeder-> setVoltage(subFeederConstants::kVoltage);
+  m_SubFeeder-> setVoltage(SubFeederConstants::kVoltage);
 }
 
 // Called once the command ends or is interrupted.
 void FeedShooter::End(bool interrupted) 
 {
-  m_subFeeder->setVoltage(0_V);
+  m_SubFeeder->setVoltage(0_V);
 }
 
 // Returns true when the command should end.

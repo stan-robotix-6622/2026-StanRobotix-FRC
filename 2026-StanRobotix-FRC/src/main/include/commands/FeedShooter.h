@@ -6,7 +6,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include <subsystems/subFeeder.h>
+#include <subsystems/SubFeeder.h>
 #include "Constants.h"
 
 /**
@@ -22,7 +22,7 @@ class FeedShooter
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  FeedShooter(subFeeder * m_subFeeder);
+  FeedShooter(SubFeeder * m_SubFeeder);
 
   void Initialize() override;
 
@@ -33,6 +33,6 @@ class FeedShooter
   bool IsFinished() override;
 
 private:
-  subFeeder * m_subFeeder;
+  SubFeeder * m_SubFeeder;
 
 };
