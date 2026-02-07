@@ -22,7 +22,7 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
     mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
                              ModuleConstants::kDrivingResetMode,
                              ModuleConstants::kDrivingPersistMode);
-    mTurningMotor->Configure(Configs::SwerveModule::DrivingConfig(iTurningInverted),
+    mTurningMotor->Configure(Configs::SwerveModule::TurningConfig(iTurningInverted),
                              ModuleConstants::kTurningResetMode,
                              ModuleConstants::kTurningPersistMode);
     
@@ -42,8 +42,8 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState, double 
 {
     mTurningCurrentAngle = frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()));
     mOptimizedState = iDesiredState;
-    // mOptimizedState.Optimize(mTurningCurrentAngle);
-    // mOptimizedState.CosineScale(mTurningCurrentAngle);
+    mOptimizedState.Optimize(mTurningCurrentAngle);
+    mOptimizedState.CosineScale(mTurningCurrentAngle);
 
     mTurningPID->SetSetpoint(mOptimizedState.angle.Radians().value());
     mTurningMotor->Set(mTurningPID->Calculate(mTurningCurrentAngle.Radians().value()));

@@ -21,7 +21,7 @@ RobotContainer::RobotContainer() {
       mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
                                       -mCommandXboxController->GetLeftX(),
                                       -mCommandXboxController->GetRightX(),
-                                      1 - mCommandXboxController->GetRightTriggerAxis());
+                                      (1 - mCommandXboxController->GetRightTriggerAxis()) / 4);
      },
      {mDrivetrain}));
 

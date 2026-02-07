@@ -45,14 +45,14 @@ namespace PathPlannerConstants {
 }
 
 namespace DrivetrainConstants {
-    constexpr int kBackRightMotorID = 6;
-    constexpr int kBackRightMotor550ID = 5;
-    constexpr int kFrontRightMotorID = 8;
-    constexpr int kFrontRightMotor550ID = 7;
-    constexpr int kFrontLeftMotorID = 2;
-    constexpr int kFrontLeftMotor550ID = 1;
-    constexpr int kBackLeftMotorID = 4;
-    constexpr int kBackLeftMotor550ID = 3;
+    constexpr int kBackRightMotorID = 8;
+    constexpr int kBackRightMotor550ID = 7;
+    constexpr int kFrontRightMotorID = 4;
+    constexpr int kFrontRightMotor550ID = 3;
+    constexpr int kFrontLeftMotorID = 6;
+    constexpr int kFrontLeftMotor550ID = 5;
+    constexpr int kBackLeftMotorID = 2;
+    constexpr int kBackLeftMotor550ID = 1;
 
     // Left-Right
     constexpr units::meter_t kRobotWidth = 28_in;
@@ -68,8 +68,8 @@ namespace DrivetrainConstants {
     constexpr frc::Translation2d kBackLeftTranslation   = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset),  (kRobotWidth / 2 - kModuleCornerOffset)};
     constexpr frc::Translation2d kBackRightTranslation  = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
 
-    constexpr units::meters_per_second_t kSpeedConstant = 5_mps;                              // Temporary value
-    constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 2_rad_per_s; // Temporary value
+    constexpr units::meters_per_second_t kSpeedConstant = 1_mps;                              // Temporary value
+    constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 0.5_rad_per_s; // Temporary value
 
 }
 
@@ -103,7 +103,7 @@ namespace ModuleConstants {
     constexpr double kRPMtoRPSFactor = 60;
 
     namespace Config {
-        constexpr rev::spark::SparkBaseConfig::IdleMode kDrivingIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
+        constexpr rev::spark::SparkBaseConfig::IdleMode kDrivingIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
         constexpr rev::spark::SparkBaseConfig::IdleMode kTurningIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
         
         constexpr rev::spark::FeedbackSensor kDrivingClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kPrimaryEncoder;
