@@ -33,6 +33,7 @@ namespace subShooterConstants {
     // constexpr kVunit kV = 1_V / 1_tps; //placeholder
 
     constexpr int kCANid = 11; //its a placeholder too :)
+    constexpr double kVitesseVoulue = 10;
 }
 
 namespace SubFeederConstants {

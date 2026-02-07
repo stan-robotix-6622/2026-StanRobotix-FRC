@@ -13,8 +13,6 @@
 #include "subsystems/subFeeder.h"
 
 #include "Constants.h"
-#include "commands/FeedShooter.h"
-#include "commands/Shoot.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since

@@ -8,12 +8,15 @@ subShooter::subShooter()
 {
     mPIDcontroller = new frc::PIDController{PIDConstants::kP, PIDConstants::kI, PIDConstants::kD};
     mShooterController =  new rev::spark::SparkMax{subShooterConstants::kCANid, rev::spark::SparkLowLevel::MotorType::kBrushless};
-    mShooterController->SetInverted(true);
     mRelativeEncoder = new rev::spark::SparkRelativeEncoder{mShooterController->GetEncoder()};
+
+    mShooterController->SetInverted(true);
 }
 
 // This method will be called once per scheduler run
-void subShooter::Periodic() {}
+void subShooter::Periodic() {
+    frc::SmartDashboard::PutNumber("Shooter Velocity", getVelocity().value());
+}
 
 void subShooter::setVoltage(units::volt_t iVoltage)
 {
@@ -27,5 +30,5 @@ void subShooter::setVelocity(units::turns_per_second_t nextVelocity)
 
 units::turns_per_second_t subShooter::getVelocity()
 {
-    return units::revolutions_per_minute_t(mRelativeEncoder->GetVelocity());
+    return units::turns_per_second_t(mRelativeEncoder->GetVelocity());
 };
