@@ -6,8 +6,7 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
-#include <frc/XboxController.h>
-
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/subShooter.h"
@@ -39,7 +38,7 @@ class RobotContainer {
   // The robot's subsystems are defined here...
   ExampleSubsystem m_subsystem;
   subShooter* m_subShooter;
-  subFeeder* m_subFeeder;
+  SubFeeder* m_subFeeder;
 
   void ConfigureBindings();
 };

@@ -7,7 +7,7 @@
 #include <frc2/command/button/Trigger.h>
 #include <frc2/command/Commands.h>
 
-
+#include <iostream>
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
@@ -17,7 +17,7 @@
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
   m_subShooter = new subShooter{};
-  m_subFeeder = new subFeeder{};
+  m_subFeeder = new SubFeeder{};
  
   // Configure the button bindings
   ConfigureBindings();
@@ -35,13 +35,19 @@ void RobotContainer::ConfigureBindings() {
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.
   m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
+  // m_driverController.A().WhileTrue(frc2::cmd::Run([this] 
+  //   {
+  //     m_subShooter->setVoltage(m_driverController.GetRightTriggerAxis() * 12_V);
+  //     frc::SmartDashboard::PutNumber("Shooter Velocity", m_subShooter->getVelocity());
+  //     frc::SmartDashboard::PutNumber("Shooter Voltage", m_driverController.GetRightTriggerAxis() * 12);
+  //   }, {m_subShooter}));
 
   m_driverController.X().ToggleOnTrue(frc2::cmd::RunEnd(
-    [this] {m_subShooter->setVelocity(m_driverController.GetRightTriggerAxis() * 1_tps);},
+    [this] {std::cout << "Shoot" << std::endl;m_subShooter->setVelocity(m_driverController.GetRightTriggerAxis() * 30_tps);},
     [this] {m_subShooter->setVelocity(0_tps);}, {m_subShooter}));
 
   m_driverController.Y().ToggleOnTrue(frc2::cmd::RunEnd(
-    [this] {m_subFeeder->setVoltage(m_driverController.GetLeftTriggerAxis() * 1_V);},
+    [this] {std::cout << "Feed" << std::endl;m_subFeeder->setVoltage(m_driverController.GetLeftTriggerAxis() * 3_V);},
     [this] {m_subFeeder->setVoltage(0_V);}, {m_subFeeder}));
 
 

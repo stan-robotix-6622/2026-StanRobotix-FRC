@@ -21,7 +21,8 @@ class subShooter : public frc2::SubsystemBase {
   subShooter();
 
   void setVelocity(units::turns_per_second_t nextVelocity);
-  double getVelocity();
+  void setVoltage(units::volt_t iVoltage);
+  units::turns_per_second_t getVelocity();
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
@@ -31,7 +32,7 @@ class subShooter : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  frc::SimpleMotorFeedforward<units::turns> m_feedforward{0_V, 3_V / 1_tps};
+  frc::SimpleMotorFeedforward<units::turns> m_feedforward{0_V, 4_V / 31.7_tps};
 
   rev::spark::SparkMax* mShooterController;
   frc::PIDController* mPIDcontroller;
