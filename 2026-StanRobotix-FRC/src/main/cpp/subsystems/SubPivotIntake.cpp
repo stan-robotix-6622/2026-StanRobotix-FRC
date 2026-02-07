@@ -18,21 +18,17 @@ void SubPivotIntake::Periodic() {}
 
 void SubPivotIntake::Stop() {
     mPivotMotor->StopMotor();
-}   
-
-void SubPivotIntake::GoUp(){
-    mPivotMotor->Set(PivotConstants::kSpeedPivot);
-}
-
-void SubPivotIntake::GoDown(){
-    mPivotMotor->Set(-PivotConstants::kSpeedPivot);
 }
 
 void SubPivotIntake::SetVoltage(double iVoltage){
     mPivotMotor->SetVoltage(units::volt_t(iVoltage));
 }
 
+void SubPivotIntake::KeepPosition()
+{
+    mPivotMotor->SetVoltage(units::volt_t(PivotConstants::kG * cos(GetAngle())));
+}
+
 double SubPivotIntake::GetAngle(){
-    // Gear ration (4:1)
-    return (mPivotMotor->GetEncoder().GetPosition() + PivotConstants::kOffset) / 4 * 2 * std::numbers::pi;
+    return (mPivotMotor->GetEncoder().GetPosition() + PivotConstants::kOffset) * 2 * std::numbers::pi / PivotConstants::kGearRatio;
 }

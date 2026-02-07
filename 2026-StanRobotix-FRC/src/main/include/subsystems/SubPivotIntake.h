@@ -16,11 +16,8 @@ class SubPivotIntake : public frc2::SubsystemBase {
 
   void Stop();
 
-  void Keep();
-  void GoUp();
-  void GoDown();
+  void KeepPosition();
 
-  
   void SetVoltage(double iVoltage);
 
   double GetAngle();
