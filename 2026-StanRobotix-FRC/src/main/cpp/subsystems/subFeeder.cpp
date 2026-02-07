@@ -6,7 +6,7 @@
 
 subFeeder::subFeeder() 
 {
-    mIndexerController = new rev::spark::SparkMax{subFeederConstants::kCANid, rev::spark::SparkLowLevel::MotorType::kBrushless};
+    mFeederController = new rev::spark::SparkMax{subFeederConstants::kCANid, rev::spark::SparkLowLevel::MotorType::kBrushless};
 }
 
 // This method will be called once per scheduler run
@@ -14,6 +14,6 @@ void subFeeder::Periodic() {}
 
 void subFeeder::setVoltage(units::volt_t iOutput)
 {
-    mIndexerController->SetVoltage(iOutput);
+    mFeederController->SetVoltage(iOutput);
 };
 
