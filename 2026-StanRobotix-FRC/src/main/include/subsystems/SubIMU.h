@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <frc2/command/SubsystemBase.h> 
+#include <frc2/command/SubsystemBase.h>
 
 #include <frc/geometry/Rotation2d.h>
 #include <ctre/phoenix6/Pigeon2.hpp>

@@ -2,8 +2,6 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include <iostream>
-
 #include "RobotContainer.h"
 
 #include <frc2/command/button/Trigger.h>
@@ -11,24 +9,37 @@
 
 RobotContainer::RobotContainer() {
   mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
+  frc::SmartDashboard::PutData("Xbox Controller", &mCommandXboxController->GetHID());
 
   // Initialize all of your commands and subsystems here
   mIMU = new SubIMU{};
   mDrivetrain = new SubDrivetrain{mIMU};
 
   mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
-      [this] {
-      mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
-                                      -mCommandXboxController->GetLeftX(),
-                                      -mCommandXboxController->GetRightX(),
-                                      (1 - mCommandXboxController->GetRightTriggerAxis()) / 4);
-     },
-     {mDrivetrain}));
+      [this]
+      {
+        mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
+                                        -mCommandXboxController->GetLeftX(),
+                                        -mCommandXboxController->GetRightX(),
+                                        (1 - mCommandXboxController->GetRightTriggerAxis()) / 4);
+      },
+      {mDrivetrain}));
+
+  mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
+      [this]
+      {
+        mDrivetrain->mesureSwerveFeedforward(
+            units::volt_t(mCommandXboxController->GetRightTriggerAxis() * 12),
+            units::volt_t(mCommandXboxController->GetLeftTriggerAxis() * 12));
+      },
+      {mDrivetrain}));
 
   mIMU->SetDefaultCommand(frc2::cmd::Run(
-    [this] {
-      // std::cout << mIMU->getRotation2d().Degrees().value() << std::endl;
-    }, {mIMU}));
+      [this]
+      {
+        frc::SmartDashboard::PutNumber("Drivetrain/Robot Rotation", mIMU->getRotation2d().Degrees().value());
+      },
+      {mIMU}));
 
   // Configure the button bindings
   ConfigureBindings();

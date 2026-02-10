@@ -4,8 +4,6 @@
 
 #include "subsystems/SubDrivetrain.h"
 
-#include <iostream>
-
 SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
 {
     // Initialization of the SwerveModules' location relative to the robot center
@@ -41,7 +39,7 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
     // Initialization of the swerve pose estimator with the kinematics, the robot's rotation, an array of the SwerveModules' position, and the robot's pose
     m_poseEstimator = new frc::SwerveDrivePoseEstimator<4>{*m_kinematics, mIMU->getRotation2d(), getSwerveModulePositions(), *m_startingRobotPose};
 
-	// Initialization des standard deviations de la vision
+    // Initialization des standard deviations de la vision
     visionMeasurementStdDevs = new wpi::array<double, 3>{LimelightConstants::kPoseEstimatorStandardDeviationX,
                                                          LimelightConstants::kPoseEstimatorStandardDeviationY,
                                                          LimelightConstants::kPoseEstimatorStandardDeviationYaw};
@@ -98,7 +96,7 @@ void SubDrivetrain::Periodic()
     frc::SmartDashboard::PutData("Drivetrain/Field2d", mField2d);
 
     // Update la rotation du robot pour la Limelight
-  
+
     /* LimelightHelpers::SetRobotOrientation("", mIMU->getAngleYaw(), mIMU->getYawRate(), 0, 0, 0, 0);
 
     mt2 = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("");
@@ -122,7 +120,7 @@ void SubDrivetrain::Periodic()
     {
         m_poseEstimator->AddVisionMeasurement(mt2.pose, frc::Timer::GetFPGATimestamp());
     }*/
-    
+
     // Publication de valeurs sur le NetworkTables
     mCurrentChassisSpeedsPublisher.Set(getRobotRelativeSpeeds());
     mCurrentModuleStatesPublisher.Set(getSwerveModuleStates());
@@ -152,10 +150,10 @@ void SubDrivetrain::refreshSwervePID()
 
 wpi::array<frc::SwerveModuleState, 4> SubDrivetrain::getSwerveModuleStates()
 {
-    return wpi::array<frc::SwerveModuleState, 4> {m_frontLeftModule->getModuleState(),
-                                                  m_frontRightModule->getModuleState(),
-                                                  m_backLeftModule->getModuleState(),
-                                                  m_backRightModule->getModuleState()};
+    return wpi::array<frc::SwerveModuleState, 4>{m_frontLeftModule->getModuleState(),
+                                                 m_frontRightModule->getModuleState(),
+                                                 m_backLeftModule->getModuleState(),
+                                                 m_backRightModule->getModuleState()};
 }
 
 wpi::array<frc::SwerveModulePosition, 4> SubDrivetrain::getSwerveModulePositions()
@@ -176,17 +174,36 @@ void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
 
     // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
     mDesiredSwerveStates = m_kinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
-    
+
     frc::SmartDashboard::PutNumber("Drivetrain/SetPoint", mDesiredSwerveStates[0].angle.Radians().value());
     frc::SmartDashboard::PutNumber("Drivetrain/Position", m_frontLeftModule->getModuleState().angle.Radians().value());
     mDesiredChassisSpeedsPublisher.Set(mDesiredChassisSpeeds);
     mDesiredModuleStatesPublisher.Set(mDesiredSwerveStates);
-    
+
     // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
     m_frontLeftModule->setDesiredState(mDesiredSwerveStates[0], iSpeedModulation);
     m_frontRightModule->setDesiredState(mDesiredSwerveStates[1], iSpeedModulation);
     m_backLeftModule->setDesiredState(mDesiredSwerveStates[2], iSpeedModulation);
     m_backRightModule->setDesiredState(mDesiredSwerveStates[3], iSpeedModulation);
+}
+
+void SubDrivetrain::mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units::volt_t iTurningVoltage)
+{
+    m_frontLeftModule->setDrivingVoltage(iDrivingVoltage);
+    m_frontRightModule->setDrivingVoltage(iDrivingVoltage);
+    m_backLeftModule->setDrivingVoltage(iDrivingVoltage);
+    m_backRightModule->setDrivingVoltage(iDrivingVoltage);
+    m_frontLeftModule->setTurningVoltage(iTurningVoltage);
+    m_frontRightModule->setTurningVoltage(iTurningVoltage);
+    m_backLeftModule->setTurningVoltage(iTurningVoltage);
+    m_backRightModule->setTurningVoltage(iTurningVoltage);
+    units::radian_t wCurrentTurningPosition = m_frontLeftModule->getModuleState().angle.Radians();
+    units::radians_per_second_t wCurrentTurningVelocity = units::math::abs(wCurrentTurningPosition - mLastTurningPosition) / 0.020_s;
+    mLastTurningPosition = wCurrentTurningPosition;
+    frc::SmartDashboard::PutNumber("Drivetrain/Driving Voltage", iDrivingVoltage.value());
+    frc::SmartDashboard::PutNumber("Drivetrain/Turning Voltage", iTurningVoltage.value());
+    frc::SmartDashboard::PutNumber("Drivetrain/Driving Velocity", m_frontLeftModule->getModuleState().speed.value());
+    frc::SmartDashboard::PutNumber("Drivetrain/Turning Velocity", wCurrentTurningVelocity.value());
 }
 
 frc::Pose2d SubDrivetrain::getPose()

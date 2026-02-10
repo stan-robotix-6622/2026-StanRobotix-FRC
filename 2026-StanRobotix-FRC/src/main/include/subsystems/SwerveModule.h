@@ -19,35 +19,38 @@
 
 class SwerveModule{
  public:
-// Constructeur de la classe avec un motorID pour le Driving et un pour le Turning
+  // Constructeur de la classe avec un motorID pour le Driving et un pour le Turning
   SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInveryed = false, bool iTurningInverted = true);
 
-// Méthode qui retourne le SwerveModulePosition du module
+  // Méthode qui retourne le SwerveModulePosition du module
   frc::SwerveModulePosition getModulePosition();
-// Méthode qui retourne le SwerveModuleState du module
+  // Méthode qui retourne le SwerveModuleState du module
   frc::SwerveModuleState getModuleState();
 
-// Méthode qui fait rouler le module à partir du SwerveModuleState désiré
+  // Méthode qui fait rouler le module à partir du SwerveModuleState désiré
   void setDesiredState(frc::SwerveModuleState iDesiredState, double iSpeedModulation);
 
   void setPIDValues(double kP, double kI, double kD);
 
-// Méthode qui met à jour le SwerveModulePosition et le SwerveModuleState du module
+  void setTurningVoltage(units::volt_t iVoltage);
+  void setDrivingVoltage(units::volt_t iVoltage);
+
+  // Méthode qui met à jour le SwerveModulePosition et le SwerveModuleState du module
   void refreshModule();
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  rev::spark::SparkMax * mDrivingMotor;
-  rev::spark::SparkMax * mTurningMotor;
+  rev::spark::SparkMax *mDrivingMotor;
+  rev::spark::SparkMax *mTurningMotor;
 
-  rev::spark::SparkClosedLoopController * mDrivingClosedLoopController; // Not used currently (please do)
-  rev::spark::SparkClosedLoopController * mTurningClosedLoopController;
-  frc::PIDController * mTurningPID; // TODO: Remove if ClosedLoop working
+  rev::spark::SparkClosedLoopController *mDrivingClosedLoopController; // Not used currently (please do)
+  rev::spark::SparkClosedLoopController *mTurningClosedLoopController;
+  frc::PIDController *mTurningPID; // TODO: Remove if ClosedLoop working
 
-  rev::spark::SparkRelativeEncoder * mDrivingEncoder;
-  rev::spark::SparkAbsoluteEncoder * mTurningAbsoluteEncoder;
+  rev::spark::SparkRelativeEncoder *mDrivingEncoder;
+  rev::spark::SparkAbsoluteEncoder *mTurningAbsoluteEncoder;
 
   frc::Rotation2d mTurningCurrentAngle;
 

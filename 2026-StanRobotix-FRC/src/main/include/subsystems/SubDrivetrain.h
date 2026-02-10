@@ -23,6 +23,11 @@
 // #include <pathplanner/lib/config/RobotConfig.h>
 // #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
 
+#include <units/voltage.h>
+#include <units/angle.h>
+#include <units/time.h>
+#include <units/angular_velocity.h>
+
 #include "Constants.h"
 // #include "LimelightHelpers.h"
 #include "subsystems/SubIMU.h"
@@ -36,23 +41,25 @@ class SubDrivetrain : public frc2::SubsystemBase {
    */
   void Periodic() override;
 
-// Method that drives the robot in field relative drive
+  // Method that drives the robot in field relative drive
   void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
 
   void refreshSwervePID();
   void refreshSwerveModules();
 
+  void mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units::volt_t iTurningVoltage);
+
   wpi::array<frc::SwerveModuleState, 4> getSwerveModuleStates();
   wpi::array<frc::SwerveModulePosition, 4> getSwerveModulePositions();
 
-// Method that returns a ChassisSpeeds from the robot relative speeds
+  // Method that returns a ChassisSpeeds from the robot relative speeds
   frc::ChassisSpeeds getRobotRelativeSpeeds();
-// Method that drives the robot in robot relative drive
+  // Method that drives the robot in robot relative drive
   void driveRobotRelative(frc::ChassisSpeeds iSpeeds, double SpeedModulation);
 
-// Method that returns the robot's pose
+  // Method that returns the robot's pose
   frc::Pose2d getPose();
-// Method that redefines the robot's pose with its input
+  // Method that redefines the robot's pose with its input
   void resetPose(frc::Pose2d iRobotPose);
 
  private:
@@ -105,6 +112,9 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::ChassisSpeeds mDesiredChassisSpeeds;
   frc::ChassisSpeeds mCurrentChassisSpeeds;
   frc::Rotation2d mCurrentRotation2d;
+
+  // Used for mesuring feedforward constants
+  units::radian_t mLastTurningPosition;
 
   // The values are meant to be changed before being used
   wpi::array<frc::SwerveModuleState, 4> mDesiredSwerveStates = {frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},

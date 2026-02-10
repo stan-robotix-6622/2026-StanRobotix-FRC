@@ -10,7 +10,7 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
     mDrivingMotor = new rev::spark::SparkMax{iDrivingMotorID, ModuleConstants::kDrivingMotorType};
     mTurningMotor = new rev::spark::SparkMax{iTurningMotorID, ModuleConstants::kTurningMotorType};
 
-    // Initialization of the PIDController with the P,I and D constants and 
+    // Initialization of the PIDController with the P,I and D constants and
     // a continuous input from 0 to 2pi
     mTurningPID = new frc::PIDController{ModuleConstants::kTurningP,
                                          ModuleConstants::kTurningI,
@@ -25,7 +25,7 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
     mTurningMotor->Configure(Configs::SwerveModule::TurningConfig(iTurningInverted),
                              ModuleConstants::kTurningResetMode,
                              ModuleConstants::kTurningPersistMode);
-    
+
     // Initialization of the motors' ClosedLoopController
     mTurningClosedLoopController = new rev::spark::SparkClosedLoopController{mTurningMotor->GetClosedLoopController()};
     mDrivingClosedLoopController = new rev::spark::SparkClosedLoopController{mDrivingMotor->GetClosedLoopController()};
@@ -80,6 +80,16 @@ void SwerveModule::setPIDValues(double kP, double kI, double kD)
     // }
 }
 
+void SwerveModule::setTurningVoltage(units::volt_t iVoltage)
+{
+    mTurningMotor->SetVoltage(iVoltage);
+}
+
+void SwerveModule::setDrivingVoltage(units::volt_t iVoltage)
+{
+    mDrivingMotor->SetVoltage(iVoltage);
+}
+
 frc::SwerveModuleState SwerveModule::getModuleState()
 {
     return mModuleState;
@@ -93,7 +103,7 @@ frc::SwerveModulePosition SwerveModule::getModulePosition()
 void SwerveModule::refreshModule()
 {
     mModuleState = frc::SwerveModuleState{units::meters_per_second_t(mDrivingEncoder->GetVelocity()),
-                                           frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
+                                          frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
     mModulePosition = frc::SwerveModulePosition{units::meter_t(mDrivingEncoder->GetPosition()),
-                                                 frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
+                                                frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
 }
