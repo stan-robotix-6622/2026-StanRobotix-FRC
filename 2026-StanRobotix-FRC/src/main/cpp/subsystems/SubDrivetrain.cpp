@@ -18,10 +18,10 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
     m_backLeftModule   = new SwerveModule{DrivetrainConstants::kBackLeftMotorID  , DrivetrainConstants::kBackLeftMotor550ID, true};
     m_backRightModule  = new SwerveModule{DrivetrainConstants::kBackRightMotorID , DrivetrainConstants::kBackRightMotor550ID, true};
 
-    frc::SmartDashboard::PutData("front left moduele", m_frontLeftModule);
-    frc::SmartDashboard::PutData("front right moduele", m_frontRightModule);
-    frc::SmartDashboard::PutData("back left moduele", m_backLeftModule);
-    frc::SmartDashboard::PutData("back right moduele", m_backRightModule);
+    frc::SmartDashboard::PutData("front left module", m_frontLeftModule);
+    frc::SmartDashboard::PutData("front right module", m_frontRightModule);
+    frc::SmartDashboard::PutData("back left module", m_backLeftModule);
+    frc::SmartDashboard::PutData("back right module", m_backRightModule);
     
     // Initialization of the Swerve Data Publishers
     mCurrentModuleStatesPublisher = mNTDriveTrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
