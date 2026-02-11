@@ -18,6 +18,8 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
     mTurningPID->EnableContinuousInput(ModuleConstants::Config::kTurningClosedLoopMinInput,
                                        ModuleConstants::Config::kTurningClosedLoopMaxInput);
 
+    frc::SmartDashboard::PutData(mTurningPID);
+
     // Configure the motors from Configs.h
     mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
                              ModuleConstants::kDrivingResetMode,
@@ -106,4 +108,12 @@ void SwerveModule::refreshModule()
                                           frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
     mModulePosition = frc::SwerveModulePosition{units::meter_t(mDrivingEncoder->GetPosition()),
                                                 frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
+}
+
+void SwerveModule::InitSendable(wpi::SendableBuilder& builder)
+{
+    builder.SetSmartDashboardType("swerve module");
+    builder.AddDoubleProperty("turning velocity", [this] {return mTurningAbsoluteEncoder->GetVelocity();}, nullptr);
+    builder.AddDoubleProperty("turning position", [this] {return mTurningAbsoluteEncoder->GetPosition();}, nullptr);
+    builder.AddDoubleProperty("driving velocity", [this] {return mDrivingEncoder->GetVelocity();}, nullptr);
 }

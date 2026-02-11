@@ -8,16 +8,18 @@
 #include <rev/AbsoluteEncoder.h>
 #include <rev/RelativeEncoder.h>
 #include <rev/SparkClosedLoopController.h>
+#include <wpi/sendable/SendableBuilder.h>
 #include <frc/controller/PIDController.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <units/velocity.h>
 #include <units/angle.h>
 
 #include "Configs.h"
 #include "Constants.h"
 
-class SwerveModule{
+class SwerveModule : public wpi::Sendable{
  public:
   // Constructeur de la classe avec un motorID pour le Driving et un pour le Turning
   SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInveryed = false, bool iTurningInverted = true);
@@ -26,6 +28,8 @@ class SwerveModule{
   frc::SwerveModulePosition getModulePosition();
   // Méthode qui retourne le SwerveModuleState du module
   frc::SwerveModuleState getModuleState();
+
+  void InitSendable(wpi::SendableBuilder& builder) override;
 
   // Méthode qui fait rouler le module à partir du SwerveModuleState désiré
   void setDesiredState(frc::SwerveModuleState iDesiredState, double iSpeedModulation);
