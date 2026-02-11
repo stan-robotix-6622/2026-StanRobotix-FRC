@@ -8,7 +8,7 @@
 #include <rev/AbsoluteEncoder.h>
 #include <rev/RelativeEncoder.h>
 #include <rev/SparkClosedLoopController.h>
-#include <wpi/sendable/SendableBuilder.h>
+#include <wpi/sendable/Sendable.h>
 #include <frc/controller/PIDController.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
