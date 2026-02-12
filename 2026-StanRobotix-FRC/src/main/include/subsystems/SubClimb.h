@@ -4,12 +4,16 @@
 
 #pragma once
 
-#include "Constants.h"
-
 #include <rev/SparkMax.h>
 #include <frc2/command/SubsystemBase.h>
 #include <rev/config/SparkMaxConfig.h>
 #include <rev/SparkRelativeEncoder.h>
+#include <frc2/command/CommandPtr.h>
+
+enum ClimbCommands {
+  ClimbUp,
+  ClimbDown
+};
 
 class SubClimb : public frc2::SubsystemBase {
  public:
@@ -17,6 +21,7 @@ class SubClimb : public frc2::SubsystemBase {
   void SetSpeed(double iSpeed);
   void StopMotor();
   double GetPosition();
+  frc2::CommandPtr GetClimbCommand(ClimbCommands iCommand);
   
   /**
    * Will be called periodically whenever the CommandScheduler runs.
