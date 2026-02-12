@@ -11,6 +11,8 @@
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
+#include "commands/FeedShooter.h"
+#include "commands/Shoot.h"
 
 
 
@@ -43,7 +45,7 @@ void RobotContainer::ConfigureBindings() {
   //   }, {m_subShooter}));
 
   m_driverController.X().ToggleOnTrue(frc2::cmd::RunEnd(
-    [this] {std::cout << "Shoot" << std::endl;m_subShooter->setVelocity(m_driverController.GetRightTriggerAxis() * 30_tps);},
+    [this] {std::cout << "Shoot" << std::endl;m_subShooter->setVelocity(m_driverController.GetRightTriggerAxis() * 60_tps);},
     [this] {m_subShooter->setVelocity(0_tps);}, {m_subShooter}));
 
   m_driverController.Y().ToggleOnTrue(frc2::cmd::RunEnd(

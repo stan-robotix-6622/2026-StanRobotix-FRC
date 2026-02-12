@@ -7,6 +7,7 @@
 SubFeeder::SubFeeder() 
 {
     mFeederController = new rev::spark::SparkMax{SubFeederConstants::kCANid, rev::spark::SparkLowLevel::MotorType::kBrushless};
+    mFeederController->SetInverted(true);
 }
 
 // This method will be called once per scheduler run

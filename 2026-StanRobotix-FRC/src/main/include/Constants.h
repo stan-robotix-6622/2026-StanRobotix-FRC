@@ -37,6 +37,7 @@ namespace subShooterConstants {
     constexpr rev::ResetMode kReset = kResetSafeParameters;
 
     constexpr rev::PersistMode kPersist = kPersistParameters;
+    constexpr double kVitesseVoulue = 10;
 
 }
 
