@@ -3,17 +3,23 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "subsystems/SubPivotIntake.h"
+#include <numbers>
 
 
 SubPivotIntake::SubPivotIntake() {
     mPivotMotor = new rev::spark::SparkMax{PivotConstants::kMotorPivotid1, rev::spark::SparkLowLevel::MotorType::kBrushless};
-    mPIDController = new frc::PIDController{PivotConstants::kP, PivotConstants::kI, PivotConstants::kD};
+    mFeedForward = new frc::ArmFeedforward{0_V, PivotConstants::kG, 1_V/1_rad_per_s};
+    mPivotMotor->SetInverted(true);
+    frc::SmartDashboard::PutNumber("Arm kG", PivotConstants::kG.value());
 }
 
 
 
 // This method will be called once per scheduler run
-void SubPivotIntake::Periodic() {}
+void SubPivotIntake::Periodic() {
+    frc::SmartDashboard::PutNumber("Arm Position", mPivotMotor->GetEncoder().GetPosition());
+    frc::SmartDashboard::PutNumber("Arm Angle", GetAngle());
+}
 
 
 void SubPivotIntake::Stop() {
@@ -26,7 +32,8 @@ void SubPivotIntake::SetVoltage(double iVoltage){
 
 void SubPivotIntake::KeepPosition()
 {
-    mPivotMotor->SetVoltage(units::volt_t(PivotConstants::kG * cos(GetAngle())));
+    mPivotMotor->SetVoltage(units::volt_t(frc::SmartDashboard::GetNumber("Arm kG", PivotConstants::kG.value()) * cos(GetAngle())));
+    // mPivotMotor->SetVoltage(PivotConstants::kG * cos(GetAngle()));
 }
 
 double SubPivotIntake::GetAngle(){

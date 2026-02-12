@@ -22,7 +22,7 @@ RobotContainer::RobotContainer() {
 
   m_SubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this]
   {
-    m_SubPivotIntake->SetVoltage((PivotConstants::kG * cos(m_SubPivotIntake->GetAngle())));
+    m_SubPivotIntake->KeepPosition();
   }, {m_SubPivotIntake}));
 
   // Configure the button bindings

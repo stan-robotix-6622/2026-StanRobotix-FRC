@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <numbers>
+#include <units/voltage.h>
+
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants.  This should not be used for any other
@@ -28,11 +31,11 @@ namespace PivotConstants{
   constexpr int kMotorPivotid1 = 9;
   // constexpr int kMotorPivotid2 = 10;
   constexpr double kGearRatio = 16;
-  constexpr double kOffset = 6.405;
+  constexpr double kOffset = -5.0952324867248535;
   constexpr double kP = 0.01; // en attendant
   constexpr double kI = 0.0; // en attendant
   constexpr double kD = 0.0; // en attendant
-  constexpr double kG = 0.50;
-  constexpr double setpointUp = 5.595 / kGearRatio;
+  constexpr units::volt_t kG = -0.80_V;
+  constexpr double setpointUp = 1.1428582668304443 * 2 * std::numbers::pi / kGearRatio;
   constexpr double setpointDown = 0;
 }

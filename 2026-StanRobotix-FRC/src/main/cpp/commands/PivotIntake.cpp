@@ -9,11 +9,7 @@ PivotIntake::PivotIntake(SubIntake * iIntake, SubPivotIntake * iPivotIntake, Sta
   mPivotIntake = iPivotIntake;
   mPIDController = new frc::PIDController {PivotConstants::kP, PivotConstants::kI, PivotConstants::kD, 20_ms};
   mState = iTarget;
-
-  frc::SmartDashboard::PutNumber("Arm P", PivotConstants::kP);
-  frc::SmartDashboard::PutNumber("Arm I", PivotConstants::kI);
-  frc::SmartDashboard::PutNumber("Arm D", PivotConstants::kD);
-
+  frc::SmartDashboard::PutData("Arm PID", mPIDController);
   AddRequirements(mPivotIntake);
   // Use addRequirements() here to declare subsystem dependencies.
 }
@@ -36,13 +32,10 @@ void PivotIntake::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void PivotIntake::Execute() {
-  double wP = frc::SmartDashboard::GetNumber("Arm P", PivotConstants::kP);
-  double wI = frc::SmartDashboard::GetNumber("Arm I", PivotConstants::kI);
-  double wD = frc::SmartDashboard::GetNumber("Arm D", PivotConstants::kD);
-  mPIDController->SetPID(wP, wI, wD);
   double wVoltage = mPIDController->Calculate(mPivotIntake->GetAngle());
   std::cout << wVoltage << std::endl;
-  mPivotIntake->SetVoltage(wVoltage + (PivotConstants::kG * cos(mPivotIntake->GetAngle())));
+  frc::SmartDashboard::PutNumber("Arm PID", wVoltage);
+  mPivotIntake->SetVoltage(wVoltage + (PivotConstants::kG.value() * cos(mPivotIntake->GetAngle())));
 }
 
 // Called once the command ends or is interrupted.
