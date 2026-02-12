@@ -32,20 +32,25 @@ namespace subShooterConstants {
     constexpr units::volt_t kVoltage = 1_V; //its a placeholder
     // constexpr kVunit kV = 1_V / 1_tps; //placeholder
 
-    constexpr int kCANid = 11; //its a placeholder too :)
+    constexpr int kCANid = 11;
+
+    constexpr rev::ResetMode kReset = kResetSafeParameters;
+
+    constexpr rev::PersistMode kPersist = kPersistParameters;
+
 }
 
 namespace SubFeederConstants {
     
-    constexpr units::volt_t kVoltage = 2_V; //placeholder
-    constexpr int kCANid = 12; //PLACEHOLDEERR
+    constexpr units::volt_t kVoltage = 2_V; //placeholder :)
+    constexpr int kCANid = 12;
 }
 
 namespace PIDConstants {
 
-    constexpr double kP = 0.00001; //T'is be a placeholder
+    constexpr double kP = 0.00001; //T'is be a placeholder :)
     constexpr double kI = 0;
     constexpr double kD = 0;
 
-    constexpr double setpoint = 1; //placeholder
+    constexpr double setpoint = 1; //its NOT a placeholder :)
 }

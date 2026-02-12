@@ -15,6 +15,8 @@
 
 #include "Constants.h"
 
+#include <rev/SparkBase.h>
+
 
 class subShooter : public frc2::SubsystemBase {
  public:
@@ -23,6 +25,7 @@ class subShooter : public frc2::SubsystemBase {
   void setVelocity(units::turns_per_second_t nextVelocity);
   void setVoltage(units::volt_t iVoltage);
   units::turns_per_second_t getVelocity();
+  rev::REVLibError Configure();
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
@@ -34,8 +37,9 @@ class subShooter : public frc2::SubsystemBase {
 
   frc::SimpleMotorFeedforward<units::turns> m_feedforward{0_V, 4_V / 31.7_tps};
 
-  rev::spark::SparkMax* mShooterController;
-  frc::PIDController* mPIDcontroller;
-  rev::spark::SparkRelativeEncoder* mRelativeEncoder;
+  rev::spark::SparkMax * mShooterController;
+  frc::PIDController * mPIDcontroller;
+  rev::spark::SparkRelativeEncoder * mRelativeEncoder;
+  rev::spark::SparkBaseConfig * mSparkConfig;
 
 };
