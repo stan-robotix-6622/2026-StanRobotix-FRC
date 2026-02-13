@@ -7,16 +7,17 @@
 
 
 Shoot::Shoot(subShooter* iSubShooter) {
-  m_PIDController = new frc::PIDController{ PIDConstants::kP, PIDConstants::kI, PIDConstants::kD, 20_ms};
+  mPIDController = new frc::PIDController{ PIDConstants::kP, PIDConstants::kI, PIDConstants::kD, 20_ms};
   mSubShooter = iSubShooter;
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements(iSubShooter);
+  frc::SmartDashboard::PutData(mPIDController);
 }
 
 // Called when the command is initially scheduled.
 void Shoot::Initialize() 
 {
-  m_PIDController->SetSetpoint(PIDConstants::setpoint);
+  mPIDController->SetSetpoint(PIDConstants::setpoint);
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -24,7 +25,7 @@ void Shoot::Execute()
 {
   units::turns_per_second_t wDesireVelocity = units::turns_per_second_t(subShooterConstants::kVitesseVoulue);
   mSubShooter->setVelocity(wDesireVelocity);
-  units::turns_per_second_t wCurrentVelocity = units::turns_per_second_t(m_PIDController->Calculate(mSubShooter->getVelocity().value()));
+  units::turns_per_second_t wCurrentVelocity = units::turns_per_second_t(mPIDController->Calculate(mSubShooter->getVelocity().value()));
 }
 
 // Called once the command ends or is interrupted.

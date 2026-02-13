@@ -38,7 +38,7 @@ class Shoot
 
  private:
   subShooter* mSubShooter;
-  frc::PIDController* m_PIDController;
+  frc::PIDController* mPIDController;
   
   
 };
