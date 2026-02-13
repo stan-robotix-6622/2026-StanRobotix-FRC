@@ -4,6 +4,8 @@
 
 #include "subsystems/SubDrivetrain.h"
 
+#include <iostream>
+
 SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
 {
     // Initialization of the SwerveModules' location relative to the robot center
@@ -18,10 +20,10 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
     m_backLeftModule   = new SwerveModule{DrivetrainConstants::kBackLeftMotorID  , DrivetrainConstants::kBackLeftMotor550ID, true};
     m_backRightModule  = new SwerveModule{DrivetrainConstants::kBackRightMotorID , DrivetrainConstants::kBackRightMotor550ID, true};
 
-    frc::SmartDashboard::PutData("front left module", m_frontLeftModule);
-    frc::SmartDashboard::PutData("front right module", m_frontRightModule);
-    frc::SmartDashboard::PutData("back left module", m_backLeftModule);
-    frc::SmartDashboard::PutData("back right module", m_backRightModule);
+    frc::SmartDashboard::PutData("swerve/fl module", m_frontLeftModule);
+    frc::SmartDashboard::PutData("swerve/fr module", m_frontRightModule);
+    frc::SmartDashboard::PutData("swerve/bl module", m_backLeftModule);
+    frc::SmartDashboard::PutData("swerve/br module", m_backRightModule);
     
     // Initialization of the Swerve Data Publishers
     mCurrentModuleStatesPublisher = mNTDriveTrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
@@ -38,7 +40,6 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
     mIMU = iIMU;
 
     // Initialization of the swerve kinematics with the SwerveModules' location
-    // WARNING: The order of the modules is not the same in this declaration as when it's uses
     m_kinematics = new frc::SwerveDriveKinematics<4>{*m_frontLeftLocation, *m_frontRightLocation, *m_backLeftLocation, *m_backRightLocation};
 
     // Initialization of the swerve pose estimator with the kinematics, the robot's rotation, an array of the SwerveModules' position, and the robot's pose
@@ -51,6 +52,7 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
     m_poseEstimator->SetVisionMeasurementStdDevs(*visionMeasurementStdDevs);
 
     mField2d = new frc::Field2d{};
+    frc::SmartDashboard::PutData("Drivetrain/Field2d", mField2d);
 
     // pathplanner::AutoBuilder::configure(
     //     [this]()
@@ -73,9 +75,8 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
     //         // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
     //         std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
-    //         std::cout << alliance.value() << std::endl;
+    //         frc::SmartDashboard::PutNumber("alliance color", frc::DriverStation::GetAlliance().value());
     //         if (alliance) {
-    //             std::cout << alliance.value() << std::endl;
     //             return alliance.value() == frc::DriverStation::Alliance::kRed;
     //         }
     //         return false;
@@ -98,7 +99,6 @@ void SubDrivetrain::Periodic()
     m_poseEstimator->Update(mCurrentRotation2d, getSwerveModulePositions());
 
     mField2d->SetRobotPose(m_poseEstimator->GetEstimatedPosition());
-    frc::SmartDashboard::PutData("Drivetrain/Field2d", mField2d);
 
     // Update la rotation du robot pour la Limelight
 

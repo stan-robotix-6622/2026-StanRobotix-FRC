@@ -19,7 +19,6 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
                                          ModuleConstants::kTurningD};
     mTurningPID->EnableContinuousInput(ModuleConstants::Config::kTurningClosedLoopMinInput,
                                        ModuleConstants::Config::kTurningClosedLoopMaxInput);
-
     frc::SmartDashboard::PutData(mTurningPID);
 
     // Configure the motors from Configs.h
@@ -114,7 +113,7 @@ void SwerveModule::refreshModule()
 
 void SwerveModule::InitSendable(wpi::SendableBuilder& builder)
 {
-    builder.SetSmartDashboardType("swerve module");
+    builder.SetSmartDashboardType("swerve/module");
     builder.AddDoubleProperty("turning velocity", [this] {return mTurningAbsoluteEncoder->GetVelocity();}, nullptr);
     builder.AddDoubleProperty("turning position", [this] {return mTurningAbsoluteEncoder->GetPosition();}, nullptr);
     builder.AddDoubleProperty("driving velocity", [this] {return mDrivingEncoder->GetVelocity();}, nullptr);
