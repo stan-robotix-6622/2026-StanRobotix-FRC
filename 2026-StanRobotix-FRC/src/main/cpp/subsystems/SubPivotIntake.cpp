@@ -9,18 +9,18 @@
 SubPivotIntake::SubPivotIntake() {
     mPivotMotor = new rev::spark::SparkMax{PivotConstants::kMotorPivotid1, rev::spark::SparkLowLevel::MotorType::kBrushless};
     mFeedForward = new frc::ArmFeedforward{0_V, PivotConstants::kG, 1_V/1_rad_per_s};
-    mPivotMotor->SetInverted(true);
     frc::SmartDashboard::PutNumber("Arm kG", PivotConstants::kG.value());
+
+    mPivotMotorConfig = new rev::spark::SparkMaxConfig{};
+    mPivotMotorConfig->Inverted(PivotConstants::kInverted);
+    mPivotMotor->Configure(*mPivotMotorConfig, PivotConstants::kReset, PivotConstants::kPersist);
 }
-
-
 
 // This method will be called once per scheduler run
 void SubPivotIntake::Periodic() {
     frc::SmartDashboard::PutNumber("Arm Position", mPivotMotor->GetEncoder().GetPosition());
     frc::SmartDashboard::PutNumber("Arm Angle", GetAngle());
 }
-
 
 void SubPivotIntake::Stop() {
     mPivotMotor->StopMotor();

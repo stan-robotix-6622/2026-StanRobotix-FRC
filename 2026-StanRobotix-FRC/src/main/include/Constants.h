@@ -24,7 +24,11 @@ inline constexpr int kDriverControllerPort = 0;
 }  // namespace OperatorConstants
 
 namespace IntakeConstants {
-    constexpr int kMotorid = 10;
+  constexpr int kMotorid = 10;
+  constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
+  constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+  constexpr bool kInverted = true;
+
 }
 
 namespace PivotConstants{
@@ -38,4 +42,7 @@ namespace PivotConstants{
   constexpr units::volt_t kG = -0.80_V;
   constexpr double setpointUp = 1.1428582668304443 * 2 * std::numbers::pi / kGearRatio;
   constexpr double setpointDown = 0;
+  constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
+  constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+  constexpr bool kInverted = true;
 }

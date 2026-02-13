@@ -8,6 +8,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/controller/ArmFeedforward.h>
 #include <rev/SparkMax.h>
+#include <rev/config/SparkMaxConfig.h>
 #include "Constants.h"
 
 
@@ -31,6 +32,7 @@ class SubPivotIntake : public frc2::SubsystemBase {
  private:
   rev::spark::SparkMax * mPivotMotor = nullptr;
   frc::ArmFeedforward * mFeedForward = nullptr;
+  rev::spark::SparkMaxConfig * mPivotMotorConfig;
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 };

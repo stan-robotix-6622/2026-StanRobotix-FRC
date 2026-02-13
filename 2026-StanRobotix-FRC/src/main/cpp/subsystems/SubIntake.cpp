@@ -5,7 +5,12 @@
 #include "subsystems/SubIntake.h"
 
 SubIntake::SubIntake() {
-     mIntakeMotor = new rev::spark::SparkMax(IntakeConstants::kMotorid, rev::spark::SparkLowLevel::MotorType::kBrushless);
+    mIntakeMotor = new rev::spark::SparkMax(IntakeConstants::kMotorid, rev::spark::SparkLowLevel::MotorType::kBrushless);
+ 
+    mIntakeMotorConfig = new rev::spark::SparkMaxConfig{};
+    mIntakeMotorConfig->Inverted(IntakeConstants::kInverted);
+
+    mIntakeMotor->Configure(*mIntakeMotorConfig, IntakeConstants::kReset, IntakeConstants::kPersist);
 }
 
 // This method will be called once per scheduler run
