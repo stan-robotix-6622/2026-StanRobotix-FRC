@@ -44,7 +44,6 @@ class SubDrivetrain : public frc2::SubsystemBase {
   // Method that drives the robot in field relative drive
   void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
 
-  void refreshSwervePID();
   void refreshSwerveModules();
 
   void mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units::volt_t iTurningVoltage);

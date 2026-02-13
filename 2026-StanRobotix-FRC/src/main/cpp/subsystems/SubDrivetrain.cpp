@@ -32,9 +32,6 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
     mDesiredChassisSpeedsPublisher = mNTDriveTrainTable->GetStructTopic<frc::ChassisSpeeds>("Desired ChassisSpeeds").Publish();
     mRotation2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Rotation2d>("Current Rotation2d").Publish();
     mPose2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
-    frc::SmartDashboard::PutNumber("Drivetrain/kTurningP", ModuleConstants::kTurningP);
-    frc::SmartDashboard::PutNumber("Drivetrain/kTurningI", ModuleConstants::kTurningI);
-    frc::SmartDashboard::PutNumber("Drivetrain/kTurningD", ModuleConstants::kTurningD);
 
     // Initialization of the IMU
     mIMU = iIMU;
@@ -91,8 +88,6 @@ void SubDrivetrain::Periodic()
     // Refreshing the SwerveModules' position and states
     refreshSwerveModules();
 
-    refreshSwervePID();
-
     // Update of the robot's pose with the robot's rotation and an array of the SwerveModules' position
     mCurrentRotation2d = mIMU->getRotation2d();
 
@@ -139,18 +134,6 @@ void SubDrivetrain::refreshSwerveModules()
     m_frontRightModule->refreshModule();
     m_backLeftModule->refreshModule();
     m_backRightModule->refreshModule();
-}
-
-void SubDrivetrain::refreshSwervePID()
-{
-    double wP = frc::SmartDashboard::GetNumber("Drivetrain/kP", ModuleConstants::kTurningP);
-    double wI = frc::SmartDashboard::GetNumber("Drivetrain/kI", ModuleConstants::kTurningI);
-    double wD = frc::SmartDashboard::GetNumber("Drivetrain/kD", ModuleConstants::kTurningD);
-
-    m_frontLeftModule->setPIDValues(wP, wI, wD);
-    m_frontRightModule->setPIDValues(wP, wI, wD);
-    m_backLeftModule->setPIDValues(wP, wI, wD);
-    m_backRightModule->setPIDValues(wP, wI, wD);
 }
 
 wpi::array<frc::SwerveModuleState, 4> SubDrivetrain::getSwerveModuleStates()

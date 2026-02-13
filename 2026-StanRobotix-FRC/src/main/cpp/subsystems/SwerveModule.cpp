@@ -55,34 +55,6 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState, double 
     // mDrivingClosedLoopController->SetSetpoint(mOptimizedState.speed.value(), ModuleConstants::kDrivingClosedLoopControlType);
 }
 
-void SwerveModule::setPIDValues(double kP, double kI, double kD)
-{
-    mTurningPID->SetPID(kP, kI, kD);
-    // bool wUpdateConfig = false;
-    // if (iP != kP)
-    // {
-    //     mTurningConfig->closedLoop.P(iP);
-    //     wUpdateConfig = true;
-    //     kP = iP;
-    // }
-    // if (iI != kI)
-    // {
-    //     mTurningConfig->closedLoop.I(iI);
-    //     wUpdateConfig = true;
-    //     kI = iI;
-    // }
-    // if (iD != kD)
-    // {
-    //     mTurningConfig->closedLoop.D(iD);
-    //     wUpdateConfig = true;
-    //     kD = iD;
-    // }
-    // if (wUpdateConfig)
-    // {
-    //     mTurningMotor->Configure(*mTurningConfig, rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kNoPersistParameters);
-    // }
-}
-
 void SwerveModule::setTurningVoltage(units::volt_t iVoltage)
 {
     mTurningMotor->SetVoltage(iVoltage);

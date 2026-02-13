@@ -34,8 +34,6 @@ class SwerveModule : public wpi::Sendable{
   // Méthode qui fait rouler le module à partir du SwerveModuleState désiré
   void setDesiredState(frc::SwerveModuleState iDesiredState, double iSpeedModulation);
 
-  void setPIDValues(double kP, double kI, double kD);
-
   void setTurningVoltage(units::volt_t iVoltage);
   void setDrivingVoltage(units::volt_t iVoltage);
 
