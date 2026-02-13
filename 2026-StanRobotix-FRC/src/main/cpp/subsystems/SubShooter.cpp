@@ -10,6 +10,9 @@ subShooter::subShooter()
     mShooterController =  new rev::spark::SparkMax{subShooterConstants::kCANid, rev::spark::SparkLowLevel::MotorType::kBrushless};
     mRelativeEncoder = new rev::spark::SparkRelativeEncoder{mShooterController->GetEncoder()};
     mSparkConfig = new rev::spark::SparkBaseConfig; //Don't forget to put the thingy inside of the other thingy
+    frc::SmartDashboard::PutNumber("kP", PIDConstants::kP);
+    frc::SmartDashboard::PutNumber("kI", PIDConstants::kI);
+    frc::SmartDashboard::PutNumber("kD", PIDConstants::kD);
 }
 
 // This method will be called once per scheduler run
@@ -34,7 +37,6 @@ units::turns_per_second_t subShooter::getVelocity()
 
 rev::REVLibError subShooter::Configure()
 {
-
     mSparkConfig->Inverted(true);
 
     return mShooterController->Configure(*mSparkConfig, subShooterConstants::kReset, subShooterConstants::kPersist);

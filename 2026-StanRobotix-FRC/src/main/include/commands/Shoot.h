@@ -9,6 +9,7 @@
 #include <frc/controller/PIDController.h>
 #include <rev/SparkAnalogSensor.h>
 #include "subsystems/subShooter.h"
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include "Constants.h"
 

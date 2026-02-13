@@ -13,6 +13,7 @@
 
 #include <units/angular_velocity.h>
 #include <units/voltage.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include "Constants.h"
 
