@@ -4,9 +4,9 @@
 
 #pragma once
 
-// #include "units/angular_acceleration.h"
-// #include "units/angle.h"
-// #include "units/acceleration.h"
+#include "units/angle.h"
+#include "units/acceleration.h"
+#include "units/angular_velocity.h"
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -22,13 +22,10 @@
 //  typedef units::compound_unit<units::volt_t, units::inverse<units::turns_per_second>> kVunit; // V / turn / s
 
 namespace OperatorConstants {
-
-inline constexpr int kDriverControllerPort = 0;
-
+    inline constexpr int kDriverControllerPort = 0;
 }  // namespace OperatorConstants
 
 namespace subShooterConstants {
-
     constexpr units::volt_t kVoltage = 1_V; //its a placeholder
     // constexpr kVunit kV = 1_V / 1_tps; //placeholder
 
@@ -42,16 +39,14 @@ namespace subShooterConstants {
 }
 
 namespace SubFeederConstants {
-    
     constexpr units::volt_t kVoltage = 2_V; //placeholder :)
     constexpr int kCANid = 12;
 }
 
 namespace PIDConstants {
-
     constexpr double kP = 0.00001; //T'is be a placeholder :)
     constexpr double kI = 0;
     constexpr double kD = 0;
 
-    constexpr double setpoint = 1; //its NOT a placeholder :)
+    constexpr units::turns_per_second_t setpoint = 30_tps; //its NOT(it actually is) a placeholder :)
 }

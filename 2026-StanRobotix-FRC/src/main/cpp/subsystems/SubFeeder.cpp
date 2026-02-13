@@ -17,4 +17,3 @@ void SubFeeder::setVoltage(units::volt_t iOutput)
 {
     mFeederController->SetVoltage(iOutput);
 };
-

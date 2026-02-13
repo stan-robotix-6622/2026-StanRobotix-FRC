@@ -11,6 +11,8 @@
 #include "subsystems/subShooter.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 
+#include <units/angular_velocity.h>
+
 #include "Constants.h"
 
 /*
@@ -40,5 +42,6 @@ class Shoot
   subShooter* mSubShooter;
   frc::PIDController* mPIDController;
   
-  
+  units::turns_per_second_t wCurrentVelocity;
+  units::turns_per_second_t wDesiredVelocity;
 };
