@@ -34,7 +34,9 @@ void Shoot::Execute()
 }
 
 // Called once the command ends or is interrupted.
-void Shoot::End(bool interrupted) {}
+void Shoot::End(bool interrupted) {
+  mSubShooter->setVelocity(0_tps);
+}
 
 // Returns true when the command should end.
 bool Shoot::IsFinished()

@@ -31,7 +31,7 @@ void subShooter::setVelocity(units::turns_per_second_t nextVelocity)
 
 units::turns_per_second_t subShooter::getVelocity()
 {
-    return units::turns_per_second_t(mRelativeEncoder->GetVelocity());
+    return units::revolutions_per_minute_t(mRelativeEncoder->GetVelocity());
 };
 
 rev::REVLibError subShooter::Configure()

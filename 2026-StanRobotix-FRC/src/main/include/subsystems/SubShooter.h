@@ -7,8 +7,8 @@
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkMax.h>
 #include <frc/controller/PIDController.h>
-#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/controller/SimpleMotorFeedforward.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <rev/SparkRelativeEncoder.h>
 
 #include <units/angular_velocity.h>

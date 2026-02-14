@@ -5,8 +5,12 @@
 #pragma once
 
 #include "units/angle.h"
+#include "units/velocity.h"
 #include "units/acceleration.h"
 #include "units/angular_velocity.h"
+#include "units/angular_acceleration.h"
+
+#include <frc/controller/SimpleMotorFeedforward.h>
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -34,7 +38,7 @@ namespace subShooterConstants {
     constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
 
     constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
-    constexpr double kVitesseVoulue = 10;
+    constexpr units::turns_per_second_t kVitesseVoulue = 10_tps;
 
 }
 
@@ -44,9 +48,9 @@ namespace SubFeederConstants {
 }
 
 namespace PIDConstants {
-    constexpr double kP = 0.00001; //T'is be a placeholder :)
+    constexpr double kP = 1; //T'is be a placeholder :)
     constexpr double kI = 0;
     constexpr double kD = 0;
 
-    constexpr units::turns_per_second_t setpoint = 30_tps; //its NOT(it actually is) a placeholder :)
+    constexpr units::turns_per_second_t setpoint = 10_tps; //its NOT(it actually is) a placeholder :)
 }

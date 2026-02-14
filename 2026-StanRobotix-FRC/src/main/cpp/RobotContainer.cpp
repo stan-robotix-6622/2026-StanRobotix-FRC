@@ -14,8 +14,6 @@
 #include "commands/FeedShooter.h"
 #include "commands/Shoot.h"
 
-
-
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
   m_subShooter = new subShooter{};
@@ -36,26 +34,19 @@ void RobotContainer::ConfigureBindings() {
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.
-  m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
-  // m_driverController.A().WhileTrue(frc2::cmd::Run([this] 
-  //   {
-  //     m_subShooter->setVoltage(m_driverController.GetRightTriggerAxis() * 12_V);
-  //     frc::SmartDashboard::PutNumber("Shooter Velocity", m_subShooter->getVelocity());
-  //     frc::SmartDashboard::PutNumber("Shooter Voltage", m_driverController.GetRightTriggerAxis() * 12);
-  //   }, {m_subShooter}));
+  // m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
 
-  m_driverController.X().ToggleOnTrue(frc2::cmd::RunEnd(
-    [this] {std::cout << "Shoot" << std::endl;m_subShooter->setVelocity(m_driverController.GetRightTriggerAxis() * 60_tps);},
+  m_driverController.Y().WhileTrue(frc2::cmd::RunEnd(
+    [this] {std::cout << "Shoot" << std::endl;m_subShooter->setVelocity(m_driverController.GetRightTriggerAxis() * subShooterConstants::kVitesseVoulue);},
     [this] {m_subShooter->setVelocity(0_tps);}, {m_subShooter}));
-
-  m_driverController.Y().ToggleOnTrue(frc2::cmd::RunEnd(
-    [this] {std::cout << "Feed" << std::endl;m_subFeeder->setVoltage(m_driverController.GetLeftTriggerAxis() * 3_V);},
+    
+  m_driverController.B().WhileTrue(frc2::cmd::RunEnd(
+    [this] {std::cout << "Feed" << std::endl;m_subFeeder->setVoltage(m_driverController.GetLeftTriggerAxis() * SubFeederConstants::kVoltage);},
     [this] {m_subFeeder->setVoltage(0_V);}, {m_subFeeder}));
+      
+  m_driverController.X().WhileTrue(Shoot(m_subShooter).ToPtr());
 
-
-  frc2::Trigger([this] {
-    return m_XboxController.GetAButtonPressed();
-  }).OnTrue(FeedShooter(m_subFeeder).ToPtr());
+  m_driverController.A().WhileTrue(FeedShooter(m_subFeeder).ToPtr());
 
 
  /* frc2::Trigger([this] {
