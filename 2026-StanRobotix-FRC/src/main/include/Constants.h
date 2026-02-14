@@ -6,6 +6,7 @@
 
 #include <numbers>
 #include <units/voltage.h>
+#include <rev/config/SparkBaseConfig.h> 
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -28,6 +29,7 @@ namespace IntakeConstants {
   constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
   constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   constexpr bool kInverted = true;
+  constexpr double kSpeed = 0.8; // a modifier (valeur temporaire)
 
 }
 

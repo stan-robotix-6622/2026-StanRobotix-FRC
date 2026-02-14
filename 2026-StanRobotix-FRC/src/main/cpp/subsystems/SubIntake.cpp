@@ -24,3 +24,8 @@ void SubIntake::SetVoltage(double iVoltage)
 {
     mIntakeMotor->SetVoltage(units::volt_t(iVoltage));
 }
+
+void SubIntake::SetSpeed(double iSpeed)
+{
+    mIntakeMotor->Set(iSpeed);
+}

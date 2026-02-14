@@ -6,14 +6,9 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
-#include <cmath>
-#include <iostream>
-#include <frc/controller/PIDController.h>
-#include <frc/smartdashboard/SmartDashboard.h>
-
 #include "subsystems/SubIntake.h"
+#include "Constants.h"
 #include "subsystems/SubPivotIntake.h"
-
 
 /**
  * An example command.
@@ -22,19 +17,13 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class PivotIntake
-    : public frc2::CommandHelper<frc2::Command, PivotIntake> {
+class Intake
+    : public frc2::CommandHelper<frc2::Command, Intake> {
  public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-
-  enum StatePivotIntake{
-    kUp,
-    kDown
-  };
-
-  PivotIntake(SubPivotIntake*, StatePivotIntake iTarget);
+  Intake(SubIntake*);
 
   void Initialize() override;
 
@@ -46,9 +35,6 @@ class PivotIntake
 
   private:
 
+  SubIntake * mIntake;
   
-  SubPivotIntake * mPivotIntake;
-  frc::PIDController * mPIDController;
- 
-  StatePivotIntake mState;
 };

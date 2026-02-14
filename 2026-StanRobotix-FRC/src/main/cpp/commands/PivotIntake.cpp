@@ -5,7 +5,7 @@
 #include "commands/PivotIntake.h"
 
 
-PivotIntake::PivotIntake(SubIntake * iIntake, SubPivotIntake * iPivotIntake, StatePivotIntake iTarget) {
+PivotIntake::PivotIntake(SubPivotIntake * iPivotIntake, StatePivotIntake iTarget) {
   mPivotIntake = iPivotIntake;
   mPIDController = new frc::PIDController {PivotConstants::kP, PivotConstants::kI, PivotConstants::kD, 20_ms};
   mState = iTarget;
