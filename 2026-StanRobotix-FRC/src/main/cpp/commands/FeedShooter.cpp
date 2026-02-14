@@ -15,7 +15,7 @@ void FeedShooter::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
 void FeedShooter::Execute() {
-  m_SubFeeder->setVoltage(SubFeederConstants::kVoltage);
+  m_SubFeeder->setVoltage(SubFeederConstants::kDesiredVoltage);
 }
 
 // Called once the command ends or is interrupted.

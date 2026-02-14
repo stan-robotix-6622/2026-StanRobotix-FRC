@@ -22,16 +22,17 @@
  * they are needed.
  */
 
-//  typedef units::compound_unit<units::volt_t, units::inverse<units::turns_per_second_squared>> kAunit; // V / turn / s^2
-//  typedef units::compound_unit<units::volt_t, units::inverse<units::turns_per_second>> kVunit; // V / turn / s
+ typedef units::unit_t<units::compound_unit<units::volts, units::inverse<units::turns_per_second_squared>>, double, units::linear_scale> kAunit; // V / turn / s^2
+ typedef units::unit_t<units::compound_unit<units::volts, units::inverse<units::turns_per_second>>, double, units::linear_scale> kVunit; // V / turn / s
 
 namespace OperatorConstants {
     inline constexpr int kDriverControllerPort = 0;
 }  // namespace OperatorConstants
 
 namespace subShooterConstants {
-    constexpr units::volt_t kVoltage = 1_V; //its a placeholder
-    // constexpr kVunit kV = 1_V / 1_tps; //placeholder
+    constexpr units::volt_t kS = 0_V;
+    constexpr kVunit kV = 4_V / 31.7_tps;
+    constexpr kAunit kA = 0_V / 1_tr_per_s_sq;
 
     constexpr int kCANid = 11;
 
@@ -43,7 +44,7 @@ namespace subShooterConstants {
 }
 
 namespace SubFeederConstants {
-    constexpr units::volt_t kVoltage = 2_V; //placeholder :)
+    constexpr units::volt_t kDesiredVoltage = 2_V; //placeholder :)
     constexpr int kCANid = 12;
 }
 

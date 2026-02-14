@@ -37,7 +37,7 @@ class subShooter : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  frc::SimpleMotorFeedforward<units::turns> m_feedforward{0_V, 4_V / 31.7_tps};
+  frc::SimpleMotorFeedforward<units::turns> m_feedforward{subShooterConstants::kS, subShooterConstants::kV};
 
   rev::spark::SparkMax * mShooterController;
   frc::PIDController * mPIDcontroller;
