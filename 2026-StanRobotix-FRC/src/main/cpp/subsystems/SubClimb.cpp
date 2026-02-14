@@ -3,10 +3,13 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "subsystems/SubClimb.h"
+#include "commands/ClimbUp.h"
+#include "commands/ClimbDown.h"
 #include "Constants.h"
 
 #include <frc/StateSpaceUtil.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/RunCommand.h>
 
 SubClimb::SubClimb() {
     mSparkMax1 = new rev::spark::SparkMax(ClimbConstants::kDeviceIDSparkMax1, ClimbConstants::kMotorTypeSparkMax1);
@@ -45,9 +48,11 @@ double SubClimb::GetPosition() {
 
 frc2::CommandPtr SubClimb::GetClimbCommand(ClimbCommands iCommand) {
     switch (iCommand) {
-        case ClimbUp:
-            return;
-        case ClimbDown:
-            return;
+        case Up:
+            return ClimbUp(this).ToPtr();
+        case Down:
+            return ClimbDown(this).ToPtr();
+        default:
+            break;
     }
 }

@@ -11,8 +11,8 @@
 #include <frc2/command/CommandPtr.h>
 
 enum ClimbCommands {
-  ClimbUp,
-  ClimbDown
+  Up,
+  Down
 };
 
 class SubClimb : public frc2::SubsystemBase {
