@@ -37,11 +37,11 @@ void RobotContainer::ConfigureBindings() {
   // m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
 
   m_driverController.Y().WhileTrue(frc2::cmd::RunEnd(
-    [this] {std::cout << "Shoot" << std::endl;m_subShooter->setVelocity(m_driverController.GetRightTriggerAxis() * subShooterConstants::kVitesseVoulue);},
+    [this] {std::cout << "Shoot" << std::endl;m_subShooter->setVelocity(m_driverController.GetRightTriggerAxis() * ShooterConstants::kVitesseVoulue);},
     [this] {m_subShooter->setVelocity(0_tps);}, {m_subShooter}));
     
   m_driverController.B().WhileTrue(frc2::cmd::RunEnd(
-    [this] {std::cout << "Feed" << std::endl;m_subFeeder->setVoltage(m_driverController.GetLeftTriggerAxis() * SubFeederConstants::kDesiredVoltage);},
+    [this] {std::cout << "Feed" << std::endl;m_subFeeder->setVoltage(m_driverController.GetLeftTriggerAxis() * FeederConstants::kDesiredVoltage);},
     [this] {m_subFeeder->setVoltage(0_V);}, {m_subFeeder}));
       
   m_driverController.X().WhileTrue(Shoot(m_subShooter).ToPtr());

@@ -12,14 +12,14 @@ Shoot::Shoot(subShooter* iSubShooter) {
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements(iSubShooter);
   
-  mPIDController = new frc::PIDController{PIDConstants::kP, PIDConstants::kI, PIDConstants::kD};
+  mPIDController = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
   frc::SmartDashboard::PutData(mPIDController);
 }
 
 // Called when the command is initially scheduled.
 void Shoot::Initialize() 
 {
-  mPIDController->SetSetpoint(PIDConstants::setpoint.value());
+  mPIDController->SetSetpoint(ShooterConstants::PIDConstants::setpoint.value());
 }
 
 // Called repeatedly when this Command is scheduled to run
