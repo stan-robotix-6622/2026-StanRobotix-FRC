@@ -9,7 +9,7 @@ SubIntake::SubIntake() {
  
     mIntakeMotorConfig = new rev::spark::SparkMaxConfig{};
     mIntakeMotorConfig->Inverted(IntakeConstants::kInverted);
-
+    mIntakeMotorConfig->SetIdleMode(PivotConstants::kIdleMode);
     mIntakeMotor->Configure(*mIntakeMotorConfig, IntakeConstants::kReset, IntakeConstants::kPersist);
 }
 

@@ -13,6 +13,7 @@ SubPivotIntake::SubPivotIntake() {
 
     mPivotMotorConfig = new rev::spark::SparkMaxConfig{};
     mPivotMotorConfig->Inverted(PivotConstants::kInverted);
+    mPivotMotorConfig->SetIdleMode(PivotConstants::kIdleMode);
     mPivotMotor->Configure(*mPivotMotorConfig, PivotConstants::kReset, PivotConstants::kPersist);
 }
 

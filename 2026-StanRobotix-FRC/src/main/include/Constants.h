@@ -4,9 +4,12 @@
 
 #pragma once
 
-#include <numbers>
 #include <units/voltage.h>
-#include <rev/config/SparkBaseConfig.h> 
+
+#include <numbers>
+
+#include <rev/SparkBase.h> // Include Spark variable types
+#include <rev/config/SparkBaseConfig.h> // For the spark IdleMode
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -28,23 +31,24 @@ namespace IntakeConstants {
   constexpr int kMotorid = 10;
   constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
   constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+  constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
   constexpr bool kInverted = true;
   constexpr double kSpeed = 0.8; // a modifier (valeur temporaire)
-
 }
 
 namespace PivotConstants{
   constexpr int kMotorPivotid1 = 9;
   // constexpr int kMotorPivotid2 = 10;
   constexpr double kGearRatio = 16;
-  constexpr double kOffset = -5.0952324867248535;
-  constexpr double kP = 0.01; // en attendant
+  constexpr double kOffset = -6.357143878936768;
+  constexpr double kP = 1.0; // en attendant
   constexpr double kI = 0.0; // en attendant
   constexpr double kD = 0.0; // en attendant
-  constexpr units::volt_t kG = -0.80_V;
-  constexpr double setpointUp = 1.1428582668304443 * 2 * std::numbers::pi / kGearRatio;
+  constexpr units::volt_t kG = -0.70_V;
+  constexpr double setpointUp = -std::numbers::pi / 2;
   constexpr double setpointDown = 0;
   constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
   constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+  constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
   constexpr bool kInverted = true;
 }
