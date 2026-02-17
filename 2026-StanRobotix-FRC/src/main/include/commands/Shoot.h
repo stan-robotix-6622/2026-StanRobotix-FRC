@@ -42,6 +42,7 @@ class Shoot
   subShooter* mSubShooter;
   frc::PIDController* mPIDController;
   
-  units::turns_per_second_t wCurrentVelocity;
-  units::turns_per_second_t wDesiredVelocity;
+  units::turns_per_second_t mCurrentVelocity;
+  units::turns_per_second_t mDesiredVelocity;
+  units::turns_per_second_t mPIDMargin;
 };
