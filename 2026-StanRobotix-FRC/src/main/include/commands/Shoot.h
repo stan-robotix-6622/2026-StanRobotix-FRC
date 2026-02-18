@@ -41,8 +41,10 @@ class Shoot
  private:
   subShooter* mSubShooter;
   frc::PIDController* mPIDController;
+
+  units::turns_per_second_t mSetpointVelocity;
   
   units::turns_per_second_t mCurrentVelocity;
-  units::turns_per_second_t mDesiredVelocity;
-  units::turns_per_second_t mPIDMargin;
+  units::turns_per_second_t mAdjustedVelocity;
+  units::turns_per_second_t mPIDAdjustment;
 };

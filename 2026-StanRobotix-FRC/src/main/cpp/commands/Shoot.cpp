@@ -19,20 +19,22 @@ Shoot::Shoot(subShooter* iSubShooter) {
 // Called when the command is initially scheduled.
 void Shoot::Initialize() 
 {
-  mPIDController->SetSetpoint(ShooterConstants::PIDConstants::setpoint.value());
+  mSetpointVelocity = ShooterConstants::PIDConstants::setpoint;
+  mPIDController->SetSetpoint(mSetpointVelocity.value());
+  frc::SmartDashboard::PutNumber("shooter/setpoint velocity", mSetpointVelocity.value());
 }
 
 // Called repeatedly when this Command is scheduled to run
 void Shoot::Execute() 
 {
-  mPIDMargin = units::turns_per_second_t(mPIDController->Calculate(mSubShooter->getVelocity().value()));
+  mPIDAdjustment = units::turns_per_second_t(mPIDController->Calculate(mSubShooter->getVelocity().value()));
   mCurrentVelocity = mSubShooter->getVelocity();
-  mDesiredVelocity = mCurrentVelocity + mPIDMargin;
+  mAdjustedVelocity = mCurrentVelocity + mPIDAdjustment;
 
-  frc::SmartDashboard::PutNumber("shooter/PID margin", mPIDMargin.value());
+  frc::SmartDashboard::PutNumber("shooter/PID adjustment", mPIDAdjustment.value());
   frc::SmartDashboard::PutNumber("shooter/current velocity", mCurrentVelocity.value());
-  frc::SmartDashboard::PutNumber("shooter/desired velocity", mDesiredVelocity.value());
-  mSubShooter->setVelocity(mDesiredVelocity);
+  frc::SmartDashboard::PutNumber("shooter/adjusted velocity", mAdjustedVelocity.value());
+  mSubShooter->setVelocity(mAdjustedVelocity);
 }
 
 // Called once the command ends or is interrupted.
