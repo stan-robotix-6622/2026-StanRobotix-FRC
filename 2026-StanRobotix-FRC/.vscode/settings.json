@@ -23,5 +23,6 @@
     "functional": "cpp",
     "expected": "cpp",
     "iostream": "cpp"
-  }
+  },
+  "wpilib.autoStartRioLog": false
 }

@@ -37,7 +37,7 @@ class RobotContainer {
   ExampleSubsystem m_subsystem;
   subShooter* m_subShooter;
   SubFeeder* m_subFeeder;
-  SubIndexer* m_subIndexer;
+  // SubIndexer* m_subIndexer;
 
   void ConfigureBindings();
 };

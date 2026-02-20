@@ -19,7 +19,7 @@ RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
   m_subShooter = new subShooter{};
   m_subFeeder = new SubFeeder{};
- 
+  // m_subIndexer = new SubIndexer{};
   // Configure the button bindings
   ConfigureBindings();
 }
@@ -40,20 +40,26 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.Y().WhileTrue(frc2::cmd::RunEnd(
     [this] {std::cout << "Shoot" << std::endl;m_subShooter->setVelocity(m_driverController.GetRightTriggerAxis() * ShooterConstants::kVitesseVoulue);},
     [this] {m_subShooter->setVelocity(0_tps);}, {m_subShooter}));
+
+  // m_driverController.Y().WhileTrue(frc2::cmd::RunEnd(
+  //   [this] {std::cout << "Shoot" << std::endl;
+  //     m_subShooter->setVoltage(m_driverController.GetRightTriggerAxis() * 8_V);
+  //     frc::SmartDashboard::PutNumber("shooter voltage", m_driverController.GetRightTriggerAxis() * 8);},
+  //   [this] {m_subShooter->setVelocity(0_tps);}, {m_subShooter}));
     
   m_driverController.B().WhileTrue(frc2::cmd::RunEnd(
     [this] {std::cout << "Feed" << std::endl;m_subFeeder->setVoltage(m_driverController.GetLeftTriggerAxis() * FeederConstants::kDesiredVoltage);},
     [this] {m_subFeeder->setVoltage(0_V);}, {m_subFeeder}));
 
-    m_driverController.A().WhileTrue(frc2::cmd::RunEnd(
-    [this] {std::cout << "Index" << std::endl;m_subIndexer->setVoltage(m_driverController.GetLeftTriggerAxis() * IndexerConstants::kDesiredVoltage);},
-    [this] {m_subIndexer->setVoltage(0_V);}, {m_subIndexer}));
+    // m_driverController.A().WhileTrue(frc2::cmd::RunEnd(
+    // [this] {std::cout << "Index" << std::endl;m_subIndexer->setVoltage(m_driverController.GetLeftTriggerAxis() * IndexerConstants::kDesiredVoltage);},
+    // [this] {m_subIndexer->setVoltage(0_V);}, {m_subIndexer}));
       
   m_driverController.X().WhileTrue(Shoot(m_subShooter).ToPtr());
 
-  m_driverController.B().WhileTrue(FeedShooter(m_subFeeder).ToPtr());
+  m_driverController.RightBumper().WhileTrue(FeedShooter(m_subFeeder).ToPtr());
 
-  m_driverController.A().WhileTrue(Index(m_subIndexer).ToPtr());
+  //m_driverController.LeftBumper().WhileTrue(Index(m_subIndexer).ToPtr());
 
 
  /* frc2::Trigger([this] {

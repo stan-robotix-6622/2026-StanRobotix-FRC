@@ -33,22 +33,22 @@ namespace OperatorConstants
 namespace ShooterConstants
 {
   constexpr units::volt_t kS = 0_V;
-  constexpr kVunit kV = 4_V / 31.7_tps;
+  constexpr kVunit kV = 8_V / 61.523844_tps;
   // constexpr kAunit kA = 0_V / 1_tr_per_s_sq;
 
   constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
   constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 
-  constexpr units::turns_per_second_t kVitesseVoulue = 10_tps;
+  constexpr units::turns_per_second_t kVitesseVoulue = 60_tps;
 
   namespace PIDConstants
   {
-    constexpr double kP = 1; // T'is be a placeholder :)
+    constexpr double kP = 2; // T'is be a placeholder :)
     constexpr double kI = 0;
     constexpr double kD = 0;
 
-    constexpr units::turns_per_second_t setpoint = 10_tps; // its NOT(it actually is) a placeholder :)
+    constexpr units::turns_per_second_t setpoint = 60_tps; // its NOT(it actually is) a placeholder :)
   }
 }
 
@@ -73,8 +73,8 @@ namespace IndexerConstants
 
 namespace CANid
 {
-  constexpr int kMotorIndexerID = 13;
-  constexpr int kMotorFeederID = 12;
+  constexpr int kMotorIndexerID = 12;
+  constexpr int kMotorFeederID = 13;
   constexpr int kMotorShooter1ID = 16;
   constexpr int kMotorShooter2ID = 17;
 }
