@@ -6,7 +6,7 @@
 
 SubFeeder::SubFeeder() 
 {
-    mFeederController = new rev::spark::SparkMax{CANid::kCANidFeeder, rev::spark::SparkLowLevel::MotorType::kBrushless};
+    mFeederController = new rev::spark::SparkMax{CANid::kMotorFeederID, rev::spark::SparkLowLevel::MotorType::kBrushless};
     mFeederController->SetInverted(true);
     mSparkConfigFeeder = new rev::spark::SparkBaseConfig;
     Configure();

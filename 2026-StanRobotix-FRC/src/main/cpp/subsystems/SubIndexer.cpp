@@ -6,7 +6,7 @@
 
 SubIndexer::SubIndexer() 
 {
-    mIndexerController = new rev::spark::SparkMax{CANid::kCANidIndexer, rev::spark::SparkLowLevel::MotorType::kBrushless};
+    mIndexerController = new rev::spark::SparkMax{CANid::kMotorIndexerID, rev::spark::SparkLowLevel::MotorType::kBrushless};
     mIndexerController->SetInverted(true);
     mSparkConfigIndexer = new rev::spark::SparkBaseConfig;
     Configure();

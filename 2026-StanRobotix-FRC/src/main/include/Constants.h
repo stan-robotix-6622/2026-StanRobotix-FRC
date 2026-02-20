@@ -10,7 +10,7 @@
 #include "units/angular_velocity.h"
 #include "units/angular_acceleration.h"
 
-#include <rev/SparkBase.h> // Include Spark variable types
+#include <rev/SparkBase.h>              // Include Spark variable types
 #include <rev/config/SparkBaseConfig.h> // For the spark IdleMode
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -25,57 +25,56 @@
 typedef units::unit_t<units::compound_unit<units::volts, units::inverse<units::turns_per_second_squared>>, double, units::linear_scale> kAunit; // V / turn / s^2
 typedef units::unit_t<units::compound_unit<units::volts, units::inverse<units::turns_per_second>>, double, units::linear_scale> kVunit;         // V / turn / s
 
-namespace OperatorConstants {
-    inline constexpr int kDriverControllerPort = 0;
+namespace OperatorConstants
+{
+  inline constexpr int kDriverControllerPort = 0;
 } // namespace OperatorConstants
 
-namespace ShooterConstants {
-    
+namespace ShooterConstants
+{
+  constexpr units::volt_t kS = 0_V;
+  constexpr kVunit kV = 4_V / 31.7_tps;
+  // constexpr kAunit kA = 0_V / 1_tr_per_s_sq;
 
-    constexpr units::volt_t kS = 0_V;
-    constexpr kVunit kV = 4_V / 31.7_tps;
-    // constexpr kAunit kA = 0_V / 1_tr_per_s_sq;
+  constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
+  constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+  constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 
-    constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
-    constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
-    constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kCoast;
+  constexpr units::turns_per_second_t kVitesseVoulue = 10_tps;
 
-    constexpr units::turns_per_second_t kVitesseVoulue = 10_tps;
+  namespace PIDConstants
+  {
+    constexpr double kP = 1; // T'is be a placeholder :)
+    constexpr double kI = 0;
+    constexpr double kD = 0;
 
-    namespace PIDConstants {
-        constexpr double kP = 1; // T'is be a placeholder :)
-        constexpr double kI = 0;
-        constexpr double kD = 0;
-
-        constexpr units::turns_per_second_t setpoint = 10_tps; // its NOT(it actually is) a placeholder :)
-    }
+    constexpr units::turns_per_second_t setpoint = 10_tps; // its NOT(it actually is) a placeholder :)
+  }
 }
 
-namespace FeederConstants {
-    
+namespace FeederConstants
+{
+  constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
 
-    constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
-
-    constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
-    constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
-    constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kBrake;
+  constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
+  constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+  constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kBrake;
 
 }
 
-namespace IndexerConstants {
-   
+namespace IndexerConstants
+{
+  constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
 
-    constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
-
-    constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
-    constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
-    constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kBrake;
+  constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
+  constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+  constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kBrake;
 }
 
 namespace CANid
 {
-    constexpr int kCANidIndexer = 13; //placeholder :)
-    constexpr int kCANidFeeder = 12;
-    constexpr int kCANidShooter = 11;
-
+  constexpr int kMotorIndexerID = 13;
+  constexpr int kMotorFeederID = 12;
+  constexpr int kMotorShooter1ID = 16;
+  constexpr int kMotorShooter2ID = 17;
 }
