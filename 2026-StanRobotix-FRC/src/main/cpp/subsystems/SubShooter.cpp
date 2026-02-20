@@ -7,7 +7,7 @@
 subShooter::subShooter()
 {
     // mPIDcontroller = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
-    mShooterController =  new rev::spark::SparkMax{ShooterConstants::kCANid, rev::spark::SparkLowLevel::MotorType::kBrushless};
+    mShooterController =  new rev::spark::SparkMax{CANid::kCANidShooter, rev::spark::SparkLowLevel::MotorType::kBrushless};
     mRelativeEncoder = new rev::spark::SparkRelativeEncoder{mShooterController->GetEncoder()};
     mSparkConfigShooter = new rev::spark::SparkBaseConfig;
     Configure();
