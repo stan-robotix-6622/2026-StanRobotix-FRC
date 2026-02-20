@@ -13,6 +13,7 @@
 #include "commands/ExampleCommand.h"
 #include "commands/FeedShooter.h"
 #include "commands/Shoot.h"
+#include "commands/Index.h"
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
@@ -43,10 +44,16 @@ void RobotContainer::ConfigureBindings() {
   m_driverController.B().WhileTrue(frc2::cmd::RunEnd(
     [this] {std::cout << "Feed" << std::endl;m_subFeeder->setVoltage(m_driverController.GetLeftTriggerAxis() * FeederConstants::kDesiredVoltage);},
     [this] {m_subFeeder->setVoltage(0_V);}, {m_subFeeder}));
+
+    m_driverController.A().WhileTrue(frc2::cmd::RunEnd(
+    [this] {std::cout << "Index" << std::endl;m_subIndexer->setVoltage(m_driverController.GetLeftTriggerAxis() * IndexerConstants::kDesiredVoltage);},
+    [this] {m_subIndexer->setVoltage(0_V);}, {m_subIndexer}));
       
   m_driverController.X().WhileTrue(Shoot(m_subShooter).ToPtr());
 
-  m_driverController.A().WhileTrue(FeedShooter(m_subFeeder).ToPtr());
+  m_driverController.B().WhileTrue(FeedShooter(m_subFeeder).ToPtr());
+
+  m_driverController.A().WhileTrue(Index(m_subIndexer).ToPtr());
 
 
  /* frc2::Trigger([this] {
