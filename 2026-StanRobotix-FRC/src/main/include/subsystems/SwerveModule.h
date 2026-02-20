@@ -9,10 +9,12 @@
 #include <rev/RelativeEncoder.h>
 #include <rev/SparkClosedLoopController.h>
 #include <wpi/sendable/Sendable.h>
+#include <wpi/sendable/SendableBuilder.h>
 #include <frc/controller/PIDController.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+
 #include <units/velocity.h>
 #include <units/angle.h>
 

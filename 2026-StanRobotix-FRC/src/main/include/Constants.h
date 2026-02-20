@@ -6,12 +6,15 @@
 
 #include <units/length.h>
 #include <units/velocity.h>
+#include <units/acceleration.h>
 #include <units/angle.h>
 #include <units/angular_velocity.h>
+#include <units/angular_acceleration.h>
 
 #include <numbers>
 
 #include <frc/geometry/Translation2d.h>
+#include <frc/geometry/Pose2d.h>
 #include <rev/SparkBase.h> // Include Spark variable types
 #include <rev/config/SparkBaseConfig.h> // For the spark IdleMode
 
@@ -42,6 +45,10 @@ namespace PathPlannerConstants {
     constexpr double kDRotation = 0.0;
 
     constexpr double kPathPlannerSpeedModulation = 1.0;
+    constexpr units::meters_per_second_t kMaxVelocity = 3.0_mps;
+    constexpr units::meters_per_second_squared_t kMaxAcceleration = 3.0_mps_sq; 
+    constexpr units::degrees_per_second_t kMaxAngularVelocity = 360_deg_per_s;
+    constexpr units::degrees_per_second_squared_t kMaxAngularAcceleration = 720_deg_per_s_sq;
 }
 
 namespace DrivetrainConstants {
@@ -122,4 +129,9 @@ namespace LimelightConstants {
     constexpr double kPoseEstimatorStandardDeviationX = 0.7;      // Default/Recommended values
     constexpr double kPoseEstimatorStandardDeviationY = 0.7;      // Default/Recommended values
     constexpr double kPoseEstimatorStandardDeviationYaw = 999999; // Default/Recommended values
+}
+
+namespace HubConstants {
+    constexpr frc::Translation2d kHubCenterTranslation2d = frc::Translation2d{182.11_in, 158.32_in}; // From the 
+    constexpr frc::Pose2d kHubCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad}; // From the 
 }

@@ -103,7 +103,9 @@
     "xmemory": "cpp",
     "xstring": "cpp",
     "xtree": "cpp",
-    "xutility": "cpp"
+    "xutility": "cpp",
+    "*.inc": "cpp"
   },
-  "wpilib.autoStartRioLog": false
+  "wpilib.autoStartRioLog": false,
+  "wpilib.skipSelectSimulateExtension": true
 }

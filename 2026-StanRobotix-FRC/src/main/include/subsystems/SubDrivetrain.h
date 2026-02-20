@@ -19,9 +19,9 @@
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
-// #include <pathplanner/lib/auto/AutoBuilder.h>
-// #include <pathplanner/lib/config/RobotConfig.h>
-// #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
+#include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/config/RobotConfig.h>
+#include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
 
 #include <units/voltage.h>
 #include <units/angle.h>
@@ -72,8 +72,8 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::Translation2d * m_backRightLocation;
 
   nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
-  std::shared_ptr<nt::NetworkTable> mNTDriveTrainTable = inst.GetTable("Drivetrain");
-  std::shared_ptr<nt::NetworkTable> mNTSwervePIDTable = inst.GetTable("Swerve");
+  std::shared_ptr<nt::NetworkTable> mNTDrivetrainTable = inst.GetTable("SmartDashboard/Drivetrain");
+  std::shared_ptr<nt::NetworkTable> mNTSwervePIDTable = inst.GetTable("SmartDashboard/swerve");
 
   nt::StructArrayPublisher<frc::SwerveModuleState> mCurrentModuleStatesPublisher;
   nt::StructPublisher<frc::ChassisSpeeds> mCurrentChassisSpeedsPublisher;
@@ -81,6 +81,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
   nt::StructPublisher<frc::ChassisSpeeds> mDesiredChassisSpeedsPublisher;
   nt::StructPublisher<frc::Rotation2d> mRotation2dPublisher;
   nt::StructPublisher<frc::Pose2d> mPose2dPublisher;
+  nt::StructSubscriber<frc::Pose2d> mPose2dSubscriber;
 
   // Declaring the four SwerveModule objects
   SwerveModule * m_frontLeftModule;
@@ -123,5 +124,5 @@ class SubDrivetrain : public frc2::SubsystemBase {
 
   // Load the RobotConfig from the GUI settings. You should probably
   // store this in your Constants file
-  // pathplanner::RobotConfig config = pathplanner::RobotConfig::fromGUISettings();
+  pathplanner::RobotConfig config = pathplanner::RobotConfig::fromGUISettings();
 };

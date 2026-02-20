@@ -4,8 +4,6 @@
 
 #include "subsystems/SubDrivetrain.h"
 
-#include <iostream>
-
 SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
 {
     // Initialization of the SwerveModules' location relative to the robot center
@@ -26,12 +24,13 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
     frc::SmartDashboard::PutData("swerve/br module", m_backRightModule);
     
     // Initialization of the Swerve Data Publishers
-    mCurrentModuleStatesPublisher = mNTDriveTrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
-    mCurrentChassisSpeedsPublisher = mNTDriveTrainTable->GetStructTopic<frc::ChassisSpeeds>("Current ChassisSpeeds").Publish();
-    mDesiredModuleStatesPublisher = mNTDriveTrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Desired SwerveModuleStates").Publish();
-    mDesiredChassisSpeedsPublisher = mNTDriveTrainTable->GetStructTopic<frc::ChassisSpeeds>("Desired ChassisSpeeds").Publish();
-    mRotation2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Rotation2d>("Current Rotation2d").Publish();
-    mPose2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
+    mCurrentModuleStatesPublisher = mNTDrivetrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
+    mCurrentChassisSpeedsPublisher = mNTDrivetrainTable->GetStructTopic<frc::ChassisSpeeds>("Current ChassisSpeeds").Publish();
+    mDesiredModuleStatesPublisher = mNTDrivetrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Desired SwerveModuleStates").Publish();
+    mDesiredChassisSpeedsPublisher = mNTDrivetrainTable->GetStructTopic<frc::ChassisSpeeds>("Desired ChassisSpeeds").Publish();
+    mRotation2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Rotation2d>("Current Rotation2d").Publish();
+    mPose2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
+    mPose2dSubscriber = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Subscribe(*m_startingRobotPose);
 
     // Initialization of the IMU
     mIMU = iIMU;
@@ -51,35 +50,38 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
     mField2d = new frc::Field2d{};
     frc::SmartDashboard::PutData("Drivetrain/Field2d", mField2d);
 
-    // pathplanner::AutoBuilder::configure(
-    //     [this]()
-    //     { return getPose(); }, // Robot pose supplier
-    //     [this](frc::Pose2d pose)
-    //     { resetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
-    //     [this]()
-    //     { return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    //     [this](auto speeds, auto feedforwards)
-    //     { driveRobotRelative(speeds, PathPlannerConstants::kPathPlannerSpeedModulation); },                                                           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-    //     std::make_shared<pathplanner::PPHolonomicDriveController>(                                                                                    // PPHolonomicController is the built in path following controller for holonomic drive trains
-    //         pathplanner::PIDConstants(PathPlannerConstants::kPTranslation, PathPlannerConstants::kITranslation, PathPlannerConstants::kDTranslation), // Translation PID constants
-    //         pathplanner::PIDConstants(PathPlannerConstants::kPRotation, PathPlannerConstants::kIRotation, PathPlannerConstants::kDRotation)           // Rotation PID constants
-    //         ),
-    //     config, // The robot configuration
-    //     []()
-    //     {
-    //         // Boolean supplier that controls when the path will be mirrored for the red alliance
-    //         // This will flip the path being followed to the red side of the field.
-    //         // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    // Wait for the robot to be connected to the DriverStation
+    frc::DriverStation::WaitForDsConnection(0_s);
+    frc2::CommandScheduler::GetInstance().Schedule(frc2::cmd::Print("The Driver Station is connected!"));
+    pathplanner::AutoBuilder::configure(
+        [this]()
+        { return getPose(); }, // Robot pose supplier
+        [this](frc::Pose2d pose)
+        { resetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
+        [this]()
+        { return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        [this](auto speeds, auto feedforwards)
+        { driveRobotRelative(speeds, PathPlannerConstants::kPathPlannerSpeedModulation); },                                                           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+        std::make_shared<pathplanner::PPHolonomicDriveController>(                                                                                    // PPHolonomicController is the built in path following controller for holonomic drive trains
+            pathplanner::PIDConstants(PathPlannerConstants::kPTranslation, PathPlannerConstants::kITranslation, PathPlannerConstants::kDTranslation), // Translation PID constants
+            pathplanner::PIDConstants(PathPlannerConstants::kPRotation, PathPlannerConstants::kIRotation, PathPlannerConstants::kDRotation)           // Rotation PID constants
+            ),
+        config, // The robot configuration
+        []()
+        {
+            // Boolean supplier that controls when the path will be mirrored for the red alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-    //         std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
-    //         frc::SmartDashboard::PutNumber("alliance color", frc::DriverStation::GetAlliance().value());
-    //         if (alliance) {
-    //             return alliance.value() == frc::DriverStation::Alliance::kRed;
-    //         }
-    //         return false;
-    //     },
-    //     this // Reference to this subsystem to set requirements
-    // );
+            std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
+            frc::SmartDashboard::PutNumber("alliance color", frc::DriverStation::GetAlliance().value());
+            if (alliance) {
+                return alliance.value() == frc::DriverStation::Alliance::kRed;
+            }
+            return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
 }
 
 // This method will be called once per scheduler run
@@ -126,6 +128,7 @@ void SubDrivetrain::Periodic()
     mCurrentModuleStatesPublisher.Set(getSwerveModuleStates());
     mRotation2dPublisher.Set(mCurrentRotation2d.Degrees());
     mPose2dPublisher.Set(m_poseEstimator->GetEstimatedPosition());
+    resetPose(mPose2dSubscriber.Get());
 }
 
 void SubDrivetrain::refreshSwerveModules()

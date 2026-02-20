@@ -7,6 +7,8 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
 
+#include <frc/DriverStation.h>
+
 // #include <pathplanner/lib/path/PathPlannerPath.h>
 // #include <pathplanner/lib/auto/AutoBuilder.h>
 
