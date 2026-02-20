@@ -23,8 +23,8 @@ inline constexpr int kDriverControllerPort = 0;
 }  // namespace OperatorConstants
 
 namespace ClimbConstants {
-    constexpr int kDeviceIDSparkMax1 = 0;
-    constexpr int kDeviceIDSparkMax2 = 1;
+    constexpr int kDeviceIDSparkMax1 = 9;
+    constexpr int kDeviceIDSparkMax2 = 10;
 
     constexpr rev::spark::SparkLowLevel::MotorType kMotorTypeSparkMax1 = rev::spark::SparkLowLevel::MotorType::kBrushless;
     constexpr rev::spark::SparkLowLevel::MotorType kMotorTypeSparkMax2 = rev::spark::SparkLowLevel::MotorType::kBrushless;
