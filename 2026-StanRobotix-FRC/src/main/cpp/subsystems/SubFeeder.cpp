@@ -8,6 +8,8 @@ SubFeeder::SubFeeder()
 {
     mFeederController = new rev::spark::SparkMax{FeederConstants::kCANid, rev::spark::SparkLowLevel::MotorType::kBrushless};
     mFeederController->SetInverted(true);
+    mSparkConfigFeeder = new rev::spark::SparkBaseConfig;
+    Configure();
 }
 
 // This method will be called once per scheduler run
@@ -17,3 +19,11 @@ void SubFeeder::setVoltage(units::volt_t iOutput)
 {
     mFeederController->SetVoltage(iOutput);
 };
+
+rev::REVLibError SubFeeder::Configure()
+{
+    mSparkConfigFeeder->Inverted(true);
+
+    return mFeederController->Configure(*mSparkConfigFeeder, FeederConstants::kReset, FeederConstants::kPersist);
+};
+

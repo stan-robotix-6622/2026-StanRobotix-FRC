@@ -7,26 +7,26 @@
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkMax.h>
 #include "Constants.h"
+#include <rev/SparkBase.h>
+ 
 
-
-class SubFeeder : public frc2::SubsystemBase {
+class SubIndexer : public frc2::SubsystemBase {
  public:
-  SubFeeder();
-  
-  void setVoltage(units::volt_t iOutput);
-
-   rev::REVLibError Configure();
-
+  SubIndexer();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
 
+  void setVoltage(units::volt_t iOutput);
+  rev::REVLibError Configure();
+
+
  private:
-  rev::spark::SparkMax* mFeederController;
-  rev::spark::SparkBaseConfig * mSparkConfigFeeder;
- 
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
+
+  rev::spark::SparkMax* mIndexerController;
+  rev::spark::SparkBaseConfig * mSparkConfigIndexer;
 };

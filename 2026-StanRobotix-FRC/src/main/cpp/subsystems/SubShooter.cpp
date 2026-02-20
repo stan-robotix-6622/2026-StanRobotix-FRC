@@ -9,7 +9,7 @@ subShooter::subShooter()
     // mPIDcontroller = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
     mShooterController =  new rev::spark::SparkMax{ShooterConstants::kCANid, rev::spark::SparkLowLevel::MotorType::kBrushless};
     mRelativeEncoder = new rev::spark::SparkRelativeEncoder{mShooterController->GetEncoder()};
-    mSparkConfig = new rev::spark::SparkBaseConfig; //Don't forget to put the thingy inside of the other thingy
+    mSparkConfigShooter = new rev::spark::SparkBaseConfig;
     Configure();
     // frc::SmartDashboard::PutData(mPIDcontroller);
 }
@@ -36,7 +36,7 @@ units::turns_per_second_t subShooter::getVelocity()
 
 rev::REVLibError subShooter::Configure()
 {
-    mSparkConfig->Inverted(true);
+    mSparkConfigShooter->Inverted(true);
 
-    return mShooterController->Configure(*mSparkConfig, ShooterConstants::kReset, ShooterConstants::kPersist);
+    return mShooterController->Configure(*mSparkConfigShooter, ShooterConstants::kReset, ShooterConstants::kPersist);
 };

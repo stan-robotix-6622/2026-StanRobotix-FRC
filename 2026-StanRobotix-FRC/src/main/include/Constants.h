@@ -10,6 +10,8 @@
 #include "units/angular_velocity.h"
 #include "units/angular_acceleration.h"
 
+#include <rev/SparkBase.h> // Include Spark variable types
+#include <rev/config/SparkBaseConfig.h> // For the spark IdleMode
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants.  This should not be used for any other
@@ -32,10 +34,11 @@ namespace ShooterConstants {
 
     constexpr units::volt_t kS = 0_V;
     constexpr kVunit kV = 4_V / 31.7_tps;
-    constexpr kAunit kA = 0_V / 1_tr_per_s_sq;
+    // constexpr kAunit kA = 0_V / 1_tr_per_s_sq;
 
     constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
     constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+    constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 
     constexpr units::turns_per_second_t kVitesseVoulue = 10_tps;
 
@@ -52,4 +55,19 @@ namespace FeederConstants {
     constexpr int kCANid = 12;
 
     constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
+
+    constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
+    constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+    constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kBrake;
+
+}
+
+namespace IndexerConstants {
+    constexpr int kCANid = 12; //placeholder :)
+
+    constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
+
+    constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
+    constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+    constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kBrake;
 }

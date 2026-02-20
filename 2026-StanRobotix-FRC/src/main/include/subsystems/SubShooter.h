@@ -42,6 +42,5 @@ class subShooter : public frc2::SubsystemBase {
   rev::spark::SparkMax * mShooterController;
   frc::PIDController * mPIDcontroller;
   rev::spark::SparkRelativeEncoder * mRelativeEncoder;
-  rev::spark::SparkBaseConfig * mSparkConfig;
-
+  rev::spark::SparkBaseConfig * mSparkConfigShooter;
 };
