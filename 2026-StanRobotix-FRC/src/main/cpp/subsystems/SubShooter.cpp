@@ -24,9 +24,9 @@ void SubShooter::setVoltage(units::volt_t iVoltage)
     mShooterController->SetVoltage(iVoltage);
 };
 
-void SubShooter::setVelocity(units::turns_per_second_t nextVelocity)
+void SubShooter::setVelocity(units::turns_per_second_t iNextVelocity)
 {
-    mShooterController->SetVoltage(mFeedforward.Calculate(nextVelocity));
+    mShooterController->SetVoltage(mFeedforward.Calculate(iNextVelocity));
 };
 
 units::turns_per_second_t SubShooter::getVelocity()

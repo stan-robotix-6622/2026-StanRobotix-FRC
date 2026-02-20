@@ -19,12 +19,12 @@
 
 #include <rev/SparkBase.h>
 
-
-class SubShooter : public frc2::SubsystemBase {
- public:
+class SubShooter : public frc2::SubsystemBase
+{
+public:
   SubShooter();
 
-  void setVelocity(units::turns_per_second_t nextVelocity);
+  void setVelocity(units::turns_per_second_t iNextVelocity);
   void setVoltage(units::volt_t iVoltage);
   units::turns_per_second_t getVelocity();
   rev::REVLibError Configure();
@@ -33,14 +33,14 @@ class SubShooter : public frc2::SubsystemBase {
    */
   void Periodic() override;
 
- private:
+private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
   frc::SimpleMotorFeedforward<units::turns> mFeedforward{ShooterConstants::kS, ShooterConstants::kV};
 
-  rev::spark::SparkMax * mShooterController;
-  frc::PIDController * mPIDcontroller;
-  rev::spark::SparkRelativeEncoder * mRelativeEncoder;
-  rev::spark::SparkBaseConfig * mSparkConfigShooter;
+  rev::spark::SparkMax *mShooterController;
+  frc::PIDController *mPIDcontroller;
+  rev::spark::SparkRelativeEncoder *mRelativeEncoder;
+  rev::spark::SparkBaseConfig *mSparkConfigShooter;
 };

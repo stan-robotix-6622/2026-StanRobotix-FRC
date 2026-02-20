@@ -8,10 +8,10 @@
 #include <rev/SparkMax.h>
 #include "Constants.h"
 #include <rev/SparkBase.h>
- 
 
-class SubIndexer : public frc2::SubsystemBase {
- public:
+class SubIndexer : public frc2::SubsystemBase
+{
+public:
   SubIndexer();
 
   /**
@@ -22,11 +22,10 @@ class SubIndexer : public frc2::SubsystemBase {
   void setVoltage(units::volt_t iOutput);
   rev::REVLibError Configure();
 
-
- private:
+private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  rev::spark::SparkMax* mIndexerController;
-  rev::spark::SparkBaseConfig * mSparkConfigIndexer;
+  rev::spark::SparkMax *mIndexerController;
+  rev::spark::SparkBaseConfig *mSparkConfigIndexer;
 };

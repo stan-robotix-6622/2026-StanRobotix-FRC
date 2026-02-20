@@ -21,8 +21,9 @@
 #include "Configs.h"
 #include "Constants.h"
 
-class SwerveModule : public wpi::Sendable{
- public:
+class SwerveModule : public wpi::Sendable
+{
+public:
   // Constructeur de la classe avec un motorID pour le Driving et un pour le Turning
   SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInveryed = false, bool iTurningInverted = true);
 
@@ -31,7 +32,7 @@ class SwerveModule : public wpi::Sendable{
   // Méthode qui retourne le SwerveModuleState du module
   frc::SwerveModuleState getModuleState();
 
-  void InitSendable(wpi::SendableBuilder& builder) override;
+  void InitSendable(wpi::SendableBuilder &builder) override;
 
   // Méthode qui fait rouler le module à partir du SwerveModuleState désiré
   void setDesiredState(frc::SwerveModuleState iDesiredState, double iSpeedModulation);
@@ -42,7 +43,7 @@ class SwerveModule : public wpi::Sendable{
   // Méthode qui met à jour le SwerveModulePosition et le SwerveModuleState du module
   void refreshModule();
 
- private:
+private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 

@@ -6,8 +6,10 @@
 
 using namespace rev::spark;
 
-namespace Configs {
-  class SwerveModule {
+namespace Configs
+{
+  class SwerveModule
+  {
   public:
     static SparkMaxConfig &DrivingConfig(bool iDrivingInverted)
     {

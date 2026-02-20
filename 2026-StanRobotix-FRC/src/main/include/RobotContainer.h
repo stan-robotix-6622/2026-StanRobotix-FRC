@@ -27,23 +27,24 @@
  * scheduler calls).  Instead, the structure of the robot (including subsystems,
  * commands, and trigger mappings) should be declared here.
  */
-class RobotContainer {
- public:
+class RobotContainer
+{
+public:
   RobotContainer();
 
   frc2::CommandPtr GetAutonomousCommand();
 
- private:
+private:
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  frc2::CommandXboxController * mCommandXboxController;
+  frc2::CommandXboxController *mCommandXboxController;
 
   // The robot's subsystems are defined here...
   ExampleSubsystem mSubsystem;
-  SubShooter * mSubShooter;
-  SubFeeder * mSubFeeder;
+  SubShooter *mSubShooter;
+  SubFeeder *mSubFeeder;
   // SubIndexer * mSubIndexer;
-  SubIMU * mIMU = nullptr;
-  SubDrivetrain * mDrivetrain = nullptr;
+  SubIMU *mIMU = nullptr;
+  SubDrivetrain *mDrivetrain = nullptr;
 
   void ConfigureBindings();
 };

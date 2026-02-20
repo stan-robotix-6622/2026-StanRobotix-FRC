@@ -193,6 +193,6 @@ namespace CANid
   constexpr int kFrontLeftMotor550ID = 5;
   constexpr int kBackLeftMotorID = 2;
   constexpr int kBackLeftMotor550ID = 1;
-  
+
   constexpr int kIMUPigeonID = 0;
 }

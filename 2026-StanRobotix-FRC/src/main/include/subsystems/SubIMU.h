@@ -11,9 +11,9 @@
 
 #include "Constants.h"
 
-
-class SubIMU : public frc2::SubsystemBase {
- public:
+class SubIMU : public frc2::SubsystemBase
+{
+public:
   SubIMU();
 
   /**
@@ -29,8 +29,8 @@ class SubIMU : public frc2::SubsystemBase {
 
   void resetAngle();
 
- private:
-  ctre::phoenix6::hardware::Pigeon2 * mIMU;
+private:
+  ctre::phoenix6::hardware::Pigeon2 *mIMU;
 
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
