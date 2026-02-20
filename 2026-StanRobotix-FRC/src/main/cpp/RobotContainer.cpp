@@ -29,24 +29,6 @@ RobotContainer::RobotContainer() {
       },
       {mDrivetrain}));
 
-  // mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
-  //     [this]
-  //     {
-  //       mDrivetrain->mesureSwerveFeedforward(
-  //           units::volt_t(mCommandXboxController->GetRightTriggerAxis() * 12),
-  //           units::volt_t(mCommandXboxController->GetLeftTriggerAxis() * 12));
-  //     },
-  //     {mDrivetrain}));
-
-  // mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
-  //   [this] {
-  //     if (mCommandXboxController->GetHID().GetBButton() == true)
-  //     {
-  //       std::cout << "The Button B is held" << std::endl;
-  //     }
-  //   }, {mDrivetrain})
-  // );
-
   mIMU->SetDefaultCommand(frc2::cmd::Run(
       [this]
       {
@@ -61,17 +43,7 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
-  // mCommandXboxController->X().OnTrue(pathplanner::AutoBuilder::followPath(pathplanner::PathPlannerPath::fromPathFile("Example Path")));
   mCommandXboxController->Y().WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
-  // mCommandXboxController->A().OnTrue(frc2::cmd::Print("Button A is pressed"));
-  // frc2::Trigger(
-  //   [this] {return mCommandXboxController->GetHID().GetBButton();}
-  // ).WhileTrue(frc2::cmd::Print("Button B is held"));
-  // mCommandXboxController->X().OnTrue(frc2::cmd::Parallel(
-  //   frc2::cmd::Race(
-  //     GoToDistanceFromHub(mDrivetrain, 4_m).ToPtr(),
-  //     frc2::cmd::Wait(2_s)),
-  //   frc2::cmd::Print("Calculating...")));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
