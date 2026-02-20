@@ -28,7 +28,6 @@ inline constexpr int kDriverControllerPort = 0;
 }  // namespace OperatorConstants
 
 namespace IntakeConstants {
-  constexpr int kMotorid = 10;
   constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
   constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
@@ -37,8 +36,6 @@ namespace IntakeConstants {
 }
 
 namespace PivotConstants{
-  constexpr int kMotorPivotid1 = 9;
-  // constexpr int kMotorPivotid2 = 10;
   constexpr double kGearRatio = 16;
   constexpr double kOffset = -6.357143878936768;
   constexpr double kP = 1.0; // en attendant
@@ -51,4 +48,10 @@ namespace PivotConstants{
   constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
   constexpr bool kInverted = true;
+}
+
+namespace CANid
+{
+  constexpr int kMotorPivotID = 9;
+  constexpr int kMotorIntakeID = 10;
 }

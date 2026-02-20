@@ -7,7 +7,7 @@
 
 
 SubPivotIntake::SubPivotIntake() {
-    mPivotMotor = new rev::spark::SparkMax{PivotConstants::kMotorPivotid1, rev::spark::SparkLowLevel::MotorType::kBrushless};
+    mPivotMotor = new rev::spark::SparkMax{CANid::kMotorPivotID, rev::spark::SparkLowLevel::MotorType::kBrushless};
     mFeedForward = new frc::ArmFeedforward{0_V, PivotConstants::kG, 1_V/1_rad_per_s};
     frc::SmartDashboard::PutNumber("Arm kG", PivotConstants::kG.value());
 

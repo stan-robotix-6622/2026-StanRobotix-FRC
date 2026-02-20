@@ -5,7 +5,7 @@
 #include "subsystems/SubIntake.h"
 
 SubIntake::SubIntake() {
-    mIntakeMotor = new rev::spark::SparkMax(IntakeConstants::kMotorid, rev::spark::SparkLowLevel::MotorType::kBrushless);
+    mIntakeMotor = new rev::spark::SparkMax(CANid::kMotorIntakeID, rev::spark::SparkLowLevel::MotorType::kBrushless);
  
     mIntakeMotorConfig = new rev::spark::SparkMaxConfig{};
     mIntakeMotorConfig->Inverted(IntakeConstants::kInverted);
