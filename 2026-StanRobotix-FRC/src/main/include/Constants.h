@@ -30,7 +30,7 @@ namespace OperatorConstants {
 } // namespace OperatorConstants
 
 namespace ShooterConstants {
-    constexpr int kCANid = 11;
+    
 
     constexpr units::volt_t kS = 0_V;
     constexpr kVunit kV = 4_V / 31.7_tps;
@@ -52,7 +52,7 @@ namespace ShooterConstants {
 }
 
 namespace FeederConstants {
-    constexpr int kCANid = 12;
+    
 
     constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
 
@@ -63,11 +63,19 @@ namespace FeederConstants {
 }
 
 namespace IndexerConstants {
-    constexpr int kCANid = 12; //placeholder :)
+   
 
     constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
 
     constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
     constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
     constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kBrake;
+}
+
+namespace CANid
+{
+    constexpr int kCANidIndexer = 13; //placeholder :)
+    constexpr int kCANidFeeder = 12;
+    constexpr int kCANidShooter = 11;
+
 }
