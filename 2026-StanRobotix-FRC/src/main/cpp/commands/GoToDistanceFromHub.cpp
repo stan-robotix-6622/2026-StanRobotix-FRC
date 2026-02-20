@@ -9,7 +9,7 @@ GoToDistanceFromHub::GoToDistanceFromHub(SubDrivetrain * iDrivetrain, units::met
   mDrivetrain = iDrivetrain;
   mDesiredDistance = iDesiredDistance;
 
-  frc::SmartDashboard::PutData("commands/go to pose command ", mGoToPoseCommand.get());
+  frc::SmartDashboard::PutData("commands/go to pose command ", mGoToPoseCommand.value().get());
 
   mPose2dPublisher = mNTVectorsTable->GetStructTopic<frc::Pose2d>("Target Pose").Publish();
   mOriginToRobotPublisher = mNTVectorsTable->GetStructTopic<frc::Translation2d>("Origin to Robot").Publish();
@@ -68,9 +68,12 @@ void GoToDistanceFromHub::Initialize()
     pathplanner::GoalEndState(0.0_mps, mDesiredPose.Rotation()) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
   );
   
-  // mGoToPoseCommand = pathplanner::AutoBuilder::followPath(wDistanceFromHubPath);
+  mGoToPoseCommand = pathplanner::AutoBuilder::followPath(wDistanceFromHubPath);
   
-  // frc2::CommandScheduler::GetInstance().Schedule(mGoToPoseCommand);
+  if (mGoToPoseCommand)
+  {
+    frc2::CommandScheduler::GetInstance().Schedule(mGoToPoseCommand.value());
+  }
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -81,12 +84,14 @@ void GoToDistanceFromHub::End(bool interrupted)
 {
   if (interrupted)
   {
-    frc2::CommandScheduler::GetInstance().Cancel(mGoToPoseCommand);
+    if (mGoToPoseCommand)
+    {
+      frc2::CommandScheduler::GetInstance().Cancel(mGoToPoseCommand.value());
+    }
   }
 }
 
 // Returns true when the command should end.
 bool GoToDistanceFromHub::IsFinished() {
   return false;
-  // return mGoToPoseCommand.get()->IsFinished();
 }

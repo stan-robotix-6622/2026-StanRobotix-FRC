@@ -67,5 +67,5 @@ class GoToDistanceFromHub
 
   SubDrivetrain * mDrivetrain = nullptr;
 
-  frc2::CommandPtr mGoToPoseCommand = frc2::cmd::Print("GoToPoseCommand is not defined");
+  std::optional<frc2::CommandPtr> mGoToPoseCommand;
 };
