@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <units/voltage.h>
 #include <units/length.h>
 #include <units/velocity.h>
 #include <units/acceleration.h>
@@ -28,11 +29,55 @@
  * they are needed.
  */
 
+typedef units::unit_t<units::compound_unit<units::volts, units::inverse<units::turns_per_second_squared>>, double, units::linear_scale> kAunit; // V / turn / s^2
+typedef units::unit_t<units::compound_unit<units::volts, units::inverse<units::turns_per_second>>, double, units::linear_scale> kVunit;         // V / turn / s
+
 namespace OperatorConstants
 {
   inline constexpr int kDriverControllerPort = 0;
 } // namespace OperatorConstants
 
+namespace ShooterConstants
+{
+  constexpr units::volt_t kS = 0_V;
+  constexpr kVunit kV = 8_V / 61.523844_tps;
+  // constexpr kAunit kA = 0_V / 1_tr_per_s_sq;
+
+  constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
+  constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+  constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kCoast;
+
+  constexpr units::turns_per_second_t kVitesseVoulue = 60_tps;
+
+  namespace PIDConstants
+  {
+    constexpr double kP = 2; // T'is be a placeholder :)
+    constexpr double kI = 0;
+    constexpr double kD = 0;
+
+    constexpr units::turns_per_second_t setpoint = 60_tps; // its NOT(it actually is) a placeholder :)
+  }
+}
+
+namespace FeederConstants
+{
+  constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
+
+  constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
+  constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+  constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kBrake;
+
+}
+
+namespace IndexerConstants
+{
+  constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
+
+  constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
+  constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+  constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kBrake;
+}
+  
 namespace PathPlannerConstants
 {
   constexpr double kPTranslation = 5.0;
@@ -67,7 +112,6 @@ namespace DrivetrainConstants
 
   constexpr units::meters_per_second_t kSpeedConstant = 1_mps;                              // Temporary value
   constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 0.5_rad_per_s; // Temporary value
-
 }
 
 namespace ModuleConstants
@@ -135,6 +179,10 @@ namespace HubConstants
 
 namespace CANid
 {
+  constexpr int kMotorIndexerID = 12;
+  constexpr int kMotorFeederID = 13;
+  constexpr int kMotorShooter1ID = 16;
+  constexpr int kMotorShooter2ID = 17;
   constexpr int kBackRightMotorID = 8;
   constexpr int kBackRightMotor550ID = 7;
   constexpr int kFrontRightMotorID = 4;

@@ -6,15 +6,19 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
-
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/DriverStation.h>
-
 // #include <pathplanner/lib/path/PathPlannerPath.h>
 // #include <pathplanner/lib/auto/AutoBuilder.h>
 
-#include "Constants.h"
+#include "subsystems/ExampleSubsystem.h"
+#include "subsystems/subShooter.h"
+#include "subsystems/subFeeder.h"
+#include "subsystems/subIndexer.h"
 #include "subsystems/SubDrivetrain.h"
 #include "subsystems/SubIMU.h"
+
+#include "Constants.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -34,6 +38,10 @@ class RobotContainer {
   frc2::CommandXboxController * mCommandXboxController;
 
   // The robot's subsystems are defined here...
+  ExampleSubsystem m_subsystem;
+  subShooter * m_subShooter;
+  SubFeeder * m_subFeeder;
+  // SubIndexer * m_subIndexer;
   SubIMU * mIMU = nullptr;
   SubDrivetrain * mDrivetrain = nullptr;
 
