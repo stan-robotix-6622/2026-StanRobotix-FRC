@@ -7,11 +7,16 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/DriverStation.h>
+// #include <pathplanner/lib/path/PathPlannerPath.h>
+// #include <pathplanner/lib/auto/AutoBuilder.h>
 
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/subShooter.h"
 #include "subsystems/subFeeder.h"
 #include "subsystems/subIndexer.h"
+#include "subsystems/SubDrivetrain.h"
+#include "subsystems/SubIMU.h"
 
 #include "Constants.h"
 
@@ -30,14 +35,15 @@ class RobotContainer {
 
  private:
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  frc2::CommandXboxController m_driverController{
-      OperatorConstants::kDriverControllerPort};
+  frc2::CommandXboxController * mCommandXboxController;
 
   // The robot's subsystems are defined here...
   ExampleSubsystem m_subsystem;
-  subShooter* m_subShooter;
-  SubFeeder* m_subFeeder;
-  // SubIndexer* m_subIndexer;
+  subShooter * m_subShooter;
+  SubFeeder * m_subFeeder;
+  // SubIndexer * m_subIndexer;
+  SubIMU * mIMU = nullptr;
+  SubDrivetrain * mDrivetrain = nullptr;
 
   void ConfigureBindings();
 };
