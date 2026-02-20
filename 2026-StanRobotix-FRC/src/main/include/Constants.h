@@ -73,8 +73,11 @@ namespace DrivetrainConstants
 namespace ModuleConstants
 {
   constexpr double kDrivingMotorGearRatio = 5.08;                     // 5.08 rotations of the motor for 1 rotation of the ouput
-  constexpr double kDriveWheelFreeSpeedRps = 40.0;                    // TODO: Mesure
+  constexpr units::volt_t kNominalVoltage = 12_V; // The voltage at which the 
   constexpr units::meter_t kWheelPerimeter = 3_in * std::numbers::pi; // in meters (diametre in inches * convertion to meters * pi)
+  constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260029_rad_per_s;                    // TODO: Verify?
+  constexpr units::meters_per_second_t kDriveWheelMaxSpeed = 117.671989_mps;                    // TODO: Verify?
+  constexpr double kDriveWheelFreeSpeedRps = kDriveWheelMaxSpeed.value() / kWheelPerimeter.value();
 
   constexpr double kDrivingFactor = 1 / kDrivingMotorGearRatio;
   constexpr double kTurningFactor = 2 * std::numbers::pi;
