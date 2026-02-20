@@ -12,8 +12,8 @@
 #include <frc2/command/RunCommand.h>
 
 SubClimb::SubClimb() {
-    mSparkMax1 = new rev::spark::SparkMax(ClimbConstants::kDeviceIDSparkMax1, ClimbConstants::kMotorTypeSparkMax1);
-    mSparkMax2 = new rev::spark::SparkMax(ClimbConstants::kDeviceIDSparkMax2, ClimbConstants::kMotorTypeSparkMax2);
+    mSparkMax1 = new rev::spark::SparkMax(CANid::kMotorClimb1ID, ClimbConstants::kMotorTypeSparkMax1);
+    mSparkMax2 = new rev::spark::SparkMax(CANid::kMotorClimb2ID, ClimbConstants::kMotorTypeSparkMax2);
 
     mSparkMaxConfig1 = new rev::spark::SparkMaxConfig;
     mSparkMaxConfig2 = new rev::spark::SparkMaxConfig;

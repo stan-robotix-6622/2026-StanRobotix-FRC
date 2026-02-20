@@ -41,6 +41,6 @@ namespace XboxControllerConstants {
 
 namespace CANid 
 {
-  constexpr int kDeviceIDSparkMax1 = 14;
-  constexpr int kDeviceIDSparkMax2 = 15;
+  constexpr int kMotorClimb1ID = 14;
+  constexpr int kMotorClimb2ID = 15;
 }
