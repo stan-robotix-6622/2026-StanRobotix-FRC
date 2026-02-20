@@ -77,7 +77,7 @@ namespace IndexerConstants
   constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kBrake;
 }
-  
+
 namespace PathPlannerConstants
 {
   constexpr double kPTranslation = 5.0;
@@ -116,11 +116,11 @@ namespace DrivetrainConstants
 
 namespace ModuleConstants
 {
-  constexpr double kDrivingMotorGearRatio = 5.08;                     // 5.08 rotations of the motor for 1 rotation of the ouput
-  constexpr units::volt_t kNominalVoltage = 12_V; // The voltage at which the 
-  constexpr units::meter_t kWheelPerimeter = 3_in * std::numbers::pi; // in meters (diametre in inches * convertion to meters * pi)
-  constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260029_rad_per_s;                    // TODO: Verify?
-  constexpr units::meters_per_second_t kDriveWheelMaxSpeed = 117.671989_mps;                    // TODO: Verify?
+  constexpr double kDrivingMotorGearRatio = 5.08;                                          // 5.08 rotations of the motor for 1 rotation of the ouput
+  constexpr units::volt_t kNominalVoltage = 12_V;                                          // The voltage at which the
+  constexpr units::meter_t kWheelPerimeter = 3_in * std::numbers::pi;                      // in meters (diametre in inches * convertion to meters * pi)
+  constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260029_rad_per_s; // TODO: Verify?
+  constexpr units::meters_per_second_t kDriveWheelMaxSpeed = 117.671989_mps;               // TODO: Verify?
   constexpr double kDriveWheelFreeSpeedRps = kDriveWheelMaxSpeed.value() / kWheelPerimeter.value();
 
   constexpr double kDrivingFactor = 1 / kDrivingMotorGearRatio;
@@ -181,8 +181,10 @@ namespace CANid
 {
   constexpr int kMotorIndexerID = 12;
   constexpr int kMotorFeederID = 13;
+
   constexpr int kMotorShooter1ID = 16;
   constexpr int kMotorShooter2ID = 17;
+
   constexpr int kBackRightMotorID = 8;
   constexpr int kBackRightMotor550ID = 7;
   constexpr int kFrontRightMotorID = 4;
@@ -191,5 +193,6 @@ namespace CANid
   constexpr int kFrontLeftMotor550ID = 5;
   constexpr int kBackLeftMotorID = 2;
   constexpr int kBackLeftMotor550ID = 1;
+  
   constexpr int kIMUPigeonID = 0;
 }

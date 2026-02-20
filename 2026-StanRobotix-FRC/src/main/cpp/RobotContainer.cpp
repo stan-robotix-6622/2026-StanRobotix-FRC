@@ -21,9 +21,9 @@ RobotContainer::RobotContainer() {
   frc::SmartDashboard::PutData("Xbox Controller", &mCommandXboxController->GetHID());
 
   // Initialize all of your commands and subsystems here
-  m_subShooter = new subShooter{};
-  m_subFeeder = new SubFeeder{};
-  // m_subIndexer = new SubIndexer{};
+  mSubShooter = new SubShooter{};
+  mSubFeeder = new SubFeeder{};
+  // mSubIndexer = new SubIndexer{};
   mIMU = new SubIMU{};
   mDrivetrain = new SubDrivetrain{mIMU};
 
@@ -51,35 +51,31 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
-  m_driverController.Y().WhileTrue(frc2::cmd::RunEnd(
-    [this] {std::cout << "Shoot" << std::endl;m_subShooter->setVelocity(m_driverController.GetRightTriggerAxis() * ShooterConstants::kVitesseVoulue);},
-    [this] {m_subShooter->setVelocity(0_tps);}, {m_subShooter}));
+  mCommandXboxController->Y().WhileTrue(frc2::cmd::RunEnd(
+    [this] {std::cout << "Shoot" << std::endl;mSubShooter->setVelocity(mCommandXboxController->GetRightTriggerAxis() * ShooterConstants::kVitesseVoulue);},
+    [this] {mSubShooter->setVelocity(0_tps);}, {mSubShooter}));
 
-  // m_driverController.Y().WhileTrue(frc2::cmd::RunEnd(
+  // mCommandXboxController->Y().WhileTrue(frc2::cmd::RunEnd(
   //   [this] {std::cout << "Shoot" << std::endl;
-  //     m_subShooter->setVoltage(m_driverController.GetRightTriggerAxis() * 8_V);
-  //     frc::SmartDashboard::PutNumber("shooter voltage", m_driverController.GetRightTriggerAxis() * 8);},
-  //   [this] {m_subShooter->setVelocity(0_tps);}, {m_subShooter}));
+  //     mSubShooter->setVoltage(mCommandXboxController->GetRightTriggerAxis() * 8_V);
+  //     frc::SmartDashboard::PutNumber("shooter voltage", mCommandXboxController->GetRightTriggerAxis() * 8);},
+  //   [this] {mSubShooter->setVelocity(0_tps);}, {mSubShooter}));
     
-  m_driverController.B().WhileTrue(frc2::cmd::RunEnd(
-    [this] {std::cout << "Feed" << std::endl;m_subFeeder->setVoltage(m_driverController.GetLeftTriggerAxis() * FeederConstants::kDesiredVoltage);},
-    [this] {m_subFeeder->setVoltage(0_V);}, {m_subFeeder}));
+  mCommandXboxController->B().WhileTrue(frc2::cmd::RunEnd(
+    [this] {std::cout << "Feed" << std::endl;mSubFeeder->setVoltage(mCommandXboxController->GetLeftTriggerAxis() * FeederConstants::kDesiredVoltage);},
+    [this] {mSubFeeder->setVoltage(0_V);}, {mSubFeeder}));
 
-    // m_driverController.A().WhileTrue(frc2::cmd::RunEnd(
-    // [this] {std::cout << "Index" << std::endl;m_subIndexer->setVoltage(m_driverController.GetLeftTriggerAxis() * IndexerConstants::kDesiredVoltage);},
-    // [this] {m_subIndexer->setVoltage(0_V);}, {m_subIndexer}));
+    // mCommandXboxController->A().WhileTrue(frc2::cmd::RunEnd(
+    // [this] {std::cout << "Index" << std::endl;mSubIndexer->setVoltage(mCommandXboxController->GetLeftTriggerAxis() * IndexerConstants::kDesiredVoltage);},
+    // [this] {mSubIndexer->setVoltage(0_V);}, {mSubIndexer}));
       
-  m_driverController.X().WhileTrue(Shoot(m_subShooter).ToPtr());
+  mCommandXboxController->X().WhileTrue(Shoot(mSubShooter).ToPtr());
   mCommandXboxController->Y().WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
-  m_driverController.RightBumper().WhileTrue(FeedShooter(m_subFeeder).ToPtr());
-  //m_driverController.LeftBumper().WhileTrue(Index(m_subIndexer).ToPtr());
+  mCommandXboxController->RightBumper().WhileTrue(FeedShooter(mSubFeeder).ToPtr());
+  //mCommandXboxController->LeftBumper().WhileTrue(Index(mSubIndexer).ToPtr());
 };
 
-
-  
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
   return frc2::cmd::Print("There is no AutonomousCommand");
 }
-
-

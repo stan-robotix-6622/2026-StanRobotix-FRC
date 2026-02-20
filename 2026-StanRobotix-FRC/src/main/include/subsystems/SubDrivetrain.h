@@ -66,10 +66,10 @@ class SubDrivetrain : public frc2::SubsystemBase {
   // declared private and exposed only through public methods.
 
   // Declaring the locations of the SwerveModules
-  frc::Translation2d * m_frontLeftLocation;
-  frc::Translation2d * m_frontRightLocation;
-  frc::Translation2d * m_backLeftLocation;
-  frc::Translation2d * m_backRightLocation;
+  frc::Translation2d * mFrontLeftLocation;
+  frc::Translation2d * mFrontRightLocation;
+  frc::Translation2d * mBackLeftLocation;
+  frc::Translation2d * mBackRightLocation;
 
   nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
   std::shared_ptr<nt::NetworkTable> mNTDrivetrainTable = inst.GetTable("SmartDashboard/Drivetrain");
@@ -84,19 +84,19 @@ class SubDrivetrain : public frc2::SubsystemBase {
   nt::StructSubscriber<frc::Pose2d> mPose2dSubscriber;
 
   // Declaring the four SwerveModule objects
-  SwerveModule * m_frontLeftModule;
-  SwerveModule * m_frontRightModule;
-  SwerveModule * m_backLeftModule;
-  SwerveModule * m_backRightModule;
+  SwerveModule * mFrontLeftModule;
+  SwerveModule * mFrontRightModule;
+  SwerveModule * mBackLeftModule;
+  SwerveModule * mBackRightModule;
 
   // Declaring my swerve kinematics object
-  frc::SwerveDriveKinematics<4> * m_kinematics;
+  frc::SwerveDriveKinematics<4> * mKinematics;
   // Declaring the robot starting pose object
-  frc::Pose2d * m_startingRobotPose = new frc::Pose2d{0_m, 0_m, 0_rad};
+  frc::Pose2d * mStartingRobotPose = new frc::Pose2d{0_m, 0_m, 0_rad};
   // Declaring the swerve odometry object
-  frc::SwerveDriveOdometry<4> * m_odometry;
+  frc::SwerveDriveOdometry<4> * mOdometry;
   // Declaring the pose estimator
-  frc::SwerveDrivePoseEstimator<4> * m_poseEstimator;
+  frc::SwerveDrivePoseEstimator<4> * mPoseEstimator;
 
   frc::Field2d * mField2d;
 

@@ -4,7 +4,7 @@
 
 #include "subsystems/SubShooter.h"
 
-subShooter::subShooter()
+SubShooter::SubShooter()
 {
     // mPIDcontroller = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
     mShooterController =  new rev::spark::SparkMax{CANid::kMotorShooter1ID, rev::spark::SparkLowLevel::MotorType::kBrushless};
@@ -15,26 +15,26 @@ subShooter::subShooter()
 }
 
 // This method will be called once per scheduler run
-void subShooter::Periodic() {
+void SubShooter::Periodic() {
     frc::SmartDashboard::PutNumber("Shooter Velocity", getVelocity().value());
 }
 
-void subShooter::setVoltage(units::volt_t iVoltage)
+void SubShooter::setVoltage(units::volt_t iVoltage)
 {
     mShooterController->SetVoltage(iVoltage);
 };
 
-void subShooter::setVelocity(units::turns_per_second_t nextVelocity)
+void SubShooter::setVelocity(units::turns_per_second_t nextVelocity)
 {
-    mShooterController->SetVoltage(m_feedforward.Calculate(nextVelocity));
+    mShooterController->SetVoltage(mFeedforward.Calculate(nextVelocity));
 };
 
-units::turns_per_second_t subShooter::getVelocity()
+units::turns_per_second_t SubShooter::getVelocity()
 {
     return units::revolutions_per_minute_t(mRelativeEncoder->GetVelocity());
 };
 
-rev::REVLibError subShooter::Configure()
+rev::REVLibError SubShooter::Configure()
 {
     mSparkConfigShooter->Inverted(true);
 

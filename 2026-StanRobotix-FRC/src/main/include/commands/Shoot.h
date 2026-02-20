@@ -8,7 +8,7 @@
 #include <frc2/command/CommandHelper.h>
 #include <frc/controller/PIDController.h>
 #include <rev/SparkAnalogSensor.h>
-#include "subsystems/subShooter.h"
+#include "subsystems/SubShooter.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include <units/angular_velocity.h>
@@ -28,7 +28,7 @@ class Shoot
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands*/
    
-  Shoot(subShooter* iSubShooter);
+  Shoot(SubShooter* iSubShooter);
 
   void Initialize() override;
 
@@ -39,7 +39,7 @@ class Shoot
   bool IsFinished() override;
 
  private:
-  subShooter* mSubShooter;
+  SubShooter* mSubShooter;
   frc::PIDController* mPIDController;
 
   units::turns_per_second_t mSetpointVelocity;

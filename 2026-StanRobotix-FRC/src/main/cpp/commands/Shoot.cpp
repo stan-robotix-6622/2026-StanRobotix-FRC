@@ -6,7 +6,7 @@
 #include "commands/Shoot.h"
 
 
-Shoot::Shoot(subShooter* iSubShooter) {
+Shoot::Shoot(SubShooter* iSubShooter) {
   mSubShooter = iSubShooter;
   
   // Use addRequirements() here to declare subsystem dependencies.

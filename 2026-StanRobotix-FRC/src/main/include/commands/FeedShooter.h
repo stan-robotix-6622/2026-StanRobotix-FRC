@@ -33,6 +33,6 @@ class FeedShooter
   bool IsFinished() override;
 
 private:
-  SubFeeder * m_SubFeeder;
+  SubFeeder * mSubFeeder;
 
 };

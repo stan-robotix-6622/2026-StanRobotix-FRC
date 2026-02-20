@@ -12,7 +12,7 @@
 // #include <pathplanner/lib/auto/AutoBuilder.h>
 
 #include "subsystems/ExampleSubsystem.h"
-#include "subsystems/subShooter.h"
+#include "subsystems/SubShooter.h"
 #include "subsystems/subFeeder.h"
 #include "subsystems/subIndexer.h"
 #include "subsystems/SubDrivetrain.h"
@@ -38,10 +38,10 @@ class RobotContainer {
   frc2::CommandXboxController * mCommandXboxController;
 
   // The robot's subsystems are defined here...
-  ExampleSubsystem m_subsystem;
-  subShooter * m_subShooter;
-  SubFeeder * m_subFeeder;
-  // SubIndexer * m_subIndexer;
+  ExampleSubsystem mSubsystem;
+  SubShooter * mSubShooter;
+  SubFeeder * mSubFeeder;
+  // SubIndexer * mSubIndexer;
   SubIMU * mIMU = nullptr;
   SubDrivetrain * mDrivetrain = nullptr;
 
