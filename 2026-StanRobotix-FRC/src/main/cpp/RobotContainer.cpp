@@ -5,12 +5,36 @@
 #include "RobotContainer.h"
 
 #include <frc2/command/button/Trigger.h>
+#include <frc2/command/Commands.h>
 
-#include "commands/Autos.h"
-#include "commands/ExampleCommand.h"
+#include <iostream>
+
+#include "commands/GoToDistanceFromHub.h"
 
 RobotContainer::RobotContainer() {
+  mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
+  frc::SmartDashboard::PutData("Xbox Controller", &mCommandXboxController->GetHID());
+
   // Initialize all of your commands and subsystems here
+  mIMU = new SubIMU{};
+  mDrivetrain = new SubDrivetrain{mIMU};
+
+  mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
+      [this]
+      {
+        mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
+                                        -mCommandXboxController->GetLeftX(),
+                                        -mCommandXboxController->GetRightX(),
+                                        (1 - mCommandXboxController->GetRightTriggerAxis()) / 4);
+      },
+      {mDrivetrain}));
+
+  mIMU->SetDefaultCommand(frc2::cmd::Run(
+      [this]
+      {
+        frc::SmartDashboard::PutNumber("Drivetrain/Robot Rotation", mIMU->getRotation2d().Degrees().value());
+      },
+      {mIMU}));
 
   // Configure the button bindings
   ConfigureBindings();
@@ -19,17 +43,10 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
-  // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-  frc2::Trigger([this] {
-    return m_subsystem.ExampleCondition();
-  }).OnTrue(ExampleCommand(&m_subsystem).ToPtr());
-
-  // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
-  // pressed, cancelling on release.
-  m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());
+  mCommandXboxController->Y().WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
-  return autos::ExampleAuto(&m_subsystem);
+  return frc2::cmd::Print("There is no AutonomousCommand");
 }
