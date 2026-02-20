@@ -6,7 +6,7 @@
 
 SubIMU::SubIMU()
 {
-    mIMU = new ctre::phoenix6::hardware::Pigeon2{IMUConstants::kCanID};
+    mIMU = new ctre::phoenix6::hardware::Pigeon2{CANid::kIMUPigeonID};
 }
 
 // This method will be called once per scheduler run

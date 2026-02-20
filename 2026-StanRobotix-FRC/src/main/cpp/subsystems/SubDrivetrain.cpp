@@ -13,10 +13,10 @@ SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
     m_backRightLocation  = new frc::Translation2d{DrivetrainConstants::kBackRightTranslation};
 
     // Initialization of the SwerveModules with the motor IDs
-    m_frontLeftModule  = new SwerveModule{DrivetrainConstants::kFrontLeftMotorID , DrivetrainConstants::kFrontLeftMotor550ID, false};
-    m_frontRightModule = new SwerveModule{DrivetrainConstants::kFrontRightMotorID, DrivetrainConstants::kFrontRightMotor550ID, false};
-    m_backLeftModule   = new SwerveModule{DrivetrainConstants::kBackLeftMotorID  , DrivetrainConstants::kBackLeftMotor550ID, true};
-    m_backRightModule  = new SwerveModule{DrivetrainConstants::kBackRightMotorID , DrivetrainConstants::kBackRightMotor550ID, true};
+    m_frontLeftModule  = new SwerveModule{CANid::kFrontLeftMotorID , CANid::kFrontLeftMotor550ID, false};
+    m_frontRightModule = new SwerveModule{CANid::kFrontRightMotorID, CANid::kFrontRightMotor550ID, false};
+    m_backLeftModule   = new SwerveModule{CANid::kBackLeftMotorID  , CANid::kBackLeftMotor550ID, true};
+    m_backRightModule  = new SwerveModule{CANid::kBackRightMotorID , CANid::kBackRightMotor550ID, true};
 
     frc::SmartDashboard::PutData("swerve/fl module", m_frontLeftModule);
     frc::SmartDashboard::PutData("swerve/fr module", m_frontRightModule);
