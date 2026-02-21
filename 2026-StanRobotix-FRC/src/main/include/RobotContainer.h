@@ -42,14 +42,16 @@ private:
 
   // The robot's subsystems are defined here...
   ExampleSubsystem mSubsystem;
-  SubShooter *mSubShooter;
-  SubFeeder *mSubFeeder;
-  // SubIndexer * mSubIndexer;
+
+  SubShooter *mSubShooter = nullptr;
+  // SubFeeder *mSubFeeder = nullptr;
+  // SubIndexer * mSubIndexer = nullptr;
+
   SubIMU *mIMU = nullptr;
   SubDrivetrain *mDrivetrain = nullptr;
 
-  SubIntake * m_SubIntake;
-  SubPivotIntake * m_SubPivotIntake;
+  SubIntake * m_SubIntake = nullptr;
+  SubPivotIntake * m_SubPivotIntake = nullptr;
 
   void ConfigureBindings();
 };

@@ -24,7 +24,7 @@ RobotContainer::RobotContainer() {
 
   // Initialize all of your commands and subsystems here
   mSubShooter = new SubShooter{};
-  mSubFeeder = new SubFeeder{};
+  // mSubFeeder = new SubFeeder{};
   // mSubIndexer = new SubIndexer{};
   mIMU = new SubIMU{};
   mDrivetrain = new SubDrivetrain{mIMU};
@@ -62,8 +62,8 @@ void RobotContainer::ConfigureBindings() {
 
   // mCommandXboxController->Y().WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
   // mCommandXboxController->B().WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
-  m_driverController->Y().WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
-  m_driverController->B().WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
+  mCommandXboxController->Y().WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
+  mCommandXboxController->B().WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
   
   mCommandXboxController->X().WhileTrue(Shoot(mSubShooter).ToPtr());
   mCommandXboxController->RightBumper().WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));

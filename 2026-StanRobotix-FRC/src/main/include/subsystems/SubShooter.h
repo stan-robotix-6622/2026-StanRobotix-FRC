@@ -6,6 +6,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkMax.h>
+#include <rev/config/SparkMaxConfig.h.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -16,8 +17,6 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "Constants.h"
-
-#include <rev/SparkBase.h>
 
 class SubShooter : public frc2::SubsystemBase
 {
@@ -42,5 +41,5 @@ private:
   rev::spark::SparkMax *mShooterController;
   frc::PIDController *mPIDcontroller;
   rev::spark::SparkRelativeEncoder *mRelativeEncoder;
-  rev::spark::SparkBaseConfig *mSparkConfigShooter;
+  rev::spark::SparkMaxConfig *mSparkConfigShooter;
 };
