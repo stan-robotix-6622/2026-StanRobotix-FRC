@@ -37,11 +37,11 @@ namespace IntakeConstants {
 
 namespace PivotConstants{
   constexpr double kGearRatio = 16;
-  constexpr double kOffset = -6.357143878936768;
-  constexpr double kP = 1.0; // en attendant
-  constexpr double kI = 0.0; // en attendant
-  constexpr double kD = 0.0; // en attendant
-  constexpr units::volt_t kG = -0.70_V;
+  constexpr double kOffset = -4.881;
+  constexpr double kP = 1.3; // en attendant
+  constexpr double kI = 0.4; // en attendant
+  constexpr double kD = 0.15; // en attendant
+  constexpr units::volt_t kG = -0.90_V;
   constexpr double setpointUp = -std::numbers::pi / 2;
   constexpr double setpointDown = 0;
   constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
