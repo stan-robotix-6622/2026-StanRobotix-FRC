@@ -6,7 +6,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkMax.h>
-#include <rev/config/SparkMaxConfig.h.h>
+#include <rev/config/SparkMaxConfig.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/smartdashboard/SmartDashboard.h>
