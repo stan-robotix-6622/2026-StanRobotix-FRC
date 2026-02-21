@@ -24,6 +24,7 @@
     "bitset": "cpp",
     "cctype": "cpp",
     "cfenv": "cpp",
+    "charconv": "cpp",
     "chrono": "cpp",
     "clocale": "cpp",
     "cmath": "cpp",
@@ -92,6 +93,9 @@
     "typeinfo": "cpp",
     "valarray": "cpp",
     "variant": "cpp",
+    "*.inc": "cpp"
+  },
+  "wpilib.autoStartRioLog": false
     "xtr1common": "cpp",
     "ios": "cpp",
     "xfacet": "cpp",

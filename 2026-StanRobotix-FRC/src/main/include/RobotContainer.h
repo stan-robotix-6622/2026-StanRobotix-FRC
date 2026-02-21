@@ -12,6 +12,8 @@
 // #include <pathplanner/lib/auto/AutoBuilder.h>
 
 #include "subsystems/ExampleSubsystem.h"
+#include "subsystems/SubIntake.h"
+#include "subsystems/SubPivotIntake.h"
 #include "subsystems/SubShooter.h"
 #include "subsystems/subFeeder.h"
 #include "subsystems/subIndexer.h"
@@ -45,6 +47,9 @@ private:
   // SubIndexer * mSubIndexer;
   SubIMU *mIMU = nullptr;
   SubDrivetrain *mDrivetrain = nullptr;
+
+  SubIntake * m_SubIntake;
+  SubPivotIntake * m_SubPivotIntake;
 
   void ConfigureBindings();
 };
