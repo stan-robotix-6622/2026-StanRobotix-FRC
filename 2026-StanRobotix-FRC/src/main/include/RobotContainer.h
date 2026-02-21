@@ -6,11 +6,21 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/DriverStation.h>
+// #include <pathplanner/lib/path/PathPlannerPath.h>
+// #include <pathplanner/lib/auto/AutoBuilder.h>
 
-#include "Constants.h"
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubPivotIntake.h"
+#include "subsystems/SubShooter.h"
+#include "subsystems/subFeeder.h"
+#include "subsystems/subIndexer.h"
+#include "subsystems/SubDrivetrain.h"
+#include "subsystems/SubIMU.h"
+
+#include "Constants.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -19,18 +29,24 @@
  * scheduler calls).  Instead, the structure of the robot (including subsystems,
  * commands, and trigger mappings) should be declared here.
  */
-class RobotContainer {
- public:
+class RobotContainer
+{
+public:
   RobotContainer();
 
   frc2::CommandPtr GetAutonomousCommand();
 
- private:
+private:
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  frc2::CommandXboxController * m_driverController;
+  frc2::CommandXboxController *mCommandXboxController;
 
   // The robot's subsystems are defined here...
-  ExampleSubsystem m_subsystem;
+  ExampleSubsystem mSubsystem;
+  SubShooter *mSubShooter;
+  SubFeeder *mSubFeeder;
+  // SubIndexer * mSubIndexer;
+  SubIMU *mIMU = nullptr;
+  SubDrivetrain *mDrivetrain = nullptr;
 
   SubIntake * m_SubIntake;
   SubPivotIntake * m_SubPivotIntake;

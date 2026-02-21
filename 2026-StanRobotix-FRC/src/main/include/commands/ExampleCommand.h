@@ -27,5 +27,5 @@ class ExampleCommand
   explicit ExampleCommand(ExampleSubsystem* subsystem);
 
  private:
-  ExampleSubsystem* m_subsystem;
+  ExampleSubsystem* mSubsystem;
 };

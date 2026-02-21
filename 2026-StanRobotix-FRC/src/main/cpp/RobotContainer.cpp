@@ -13,13 +13,40 @@
 #include "commands/ExampleCommand.h"
 #include "commands/PivotIntake.h"
 #include "commands/FullIntake.h"
+#include "commands/FeedShooter.h"
+#include "commands/Shoot.h"
+#include "commands/Index.h"
+#include "commands/GoToDistanceFromHub.h"
 
 RobotContainer::RobotContainer() {
-  // Initialize all of your commands and subsystems here
+  mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
+  frc::SmartDashboard::PutData("Xbox Controller", &mCommandXboxController->GetHID());
 
-  m_driverController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
-  m_SubIntake = new SubIntake;
-  m_SubPivotIntake = new SubPivotIntake;
+  // Initialize all of your commands and subsystems here
+  mSubShooter = new SubShooter{};
+  mSubFeeder = new SubFeeder{};
+  // mSubIndexer = new SubIndexer{};
+  mIMU = new SubIMU{};
+  mDrivetrain = new SubDrivetrain{mIMU};
+  m_SubIntake = new SubIntake{};
+  m_SubPivotIntake = new SubPivotIntake{};
+
+  mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
+      [this]
+      {
+        mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
+                                        -mCommandXboxController->GetLeftX(),
+                                        -mCommandXboxController->GetRightX(),
+                                        (1 - mCommandXboxController->GetRightTriggerAxis()) / 4);
+      },
+      {mDrivetrain}));
+
+  mIMU->SetDefaultCommand(frc2::cmd::Run(
+      [this]
+      {
+        frc::SmartDashboard::PutNumber("Drivetrain/Robot Rotation", mIMU->getRotation2d().Degrees().value());
+      },
+      {mIMU}));
 
   m_SubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this]
   {
@@ -33,22 +60,18 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
-  m_driverController->Y().WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
-  m_driverController->B().WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
-  // m_driverController->Y().WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
-  // m_driverController->B().WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
-  m_driverController->X().WhileTrue(frc2::cmd::Run([this] {m_SubIntake->SetVoltage(m_driverController->GetRightTriggerAxis() * 3.0);}, {m_SubIntake}));
-  // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-  frc2::Trigger([this] {
-    return m_subsystem.ExampleCondition();
-  }).OnTrue(ExampleCommand(&m_subsystem).ToPtr());
-
-  // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
-  // pressed, cancelling on release.
-  m_driverController->B().WhileTrue(m_subsystem.ExampleMethodCommand());
-}
+  // mCommandXboxController->Y().WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
+  // mCommandXboxController->B().WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
+  m_driverController->Y().WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
+  m_driverController->B().WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
+  
+  mCommandXboxController->X().WhileTrue(Shoot(mSubShooter).ToPtr());
+  mCommandXboxController->RightBumper().WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
+  // mCommandXboxController->RightBumper().WhileTrue(FeedShooter(mSubFeeder).ToPtr());
+  // mCommandXboxController->LeftBumper().WhileTrue(Index(mSubIndexer).ToPtr());
+};
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
-  return autos::ExampleAuto(&m_subsystem);
+  return frc2::cmd::Print("There is no AutonomousCommand");
 }

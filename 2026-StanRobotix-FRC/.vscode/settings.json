@@ -16,6 +16,7 @@
   },
   "C_Cpp.default.configurationProvider": "vscode-wpilib",
   "files.associations": {
+    "complex": "cpp",
     "any": "cpp",
     "array": "cpp",
     "atomic": "cpp",
@@ -29,7 +30,6 @@
     "cmath": "cpp",
     "codecvt": "cpp",
     "compare": "cpp",
-    "complex": "cpp",
     "concepts": "cpp",
     "condition_variable": "cpp",
     "cstdarg": "cpp",
@@ -96,4 +96,20 @@
     "*.inc": "cpp"
   },
   "wpilib.autoStartRioLog": false
+    "xtr1common": "cpp",
+    "ios": "cpp",
+    "xfacet": "cpp",
+    "xhash": "cpp",
+    "xiosbase": "cpp",
+    "xlocale": "cpp",
+    "xlocinfo": "cpp",
+    "xlocnum": "cpp",
+    "xmemory": "cpp",
+    "xstring": "cpp",
+    "xtree": "cpp",
+    "xutility": "cpp",
+    "*.inc": "cpp"
+  },
+  "wpilib.autoStartRioLog": false,
+  "wpilib.skipSelectSimulateExtension": true
 }
