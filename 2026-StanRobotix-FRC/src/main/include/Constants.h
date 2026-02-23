@@ -35,6 +35,18 @@ typedef units::unit_t<units::compound_unit<units::volts, units::inverse<units::t
 namespace OperatorConstants
 {
   inline constexpr int kDriverControllerPort = 0;
+
+  // Button mappings
+  // For XboxController:
+  // A = 1; B = 2; X = 3; Y = 4; RightBumper = 5; LeftBumper = 6
+  constexpr int kPivotUpButton = 4;   // Y
+  constexpr int kPivotDownButton = 2; // B
+
+  constexpr int kResetIMUButton = 5; // RightBumper
+
+  constexpr int kShootButton = 3; // X
+  constexpr int kFeedButton = 1;  // A
+  constexpr int kIndexButton = 6; // LeftBumper
 } // namespace OperatorConstants
 
 namespace ShooterConstants
@@ -193,7 +205,7 @@ namespace CANid
   constexpr int kFrontLeftMotor550ID = 5;
   constexpr int kBackLeftMotorID = 2;
   constexpr int kBackLeftMotor550ID = 1;
-  
+
   constexpr int kMotorPivotID = 9;
   constexpr int kMotorIntakeID = 10;
   constexpr int kIMUPigeonID = 0;
@@ -212,8 +224,8 @@ namespace PivotConstants
 {
   constexpr double kGearRatio = 16;
   constexpr double kOffset = -4.881;
-  constexpr double kP = 1.3; // en attendant
-  constexpr double kI = 0.4; // en attendant
+  constexpr double kP = 1.3;  // en attendant
+  constexpr double kI = 0.4;  // en attendant
   constexpr double kD = 0.15; // en attendant
   constexpr units::volt_t kG = -0.90_V;
   constexpr double setpointUp = -std::numbers::pi / 2;

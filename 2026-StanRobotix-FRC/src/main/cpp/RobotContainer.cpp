@@ -60,15 +60,15 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
-  // mCommandXboxController->Y().WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
-  // mCommandXboxController->B().WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
-  mCommandXboxController->Y().WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
-  mCommandXboxController->B().WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
+  // mCommandXboxController->Button(OperatorConstants::kPivotUpButton).WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
+  // mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
+  mCommandXboxController->Button(OperatorConstants::kPivotUpButton).WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
+  mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
   
-  mCommandXboxController->X().WhileTrue(Shoot(mSubShooter).ToPtr());
-  mCommandXboxController->RightBumper().WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
-  // mCommandXboxController->RightBumper().WhileTrue(FeedShooter(mSubFeeder).ToPtr());
-  // mCommandXboxController->LeftBumper().WhileTrue(Index(mSubIndexer).ToPtr());
+  mCommandXboxController->Button(OperatorConstants::kShootButton).WhileTrue(Shoot(mSubShooter).ToPtr());
+  mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
+  // mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(FeedShooter(mSubFeeder).ToPtr());
+  // mCommandXboxController->Button(OperatorConstants::kIndexButton).WhileTrue(Index(mSubIndexer).ToPtr());
 };
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
