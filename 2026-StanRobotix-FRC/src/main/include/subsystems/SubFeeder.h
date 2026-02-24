@@ -6,6 +6,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkMax.h>
+#include <frc2/command/CommandPtr.h>
 #include "Constants.h"
 
 
@@ -14,9 +15,8 @@ class SubFeeder : public frc2::SubsystemBase {
   SubFeeder();
   
   void setVoltage(units::volt_t iOutput);
-
-   rev::REVLibError Configure();
-
+  rev::REVLibError Configure();
+  frc2::CommandPtr getFeedShooterCommand();
 
   /**
    * Will be called periodically whenever the CommandScheduler runs.

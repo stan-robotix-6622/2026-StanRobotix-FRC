@@ -26,3 +26,19 @@ rev::REVLibError SubFeeder::Configure()
     return mFeederController->Configure(*mSparkConfigFeeder, FeederConstants::kReset, FeederConstants::kPersist);
 };
 
+frc2::CommandPtr SubFeeder::getFeedShooterCommand()
+{
+    return frc2::cmd::RunEnd(
+        [this]
+        {
+            setVoltage(FeederConstants::kDesiredVoltage);
+        },
+
+        [this]
+        {
+            setVoltage(0_V);
+        },
+        {}
+    );
+}
+
