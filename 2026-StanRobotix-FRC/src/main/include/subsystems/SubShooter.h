@@ -38,8 +38,8 @@ private:
 
   frc::SimpleMotorFeedforward<units::turns> mFeedforward{ShooterConstants::kS, ShooterConstants::kV};
 
-  rev::spark::SparkMax *mShooterController;
-  frc::PIDController *mPIDcontroller;
-  rev::spark::SparkRelativeEncoder *mRelativeEncoder;
-  rev::spark::SparkMaxConfig *mSparkConfigShooter;
+  rev::spark::SparkMax* mShooterController;
+  frc::PIDController* mPIDcontroller;
+  rev::spark::SparkRelativeEncoder* mRelativeEncoder;
+  rev::spark::SparkMaxConfig* mSparkConfigShooter;
 };

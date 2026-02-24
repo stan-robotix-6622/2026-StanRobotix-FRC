@@ -14,6 +14,7 @@ Dépôt officiel de l'équipe [Stan Robotix 6622](https://stanrobotix6622.com/) 
   - Préfixe w (work) (e.g. wSpeed)
 - Dans une classe :
   - Préfixe m (my) pour les attributs (e.g. mAccelerometer)
+  - Le `*` des pointeurs est collé au type de variable (e.g. `int* mNumber`)
   - Le nom des méthodes commence par une minuscule puis on utilise des majuscules pour les autres mots (e.g. setVoltage())
 - Nomenclature :
   - Subsystems: `Sub` suivit du type de subsystème (e.g. Drivetrain, Intake, IMU...)

@@ -4,7 +4,7 @@
 
 #include "commands/Index.h"
 
-Index::Index(SubIndexer * iSubIndexer) {
+Index::Index(SubIndexer* iSubIndexer) {
   mSubIndexer = iSubIndexer;
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements(mSubIndexer);

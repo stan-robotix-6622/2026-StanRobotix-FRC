@@ -22,7 +22,7 @@ class FeedShooter
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  FeedShooter(SubFeeder * iSubFeeder);
+  FeedShooter(SubFeeder* iSubFeeder);
 
   void Initialize() override;
 
@@ -33,6 +33,6 @@ class FeedShooter
   bool IsFinished() override;
 
 private:
-  SubFeeder * mSubFeeder;
+  SubFeeder* mSubFeeder;
 
 };

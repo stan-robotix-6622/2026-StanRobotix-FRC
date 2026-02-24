@@ -4,7 +4,7 @@
 
 #include "commands/FeedShooter.h"
 
-FeedShooter::FeedShooter(SubFeeder * iSubFeeder) {
+FeedShooter::FeedShooter(SubFeeder* iSubFeeder) {
   mSubFeeder = iSubFeeder;
   // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements(mSubFeeder);

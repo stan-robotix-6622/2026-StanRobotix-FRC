@@ -37,7 +37,7 @@ class GoToDistanceFromHub
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  GoToDistanceFromHub(SubDrivetrain * iDrivetrain, units::meter_t iDesiredDistance);
+  GoToDistanceFromHub(SubDrivetrain* iDrivetrain, units::meter_t iDesiredDistance);
 
   void Initialize() override;
 
@@ -65,7 +65,7 @@ class GoToDistanceFromHub
 
   frc::Pose2d mDesiredPose;
 
-  SubDrivetrain * mDrivetrain = nullptr;
+  SubDrivetrain* mDrivetrain = nullptr;
 
   frc2::CommandPtr mGoToPoseCommand = frc2::cmd::Print("GoToPoseCommand is not defined");
 };

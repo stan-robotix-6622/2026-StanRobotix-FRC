@@ -26,6 +26,6 @@ private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  rev::spark::SparkMax *mIndexerController;
-  rev::spark::SparkBaseConfig *mSparkConfigIndexer;
+  rev::spark::SparkMax* mIndexerController;
+  rev::spark::SparkBaseConfig* mSparkConfigIndexer;
 };

@@ -35,7 +35,7 @@
 
 class SubDrivetrain : public frc2::SubsystemBase {
  public:
-  SubDrivetrain(SubIMU * iIMU);
+  SubDrivetrain(SubIMU* iIMU);
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
@@ -66,10 +66,10 @@ class SubDrivetrain : public frc2::SubsystemBase {
   // declared private and exposed only through public methods.
 
   // Declaring the locations of the SwerveModules
-  frc::Translation2d * mFrontLeftLocation;
-  frc::Translation2d * mFrontRightLocation;
-  frc::Translation2d * mBackLeftLocation;
-  frc::Translation2d * mBackRightLocation;
+  frc::Translation2d* mFrontLeftLocation;
+  frc::Translation2d* mFrontRightLocation;
+  frc::Translation2d* mBackLeftLocation;
+  frc::Translation2d* mBackRightLocation;
 
   nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
   std::shared_ptr<nt::NetworkTable> mNTDrivetrainTable = inst.GetTable("SmartDashboard/Drivetrain");
@@ -84,27 +84,27 @@ class SubDrivetrain : public frc2::SubsystemBase {
   nt::StructSubscriber<frc::Pose2d> mPose2dSubscriber;
 
   // Declaring the four SwerveModule objects
-  SwerveModule * mFrontLeftModule;
-  SwerveModule * mFrontRightModule;
-  SwerveModule * mBackLeftModule;
-  SwerveModule * mBackRightModule;
+  SwerveModule* mFrontLeftModule;
+  SwerveModule* mFrontRightModule;
+  SwerveModule* mBackLeftModule;
+  SwerveModule* mBackRightModule;
 
   // Declaring my swerve kinematics object
-  frc::SwerveDriveKinematics<4> * mKinematics;
+  frc::SwerveDriveKinematics<4>* mKinematics;
   // Declaring the robot starting pose object
-  frc::Pose2d * mStartingRobotPose = new frc::Pose2d{0_m, 0_m, 0_rad};
+  frc::Pose2d* mStartingRobotPose = new frc::Pose2d{0_m, 0_m, 0_rad};
   // Declaring the swerve odometry object
-  frc::SwerveDriveOdometry<4> * mOdometry;
+  frc::SwerveDriveOdometry<4>* mOdometry;
   // Declaring the pose estimator
-  frc::SwerveDrivePoseEstimator<4> * mPoseEstimator;
+  frc::SwerveDrivePoseEstimator<4>* mPoseEstimator;
 
-  frc::Field2d * mField2d;
+  frc::Field2d* mField2d;
 
-  wpi::array<double, 3> * visionMeasurementStdDevs;
-  wpi::array<double, 3> * stateStdDevs;
+  wpi::array<double, 3>* visionMeasurementStdDevs;
+  wpi::array<double, 3>* stateStdDevs;
 
   // Declaring the IMU object
-  SubIMU * mIMU = nullptr;
+  SubIMU* mIMU = nullptr;
 
   // These attributes are used to not create new variables every time a function is called
   // LimelightHelpers::PoseEstimate mt2;

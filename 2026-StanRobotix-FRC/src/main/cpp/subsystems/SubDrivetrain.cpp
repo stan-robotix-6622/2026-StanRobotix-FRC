@@ -4,7 +4,7 @@
 
 #include "subsystems/SubDrivetrain.h"
 
-SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
+SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
 {
     // Initialization of the SwerveModules' location relative to the robot center
     mFrontLeftLocation  = new frc::Translation2d{DrivetrainConstants::kFrontLeftTranslation};

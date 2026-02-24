@@ -47,8 +47,8 @@ class PivotIntake
   private:
 
   
-  SubPivotIntake * mPivotIntake;
-  frc::PIDController * mPIDController;
+  SubPivotIntake* mPivotIntake;
+  frc::PIDController* mPIDController;
  
   StatePivotIntake mState;
 };

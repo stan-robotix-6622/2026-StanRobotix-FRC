@@ -38,20 +38,20 @@ public:
 
 private:
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  frc2::CommandXboxController *mCommandXboxController;
+  frc2::CommandXboxController* mCommandXboxController;
 
   // The robot's subsystems are defined here...
   ExampleSubsystem mSubsystem;
 
-  SubShooter *mSubShooter = nullptr;
-  // SubFeeder *mSubFeeder = nullptr;
-  // SubIndexer * mSubIndexer = nullptr;
+  SubShooter* mSubShooter = nullptr;
+  SubFeeder* mSubFeeder = nullptr;
+  // SubIndexer* mSubIndexer = nullptr;
 
-  SubIMU *mIMU = nullptr;
-  SubDrivetrain *mDrivetrain = nullptr;
+  SubIMU* mIMU = nullptr;
+  SubDrivetrain* mDrivetrain = nullptr;
 
-  SubIntake * m_SubIntake = nullptr;
-  SubPivotIntake * m_SubPivotIntake = nullptr;
+  SubIntake* m_SubIntake = nullptr;
+  SubPivotIntake* m_SubPivotIntake = nullptr;
 
   void ConfigureBindings();
 };

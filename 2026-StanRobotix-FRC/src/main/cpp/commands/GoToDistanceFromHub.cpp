@@ -4,7 +4,7 @@
 
 #include "commands/GoToDistanceFromHub.h"
 
-GoToDistanceFromHub::GoToDistanceFromHub(SubDrivetrain * iDrivetrain, units::meter_t iDesiredDistance)
+GoToDistanceFromHub::GoToDistanceFromHub(SubDrivetrain* iDrivetrain, units::meter_t iDesiredDistance)
 {
   mDrivetrain = iDrivetrain;
   mDesiredDistance = iDesiredDistance;

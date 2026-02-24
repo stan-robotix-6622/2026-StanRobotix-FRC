@@ -23,8 +23,8 @@ class SubIntake : public frc2::SubsystemBase {
   void Periodic() override;
 
  private:
-  rev::spark::SparkMax * mIntakeMotor = nullptr;
-  rev::spark::SparkMaxConfig * mIntakeMotorConfig;
+  rev::spark::SparkMax* mIntakeMotor = nullptr;
+  rev::spark::SparkMaxConfig* mIntakeMotorConfig;
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 };

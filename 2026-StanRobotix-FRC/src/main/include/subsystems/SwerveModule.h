@@ -47,15 +47,15 @@ private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  rev::spark::SparkMax *mDrivingMotor;
-  rev::spark::SparkMax *mTurningMotor;
+  rev::spark::SparkMax* mDrivingMotor;
+  rev::spark::SparkMax* mTurningMotor;
 
-  rev::spark::SparkClosedLoopController *mDrivingClosedLoopController; // Not used currently (please do)
-  rev::spark::SparkClosedLoopController *mTurningClosedLoopController;
-  frc::PIDController *mTurningPID; // TODO: Remove if ClosedLoop working
+  rev::spark::SparkClosedLoopController* mDrivingClosedLoopController; // Not used currently (please do)
+  rev::spark::SparkClosedLoopController* mTurningClosedLoopController;
+  frc::PIDController* mTurningPID; // TODO: Remove if ClosedLoop working
 
-  rev::spark::SparkRelativeEncoder *mDrivingEncoder;
-  rev::spark::SparkAbsoluteEncoder *mTurningAbsoluteEncoder;
+  rev::spark::SparkRelativeEncoder* mDrivingEncoder;
+  rev::spark::SparkAbsoluteEncoder* mTurningAbsoluteEncoder;
 
   frc::Rotation2d mTurningCurrentAngle;
 
