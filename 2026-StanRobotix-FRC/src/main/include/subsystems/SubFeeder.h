@@ -9,7 +9,6 @@
 #include <frc2/command/CommandPtr.h>
 #include "Constants.h"
 
-
 class SubFeeder : public frc2::SubsystemBase {
  public:
   SubFeeder();

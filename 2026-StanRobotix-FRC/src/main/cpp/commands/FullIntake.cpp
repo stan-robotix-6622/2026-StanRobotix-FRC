@@ -10,7 +10,7 @@ FullIntake::FullIntake(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::
   if (itargetState == PivotIntake::StatePivotIntake::kDown) {
     AddCommands(
       PivotIntake(iPivot, PivotIntake::StatePivotIntake::kDown),
-      Intake(iIntake)
+      iIntake->getIntakeCommand()
     );
   }
   else if (itargetState == PivotIntake::StatePivotIntake::kUp) {

@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "subsystems/SubIndexer.h"
+#include <frc2/command/Commands.h>
 
 SubIndexer::SubIndexer() 
 {
@@ -25,3 +26,18 @@ rev::REVLibError SubIndexer::Configure()
 
     return mIndexerController->Configure(*mSparkConfigIndexer, IndexerConstants::kReset, IndexerConstants::kPersist);
 };
+
+frc2::CommandPtr SubIndexer::getIndexCommand()
+{
+    return frc2::cmd::RunEnd(
+        [this]
+        {
+            setVoltage(IndexerConstants::kDesiredVoltage);
+        },
+
+        [this] {
+            setVoltage(0_V);
+        },
+        {}
+    );
+}

@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "subsystems/SubIntake.h"
+#include <frc2/command/Commands.h>
 
 SubIntake::SubIntake() {
     mIntakeMotor = new rev::spark::SparkMax(CANid::kMotorIntakeID, rev::spark::SparkLowLevel::MotorType::kBrushless);
@@ -28,4 +29,19 @@ void SubIntake::SetVoltage(double iVoltage)
 void SubIntake::SetSpeed(double iSpeed)
 {
     mIntakeMotor->Set(iSpeed);
+}
+
+frc2::CommandPtr SubIntake::getIntakeCommand() {
+    return frc2::cmd::RunEnd(
+        [this]
+        {
+            SetSpeed(IntakeConstants::kSpeed);
+        },
+
+        [this]
+        {
+            Stop();
+        },
+        {}
+    );
 }

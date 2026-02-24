@@ -13,9 +13,7 @@
 #include "commands/ExampleCommand.h"
 #include "commands/PivotIntake.h"
 #include "commands/FullIntake.h"
-#include "commands/FeedShooter.h"
 #include "commands/Shoot.h"
-#include "commands/Index.h"
 #include "commands/GoToDistanceFromHub.h"
 
 RobotContainer::RobotContainer() {
@@ -67,7 +65,7 @@ void RobotContainer::ConfigureBindings() {
   
   mCommandXboxController->Button(OperatorConstants::kShootButton).WhileTrue(Shoot(mSubShooter).ToPtr());
   mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
-  mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(FeedShooter(mSubFeeder).ToPtr());
+  mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand());
   // mCommandXboxController->Button(OperatorConstants::kIndexButton).WhileTrue(Index(mSubIndexer).ToPtr());
 };
 

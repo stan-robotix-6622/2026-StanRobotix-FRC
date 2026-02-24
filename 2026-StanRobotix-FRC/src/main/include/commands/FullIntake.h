@@ -7,7 +7,6 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 
-#include "commands/Intake.h"
 #include "commands/PivotIntake.h"
 
 #include <frc2/command/ParallelCommandGroup.h>
