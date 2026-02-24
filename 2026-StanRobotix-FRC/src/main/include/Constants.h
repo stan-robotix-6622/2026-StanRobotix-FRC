@@ -61,6 +61,8 @@ namespace ShooterConstants
 
   constexpr units::turns_per_second_t kVitesseVoulue = 60_tps;
 
+  constexpr bool kFollowerinverted = false;
+
   namespace PIDConstants
   {
     constexpr double kP = 2; // T'is be a placeholder :)
@@ -194,8 +196,8 @@ namespace CANid
   constexpr int kMotorIndexerID = 12;
   constexpr int kMotorFeederID = 13;
 
-  constexpr int kMotorShooter1ID = 16;
-  constexpr int kMotorShooter2ID = 17;
+  constexpr int kLeaderMotorShooterID = 16;
+  constexpr int kFollowerMotorShooterID = 17;
 
   constexpr int kBackRightMotorID = 8;
   constexpr int kBackRightMotor550ID = 7;
