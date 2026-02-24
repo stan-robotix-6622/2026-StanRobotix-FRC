@@ -9,6 +9,9 @@
 #include <frc/geometry/Rotation2d.h>
 #include <ctre/phoenix6/Pigeon2.hpp>
 
+#include <units/angle.h>
+#include <units/angular_velocity.h>
+
 #include "Constants.h"
 
 class SubIMU : public frc2::SubsystemBase
@@ -23,11 +26,13 @@ public:
 
   frc::Rotation2d getRotation2d();
 
-  double getAngleYaw();
+  units::degree_t getAngleYaw();
 
-  double getYawRate();
+  units::degrees_per_second_t getYawRate();
 
   void resetAngle();
+
+  void setAngleYaw(units::degree_t iAngle);
 
 private:
   ctre::phoenix6::hardware::Pigeon2 *mIMU;

@@ -99,13 +99,13 @@ void SubDrivetrain::Periodic()
 
     // Update la rotation du robot pour la Limelight
 
-    /* LimelightHelpers::SetRobotOrientation("", mIMU->getAngleYaw(), mIMU->getYawRate(), 0, 0, 0, 0);
+    /* LimelightHelpers::SetRobotOrientation("", mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
 
     mt2 = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("");
 
     bool rejectCameraUpdate = false;
 
-    if (abs(mIMU->getYawRate()) > 360)
+    if (abs(mIMU->getYawRate().value()) > 360)
     {
         rejectCameraUpdate = true;
     }
@@ -205,6 +205,7 @@ frc::Pose2d SubDrivetrain::getPose()
 void SubDrivetrain::resetPose(frc::Pose2d iRobotPose)
 {
     mPoseEstimator->ResetPose(iRobotPose);
+    mIMU->setAngleYaw(iRobotPose.Rotation().Degrees());
 }
 
 frc::ChassisSpeeds SubDrivetrain::getRobotRelativeSpeeds()

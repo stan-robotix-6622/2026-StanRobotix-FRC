@@ -17,17 +17,22 @@ frc::Rotation2d SubIMU::getRotation2d()
     return mIMU->GetRotation2d();
 }
 
-double SubIMU::getAngleYaw()
+units::degree_t SubIMU::getAngleYaw()
 {
-    return mIMU->GetYaw().GetValue().value();
+    return mIMU->GetYaw().GetValue();
 }
 
-double SubIMU::getYawRate()
+units::degrees_per_second_t SubIMU::getYawRate()
 {
-    return mIMU->GetAngularVelocityZWorld().GetValue().value();
+    return mIMU->GetAngularVelocityZWorld().GetValue();
 }
 
 void SubIMU::resetAngle()
 {
     mIMU->Reset();
+}
+
+void SubIMU::setAngleYaw(units::degree_t iAngle)
+{
+    mIMU->SetYaw(iAngle);
 }
