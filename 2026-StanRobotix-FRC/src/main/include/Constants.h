@@ -88,10 +88,10 @@ namespace PathPlannerConstants
   constexpr double kDRotation = 0.0;
 
   constexpr double kPathPlannerSpeedModulation = 1.0;
-  constexpr units::meters_per_second_t kMaxVelocity = 3.0_mps;
-  constexpr units::meters_per_second_squared_t kMaxAcceleration = 3.0_mps_sq;
-  constexpr units::degrees_per_second_t kMaxAngularVelocity = 360_deg_per_s;
-  constexpr units::degrees_per_second_squared_t kMaxAngularAcceleration = 720_deg_per_s_sq;
+  constexpr units::meters_per_second_t kMaxVelocity = .3_mps;
+  constexpr units::meters_per_second_squared_t kMaxAcceleration = 0.3_mps_sq;
+  constexpr units::degrees_per_second_t kMaxAngularVelocity = 36.0_deg_per_s;
+  constexpr units::degrees_per_second_squared_t kMaxAngularAcceleration = 72.0_deg_per_s_sq;
 }
 
 namespace DrivetrainConstants

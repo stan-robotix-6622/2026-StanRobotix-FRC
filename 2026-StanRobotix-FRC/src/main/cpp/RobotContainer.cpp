@@ -14,7 +14,6 @@
 #include "commands/FeedShooter.h"
 #include "commands/Shoot.h"
 #include "commands/Index.h"
-#include "commands/GoToDistanceFromHub.h"
 
 RobotContainer::RobotContainer() {
   mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
@@ -51,28 +50,7 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
-  mCommandXboxController->Y().WhileTrue(frc2::cmd::RunEnd(
-    [this] {std::cout << "Shoot" << std::endl;mSubShooter->setVelocity(mCommandXboxController->GetRightTriggerAxis() * ShooterConstants::kVitesseVoulue);},
-    [this] {mSubShooter->setVelocity(0_tps);}, {mSubShooter}));
-
-  // mCommandXboxController->Y().WhileTrue(frc2::cmd::RunEnd(
-  //   [this] {std::cout << "Shoot" << std::endl;
-  //     mSubShooter->setVoltage(mCommandXboxController->GetRightTriggerAxis() * 8_V);
-  //     frc::SmartDashboard::PutNumber("shooter voltage", mCommandXboxController->GetRightTriggerAxis() * 8);},
-  //   [this] {mSubShooter->setVelocity(0_tps);}, {mSubShooter}));
-    
-  mCommandXboxController->B().WhileTrue(frc2::cmd::RunEnd(
-    [this] {std::cout << "Feed" << std::endl;mSubFeeder->setVoltage(mCommandXboxController->GetLeftTriggerAxis() * FeederConstants::kDesiredVoltage);},
-    [this] {mSubFeeder->setVoltage(0_V);}, {mSubFeeder}));
-
-    // mCommandXboxController->A().WhileTrue(frc2::cmd::RunEnd(
-    // [this] {std::cout << "Index" << std::endl;mSubIndexer->setVoltage(mCommandXboxController->GetLeftTriggerAxis() * IndexerConstants::kDesiredVoltage);},
-    // [this] {mSubIndexer->setVoltage(0_V);}, {mSubIndexer}));
-      
-  mCommandXboxController->X().WhileTrue(Shoot(mSubShooter).ToPtr());
-  mCommandXboxController->Y().WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
-  mCommandXboxController->RightBumper().WhileTrue(FeedShooter(mSubFeeder).ToPtr());
-  //mCommandXboxController->LeftBumper().WhileTrue(Index(mSubIndexer).ToPtr());
+  mCommandXboxController->RightStick().OnTrue(mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(2_m);}));
 };
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
