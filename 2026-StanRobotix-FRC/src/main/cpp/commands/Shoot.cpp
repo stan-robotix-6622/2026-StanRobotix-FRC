@@ -13,7 +13,7 @@ Shoot::Shoot(SubShooter* iSubShooter) {
   AddRequirements(iSubShooter);
   
   mPIDController = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
-  frc::SmartDashboard::PutData(mPIDController);
+  frc::SmartDashboard::PutData("shooter/shooter PID", mPIDController);
 }
 
 // Called when the command is initially scheduled.

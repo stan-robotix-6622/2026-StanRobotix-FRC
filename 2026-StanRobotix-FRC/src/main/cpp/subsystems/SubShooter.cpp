@@ -13,12 +13,11 @@ SubShooter::SubShooter()
     mSparkConfigLeaderShooter = new rev::spark::SparkMaxConfig{};
     mSparkConfigFollowerShooter = new rev::spark::SparkMaxConfig{};
     Configure();
-    // frc::SmartDashboard::PutData(mPIDcontroller);
 }
 
 // This method will be called once per scheduler run
 void SubShooter::Periodic() {
-    frc::SmartDashboard::PutNumber("Shooter Velocity", getVelocity().value());
+    frc::SmartDashboard::PutNumber("shooter/velocity", getVelocity().value());
 }
 
 void SubShooter::setVoltage(units::volt_t iVoltage)
@@ -38,7 +37,8 @@ units::turns_per_second_t SubShooter::getVelocity()
 
 std::array<rev::REVLibError, 2> SubShooter::Configure()
 {
-    mSparkConfigLeaderShooter->Inverted(true);
+    mSparkConfigLeaderShooter->Inverted(ShooterConstants::kInverted);
+    mSparkConfigLeaderShooter->SetIdleMode(ShooterConstants::kIdleMode);
 
     std::array<rev::REVLibError, 2> oConfigureResult;
     oConfigureResult[0] = mLeaderShooterController->Configure(*mSparkConfigLeaderShooter, ShooterConstants::kReset, ShooterConstants::kPersist);

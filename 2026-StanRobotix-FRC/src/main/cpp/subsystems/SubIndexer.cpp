@@ -21,7 +21,8 @@ void SubIndexer::setVoltage(units::volt_t iOutput)
 
 rev::REVLibError SubIndexer::Configure()
 {
-    mSparkConfigIndexer->Inverted(true);
+    mSparkConfigIndexer->Inverted(IndexerConstants::kInverted);
+    mSparkConfigIndexer->SetIdleMode(IndexerConstants::kIdleMode);
 
     return mIndexerController->Configure(*mSparkConfigIndexer, IndexerConstants::kReset, IndexerConstants::kPersist);
 };

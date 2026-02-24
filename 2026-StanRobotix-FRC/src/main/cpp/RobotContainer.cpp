@@ -27,19 +27,19 @@ RobotContainer::RobotContainer() {
   mSubFeeder = new SubFeeder{};
   // mSubIndexer = new SubIndexer{};
   mIMU = new SubIMU{};
-  mDrivetrain = new SubDrivetrain{mIMU};
+  // mDrivetrain = new SubDrivetrain{mIMU};
   m_SubIntake = new SubIntake{};
   m_SubPivotIntake = new SubPivotIntake{};
 
-  mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
-      [this]
-      {
-        mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
-                                        -mCommandXboxController->GetLeftX(),
-                                        -mCommandXboxController->GetRightX(),
-                                        (1 - mCommandXboxController->GetRightTriggerAxis()) / 4);
-      },
-      {mDrivetrain}));
+  // mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
+  //     [this]
+  //     {
+  //       mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
+  //                                       -mCommandXboxController->GetLeftX(),
+  //                                       -mCommandXboxController->GetRightX(),
+  //                                       (1 - mCommandXboxController->GetRightTriggerAxis()) / 4);
+  //     },
+  //     {mDrivetrain}));
 
   mIMU->SetDefaultCommand(frc2::cmd::Run(
       [this]

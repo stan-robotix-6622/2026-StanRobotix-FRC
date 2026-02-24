@@ -48,7 +48,7 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
     mPoseEstimator->SetVisionMeasurementStdDevs(*visionMeasurementStdDevs);
 
     mField2d = new frc::Field2d{};
-    frc::SmartDashboard::PutData("Drivetrain/Field2d", mField2d);
+    frc::SmartDashboard::PutData("drivetrain/Field2d", mField2d);
 
     // Wait for the robot to be connected to the DriverStation
     frc::DriverStation::WaitForDsConnection(0_s);
@@ -166,8 +166,8 @@ void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
     // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
     mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
 
-    frc::SmartDashboard::PutNumber("Drivetrain/SetPoint", mDesiredSwerveStates[0].angle.Radians().value());
-    frc::SmartDashboard::PutNumber("Drivetrain/Position", mFrontLeftModule->getModuleState().angle.Radians().value());
+    frc::SmartDashboard::PutNumber("drivetrain/SetPoint", mDesiredSwerveStates[0].angle.Radians().value());
+    frc::SmartDashboard::PutNumber("drivetrain/Position", mFrontLeftModule->getModuleState().angle.Radians().value());
     mDesiredChassisSpeedsPublisher.Set(mDesiredChassisSpeeds);
     mDesiredModuleStatesPublisher.Set(mDesiredSwerveStates);
 
@@ -191,10 +191,10 @@ void SubDrivetrain::mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units
     units::radian_t wCurrentTurningPosition = mFrontLeftModule->getModuleState().angle.Radians();
     units::radians_per_second_t wCurrentTurningVelocity = units::math::abs(wCurrentTurningPosition - mLastTurningPosition) / 0.020_s;
     mLastTurningPosition = wCurrentTurningPosition;
-    frc::SmartDashboard::PutNumber("Drivetrain/Driving Voltage", iDrivingVoltage.value());
-    frc::SmartDashboard::PutNumber("Drivetrain/Turning Voltage", iTurningVoltage.value());
-    frc::SmartDashboard::PutNumber("Drivetrain/Driving Velocity", mFrontLeftModule->getModuleState().speed.value());
-    frc::SmartDashboard::PutNumber("Drivetrain/Turning Velocity", wCurrentTurningVelocity.value());
+    frc::SmartDashboard::PutNumber("drivetrain/Driving Voltage", iDrivingVoltage.value());
+    frc::SmartDashboard::PutNumber("drivetrain/Turning Voltage", iTurningVoltage.value());
+    frc::SmartDashboard::PutNumber("drivetrain/Driving Velocity", mFrontLeftModule->getModuleState().speed.value());
+    frc::SmartDashboard::PutNumber("drivetrain/Turning Velocity", wCurrentTurningVelocity.value());
 }
 
 frc::Pose2d SubDrivetrain::getPose()

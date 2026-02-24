@@ -55,41 +55,44 @@ namespace ShooterConstants
   constexpr kVunit kV = 8_V / 61.523844_tps;
   // constexpr kAunit kA = 0_V / 1_tr_per_s_sq;
 
+  constexpr bool kInverted = false;
   constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
   constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
-  constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kCoast;
-
-  constexpr units::turns_per_second_t kVitesseVoulue = 60_tps;
-
+  constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
+  
+  constexpr units::turns_per_second_t kVitesseVoulue = 20_tps;
+  
   constexpr bool kFollowerinverted = false;
-
+  
   namespace PIDConstants
   {
     constexpr double kP = 2; // T'is be a placeholder :)
     constexpr double kI = 0;
     constexpr double kD = 0;
-
-    constexpr units::turns_per_second_t setpoint = 60_tps; // its NOT(it actually is) a placeholder :)
+    
+    constexpr units::turns_per_second_t setpoint = 20_tps; // its NOT(it actually is) a placeholder :)
   }
 }
 
 namespace FeederConstants
 {
   constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
-
+  
+  constexpr bool kInverted = true;
   constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
   constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
-  constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kBrake;
-
+  constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
+  
 }
 
 namespace IndexerConstants
 {
   constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
-
+  
+  constexpr bool kInverted = true;
   constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
   constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
-  constexpr rev::spark::SparkBaseConfig::IdleMode kIdle = rev::spark::SparkBaseConfig::IdleMode::kBrake;
+  constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
 }
 
 namespace PathPlannerConstants
@@ -215,25 +218,27 @@ namespace CANid
 
 namespace IntakeConstants
 {
+  constexpr bool kInverted = false;
   constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
   constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
-  constexpr bool kInverted = true;
-  constexpr double kSpeed = 0.8; // a modifier (valeur temporaire)
+
+  constexpr double kSpeed = 0.4; // a modifier (valeur temporaire)
 }
 
 namespace PivotConstants
 {
   constexpr double kGearRatio = 16;
-  constexpr double kOffset = -4.881;
+  constexpr double kOffset = 2.90476;
   constexpr double kP = 1.3;  // en attendant
   constexpr double kI = 0.4;  // en attendant
   constexpr double kD = 0.15; // en attendant
   constexpr units::volt_t kG = -0.90_V;
   constexpr double setpointUp = -std::numbers::pi / 2;
   constexpr double setpointDown = 0;
+  
+  constexpr bool kInverted = true;
   constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
   constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
-  constexpr bool kInverted = true;
 }

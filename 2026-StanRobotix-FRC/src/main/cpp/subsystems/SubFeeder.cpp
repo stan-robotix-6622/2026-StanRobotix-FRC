@@ -21,7 +21,8 @@ void SubFeeder::setVoltage(units::volt_t iOutput)
 
 rev::REVLibError SubFeeder::Configure()
 {
-    mSparkConfigFeeder->Inverted(true);
+    mSparkConfigFeeder->Inverted(FeederConstants::kInverted);
+    mSparkConfigFeeder->SetIdleMode(FeederConstants::kIdleMode);
 
     return mFeederController->Configure(*mSparkConfigFeeder, FeederConstants::kReset, FeederConstants::kPersist);
 };
