@@ -38,5 +38,5 @@ void SubPivotIntake::KeepPosition()
 }
 
 double SubPivotIntake::GetAngle(){
-    return (mPivotMotor->GetEncoder().GetPosition() + PivotConstants::kOffset) * 2 * std::numbers::pi / PivotConstants::kGearRatio;
+    return (PivotConstants::kOffset - mPivotMotor->GetEncoder().GetPosition()) * 2 * std::numbers::pi / PivotConstants::kGearRatio;
 }

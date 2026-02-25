@@ -223,7 +223,7 @@ namespace IntakeConstants
 namespace PivotConstants
 {
   constexpr double kGearRatio = 16;
-  constexpr double kOffset = -4.881;
+  constexpr double kOffset = 4.881;
   constexpr double kP = 1.3;  // en attendant
   constexpr double kI = 0.4;  // en attendant
   constexpr double kD = 0.15; // en attendant
