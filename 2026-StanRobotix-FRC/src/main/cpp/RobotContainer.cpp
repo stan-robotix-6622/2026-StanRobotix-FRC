@@ -66,7 +66,7 @@ void RobotContainer::ConfigureBindings() {
   mCommandXboxController->Button(OperatorConstants::kShootButton).WhileTrue(Shoot(mSubShooter).ToPtr());
   mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
   mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand());
-  // mCommandXboxController->Button(OperatorConstants::kIndexButton).WhileTrue(Index(mSubIndexer).ToPtr());
+  // mCommandXboxController->Button(OperatorConstants::kIndexButton).WhileTrue(mSubIndexer->getIndexCommand());
 };
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

@@ -5,18 +5,15 @@
 #include "commands/FullIntake.h"
 #include <cmath>
 
-FullIntake::FullIntake(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake itargetState) {
+FullIntake::FullIntake(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake itargetState)
+{
   // Use addRequirements() here to declare subsystem dependencies.
-  if (itargetState == PivotIntake::StatePivotIntake::kDown) {
-    AddCommands(
-      PivotIntake(iPivot, PivotIntake::StatePivotIntake::kDown),
-      iIntake->getIntakeCommand()
-    );
+  if (itargetState == PivotIntake::StatePivotIntake::kDown)
+  {
+    PivotIntake(iPivot, PivotIntake::StatePivotIntake::kDown).AlongWith(iIntake->getIntakeCommand());
   }
-  else if (itargetState == PivotIntake::StatePivotIntake::kUp) {
-    iIntake->Idle();
-    AddCommands(
-      PivotIntake(iPivot, PivotIntake::StatePivotIntake::kUp)
-    );
+  else if (itargetState == PivotIntake::StatePivotIntake::kUp)
+  {
+    PivotIntake(iPivot, PivotIntake::StatePivotIntake::kUp).AlongWith(iIntake->Idle());
   };
 }

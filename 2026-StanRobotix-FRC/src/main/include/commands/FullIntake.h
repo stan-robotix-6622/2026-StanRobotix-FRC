@@ -5,6 +5,7 @@
 #pragma once
 
 #include <frc2/command/Command.h>
+#include <frc2/command/Commands.h>
 #include <frc2/command/CommandHelper.h>
 
 #include "commands/PivotIntake.h"
@@ -25,5 +26,5 @@ class FullIntake
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  FullIntake(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake itargetState);
+  FullIntake(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake iTargetState);
 };
