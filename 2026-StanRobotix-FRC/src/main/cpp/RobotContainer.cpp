@@ -54,12 +54,7 @@ RobotContainer::RobotContainer() {
   //   {mDrivetrain}
   // ));
 
-  mIMU->SetDefaultCommand(frc2::cmd::Run(
-      [this]
-      {
-        frc::SmartDashboard::PutNumber("Drivetrain/Robot Rotation Degrees", mIMU->getRotation2d().Degrees().value());
-      },
-      {mIMU}));
+  frc::SmartDashboard::PutData(mIMU);
 
   m_SubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this]
   {
