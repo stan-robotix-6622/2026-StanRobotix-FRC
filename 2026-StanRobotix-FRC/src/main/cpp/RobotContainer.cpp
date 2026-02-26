@@ -13,9 +13,7 @@
 #include "commands/ExampleCommand.h"
 #include "commands/PivotIntake.h"
 #include "commands/FullIntake.h"
-#include "commands/FeedShooter.h"
 #include "commands/Shoot.h"
-#include "commands/Index.h"
 #include "commands/GoToDistanceFromHub.h"
 
 RobotContainer::RobotContainer() {
@@ -70,6 +68,9 @@ void RobotContainer::ConfigureBindings() {
 
   // mCommandXboxController->Button(OperatorConstants::kPivotUpButton).WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
   // mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
+  mCommandXboxController->Button(OperatorConstants::kPivotUpButton).WhileTrue(FullIntake::FullIntakeCommand(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp));
+  mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(FullIntake::FullIntakeCommand(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown));
+  
   mCommandXboxController->Button(OperatorConstants::kPivotUpButton).WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
   mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
 

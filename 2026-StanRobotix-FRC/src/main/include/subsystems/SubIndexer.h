@@ -8,6 +8,7 @@
 #include <rev/SparkMax.h>
 #include "Constants.h"
 #include <rev/SparkBase.h>
+#include <frc2/command/CommandPtr.h>
 
 class SubIndexer : public frc2::SubsystemBase
 {
@@ -21,6 +22,7 @@ public:
 
   void setVoltage(units::volt_t iOutput);
   rev::REVLibError Configure();
+  frc2::CommandPtr getIndexCommand();
 
 private:
   // Components (e.g. motor controllers and sensors) should generally be

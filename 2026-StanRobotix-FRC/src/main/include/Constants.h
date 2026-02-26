@@ -230,8 +230,8 @@ namespace PivotConstants
 {
   constexpr double kGearRatio = 16;
   constexpr double kOffset = 6.357144;
-  constexpr double kP = 1.3; // en attendant
-  constexpr double kI = 0.4; // en attendant
+  constexpr double kP = 1.3;  // en attendant
+  constexpr double kI = 0.4;  // en attendant
   constexpr double kD = 0.15; // en attendant
   constexpr units::volt_t kG = 0.80_V;
   constexpr double setpointUp = std::numbers::pi / 2;
