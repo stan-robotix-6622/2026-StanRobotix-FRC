@@ -141,7 +141,7 @@ namespace ModuleConstants
   constexpr units::meters_per_second_t kDriveWheelMaxSpeed = 117.671989_mps;               // TODO: Verify?
   constexpr double kDriveWheelFreeSpeedRps = kDriveWheelMaxSpeed.value() / kWheelPerimeter.value();
 
-  constexpr double kDrivingFactor = 1 / kDrivingMotorGearRatio;
+  constexpr double kDrivingFactor = kDrivingMotorGearRatio;
   constexpr double kTurningFactor = 2 * std::numbers::pi;
 
   constexpr rev::spark::SparkLowLevel::ControlType kDrivingClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kVelocity;
@@ -224,7 +224,7 @@ namespace IntakeConstants
   constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 
-  constexpr double kSpeed = 1; // a modifier (valeur temporaire)
+  constexpr double kSpeed = 0.5; // a modifier (valeur temporaire)
 }
 
 namespace PivotConstants
@@ -235,8 +235,8 @@ namespace PivotConstants
   constexpr double kI = 0.4;  // en attendant
   constexpr double kD = 0.15; // en attendant
   constexpr units::volt_t kG = 0.80_V;
-  constexpr double setpointUp = std::numbers::pi / 2;
-  constexpr double setpointDown = 0;
+  constexpr double setpointUp = std::numbers::pi / 2; // 90 deg
+  constexpr double setpointDown = std::numbers::pi / 18; // 10 deg
 
   constexpr bool kInverted = false;
   constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;

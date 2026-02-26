@@ -21,7 +21,6 @@ void Shoot::Initialize()
 {
   mSetpointVelocity = ShooterConstants::PIDConstants::setpoint;
   mPIDController->SetSetpoint(mSetpointVelocity.value());
-  frc::SmartDashboard::PutNumber("shooter/setpoint velocity", mSetpointVelocity.value());
 }
 
 // Called repeatedly when this Command is scheduled to run

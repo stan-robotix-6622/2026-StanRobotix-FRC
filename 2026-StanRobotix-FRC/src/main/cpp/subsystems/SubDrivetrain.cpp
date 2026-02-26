@@ -77,8 +77,8 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
             // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
             std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
-            frc::SmartDashboard::PutNumber("alliance color", frc::DriverStation::GetAlliance().value());
             if (alliance) {
+                frc::SmartDashboard::PutNumber("alliance color", frc::DriverStation::GetAlliance().value());
                 return alliance.value() == frc::DriverStation::Alliance::kRed;
             }
             return false;
