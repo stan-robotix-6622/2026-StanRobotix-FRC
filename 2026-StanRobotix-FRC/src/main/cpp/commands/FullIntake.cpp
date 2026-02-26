@@ -5,15 +5,16 @@
 #include "commands/FullIntake.h"
 #include <cmath>
 
-FullIntake::FullIntake(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake itargetState)
+frc2::CommandPtr FullIntake::FullIntakeCommand(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake itargetState)
 {
   // Use addRequirements() here to declare subsystem dependencies.
   if (itargetState == PivotIntake::StatePivotIntake::kDown)
   {
-    PivotIntake(iPivot, PivotIntake::StatePivotIntake::kDown).AlongWith(iIntake->getIntakeCommand());
+    return PivotIntake(iPivot, PivotIntake::StatePivotIntake::kDown).AlongWith(iIntake->getIntakeCommand());
   }
   else if (itargetState == PivotIntake::StatePivotIntake::kUp)
   {
-    PivotIntake(iPivot, PivotIntake::StatePivotIntake::kUp).AlongWith(iIntake->Idle());
+    return PivotIntake(iPivot, PivotIntake::StatePivotIntake::kUp).AlongWith(iIntake->Idle());
   };
+  return frc2::cmd::None();
 }

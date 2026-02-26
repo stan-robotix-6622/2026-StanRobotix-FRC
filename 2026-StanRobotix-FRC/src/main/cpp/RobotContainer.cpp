@@ -60,8 +60,8 @@ void RobotContainer::ConfigureBindings() {
 
   // mCommandXboxController->Button(OperatorConstants::kPivotUpButton).WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
   // mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
-  mCommandXboxController->Button(OperatorConstants::kPivotUpButton).WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
-  mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
+  mCommandXboxController->Button(OperatorConstants::kPivotUpButton).WhileTrue(FullIntake::FullIntakeCommand(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp));
+  mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(FullIntake::FullIntakeCommand(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown));
   
   mCommandXboxController->Button(OperatorConstants::kShootButton).WhileTrue(Shoot(mSubShooter).ToPtr());
   mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));

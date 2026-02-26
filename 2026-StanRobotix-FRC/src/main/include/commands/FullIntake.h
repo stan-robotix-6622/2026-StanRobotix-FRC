@@ -20,11 +20,10 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class FullIntake
-    : public frc2::CommandHelper<frc2::ParallelCommandGroup, FullIntake> {
+class FullIntake {
  public:
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  FullIntake(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake iTargetState);
+  static frc2::CommandPtr FullIntakeCommand(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake iTargetState);
 };
