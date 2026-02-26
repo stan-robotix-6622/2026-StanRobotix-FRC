@@ -50,7 +50,7 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
-  mCommandXboxController->RightStick().OnTrue(mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(2_m);}));
+  mCommandXboxController->Button(8).WhileTrue(mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(111_in);}));
 };
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

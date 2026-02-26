@@ -277,5 +277,5 @@ frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHu
 
     frc2::CommandPtr wGoToPoseCommand = pathplanner::AutoBuilder::followPath(wDistanceFromHubPath);
 
-    return wGoToPoseCommand;
+    return frc2::cmd::None();
 }
