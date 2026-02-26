@@ -27,24 +27,37 @@ RobotContainer::RobotContainer() {
   mSubFeeder = new SubFeeder{};
   // mSubIndexer = new SubIndexer{};
   mIMU = new SubIMU{};
-  // mDrivetrain = new SubDrivetrain{mIMU};
+  frc::DataLogManager::Log("Debut initialisation Drivetrain");
+  mDrivetrain = new SubDrivetrain{mIMU};
+  frc::DataLogManager::Log("Drivetrain initialise");
   m_SubIntake = new SubIntake{};
   m_SubPivotIntake = new SubPivotIntake{};
 
+  mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
+      [this]
+      {
+        mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
+                                        -mCommandXboxController->GetLeftX(),
+                                        -mCommandXboxController->GetRightX(),
+                                        (1 - mCommandXboxController->GetRightTriggerAxis()) / 4);
+      },
+      {mDrivetrain}));
+
   // mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
-  //     [this]
-  //     {
-  //       mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
-  //                                       -mCommandXboxController->GetLeftX(),
-  //                                       -mCommandXboxController->GetRightX(),
-  //                                       (1 - mCommandXboxController->GetRightTriggerAxis()) / 4);
-  //     },
-  //     {mDrivetrain}));
+  //   [this]
+  //   {
+  //     mDrivetrain->mesureSwerveFeedforward(
+  //       mCommandXboxController->GetRightTriggerAxis() * ModuleConstants::kNominalVoltage,
+  //       mCommandXboxController->GetLeftTriggerAxis() * ModuleConstants::kNominalVoltage
+  //     );
+  //   },
+  //   {mDrivetrain}
+  // ));
 
   mIMU->SetDefaultCommand(frc2::cmd::Run(
       [this]
       {
-        frc::SmartDashboard::PutNumber("Drivetrain/Robot Rotation", mIMU->getRotation2d().Degrees().value());
+        frc::SmartDashboard::PutNumber("Drivetrain/Robot Rotation Degrees", mIMU->getRotation2d().Degrees().value());
       },
       {mIMU}));
 
@@ -64,14 +77,19 @@ void RobotContainer::ConfigureBindings() {
   // mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
   mCommandXboxController->Button(OperatorConstants::kPivotUpButton).WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
   mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
+
+  // mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("'8' Path").Repeatedly());
   
   mCommandXboxController->Button(OperatorConstants::kShootButton).WhileTrue(Shoot(mSubShooter).ToPtr());
-  mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
   mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(FeedShooter(mSubFeeder).ToPtr());
   // mCommandXboxController->Button(OperatorConstants::kIndexButton).WhileTrue(Index(mSubIndexer).ToPtr());
+  
+  // mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
+  mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
+    {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}, {mIMU}));
 };
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
-  return frc2::cmd::Print("There is no AutonomousCommand");
+  return mDrivetrain->getFollowPathCommand("'8' Path");
 }

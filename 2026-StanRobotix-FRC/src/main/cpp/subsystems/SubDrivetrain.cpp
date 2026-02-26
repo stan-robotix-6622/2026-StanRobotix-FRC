@@ -51,8 +51,11 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
     frc::SmartDashboard::PutData("drivetrain/Field2d", mField2d);
 
     // Wait for the robot to be connected to the DriverStation
-    frc::DriverStation::WaitForDsConnection(0_s);
-    frc2::CommandScheduler::GetInstance().Schedule(frc2::cmd::Print("The Driver Station is connected!"));
+    while (!frc::DriverStation::WaitForDsConnection(1_s))
+    {
+        frc::DataLogManager::Log("Waiting for Driver Station connection");
+    }
+    frc::DataLogManager::Log("The Driver Station is connected!");
     pathplanner::AutoBuilder::configure(
         [this]()
         { return getPose(); }, // Robot pose supplier
@@ -204,8 +207,17 @@ frc::Pose2d SubDrivetrain::getPose()
 
 void SubDrivetrain::resetPose(frc::Pose2d iRobotPose)
 {
+    // Only change the IMU config if there are more than 1 deg of difference 
+    // between the current and future rotation
+    // to prevent repeated configurations of the IMU
+    double wCurrentRotation =  mPoseEstimator->GetEstimatedPosition().Rotation().Degrees().value();
+    double wFutureRotation = iRobotPose.Rotation().Degrees().value();
+    if (int(abs(wCurrentRotation - wFutureRotation)) % 360 >= 1)
+    {
+        mIMU->setAngleYaw(iRobotPose.Rotation().Degrees());
+    }
+    // Reset the PoseEstimator's robot pose
     mPoseEstimator->ResetPose(iRobotPose);
-    mIMU->setAngleYaw(iRobotPose.Rotation().Degrees());
 }
 
 frc::ChassisSpeeds SubDrivetrain::getRobotRelativeSpeeds()
@@ -225,4 +237,11 @@ void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds,
     mFrontRightModule->setDesiredState(mDesiredSwerveStates[1], iSpeedModulation);
     mBackLeftModule->setDesiredState(mDesiredSwerveStates[2], iSpeedModulation);
     mBackRightModule->setDesiredState(mDesiredSwerveStates[3], iSpeedModulation);
+}
+
+frc2::CommandPtr SubDrivetrain::getFollowPathCommand(std::string iPathName)
+{
+    auto wPath = pathplanner::PathPlannerPath::fromPathFile(iPathName);
+
+    return pathplanner::AutoBuilder::followPath(wPath);
 }
