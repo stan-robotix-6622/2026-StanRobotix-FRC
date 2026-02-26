@@ -187,10 +187,12 @@ void SubDrivetrain::mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units
     mFrontRightModule->setDrivingVoltage(iDrivingVoltage);
     mBackLeftModule->setDrivingVoltage(iDrivingVoltage);
     mBackRightModule->setDrivingVoltage(iDrivingVoltage);
+
     mFrontLeftModule->setTurningVoltage(iTurningVoltage);
     mFrontRightModule->setTurningVoltage(iTurningVoltage);
     mBackLeftModule->setTurningVoltage(iTurningVoltage);
     mBackRightModule->setTurningVoltage(iTurningVoltage);
+
     units::radian_t wCurrentTurningPosition = mFrontLeftModule->getModuleState().angle.Radians();
     units::radians_per_second_t wCurrentTurningVelocity = units::math::abs(wCurrentTurningPosition - mLastTurningPosition) / 0.020_s;
     mLastTurningPosition = wCurrentTurningPosition;
@@ -210,8 +212,8 @@ void SubDrivetrain::resetPose(frc::Pose2d iRobotPose)
     // Only change the IMU config if there are more than 1 deg of difference 
     // between the current and future rotation
     // to prevent repeated configurations of the IMU
-    double wCurrentRotation =  mPoseEstimator->GetEstimatedPosition().Rotation().Degrees().value();
-    double wFutureRotation = iRobotPose.Rotation().Degrees().value();
+    double wCurrentRotation =  abs(mPoseEstimator->GetEstimatedPosition().Rotation().Degrees().value());
+    double wFutureRotation = abs(iRobotPose.Rotation().Degrees().value());
     if (int(abs(wCurrentRotation - wFutureRotation)) % 360 >= 1)
     {
         mIMU->setAngleYaw(iRobotPose.Rotation().Degrees());

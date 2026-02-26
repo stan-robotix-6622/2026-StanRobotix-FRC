@@ -116,9 +116,6 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::ChassisSpeeds mCurrentChassisSpeeds;
   frc::Rotation2d mCurrentRotation2d;
 
-  // Used for mesuring feedforward constants
-  units::radian_t mLastTurningPosition;
-
   // The values are meant to be changed before being used
   wpi::array<frc::SwerveModuleState, 4> mDesiredSwerveStates = {frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
                                                                 frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
