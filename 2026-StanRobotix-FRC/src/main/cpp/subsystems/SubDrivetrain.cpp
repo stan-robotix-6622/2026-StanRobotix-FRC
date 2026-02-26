@@ -193,13 +193,10 @@ void SubDrivetrain::mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units
     mBackLeftModule->setTurningVoltage(iTurningVoltage);
     mBackRightModule->setTurningVoltage(iTurningVoltage);
 
-    units::radian_t wCurrentTurningPosition = mFrontLeftModule->getModuleState().angle.Radians();
-    units::radians_per_second_t wCurrentTurningVelocity = units::math::abs(wCurrentTurningPosition - mLastTurningPosition) / 0.020_s;
-    mLastTurningPosition = wCurrentTurningPosition;
     frc::SmartDashboard::PutNumber("drivetrain/Driving Voltage", iDrivingVoltage.value());
     frc::SmartDashboard::PutNumber("drivetrain/Turning Voltage", iTurningVoltage.value());
     frc::SmartDashboard::PutNumber("drivetrain/Driving Velocity", mFrontLeftModule->getModuleState().speed.value());
-    frc::SmartDashboard::PutNumber("drivetrain/Turning Velocity", wCurrentTurningVelocity.value());
+    frc::SmartDashboard::PutNumber("drivetrain/Turning Velocity", mFrontLeftModule->getTurningVelocity().value());
 }
 
 frc::Pose2d SubDrivetrain::getPose()
