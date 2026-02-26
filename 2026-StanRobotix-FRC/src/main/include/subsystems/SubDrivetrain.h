@@ -63,6 +63,10 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::Pose2d getPose();
   // Method that redefines the robot's pose with its input
   void resetPose(frc::Pose2d iRobotPose);
+  
+  frc::Pose2d getClosestPoseAtDistanceFromHub(units::meter_t iDesiredDistance);
+
+  frc2::CommandPtr getGoToDistanceFromHubCommand(units::meter_t iDesiredDistance);
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -83,8 +87,9 @@ class SubDrivetrain : public frc2::SubsystemBase {
   nt::StructArrayPublisher<frc::SwerveModuleState> mDesiredModuleStatesPublisher;
   nt::StructPublisher<frc::ChassisSpeeds> mDesiredChassisSpeedsPublisher;
   nt::StructPublisher<frc::Rotation2d> mRotation2dPublisher;
-  nt::StructPublisher<frc::Pose2d> mPose2dPublisher;
-  nt::StructSubscriber<frc::Pose2d> mPose2dSubscriber;
+  nt::StructPublisher<frc::Pose2d> mCurrentPose2dPublisher;
+  nt::StructPublisher<frc::Pose2d> mTargetPose2dPublisher;
+  nt::StructSubscriber<frc::Pose2d> mCurrentPose2dSubscriber;
 
   // Declaring the four SwerveModule objects
   SwerveModule* mFrontLeftModule;

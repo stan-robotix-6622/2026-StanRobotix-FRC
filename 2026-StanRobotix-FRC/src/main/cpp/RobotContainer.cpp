@@ -14,7 +14,7 @@
 #include "commands/PivotIntake.h"
 #include "commands/FullIntake.h"
 #include "commands/Shoot.h"
-#include "commands/GoToDistanceFromHub.h"
+#include "commands/Index.h"
 
 RobotContainer::RobotContainer() {
   mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
@@ -81,6 +81,8 @@ void RobotContainer::ConfigureBindings() {
   // mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
   mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
     {mDrivetrain->resetPose(frc::Pose2d(2_m, 7_m, 0_deg));}, {mIMU}));
+
+  mCommandXboxController->Button(8).WhileTrue(mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(111_in);}));
 };
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
