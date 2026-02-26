@@ -28,8 +28,8 @@ RobotContainer::RobotContainer() {
   frc::DataLogManager::Log("Debut initialisation Drivetrain");
   mDrivetrain = new SubDrivetrain{mIMU};
   frc::DataLogManager::Log("Drivetrain initialise");
-  m_SubIntake = new SubIntake{};
-  m_SubPivotIntake = new SubPivotIntake{};
+  mSubIntake = new SubIntake{};
+  mSubPivotIntake = new SubPivotIntake{};
 
   mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
       [this]
@@ -54,10 +54,10 @@ RobotContainer::RobotContainer() {
 
   frc::SmartDashboard::PutData(mIMU);
 
-  m_SubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this]
+  mSubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this]
   {
-    m_SubPivotIntake->KeepPosition();
-  }, {m_SubPivotIntake}));
+    mSubPivotIntake->KeepPosition();
+  }, {mSubPivotIntake}));
 
   // Configure the button bindings
   ConfigureBindings();
@@ -66,19 +66,17 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
-  // mCommandXboxController->Button(OperatorConstants::kPivotUpButton).WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
-  // mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(PivotIntake(m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
-  mCommandXboxController->Button(OperatorConstants::kPivotUpButton).WhileTrue(FullIntake::FullIntakeCommand(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp));
-  mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(FullIntake::FullIntakeCommand(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown));
-  
-  mCommandXboxController->Button(OperatorConstants::kPivotUpButton).WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
-  mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(FullIntake(m_SubIntake, m_SubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
+  // mCommandXboxController->Button(OperatorConstants::kPivotUpButton).WhileTrue(PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
+  // mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
+  mCommandXboxController->Button(OperatorConstants::kPivotUpButton).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
+  mCommandXboxController->Button(OperatorConstants::kPivotDownButton).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
 
   // mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("'8' Path").Repeatedly());
   
-  mCommandXboxController->Button(OperatorConstants::kShootButton).WhileTrue(Shoot(mSubShooter).ToPtr());
-  mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(FeedShooter(mSubFeeder).ToPtr());
-  // mCommandXboxController->Button(OperatorConstants::kIndexButton).WhileTrue(Index(mSubIndexer).ToPtr());
+  mCommandXboxController->Button(OperatorConstants::kShootButton).ToggleOnTrue(Shoot(mSubShooter).ToPtr());
+  mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
+  mCommandXboxController->Button(OperatorConstants::kUnstuckFuelButton).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
+  // mCommandXboxController->Button(OperatorConstants::kIndexButton).WhileTrue(mSubIntake->getIntakeCommand());
   
   // mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
   mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]

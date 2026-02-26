@@ -8,7 +8,7 @@
 SubFeeder::SubFeeder() 
 {
     mFeederController = new rev::spark::SparkMax{CANid::kMotorFeederID, rev::spark::SparkLowLevel::MotorType::kBrushless};
-    mSparkConfigFeeder = new rev::spark::SparkBaseConfig;
+    mSparkConfigFeeder = new rev::spark::SparkMaxConfig;
     Configure();
 }
 
@@ -28,12 +28,12 @@ rev::REVLibError SubFeeder::Configure()
     return mFeederController->Configure(*mSparkConfigFeeder, FeederConstants::kReset, FeederConstants::kPersist);
 };
 
-frc2::CommandPtr SubFeeder::getFeedShooterCommand()
+frc2::CommandPtr SubFeeder::getFeedShooterCommand(units::volt_t iVoltage)
 {
     return frc2::cmd::RunEnd(
-        [this]
+        [this, iVoltage]
         {
-            setVoltage(FeederConstants::kDesiredVoltage);
+            setVoltage(iVoltage);
         },
 
         [this]

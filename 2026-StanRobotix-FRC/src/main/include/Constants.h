@@ -44,9 +44,10 @@ namespace OperatorConstants
 
   constexpr int kResetIMUButton = 5; // RightBumper
 
-  constexpr int kShootButton = 3; // X
-  constexpr int kFeedButton = 1;  // A
-  constexpr int kIndexButton = 6; // LeftBumper
+  constexpr int kShootButton = 3;       // X
+  constexpr int kUnstuckFuelButton = 6; // LeftBumper
+  constexpr int kFeedButton = 1;        // A
+  // constexpr int kIndexButton = 6;       // LeftBumper
 } // namespace OperatorConstants
 
 namespace ShooterConstants

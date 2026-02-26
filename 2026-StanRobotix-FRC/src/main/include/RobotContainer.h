@@ -49,8 +49,8 @@ private:
   SubIMU* mIMU = nullptr;
   SubDrivetrain* mDrivetrain = nullptr;
 
-  SubIntake* m_SubIntake = nullptr;
-  SubPivotIntake* m_SubPivotIntake = nullptr;
+  SubIntake* mSubIntake = nullptr;
+  SubPivotIntake* mSubPivotIntake = nullptr;
 
   void ConfigureBindings();
 };
