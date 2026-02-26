@@ -9,6 +9,7 @@
 #include <frc/controller/ArmFeedforward.h>
 #include <rev/SparkMax.h>
 #include <rev/config/SparkMaxConfig.h>
+#include <rev/SparkRelativeEncoder.h>
 #include "Constants.h"
 
 
@@ -30,8 +31,9 @@ class SubPivotIntake : public frc2::SubsystemBase {
   void Periodic() override;
 
  private:
-  rev::spark::SparkMax* mPivotMotor = nullptr;
-  frc::ArmFeedforward* mFeedForward = nullptr;
+  rev::spark::SparkMax* mPivotMotor;
+  rev::spark::SparkRelativeEncoder* mEncoder;
+  frc::ArmFeedforward* mFeedForward;
   rev::spark::SparkMaxConfig* mPivotMotorConfig;
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.

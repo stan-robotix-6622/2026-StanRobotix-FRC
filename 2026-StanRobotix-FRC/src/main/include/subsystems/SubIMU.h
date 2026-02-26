@@ -34,6 +34,8 @@ public:
 
   void setAngleYaw(units::degree_t iAngle);
 
+  void InitSendable(wpi::SendableBuilder &builder) override;
+
 private:
   ctre::phoenix6::hardware::Pigeon2* mIMU;
 

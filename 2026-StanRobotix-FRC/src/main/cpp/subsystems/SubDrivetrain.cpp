@@ -48,11 +48,14 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
     mPoseEstimator->SetVisionMeasurementStdDevs(*visionMeasurementStdDevs);
 
     mField2d = new frc::Field2d{};
-    frc::SmartDashboard::PutData("Drivetrain/Field2d", mField2d);
+    frc::SmartDashboard::PutData("drivetrain/Field2d", mField2d);
 
     // Wait for the robot to be connected to the DriverStation
-    frc::DriverStation::WaitForDsConnection(0_s);
-    frc2::CommandScheduler::GetInstance().Schedule(frc2::cmd::Print("The Driver Station is connected!"));
+    while (!frc::DriverStation::WaitForDsConnection(1_s))
+    {
+        frc::DataLogManager::Log("Waiting for Driver Station connection");
+    }
+    frc::DataLogManager::Log("The Driver Station is connected!");
     pathplanner::AutoBuilder::configure(
         [this]()
         { return getPose(); }, // Robot pose supplier
@@ -166,8 +169,8 @@ void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
     // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
     mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
 
-    frc::SmartDashboard::PutNumber("Drivetrain/SetPoint", mDesiredSwerveStates[0].angle.Radians().value());
-    frc::SmartDashboard::PutNumber("Drivetrain/Position", mFrontLeftModule->getModuleState().angle.Radians().value());
+    frc::SmartDashboard::PutNumber("drivetrain/SetPoint", mDesiredSwerveStates[0].angle.Radians().value());
+    frc::SmartDashboard::PutNumber("drivetrain/Position", mFrontLeftModule->getModuleState().angle.Radians().value());
     mDesiredChassisSpeedsPublisher.Set(mDesiredChassisSpeeds);
     mDesiredModuleStatesPublisher.Set(mDesiredSwerveStates);
 
@@ -191,10 +194,10 @@ void SubDrivetrain::mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units
     units::radian_t wCurrentTurningPosition = mFrontLeftModule->getModuleState().angle.Radians();
     units::radians_per_second_t wCurrentTurningVelocity = units::math::abs(wCurrentTurningPosition - mLastTurningPosition) / 0.020_s;
     mLastTurningPosition = wCurrentTurningPosition;
-    frc::SmartDashboard::PutNumber("Drivetrain/Driving Voltage", iDrivingVoltage.value());
-    frc::SmartDashboard::PutNumber("Drivetrain/Turning Voltage", iTurningVoltage.value());
-    frc::SmartDashboard::PutNumber("Drivetrain/Driving Velocity", mFrontLeftModule->getModuleState().speed.value());
-    frc::SmartDashboard::PutNumber("Drivetrain/Turning Velocity", wCurrentTurningVelocity.value());
+    frc::SmartDashboard::PutNumber("drivetrain/Driving Voltage", iDrivingVoltage.value());
+    frc::SmartDashboard::PutNumber("drivetrain/Turning Voltage", iTurningVoltage.value());
+    frc::SmartDashboard::PutNumber("drivetrain/Driving Velocity", mFrontLeftModule->getModuleState().speed.value());
+    frc::SmartDashboard::PutNumber("drivetrain/Turning Velocity", wCurrentTurningVelocity.value());
 }
 
 frc::Pose2d SubDrivetrain::getPose()
@@ -204,8 +207,17 @@ frc::Pose2d SubDrivetrain::getPose()
 
 void SubDrivetrain::resetPose(frc::Pose2d iRobotPose)
 {
+    // Only change the IMU config if there are more than 1 deg of difference 
+    // between the current and future rotation
+    // to prevent repeated configurations of the IMU
+    double wCurrentRotation =  mPoseEstimator->GetEstimatedPosition().Rotation().Degrees().value();
+    double wFutureRotation = iRobotPose.Rotation().Degrees().value();
+    if (int(abs(wCurrentRotation - wFutureRotation)) % 360 >= 1)
+    {
+        mIMU->setAngleYaw(iRobotPose.Rotation().Degrees());
+    }
+    // Reset the PoseEstimator's robot pose
     mPoseEstimator->ResetPose(iRobotPose);
-    mIMU->setAngleYaw(iRobotPose.Rotation().Degrees());
 }
 
 frc::ChassisSpeeds SubDrivetrain::getRobotRelativeSpeeds()
@@ -225,4 +237,11 @@ void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds,
     mFrontRightModule->setDesiredState(mDesiredSwerveStates[1], iSpeedModulation);
     mBackLeftModule->setDesiredState(mDesiredSwerveStates[2], iSpeedModulation);
     mBackRightModule->setDesiredState(mDesiredSwerveStates[3], iSpeedModulation);
+}
+
+frc2::CommandPtr SubDrivetrain::getFollowPathCommand(std::string iPathName)
+{
+    auto wPath = pathplanner::PathPlannerPath::fromPathFile(iPathName);
+
+    return pathplanner::AutoBuilder::followPath(wPath);
 }

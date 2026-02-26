@@ -7,9 +7,9 @@
 
 PivotIntake::PivotIntake(SubPivotIntake* iPivotIntake, StatePivotIntake iTarget) {
   mPivotIntake = iPivotIntake;
-  mPIDController = new frc::PIDController {PivotConstants::kP, PivotConstants::kI, PivotConstants::kD, 20_ms};
+  mPIDController = new frc::PIDController {PivotConstants::kP, PivotConstants::kI, PivotConstants::kD};
   mState = iTarget;
-  frc::SmartDashboard::PutData("Arm PID", mPIDController);
+  frc::SmartDashboard::PutData("pivot/Arm PID", mPIDController);
   AddRequirements(mPivotIntake);
   // Use addRequirements() here to declare subsystem dependencies.
 }
@@ -34,7 +34,7 @@ void PivotIntake::Initialize() {
 void PivotIntake::Execute() {
   double wVoltage = mPIDController->Calculate(mPivotIntake->GetAngle());
   std::cout << wVoltage << std::endl;
-  frc::SmartDashboard::PutNumber("Arm PID", wVoltage);
+  frc::SmartDashboard::PutNumber("pivot/Arm PID adjust", wVoltage);
   mPivotIntake->SetVoltage(wVoltage + (PivotConstants::kG.value() * cos(mPivotIntake->GetAngle())));
 }
 

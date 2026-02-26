@@ -7,26 +7,27 @@
 SubShooter::SubShooter()
 {
     // mPIDcontroller = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
-    mShooterController =  new rev::spark::SparkMax{CANid::kMotorShooter1ID, rev::spark::SparkLowLevel::MotorType::kBrushless};
-    mRelativeEncoder = new rev::spark::SparkRelativeEncoder{mShooterController->GetEncoder()};
-    mSparkConfigShooter = new rev::spark::SparkMaxConfig{};
+    mLeaderShooterController =  new rev::spark::SparkMax{CANid::kLeaderMotorShooterID, rev::spark::SparkLowLevel::MotorType::kBrushless};
+    mFollowerShooterController =  new rev::spark::SparkMax{CANid::kFollowerMotorShooterID, rev::spark::SparkLowLevel::MotorType::kBrushless};
+    mRelativeEncoder = new rev::spark::SparkRelativeEncoder{mLeaderShooterController->GetEncoder()};
+    mSparkConfigLeaderShooter = new rev::spark::SparkMaxConfig{};
+    mSparkConfigFollowerShooter = new rev::spark::SparkMaxConfig{};
     Configure();
-    // frc::SmartDashboard::PutData(mPIDcontroller);
 }
 
 // This method will be called once per scheduler run
 void SubShooter::Periodic() {
-    frc::SmartDashboard::PutNumber("Shooter Velocity", getVelocity().value());
+    frc::SmartDashboard::PutNumber("shooter/velocity", getVelocity().value());
 }
 
 void SubShooter::setVoltage(units::volt_t iVoltage)
 {
-    mShooterController->SetVoltage(iVoltage);
+    mLeaderShooterController->SetVoltage(iVoltage);
 };
 
 void SubShooter::setVelocity(units::turns_per_second_t iNextVelocity)
 {
-    mShooterController->SetVoltage(mFeedforward.Calculate(iNextVelocity));
+    mLeaderShooterController->SetVoltage(mFeedforward.Calculate(iNextVelocity));
 };
 
 units::turns_per_second_t SubShooter::getVelocity()
@@ -34,9 +35,14 @@ units::turns_per_second_t SubShooter::getVelocity()
     return units::revolutions_per_minute_t(mRelativeEncoder->GetVelocity());
 };
 
-rev::REVLibError SubShooter::Configure()
+std::array<rev::REVLibError, 2> SubShooter::Configure()
 {
-    mSparkConfigShooter->Inverted(true);
+    mSparkConfigLeaderShooter->Inverted(ShooterConstants::kInverted);
+    mSparkConfigLeaderShooter->SetIdleMode(ShooterConstants::kIdleMode);
 
-    return mShooterController->Configure(*mSparkConfigShooter, ShooterConstants::kReset, ShooterConstants::kPersist);
+    std::array<rev::REVLibError, 2> oConfigureResult;
+    oConfigureResult[0] = mLeaderShooterController->Configure(*mSparkConfigLeaderShooter, ShooterConstants::kReset, ShooterConstants::kPersist);
+    mSparkConfigFollowerShooter->Apply(*mSparkConfigLeaderShooter).Follow(CANid::kLeaderMotorShooterID, ShooterConstants::kFollowerinverted);
+    oConfigureResult[1] = mFollowerShooterController->Configure(*mSparkConfigFollowerShooter, ShooterConstants::kReset, ShooterConstants::kPersist);
+    return oConfigureResult;
 };

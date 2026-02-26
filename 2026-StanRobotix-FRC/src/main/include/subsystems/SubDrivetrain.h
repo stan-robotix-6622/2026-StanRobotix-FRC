@@ -6,6 +6,7 @@
 
 #include <frc/RobotBase.h>
 #include <frc/DriverStation.h>
+#include <frc/DataLogManager.h>
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Translation2d.h>
@@ -51,6 +52,8 @@ class SubDrivetrain : public frc2::SubsystemBase {
   wpi::array<frc::SwerveModuleState, 4> getSwerveModuleStates();
   wpi::array<frc::SwerveModulePosition, 4> getSwerveModulePositions();
 
+  frc2::CommandPtr getFollowPathCommand(std::string iPathName);
+
   // Method that returns a ChassisSpeeds from the robot relative speeds
   frc::ChassisSpeeds getRobotRelativeSpeeds();
   // Method that drives the robot in robot relative drive
@@ -72,7 +75,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::Translation2d* mBackRightLocation;
 
   nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
-  std::shared_ptr<nt::NetworkTable> mNTDrivetrainTable = inst.GetTable("SmartDashboard/Drivetrain");
+  std::shared_ptr<nt::NetworkTable> mNTDrivetrainTable = inst.GetTable("SmartDashboard/drivetrain");
   std::shared_ptr<nt::NetworkTable> mNTSwervePIDTable = inst.GetTable("SmartDashboard/swerve");
 
   nt::StructArrayPublisher<frc::SwerveModuleState> mCurrentModuleStatesPublisher;
@@ -92,7 +95,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
   // Declaring my swerve kinematics object
   frc::SwerveDriveKinematics<4>* mKinematics;
   // Declaring the robot starting pose object
-  frc::Pose2d* mStartingRobotPose = new frc::Pose2d{0_m, 0_m, 0_rad};
+  frc::Pose2d* mStartingRobotPose = new frc::Pose2d{2_m, 7_m, 0_rad};
   // Declaring the swerve odometry object
   frc::SwerveDriveOdometry<4>* mOdometry;
   // Declaring the pose estimator

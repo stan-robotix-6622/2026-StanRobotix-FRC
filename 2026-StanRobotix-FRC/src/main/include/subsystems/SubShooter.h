@@ -26,7 +26,10 @@ public:
   void setVelocity(units::turns_per_second_t iNextVelocity);
   void setVoltage(units::volt_t iVoltage);
   units::turns_per_second_t getVelocity();
-  rev::REVLibError Configure();
+
+  // The first index of the array is the result of the Leader's configuration and
+  // the second is the result of the Follower's configuration
+  std::array<rev::REVLibError, 2> Configure();
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
@@ -38,8 +41,10 @@ private:
 
   frc::SimpleMotorFeedforward<units::turns> mFeedforward{ShooterConstants::kS, ShooterConstants::kV};
 
-  rev::spark::SparkMax* mShooterController;
+  rev::spark::SparkMax* mLeaderShooterController;
+  rev::spark::SparkMax* mFollowerShooterController;
   frc::PIDController* mPIDcontroller;
   rev::spark::SparkRelativeEncoder* mRelativeEncoder;
-  rev::spark::SparkMaxConfig* mSparkConfigShooter;
+  rev::spark::SparkMaxConfig* mSparkConfigLeaderShooter;
+  rev::spark::SparkMaxConfig* mSparkConfigFollowerShooter;
 };

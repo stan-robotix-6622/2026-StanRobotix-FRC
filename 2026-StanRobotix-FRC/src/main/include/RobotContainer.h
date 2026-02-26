@@ -8,8 +8,7 @@
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/DriverStation.h>
-// #include <pathplanner/lib/path/PathPlannerPath.h>
-// #include <pathplanner/lib/auto/AutoBuilder.h>
+#include <frc/DataLogManager.h>
 
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/SubIntake.h"
