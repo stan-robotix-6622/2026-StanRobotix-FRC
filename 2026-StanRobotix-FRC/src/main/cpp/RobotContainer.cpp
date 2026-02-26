@@ -37,7 +37,7 @@ RobotContainer::RobotContainer() {
         mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
                                         -mCommandXboxController->GetLeftX(),
                                         -mCommandXboxController->GetRightX(),
-                                        (1 - mCommandXboxController->GetRightTriggerAxis()) / 4);
+                                        (1 - mCommandXboxController->GetRightTriggerAxis()) / 3);
       },
       {mDrivetrain}));
 
@@ -52,7 +52,7 @@ RobotContainer::RobotContainer() {
   //   {mDrivetrain}
   // ));
 
-  frc::SmartDashboard::PutData(mIMU);
+  frc::SmartDashboard::PutData("drivetrain/IMU", mIMU);
 
   mSubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this]
   {
@@ -80,7 +80,7 @@ void RobotContainer::ConfigureBindings() {
   
   // mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
   mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
-    {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}, {mIMU}));
+    {mDrivetrain->resetPose(frc::Pose2d(2_m, 7_m, 0_deg));}, {mIMU}));
 };
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {

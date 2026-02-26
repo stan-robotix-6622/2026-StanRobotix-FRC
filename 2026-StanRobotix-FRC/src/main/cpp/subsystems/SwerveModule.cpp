@@ -75,6 +75,11 @@ frc::SwerveModulePosition SwerveModule::getModulePosition()
     return mModulePosition;
 }
 
+units::radians_per_second_t SwerveModule::getTurningVelocity()
+{
+    return units::radians_per_second_t(mTurningAbsoluteEncoder->GetVelocity());
+}
+
 void SwerveModule::refreshModule()
 {
     mModuleState = frc::SwerveModuleState{units::meters_per_second_t(mDrivingEncoder->GetVelocity()),

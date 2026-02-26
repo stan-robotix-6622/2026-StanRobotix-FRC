@@ -17,6 +17,7 @@
 
 #include <units/velocity.h>
 #include <units/angle.h>
+#include <units/angular_velocity.h>
 
 #include "Configs.h"
 #include "Constants.h"
@@ -31,6 +32,8 @@ public:
   frc::SwerveModulePosition getModulePosition();
   // Méthode qui retourne le SwerveModuleState du module
   frc::SwerveModuleState getModuleState();
+
+  units::radians_per_second_t getTurningVelocity();
 
   void InitSendable(wpi::SendableBuilder &builder) override;
 

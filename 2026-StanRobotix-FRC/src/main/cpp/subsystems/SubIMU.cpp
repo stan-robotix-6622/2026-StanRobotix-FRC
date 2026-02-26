@@ -39,7 +39,7 @@ void SubIMU::setAngleYaw(units::degree_t iAngle)
 
 void SubIMU::InitSendable(wpi::SendableBuilder& builder)
 {
-    builder.SetSmartDashboardType("drivetrain/IMU");
+    builder.SetSmartDashboardType("IMU");
     builder.AddDoubleProperty("rotation rads", [this] {return getRotation2d().Degrees().value();}, [this] (double iValue) {setAngleYaw(units::radian_t(iValue));});
     builder.AddDoubleProperty("rotation degrees", [this] {return getRotation2d().Radians().value();}, [this] (double iValue) {setAngleYaw(units::degree_t(iValue));});
     builder.AddDoubleProperty("angular velocity rad/sec", [this] {return units::radians_per_second_t(getYawRate()).value();}, nullptr);
