@@ -103,7 +103,7 @@ void SubDrivetrain::Periodic()
 
     // Update la rotation du robot pour la Limelight
 
-    /* LimelightHelpers::SetRobotOrientation("", mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
+    LimelightHelpers::SetRobotOrientation("", mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
 
     mt2 = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("");
 
@@ -125,7 +125,7 @@ void SubDrivetrain::Periodic()
     if (!rejectCameraUpdate)
     {
         mPoseEstimator->AddVisionMeasurement(mt2.pose, frc::Timer::GetFPGATimestamp());
-    }*/
+    }
 
     // Publication de valeurs sur le NetworkTables
     mCurrentChassisSpeedsPublisher.Set(getRobotRelativeSpeeds());
