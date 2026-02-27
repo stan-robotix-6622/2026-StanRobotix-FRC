@@ -139,19 +139,18 @@ namespace ModuleConstants
   constexpr units::meter_t kWheelPerimeter = 3_in * std::numbers::pi;                      // in meters (diametre in inches * convertion to meters * pi)
   constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260029_rad_per_s; // TODO: Verify?
   constexpr units::meters_per_second_t kDriveWheelMaxSpeed = 4.5598_mps;                   // TODO: Verify?
-  constexpr double kDriveWheelFreeSpeedRps = kDriveWheelMaxSpeed.value() / kWheelPerimeter.value();
 
-  constexpr double kDrivingFactor = kDrivingMotorGearRatio;
+  constexpr double kDrivingFactor = ModuleConstants::kWheelPerimeter.value() / kDrivingMotorGearRatio;
   constexpr double kTurningFactor = 2 * std::numbers::pi;
 
   constexpr rev::spark::SparkLowLevel::ControlType kDrivingClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kVelocity;
   constexpr rev::spark::SparkLowLevel::ControlType kTurningClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kMAXMotionPositionControl;
+  
+  constexpr rev::spark::SparkLowLevel::MotorType kDrivingMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+  constexpr rev::spark::SparkLowLevel::MotorType kTurningMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
 
   constexpr rev::ResetMode kDrivingResetMode = rev::ResetMode::kResetSafeParameters;
   constexpr rev::ResetMode kTurningResetMode = rev::ResetMode::kResetSafeParameters;
-
-  constexpr rev::spark::SparkLowLevel::MotorType kDrivingMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
-  constexpr rev::spark::SparkLowLevel::MotorType kTurningMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
 
   constexpr rev::PersistMode kDrivingPersistMode = rev::PersistMode::kPersistParameters;
   constexpr rev::PersistMode kTurningPersistMode = rev::PersistMode::kPersistParameters;
