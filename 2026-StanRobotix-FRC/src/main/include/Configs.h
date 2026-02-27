@@ -23,7 +23,7 @@ namespace Configs
       drivingConfig.SetIdleMode(ModuleConstants::Config::kDrivingIdleMode);
       drivingConfig.Apply(SparkBaseConfig::Presets::REV_NEO());
 
-      drivingConfig.encoder.VelocityConversionFactor(drivingFactor / ModuleConstants::kRPMtoRPSFactor);
+      drivingConfig.encoder.VelocityConversionFactor(drivingFactor / ModuleConstants::Config::kRPMtoRPSFactor);
       drivingConfig.encoder.PositionConversionFactor(drivingFactor);
 
       drivingConfig.closedLoop.SetFeedbackSensor(ModuleConstants::Config::kDrivingClosedLoopFeedbackSensor);
@@ -45,7 +45,7 @@ namespace Configs
       turningConfig.SetIdleMode(ModuleConstants::Config::kTurningIdleMode);
       turningConfig.Apply(SparkBaseConfig::Presets::REV_NEO_550());
 
-      turningConfig.absoluteEncoder.VelocityConversionFactor(turningFactor / ModuleConstants::kRPMtoRPSFactor);
+      turningConfig.absoluteEncoder.VelocityConversionFactor(turningFactor / ModuleConstants::Config::kRPMtoRPSFactor);
       turningConfig.absoluteEncoder.PositionConversionFactor(turningFactor);
       turningConfig.absoluteEncoder.Inverted(iEncoderInverted);
       turningConfig.absoluteEncoder.ZeroCentered(ModuleConstants::Config::kTurningEncoderZeroCentered);
@@ -59,6 +59,8 @@ namespace Configs
       turningConfig.closedLoop.PositionWrappingMaxInput(ModuleConstants::Config::kTurningClosedLoopMaxInput);
 
       turningConfig.closedLoop.maxMotion.AllowedProfileError(ModuleConstants::Config::kTurningClosedLoopTolerance);
+      turningConfig.closedLoop.maxMotion.CruiseVelocity(ModuleConstants::Config::kTurningCruiseVelocity.value());
+      turningConfig.closedLoop.maxMotion.MaxAcceleration(ModuleConstants::Config::kTurningMaxAcceleration.value());
 
       return turningConfig;
     }

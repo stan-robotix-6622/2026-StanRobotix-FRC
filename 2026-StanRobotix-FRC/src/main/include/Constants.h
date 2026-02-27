@@ -162,10 +162,13 @@ namespace ModuleConstants
   constexpr double kDrivingI = 0.0;
   constexpr double kDrivingD = 0.0;
 
-  constexpr double kRPMtoRPSFactor = 60;
-
   namespace Config
   {
+    constexpr double kRPMtoRPSFactor = 60;
+
+    constexpr units::radians_per_second_t kTurningCruiseVelocity = 2_rad_per_s * std::numbers::pi;
+    constexpr units::radians_per_second_squared_t kTurningMaxAcceleration = 4_rad_per_s_sq * std::numbers::pi;
+
     constexpr rev::spark::SparkBaseConfig::IdleMode kDrivingIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
     constexpr rev::spark::SparkBaseConfig::IdleMode kTurningIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 
