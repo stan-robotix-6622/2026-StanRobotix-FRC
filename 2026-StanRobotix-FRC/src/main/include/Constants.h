@@ -39,13 +39,13 @@ namespace OperatorConstants
   // Button mappings
   // For XboxController:
   // A = 1; B = 2; X = 3; Y = 4; RightBumper = 5; LeftBumper = 6
-  constexpr int kPivotUpButton = 4;   // Y
   constexpr int kPivotDownButton = 2; // B
 
-  constexpr int kResetIMUButton = 5; // RightBumper
+  constexpr int kResetIMUButton = 5;  // RightBumper
+  constexpr int kResetPoseButton = 6; // LeftBumper
 
-  constexpr int kShootButton = 3;       // X
-  constexpr int kUnstuckFuelButton = 6; // LeftBumper
+  constexpr int kShootButton = 4;       // Y
+  constexpr int kUnstuckFuelButton = 3; // X
   constexpr int kFeedButton = 1;        // A
   // constexpr int kIndexButton = 6;       // LeftBumper
 } // namespace OperatorConstants
@@ -235,8 +235,8 @@ namespace PivotConstants
   constexpr double kI = 0.4;  // en attendant
   constexpr double kD = 0.15; // en attendant
   constexpr units::volt_t kG = 0.80_V;
-  constexpr double setpointUp = std::numbers::pi / 2; // 90 deg
-  constexpr double setpointDown = std::numbers::pi / 18; // 10 deg
+  constexpr double setpointUp = std::numbers::pi / 2;    // 90 deg up
+  constexpr double setpointDown = std::numbers::pi / 18; // 10 deg up
 
   constexpr bool kInverted = false;
   constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
