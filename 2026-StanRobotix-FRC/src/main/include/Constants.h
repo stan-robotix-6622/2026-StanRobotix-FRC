@@ -39,13 +39,13 @@ namespace OperatorConstants
   // Button mappings
   // For XboxController:
   // A = 1; B = 2; X = 3; Y = 4; RightBumper = 5; LeftBumper = 6
-  constexpr int kPivotUpButton = 4;   // Y
   constexpr int kPivotDownButton = 2; // B
 
-  constexpr int kResetIMUButton = 5; // RightBumper
+  constexpr int kResetIMUButton = 5;  // RightBumper
+  constexpr int kResetPoseButton = 6; // LeftBumper
 
-  constexpr int kShootButton = 3;       // X
-  constexpr int kUnstuckFuelButton = 6; // LeftBumper
+  constexpr int kShootButton = 4;       // Y
+  constexpr int kUnstuckFuelButton = 3; // X
   constexpr int kFeedButton = 1;        // A
   // constexpr int kIndexButton = 6;       // LeftBumper
 } // namespace OperatorConstants
@@ -138,20 +138,19 @@ namespace ModuleConstants
   constexpr units::volt_t kNominalVoltage = 12_V;                                          // The voltage at which the
   constexpr units::meter_t kWheelPerimeter = 3_in * std::numbers::pi;                      // in meters (diametre in inches * convertion to meters * pi)
   constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260029_rad_per_s; // TODO: Verify?
-  constexpr units::meters_per_second_t kDriveWheelMaxSpeed = 117.671989_mps;               // TODO: Verify?
-  constexpr double kDriveWheelFreeSpeedRps = kDriveWheelMaxSpeed.value() / kWheelPerimeter.value();
+  constexpr units::meters_per_second_t kDriveWheelMaxSpeed = 4.5598_mps;                   // TODO: Verify?
 
-  constexpr double kDrivingFactor = kDrivingMotorGearRatio;
+  constexpr double kDrivingFactor = ModuleConstants::kWheelPerimeter.value() / kDrivingMotorGearRatio;
   constexpr double kTurningFactor = 2 * std::numbers::pi;
 
   constexpr rev::spark::SparkLowLevel::ControlType kDrivingClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kVelocity;
   constexpr rev::spark::SparkLowLevel::ControlType kTurningClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kMAXMotionPositionControl;
+  
+  constexpr rev::spark::SparkLowLevel::MotorType kDrivingMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+  constexpr rev::spark::SparkLowLevel::MotorType kTurningMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
 
   constexpr rev::ResetMode kDrivingResetMode = rev::ResetMode::kResetSafeParameters;
   constexpr rev::ResetMode kTurningResetMode = rev::ResetMode::kResetSafeParameters;
-
-  constexpr rev::spark::SparkLowLevel::MotorType kDrivingMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
-  constexpr rev::spark::SparkLowLevel::MotorType kTurningMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
 
   constexpr rev::PersistMode kDrivingPersistMode = rev::PersistMode::kPersistParameters;
   constexpr rev::PersistMode kTurningPersistMode = rev::PersistMode::kPersistParameters;
@@ -163,10 +162,13 @@ namespace ModuleConstants
   constexpr double kDrivingI = 0.0;
   constexpr double kDrivingD = 0.0;
 
-  constexpr double kRPMtoRPSFactor = 60;
-
   namespace Config
   {
+    constexpr double kRPMtoRPSFactor = 60;
+
+    constexpr units::radians_per_second_t kTurningCruiseVelocity = 2_rad_per_s * std::numbers::pi;
+    constexpr units::radians_per_second_squared_t kTurningMaxAcceleration = 4_rad_per_s_sq * std::numbers::pi;
+
     constexpr rev::spark::SparkBaseConfig::IdleMode kDrivingIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
     constexpr rev::spark::SparkBaseConfig::IdleMode kTurningIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 
@@ -184,6 +186,18 @@ namespace ModuleConstants
 
 namespace LimelightConstants
 {
+  constexpr bool kUseMegaTag2 = true;
+
+  const std::string kName = "";
+
+  constexpr units::meter_t kForward = -1.125_in;
+  constexpr units::meter_t kRight = -9.75_in;
+  constexpr units::meter_t kUp = 20.25_in;
+
+  constexpr units::degree_t kRoll = 0_deg;
+  constexpr units::degree_t kPitch = 0_deg;
+  constexpr units::degree_t kYaw = -90_deg;
+
   constexpr double kPoseEstimatorStandardDeviationX = 0.7;      // Default/Recommended values
   constexpr double kPoseEstimatorStandardDeviationY = 0.7;      // Default/Recommended values
   constexpr double kPoseEstimatorStandardDeviationYaw = 999999; // Default/Recommended values
@@ -230,13 +244,13 @@ namespace IntakeConstants
 namespace PivotConstants
 {
   constexpr double kGearRatio = 16;
-  constexpr double kOffset = 6.357144;
+  constexpr double kOffset = 5.66666;
   constexpr double kP = 1.3;  // en attendant
   constexpr double kI = 0.4;  // en attendant
   constexpr double kD = 0.15; // en attendant
   constexpr units::volt_t kG = 0.80_V;
-  constexpr double setpointUp = std::numbers::pi / 2; // 90 deg
-  constexpr double setpointDown = std::numbers::pi / 18; // 10 deg
+  constexpr double setpointUp = std::numbers::pi / 2;    // 90 deg up
+  constexpr double setpointDown = std::numbers::pi / 36; // 5 deg up
 
   constexpr bool kInverted = false;
   constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;

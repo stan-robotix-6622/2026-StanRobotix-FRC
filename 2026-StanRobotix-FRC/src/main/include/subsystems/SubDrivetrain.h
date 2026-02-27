@@ -30,7 +30,7 @@
 #include <units/angular_velocity.h>
 
 #include "Constants.h"
-// #include "LimelightHelpers.h"
+#include "LimelightHelpers.h"
 #include "subsystems/SubIMU.h"
 #include "subsystems/SwerveModule.h"
 
@@ -115,7 +115,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
   SubIMU* mIMU = nullptr;
 
   // These attributes are used to not create new variables every time a function is called
-  // LimelightHelpers::PoseEstimate mt2;
+  LimelightHelpers::PoseEstimate mLimelightPoseEstimate;
   bool rejectCameraUpdate;
   frc::ChassisSpeeds mDesiredChassisSpeeds;
   frc::ChassisSpeeds mCurrentChassisSpeeds;

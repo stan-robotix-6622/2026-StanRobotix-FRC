@@ -6,6 +6,7 @@
 
 SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
 {
+    frc::DataLogManager::Log("Debut initialisation du Drivetrain");
     // Initialization of the SwerveModules' location relative to the robot center
     mFrontLeftLocation  = new frc::Translation2d{DrivetrainConstants::kFrontLeftTranslation};
     mFrontRightLocation = new frc::Translation2d{DrivetrainConstants::kFrontRightTranslation};
@@ -32,6 +33,17 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
     mCurrentPose2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
     mTargetPose2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Target Pose2d").Publish();
     mCurrentPose2dSubscriber = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Subscribe(*mStartingRobotPose);
+
+    // Set Limelight's position on the robot
+    LimelightHelpers::setCameraPose_RobotSpace(
+        LimelightConstants::kName,
+        LimelightConstants::kForward.value(),
+        LimelightConstants::kRight.value(),
+        LimelightConstants::kUp.value(),
+        LimelightConstants::kRoll.value(),
+        LimelightConstants::kPitch.value(),
+        LimelightConstants::kYaw.value()
+    );
 
     // Initialization of the IMU
     mIMU = iIMU;
@@ -86,6 +98,7 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
         },
         this // Reference to this subsystem to set requirements
     );
+    frc::DataLogManager::Log("Drivetrain initialise");
 }
 
 // This method will be called once per scheduler run
@@ -103,29 +116,38 @@ void SubDrivetrain::Periodic()
 
     // Update la rotation du robot pour la Limelight
 
-    /* LimelightHelpers::SetRobotOrientation("", mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
+    LimelightHelpers::SetRobotOrientation(LimelightConstants::kName, mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
 
-    mt2 = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("");
+    if (LimelightConstants::kUseMegaTag2)
+    {
+        mLimelightPoseEstimate = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2(LimelightConstants::kName);
+    }
+    else
+    {
+        mLimelightPoseEstimate = LimelightHelpers::getBotPoseEstimate_wpiBlue(LimelightConstants::kName);
+    }
 
-    bool rejectCameraUpdate = false;
+    // reject the camera update if the PoseEstimate is not valid
+    bool rejectCameraUpdate = !LimelightHelpers::validPoseEstimate(mLimelightPoseEstimate);
 
-    if (abs(mIMU->getYawRate().value()) > 360)
+    if (units::math::abs(mIMU->getYawRate()) > 360_deg_per_s)
     {
         rejectCameraUpdate = true;
     }
-    else if (mt2.tagCount == 0)
+    else if (mLimelightPoseEstimate.tagCount == 0)
     {
         rejectCameraUpdate = true;
     }
-    else if (mt2.pose == frc::Pose2d(0_m, 0_m, 0_rad))
+    else if (mLimelightPoseEstimate.pose == frc::Pose2d(0_m, 0_m, 0_rad))
     {
         rejectCameraUpdate = true;
     }
 
     if (!rejectCameraUpdate)
     {
-        mPoseEstimator->AddVisionMeasurement(mt2.pose, frc::Timer::GetFPGATimestamp());
-    }*/
+        LimelightHelpers::PrintPoseEstimate(mLimelightPoseEstimate);
+        mPoseEstimator->AddVisionMeasurement(mLimelightPoseEstimate.pose, frc::Timer::GetFPGATimestamp());
+    }
 
     // Publication de valeurs sur le NetworkTables
     mCurrentChassisSpeedsPublisher.Set(getRobotRelativeSpeeds());
@@ -263,7 +285,7 @@ frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubto
         wRobotToHubTranslation.Angle()};
 
     frc::Translation2d wOriginToTargetTranslation = wOriginToRobotTranslation + wRobotToTargetTranslation;
-    frc::Pose2d oOriginToTargetPose = frc::Pose2d{wOriginToTargetTranslation, wRobotToTargetTranslation.Angle()};
+    frc::Pose2d oOriginToTargetPose = frc::Pose2d{wOriginToTargetTranslation, wRobotToHubTranslation.Angle()};
     mTargetPose2dPublisher.Set(oOriginToTargetPose);
     return oOriginToTargetPose;
 }
@@ -292,5 +314,5 @@ frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHu
 
     frc2::CommandPtr wGoToPoseCommand = pathplanner::AutoBuilder::followPath(wDistanceFromHubPath);
 
-    return frc2::cmd::None();
+    return wGoToPoseCommand;
 }

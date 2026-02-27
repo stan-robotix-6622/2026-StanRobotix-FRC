@@ -20,12 +20,10 @@ void PivotIntake::Initialize() {
   switch (mState){
     case kUp:
       mPIDController->SetSetpoint(PivotConstants::setpointUp);
-      std::cout << "Pivot du Intake Up";
       break;
 
     case kDown:
       mPIDController->SetSetpoint(PivotConstants::setpointDown);
-      std::cout << "Pivot du Intake Down";
       break;
   }
 }
@@ -33,15 +31,12 @@ void PivotIntake::Initialize() {
 // Called repeatedly when this Command is scheduled to run
 void PivotIntake::Execute() {
   double wVoltage = mPIDController->Calculate(mPivotIntake->GetAngle());
-  std::cout << wVoltage << std::endl;
   frc::SmartDashboard::PutNumber("pivot/Arm PID adjust", wVoltage);
   mPivotIntake->SetVoltage(wVoltage + (PivotConstants::kG.value() * cos(mPivotIntake->GetAngle())));
 }
 
 // Called once the command ends or is interrupted.
-void PivotIntake::End(bool interrupted) {
-  std::cout << "Intake Pivot Up Fini" << std::endl;
-}
+void PivotIntake::End(bool interrupted) {}
 
 // Returns true when the command should end.
 bool PivotIntake::IsFinished() {

@@ -29,7 +29,7 @@ units::degrees_per_second_t SubIMU::getYawRate()
 
 void SubIMU::resetAngle()
 {
-    mIMU->Reset();
+    mIMU->SetYaw(0_deg);
 }
 
 void SubIMU::setAngleYaw(units::degree_t iAngle)

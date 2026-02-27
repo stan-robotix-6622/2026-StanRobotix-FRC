@@ -53,4 +53,6 @@ private:
   SubPivotIntake* mSubPivotIntake = nullptr;
 
   void ConfigureBindings();
+  void RegisterCommandsPathPlanner();
+  void SetSubsystemDefaultCommands();
 };
