@@ -59,11 +59,7 @@ void RobotContainer::SetSubsystemDefaultCommands() {
   //   {mDrivetrain}
   // ));
 
-
-  mSubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this]
-  {
-    mSubPivotIntake->KeepPosition();
-  }, {mSubPivotIntake}));
+  mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
 }
 
 void RobotContainer::RegisterCommandsPathPlanner() {
@@ -71,6 +67,7 @@ void RobotContainer::RegisterCommandsPathPlanner() {
   pathplanner::NamedCommands::registerCommand("Pivot Down", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
   pathplanner::NamedCommands::registerCommand("Full Intake", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
   pathplanner::NamedCommands::registerCommand("GoTo3mFromHub", mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(3_m);}));
+  pathplanner::NamedCommands::registerCommand("Intake", mSubIntake->getIntakeCommand());
   pathplanner::NamedCommands::registerCommand("Shoot", Shoot(mSubShooter).ToPtr());
   pathplanner::NamedCommands::registerCommand("Feed Shooter", mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
   pathplanner::NamedCommands::registerCommand("Unstuck Feeder", mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
@@ -80,9 +77,6 @@ void RobotContainer::RegisterCommandsPathPlanner() {
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
 
-  // mCommandXboxController->Button(OperatorConstants::kPivotUpButton).WhileTrue(PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
-  // mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
-  mCommandXboxController->Button(OperatorConstants::kPivotUpButton).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
   mCommandXboxController->Button(OperatorConstants::kPivotDownButton).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
 
   // mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("'8' Path").Repeatedly());
