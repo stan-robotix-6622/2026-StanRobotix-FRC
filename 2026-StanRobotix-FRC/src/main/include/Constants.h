@@ -186,6 +186,16 @@ namespace ModuleConstants
 
 namespace LimelightConstants
 {
+  const std::string kName = "";
+
+  constexpr units::meter_t kForward = -1.125_in;
+  constexpr units::meter_t kRight = -9.75_in;
+  constexpr units::meter_t kUp = 20.25_in;
+
+  constexpr units::degree_t kRoll = 0_deg;
+  constexpr units::degree_t kPitch = 0_deg;
+  constexpr units::degree_t kYaw = -90_deg;
+
   constexpr double kPoseEstimatorStandardDeviationX = 0.7;      // Default/Recommended values
   constexpr double kPoseEstimatorStandardDeviationY = 0.7;      // Default/Recommended values
   constexpr double kPoseEstimatorStandardDeviationYaw = 999999; // Default/Recommended values

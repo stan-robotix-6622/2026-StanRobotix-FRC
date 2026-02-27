@@ -34,6 +34,17 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
     mTargetPose2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Target Pose2d").Publish();
     mCurrentPose2dSubscriber = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Subscribe(*mStartingRobotPose);
 
+    // Set Limelight's position on the robot
+    LimelightHelpers::setCameraPose_RobotSpace(
+        LimelightConstants::kName,
+        LimelightConstants::kForward.value(),
+        LimelightConstants::kRight.value(),
+        LimelightConstants::kUp.value(),
+        LimelightConstants::kRoll.value(),
+        LimelightConstants::kPitch.value(),
+        LimelightConstants::kYaw.value()
+    );
+
     // Initialization of the IMU
     mIMU = iIMU;
 
@@ -105,13 +116,14 @@ void SubDrivetrain::Periodic()
 
     // Update la rotation du robot pour la Limelight
 
-    LimelightHelpers::SetRobotOrientation("", mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
+    LimelightHelpers::SetRobotOrientation(LimelightConstants::kName, mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
 
-    mt2 = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("");
+    mt2 = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2(LimelightConstants::kName);
 
-    bool rejectCameraUpdate = false;
+    // reject the camera update if the PoseEstimate is not valid
+    bool rejectCameraUpdate = !LimelightHelpers::validPoseEstimate(mt2);
 
-    if (abs(mIMU->getYawRate().value()) > 360)
+    if (units::math::abs(mIMU->getYawRate()) > 360_deg_per_s)
     {
         rejectCameraUpdate = true;
     }
@@ -126,6 +138,7 @@ void SubDrivetrain::Periodic()
 
     if (!rejectCameraUpdate)
     {
+        LimelightHelpers::PrintPoseEstimate(mt2);
         mPoseEstimator->AddVisionMeasurement(mt2.pose, frc::Timer::GetFPGATimestamp());
     }
 
