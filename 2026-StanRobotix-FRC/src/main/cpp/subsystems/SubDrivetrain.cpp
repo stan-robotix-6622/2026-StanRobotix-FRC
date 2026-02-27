@@ -6,6 +6,7 @@
 
 SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
 {
+    frc::DataLogManager::Log("Debut initialisation du Drivetrain");
     // Initialization of the SwerveModules' location relative to the robot center
     mFrontLeftLocation  = new frc::Translation2d{DrivetrainConstants::kFrontLeftTranslation};
     mFrontRightLocation = new frc::Translation2d{DrivetrainConstants::kFrontRightTranslation};
@@ -86,6 +87,7 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
         },
         this // Reference to this subsystem to set requirements
     );
+    frc::DataLogManager::Log("Drivetrain initialise");
 }
 
 // This method will be called once per scheduler run

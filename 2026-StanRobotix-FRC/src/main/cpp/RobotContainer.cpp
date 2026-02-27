@@ -2,12 +2,11 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+#include "RobotContainer.h"
+
 #include <frc2/command/button/Trigger.h>
 #include <frc2/command/Commands.h>
-
-#include <iostream>
-
-#include "RobotContainer.h"
+#include <pathplanner/lib/auto/NamedCommands.h>
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
@@ -17,18 +16,27 @@
 
 RobotContainer::RobotContainer() {
   mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
-  frc::SmartDashboard::PutData("Xbox Controller", &mCommandXboxController->GetHID());
-
+  
   // Initialize all of your commands and subsystems here
   mSubShooter = new SubShooter{};
   mSubFeeder = new SubFeeder{};
   // mSubIndexer = new SubIndexer{};
   mIMU = new SubIMU{};
-  frc::DataLogManager::Log("Debut initialisation Drivetrain");
   mDrivetrain = new SubDrivetrain{mIMU};
-  frc::DataLogManager::Log("Drivetrain initialise");
   mSubIntake = new SubIntake{};
   mSubPivotIntake = new SubPivotIntake{};
+  
+  // Set the default commands for all subsystems
+  SetSubsystemDefaultCommands();
+  // Register all relevant commands to pathplanner
+  RegisterCommandsPathPlanner();
+  // Configure the button bindings
+  ConfigureBindings();
+}
+
+void RobotContainer::SetSubsystemDefaultCommands() {
+  frc::SmartDashboard::PutData("Xbox Controller", &mCommandXboxController->GetHID());
+  frc::SmartDashboard::PutData("drivetrain/IMU", mIMU);
 
   mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
       [this]
@@ -51,15 +59,22 @@ RobotContainer::RobotContainer() {
   //   {mDrivetrain}
   // ));
 
-  frc::SmartDashboard::PutData("drivetrain/IMU", mIMU);
 
   mSubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this]
   {
     mSubPivotIntake->KeepPosition();
   }, {mSubPivotIntake}));
+}
 
-  // Configure the button bindings
-  ConfigureBindings();
+void RobotContainer::RegisterCommandsPathPlanner() {
+  pathplanner::NamedCommands::registerCommand("Pivot Up", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
+  pathplanner::NamedCommands::registerCommand("Pivot Down", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
+  pathplanner::NamedCommands::registerCommand("Full Intake", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
+  pathplanner::NamedCommands::registerCommand("GoTo3mFromHub", mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(3_m);}));
+  pathplanner::NamedCommands::registerCommand("Shoot", Shoot(mSubShooter).ToPtr());
+  pathplanner::NamedCommands::registerCommand("Feed Shooter", mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
+  pathplanner::NamedCommands::registerCommand("Unstuck Feeder", mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
+  // pathplanner::NamedCommands::registerCommand("Index Fuel", mSubIntake->getIntakeCommand());
 }
 
 void RobotContainer::ConfigureBindings() {
