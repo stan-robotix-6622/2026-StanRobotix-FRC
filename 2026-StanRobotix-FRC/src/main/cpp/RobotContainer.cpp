@@ -14,7 +14,6 @@
 #include "commands/PivotIntake.h"
 #include "commands/FullIntake.h"
 #include "commands/Shoot.h"
-#include "commands/Index.h"
 
 RobotContainer::RobotContainer() {
   mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
