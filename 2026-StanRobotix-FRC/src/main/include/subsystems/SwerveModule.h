@@ -53,7 +53,7 @@ private:
   rev::spark::SparkMax* mDrivingMotor;
   rev::spark::SparkMax* mTurningMotor;
 
-  rev::spark::SparkClosedLoopController* mDrivingClosedLoopController; // Not used currently (please do)
+  rev::spark::SparkClosedLoopController* mDrivingClosedLoopController;
   rev::spark::SparkClosedLoopController* mTurningClosedLoopController;
   frc::PIDController* mTurningPID; // TODO: Remove if ClosedLoop working
 

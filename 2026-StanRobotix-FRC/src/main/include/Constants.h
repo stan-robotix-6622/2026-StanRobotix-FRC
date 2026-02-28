@@ -123,7 +123,6 @@ namespace DrivetrainConstants
   constexpr units::meter_t kModuleCornerOffset = 1.75_in;
 
   // We take for granted a rectangular frame
-  // TODO: Input the new offset for the frame
   constexpr frc::Translation2d kFrontLeftTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
   constexpr frc::Translation2d kFrontRightTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
   constexpr frc::Translation2d kBackLeftTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
@@ -135,11 +134,12 @@ namespace DrivetrainConstants
 
 namespace ModuleConstants
 {
-  constexpr double kDrivingMotorGearRatio = 5.08;                                          // 5.08 rotations of the motor for 1 rotation of the ouput
-  constexpr units::volt_t kNominalVoltage = 12_V;                                          // The voltage at which the
-  constexpr units::meter_t kWheelPerimeter = 3_in * std::numbers::pi;                      // in meters (diametre in inches * convertion to meters * pi)
-  constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260029_rad_per_s; // TODO: Verify?
-  constexpr units::meters_per_second_t kDriveWheelMaxSpeed = 4.5598_mps;                   // TODO: Verify?
+  constexpr double kDrivingMotorGearRatio = 4.71;                                       // 5.08 rotations of the motor for 1 rotation of the ouput
+  constexpr units::volt_t kNominalVoltage = 12_V;                                       // The voltage at which the max speeds are mesured
+  constexpr units::meter_t kWheelRadius = 1.5_in;                                       // The radius of REV's plastic wheels
+  constexpr units::meter_t kWheelPerimeter = kWheelRadius * 2 * std::numbers::pi;       // in meters (diametre in inches * convertion to meters * pi)
+  constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260_rad_per_s; // TODO: Verify?
+  constexpr units::meters_per_second_t kDriveWheelMaxSpeed = 4.9180_mps;                // TODO: Verify?
 
   constexpr double kDrivingFactor = ModuleConstants::kWheelPerimeter.value() / kDrivingMotorGearRatio;
   constexpr double kTurningFactor = 2 * std::numbers::pi;
