@@ -20,7 +20,6 @@
 #include <units/angular_velocity.h>
 
 #include "Configs.h"
-#include "Constants.h"
 
 class SwerveModule : public wpi::Sendable
 {

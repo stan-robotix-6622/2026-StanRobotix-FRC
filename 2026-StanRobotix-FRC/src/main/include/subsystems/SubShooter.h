@@ -5,18 +5,16 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include <rev/SparkMax.h>
-#include <rev/config/SparkMaxConfig.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <rev/SparkMax.h>
+#include <rev/config/SparkMaxConfig.h>
 #include <rev/SparkRelativeEncoder.h>
 
+#include <units/angle.h>
 #include <units/angular_velocity.h>
 #include <units/voltage.h>
-#include <frc/smartdashboard/SmartDashboard.h>
-
-#include "Constants.h"
 
 class SubShooter : public frc2::SubsystemBase
 {
@@ -39,7 +37,7 @@ private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  frc::SimpleMotorFeedforward<units::turns> mFeedforward{ShooterConstants::kS, ShooterConstants::kV};
+  frc::SimpleMotorFeedforward<units::turns>* mFeedforward;
 
   rev::spark::SparkMax* mLeaderShooterController;
   rev::spark::SparkMax* mFollowerShooterController;

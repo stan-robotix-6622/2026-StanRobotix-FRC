@@ -5,13 +5,13 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include "Constants.h"
+#include <frc2/command/CommandPtr.h>
 #include <rev/SparkMax.h>
 #include <rev/config/SparkMaxConfig.h>
-#include <frc2/command/CommandPtr.h>
 
-class SubIntake : public frc2::SubsystemBase {
- public:
+class SubIntake : public frc2::SubsystemBase
+{
+public:
   SubIntake();
   void Stop();
 
@@ -23,9 +23,9 @@ class SubIntake : public frc2::SubsystemBase {
    */
   void Periodic() override;
 
- private:
-  rev::spark::SparkMax* mIntakeMotor = nullptr;
-  rev::spark::SparkMaxConfig* mIntakeMotorConfig;
+private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
+  rev::spark::SparkMax* mIntakeMotor = nullptr;
+  rev::spark::SparkMaxConfig* mIntakeMotorConfig;
 };

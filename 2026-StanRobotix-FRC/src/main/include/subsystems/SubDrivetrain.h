@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <frc/RobotBase.h>
 #include <frc/DriverStation.h>
 #include <frc/DataLogManager.h>
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
@@ -27,8 +26,6 @@
 #include <units/angle.h>
 #include <units/time.h>
 #include <units/angular_velocity.h>
-
-#include "Constants.h"
 #include "LimelightHelpers.h"
 #include "subsystems/SubIMU.h"
 #include "subsystems/SwerveModule.h"
@@ -116,6 +113,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
   SubIMU* mIMU = nullptr;
 
   // These attributes are used to not create new variables every time a function is called
+  std::string mLimelightName;
   LimelightHelpers::PoseEstimate mLimelightPoseEstimate;
   bool rejectCameraUpdate;
   frc::ChassisSpeeds mDesiredChassisSpeeds;
