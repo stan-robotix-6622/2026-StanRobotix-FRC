@@ -18,6 +18,7 @@
 #include <frc/geometry/Pose2d.h>
 #include <rev/SparkBase.h>              // Include Spark variable types
 #include <rev/config/SparkBaseConfig.h> // For the spark IdleMode
+#include <pathplanner/lib/config/RobotConfig.h>
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -98,6 +99,8 @@ namespace IndexerConstants
 
 namespace PathPlannerConstants
 {
+  pathplanner::RobotConfig PathPlannerConfig = pathplanner::RobotConfig::fromGUISettings();
+
   constexpr double kPTranslation = 5.0;
   constexpr double kITranslation = 0.0;
   constexpr double kDTranslation = 0.0;
