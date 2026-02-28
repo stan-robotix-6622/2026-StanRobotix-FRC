@@ -146,7 +146,7 @@ namespace ModuleConstants
 
   constexpr rev::spark::SparkLowLevel::ControlType kDrivingClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kVelocity;
   constexpr rev::spark::SparkLowLevel::ControlType kTurningClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kMAXMotionPositionControl;
-  
+
   constexpr rev::spark::SparkLowLevel::MotorType kDrivingMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
   constexpr rev::spark::SparkLowLevel::MotorType kTurningMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
 
@@ -204,10 +204,14 @@ namespace LimelightConstants
   constexpr double kPoseEstimatorStandardDeviationYaw = 999999; // Default/Recommended values
 }
 
-namespace HubConstants
+// Values found at https://firstfrc.blob.core.windows.net/frc2026/FieldAssets/2026-field-dimension-dwgs.pdf#page=3
+// For the Welded Field
+namespace FieldConstants
 {
-  constexpr frc::Translation2d kHubCenterTranslation2d = frc::Translation2d{182.11_in, 158.32_in}; // From the right corner of blue alliance wall
-  constexpr frc::Pose2d kHubCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};            // From the right corner of blue alliance wall
+  constexpr frc::Translation2d kHubCenterTranslation2d = frc::Translation2d{182.11_in, 158.32_in};   // From the right corner of blue alliance wall
+  constexpr frc::Pose2d kHubCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};              // From the right corner of blue alliance wall
+  constexpr frc::Translation2d kFieldCenterTranslation2d = frc::Translation2d{325.61_in, 158.32_in}; // From the right corner of blue alliance wall
+  constexpr frc::Pose2d kFieldCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};            // From the right corner of blue alliance wall
 }
 
 namespace CANid

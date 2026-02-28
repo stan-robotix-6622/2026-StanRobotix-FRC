@@ -21,7 +21,6 @@
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
-#include <pathplanner/lib/config/RobotConfig.h>
 #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
 
 #include <units/voltage.h>
@@ -67,6 +66,10 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::Pose2d getClosestPoseAtDistanceFromHub(units::meter_t iDesiredDistance);
 
   frc2::CommandPtr getGoToDistanceFromHubCommand(units::meter_t iDesiredDistance);
+
+  frc::Translation2d getTranslationToHub();
+
+  frc::Pose2d standardizePose(frc::Pose2d iPose);
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be

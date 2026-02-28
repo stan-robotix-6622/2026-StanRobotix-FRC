@@ -268,12 +268,28 @@ frc2::CommandPtr SubDrivetrain::getFollowPathCommand(std::string iPathName)
     return pathplanner::AutoBuilder::followPath(wPath);
 }
 
+frc::Pose2d SubDrivetrain::standardizePose(frc::Pose2d iPose)
+{
+    auto mAlliance = frc::DriverStation::GetAlliance();
+    if (mAlliance && mAlliance.value() == frc::DriverStation::kRed)
+    {
+        return iPose.RotateAround(FieldConstants::kFieldCenterTranslation2d, 180_deg);
+    }
+    return iPose;
+}
+
+frc::Translation2d SubDrivetrain::getTranslationToHub()
+{
+    frc::Translation2d wOriginToRobotTranslation = standardizePose(getPose()).Translation();
+    units::meter_t wRobotToHubX = FieldConstants::kHubCenterTranslation2d.X() - wOriginToRobotTranslation.X();
+    units::meter_t wRobotToHubY = FieldConstants::kHubCenterTranslation2d.Y() - wOriginToRobotTranslation.Y();
+    return frc::Translation2d{wRobotToHubX, wRobotToHubY};
+}
+
 frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubtoRobotDistance)
 {
-    frc::Translation2d wOriginToRobotTranslation = mPoseEstimator->GetEstimatedPosition().Translation();
-    units::meter_t wRobotToHubX = HubConstants::kHubCenterTranslation2d.X() - wOriginToRobotTranslation.X();
-    units::meter_t wRobotToHubY = HubConstants::kHubCenterTranslation2d.Y() - wOriginToRobotTranslation.Y();
-    frc::Translation2d wRobotToHubTranslation = frc::Translation2d{wRobotToHubX, wRobotToHubY};
+    frc::Translation2d wOriginToRobotTranslation = standardizePose(getPose()).Translation();
+    frc::Translation2d wRobotToHubTranslation = getTranslationToHub();
     // If the Robot is not in the alliance zone
     if (wRobotToHubTranslation.X() < 0_m)
     {
@@ -287,7 +303,7 @@ frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubto
     frc::Translation2d wOriginToTargetTranslation = wOriginToRobotTranslation + wRobotToTargetTranslation;
     frc::Pose2d oOriginToTargetPose = frc::Pose2d{wOriginToTargetTranslation, wRobotToHubTranslation.Angle()};
     mTargetPose2dPublisher.Set(oOriginToTargetPose);
-    return oOriginToTargetPose;
+    return standardizePose(oOriginToTargetPose);
 }
 
 frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHubtoRobotDistance)
@@ -311,6 +327,9 @@ frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHu
         std::nullopt,                                               // The ideal starting state, this is only relevant for pre-planned paths, so can be nullopt for on-the-fly paths.
         pathplanner::GoalEndState(0.0_mps, wDesiredPose.Rotation()) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
     );
+
+    // The path is already different depending on the Alliance color
+    wDistanceFromHubPath->preventFlipping = true;
 
     frc2::CommandPtr wGoToPoseCommand = pathplanner::AutoBuilder::followPath(wDistanceFromHubPath);
 
