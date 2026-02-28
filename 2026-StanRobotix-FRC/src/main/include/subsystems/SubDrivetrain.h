@@ -129,5 +129,5 @@ class SubDrivetrain : public frc2::SubsystemBase {
 
   // Load the RobotConfig from the GUI settings. You should probably
   // store this in your Constants file
-  pathplanner::RobotConfig config = pathplanner::RobotConfig::fromGUISettings();
+  pathplanner::RobotConfig PathPlannerConfig = pathplanner::RobotConfig::fromGUISettings();
 };

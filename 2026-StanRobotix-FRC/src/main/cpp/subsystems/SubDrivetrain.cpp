@@ -82,7 +82,7 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
             pathplanner::PIDConstants(PathPlannerConstants::kPTranslation, PathPlannerConstants::kITranslation, PathPlannerConstants::kDTranslation), // Translation PID constants
             pathplanner::PIDConstants(PathPlannerConstants::kPRotation, PathPlannerConstants::kIRotation, PathPlannerConstants::kDRotation)           // Rotation PID constants
             ),
-        PathPlannerConstants::PathPlannerConfig, // The robot configuration
+        PathPlannerConfig, // The robot configuration
         []()
         {
             // Boolean supplier that controls when the path will be mirrored for the red alliance

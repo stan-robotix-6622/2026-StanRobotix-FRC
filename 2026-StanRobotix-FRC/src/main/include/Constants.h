@@ -99,8 +99,6 @@ namespace IndexerConstants
 
 namespace PathPlannerConstants
 {
-  pathplanner::RobotConfig PathPlannerConfig = pathplanner::RobotConfig::fromGUISettings();
-
   constexpr double kPTranslation = 5.0;
   constexpr double kITranslation = 0.0;
   constexpr double kDTranslation = 0.0;
