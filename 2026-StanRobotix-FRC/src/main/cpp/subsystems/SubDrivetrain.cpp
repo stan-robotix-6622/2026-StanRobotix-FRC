@@ -309,7 +309,7 @@ frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHu
         wDesiredPose};
     std::vector<pathplanner::Waypoint> wWaypoints = pathplanner::PathPlannerPath::waypointsFromPoses(wPoses);
 
-    pathplanner::PathConstraints wConstraints = pathplanner::AutoBuilder::{
+    pathplanner::PathConstraints wConstraints{
         PathPlannerConstants::kMaxVelocity,
         PathPlannerConstants::kMaxAcceleration,
         PathPlannerConstants::kMaxAngularVelocity,
