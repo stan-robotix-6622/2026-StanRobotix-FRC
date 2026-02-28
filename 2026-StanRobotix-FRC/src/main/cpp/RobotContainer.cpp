@@ -39,14 +39,15 @@ void RobotContainer::SetSubsystemDefaultCommands() {
   frc::SmartDashboard::PutData("drivetrain/IMU", mIMU);
 
   mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
-      [this]
-      {
-        mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
-                                        -mCommandXboxController->GetLeftX(),
-                                        -mCommandXboxController->GetRightX(),
-                                        (1 - mCommandXboxController->GetRightTriggerAxis()) / 3);
-      },
-      {mDrivetrain}));
+    [this]
+    {
+      mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
+                                      -mCommandXboxController->GetLeftX(),
+                                      -mCommandXboxController->GetRightX(),
+                                      (1 - mCommandXboxController->GetRightTriggerAxis()));
+    },
+    {mDrivetrain})
+  );
 
   // mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
   //   [this]

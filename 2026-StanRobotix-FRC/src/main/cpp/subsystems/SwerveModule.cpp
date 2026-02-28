@@ -41,7 +41,7 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
     refreshModule();
 }
 
-void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState, double iSpeedModulation)
+void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
 {
     mTurningCurrentAngle = frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()));
     mOptimizedState = iDesiredState;
@@ -51,7 +51,6 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState, double 
     mTurningPID->SetSetpoint(mOptimizedState.angle.Radians().value());
     mTurningMotor->Set(mTurningPID->Calculate(mTurningCurrentAngle.Radians().value()));
     // mTurningClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
-    // mDrivingMotor->Set(mOptimizedState.speed.value() * iSpeedModulation);
     mDrivingClosedLoopController->SetSetpoint(mOptimizedState.speed.value(), ModuleConstants::kDrivingClosedLoopControlType);
 }
 

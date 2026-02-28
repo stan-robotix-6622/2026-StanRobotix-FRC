@@ -106,7 +106,6 @@ namespace PathPlannerConstants
   constexpr double kIRotation = 0.0;
   constexpr double kDRotation = 0.0;
 
-  constexpr double kPathPlannerSpeedModulation = 1.0;
   constexpr units::meters_per_second_t kMaxVelocity = .3_mps;
   constexpr units::meters_per_second_squared_t kMaxAcceleration = 0.3_mps_sq;
   constexpr units::degrees_per_second_t kMaxAngularVelocity = 36.0_deg_per_s;

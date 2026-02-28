@@ -38,7 +38,7 @@ public:
   void InitSendable(wpi::SendableBuilder &builder) override;
 
   // Méthode qui fait rouler le module à partir du SwerveModuleState désiré
-  void setDesiredState(frc::SwerveModuleState iDesiredState, double iSpeedModulation);
+  void setDesiredState(frc::SwerveModuleState iDesiredState);
 
   void setTurningVoltage(units::volt_t iVoltage);
   void setDrivingVoltage(units::volt_t iVoltage);

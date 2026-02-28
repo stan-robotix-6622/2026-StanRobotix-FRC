@@ -77,7 +77,7 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
         [this]()
         { return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
         [this](auto speeds, auto feedforwards)
-        { driveRobotRelative(speeds, PathPlannerConstants::kPathPlannerSpeedModulation); },                                                           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+        { driveRobotRelative(speeds); },                                                           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
         std::make_shared<pathplanner::PPHolonomicDriveController>(                                                                                    // PPHolonomicController is the built in path following controller for holonomic drive trains
             pathplanner::PIDConstants(PathPlannerConstants::kPTranslation, PathPlannerConstants::kITranslation, PathPlannerConstants::kDTranslation), // Translation PID constants
             pathplanner::PIDConstants(PathPlannerConstants::kPRotation, PathPlannerConstants::kIRotation, PathPlannerConstants::kDRotation)           // Rotation PID constants
@@ -184,9 +184,9 @@ wpi::array<frc::SwerveModulePosition, 4> SubDrivetrain::getSwerveModulePositions
 void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation)
 {
     // Creating a ChassisSpeeds from the wanted speeds and the robot's rotation
-    mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(DrivetrainConstants::kSpeedConstant * iX,
-                                                                        DrivetrainConstants::kSpeedConstant * iY,
-                                                                        DrivetrainConstants::kSpeedConstant0 * i0,
+    mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kSpeedConstant * iX,
+                                                                        iSpeedModulation * DrivetrainConstants::kSpeedConstant * iY,
+                                                                        iSpeedModulation * DrivetrainConstants::kSpeedConstant0 * i0,
                                                                         mIMU->getRotation2d());
 
     // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
@@ -198,10 +198,10 @@ void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
     mDesiredModuleStatesPublisher.Set(mDesiredSwerveStates);
 
     // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
-    mFrontLeftModule->setDesiredState(mDesiredSwerveStates[0], iSpeedModulation);
-    mFrontRightModule->setDesiredState(mDesiredSwerveStates[1], iSpeedModulation);
-    mBackLeftModule->setDesiredState(mDesiredSwerveStates[2], iSpeedModulation);
-    mBackRightModule->setDesiredState(mDesiredSwerveStates[3], iSpeedModulation);
+    mFrontLeftModule->setDesiredState(mDesiredSwerveStates[0]);
+    mFrontRightModule->setDesiredState(mDesiredSwerveStates[1]);
+    mBackLeftModule->setDesiredState(mDesiredSwerveStates[2]);
+    mBackRightModule->setDesiredState(mDesiredSwerveStates[3]);
 }
 
 void SubDrivetrain::mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units::volt_t iTurningVoltage)
@@ -249,16 +249,16 @@ frc::ChassisSpeeds SubDrivetrain::getRobotRelativeSpeeds()
     return mCurrentChassisSpeeds;
 }
 
-void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds, double iSpeedModulation)
+void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds)
 {
     // Tansforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
     mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(iDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
 
     // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
-    mFrontLeftModule->setDesiredState(mDesiredSwerveStates[0], iSpeedModulation);
-    mFrontRightModule->setDesiredState(mDesiredSwerveStates[1], iSpeedModulation);
-    mBackLeftModule->setDesiredState(mDesiredSwerveStates[2], iSpeedModulation);
-    mBackRightModule->setDesiredState(mDesiredSwerveStates[3], iSpeedModulation);
+    mFrontLeftModule->setDesiredState(mDesiredSwerveStates[0]);
+    mFrontRightModule->setDesiredState(mDesiredSwerveStates[1]);
+    mBackLeftModule->setDesiredState(mDesiredSwerveStates[2]);
+    mBackRightModule->setDesiredState(mDesiredSwerveStates[3]);
 }
 
 frc2::CommandPtr SubDrivetrain::getFollowPathCommand(std::string iPathName)
@@ -278,18 +278,12 @@ frc::Pose2d SubDrivetrain::standardizePose(frc::Pose2d iPose)
     return iPose;
 }
 
-frc::Translation2d SubDrivetrain::getTranslationToHub()
+frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubtoRobotDistance)
 {
     frc::Translation2d wOriginToRobotTranslation = standardizePose(getPose()).Translation();
     units::meter_t wRobotToHubX = FieldConstants::kHubCenterTranslation2d.X() - wOriginToRobotTranslation.X();
     units::meter_t wRobotToHubY = FieldConstants::kHubCenterTranslation2d.Y() - wOriginToRobotTranslation.Y();
-    return frc::Translation2d{wRobotToHubX, wRobotToHubY};
-}
-
-frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubtoRobotDistance)
-{
-    frc::Translation2d wOriginToRobotTranslation = standardizePose(getPose()).Translation();
-    frc::Translation2d wRobotToHubTranslation = getTranslationToHub();
+    frc::Translation2d wRobotToHubTranslation = frc::Translation2d{wRobotToHubX, wRobotToHubY};
     // If the Robot is not in the alliance zone
     if (wRobotToHubTranslation.X() < 0_m)
     {
@@ -301,9 +295,9 @@ frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubto
         wRobotToHubTranslation.Angle()};
 
     frc::Translation2d wOriginToTargetTranslation = wOriginToRobotTranslation + wRobotToTargetTranslation;
-    frc::Pose2d oOriginToTargetPose = frc::Pose2d{wOriginToTargetTranslation, wRobotToHubTranslation.Angle()};
+    frc::Pose2d oOriginToTargetPose = standardizePose(frc::Pose2d{wOriginToTargetTranslation, wRobotToHubTranslation.Angle()});
     mTargetPose2dPublisher.Set(oOriginToTargetPose);
-    return standardizePose(oOriginToTargetPose);
+    return oOriginToTargetPose;
 }
 
 frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHubtoRobotDistance)
@@ -315,7 +309,7 @@ frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHu
         wDesiredPose};
     std::vector<pathplanner::Waypoint> wWaypoints = pathplanner::PathPlannerPath::waypointsFromPoses(wPoses);
 
-    pathplanner::PathConstraints wConstraints{
+    pathplanner::PathConstraints wConstraints = pathplanner::AutoBuilder::{
         PathPlannerConstants::kMaxVelocity,
         PathPlannerConstants::kMaxAcceleration,
         PathPlannerConstants::kMaxAngularVelocity,

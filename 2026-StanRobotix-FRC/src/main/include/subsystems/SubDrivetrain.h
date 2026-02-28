@@ -56,7 +56,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
   // Method that returns a ChassisSpeeds from the robot relative speeds
   frc::ChassisSpeeds getRobotRelativeSpeeds();
   // Method that drives the robot in robot relative drive
-  void driveRobotRelative(frc::ChassisSpeeds iSpeeds, double SpeedModulation);
+  void driveRobotRelative(frc::ChassisSpeeds iSpeeds);
 
   // Method that returns the robot's pose
   frc::Pose2d getPose();
@@ -66,8 +66,6 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::Pose2d getClosestPoseAtDistanceFromHub(units::meter_t iDesiredDistance);
 
   frc2::CommandPtr getGoToDistanceFromHubCommand(units::meter_t iDesiredDistance);
-
-  frc::Translation2d getTranslationToHub();
 
   frc::Pose2d standardizePose(frc::Pose2d iPose);
 
