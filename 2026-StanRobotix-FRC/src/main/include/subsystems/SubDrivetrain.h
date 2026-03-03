@@ -38,6 +38,8 @@ class SubDrivetrain : public frc2::SubsystemBase {
    */
   void Periodic() override;
 
+  void ConfigurePathplanner();
+
   // Method that drives the robot in field relative drive
   void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
 

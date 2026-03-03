@@ -31,6 +31,8 @@ class RobotContainer
 public:
   RobotContainer();
 
+  void ConfigureWhenConnectedToDS();
+
   frc2::CommandPtr GetAutonomousCommand();
 
 private:

@@ -96,6 +96,11 @@ void RobotContainer::ConfigureBindings() {
   mCommandXboxController->Button(8).WhileTrue(mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(2.3_m);}));
 };
 
+void RobotContainer::ConfigureWhenConnectedToDS()
+{
+  mDrivetrain->ConfigurePathplanner();
+}
+
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
   return mDrivetrain->getFollowPathCommand("'8' Path");
