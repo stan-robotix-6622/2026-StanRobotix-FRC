@@ -86,5 +86,35 @@ void RobotContainer::ConfigureBindings() {
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous
-  return mDrivetrain->getFollowPathCommand("'8' Path");
+ // return mDrivetrain->getFollowPathCommand("Blue Left - Left Blue Bump");
+
+  switch (mAutonomousPhase){
+    case EightPath:
+      return mDrivetrain->getFollowPathCommand("EightPath");
+      break;
+
+    case BlueCenterBumpPath:
+      return mDrivetrain->getFollowPathCommand("BlueCenterBumpPath");
+      break;
+
+    case BlueCenterTrenchPath:
+      return mDrivetrain->getFollowPathCommand("BlueCenterTrenchPath");
+      break;
+
+    case BlueLeftBumpPath:
+      return mDrivetrain->getFollowPathCommand("BlueLeftBumpPath");
+      break;
+
+    case BlueLeftTrenchPath:
+      return mDrivetrain->getFollowPathCommand("BlueLeftTrenchPath");
+      break;
+
+   case BlueRightBumpPath:
+      return mDrivetrain->getFollowPathCommand("BlueRightBumpPath");
+      break;
+
+   case BlueRightTrenchPath:
+      return mDrivetrain->getFollowPathCommand("BlueRightTrenchPath");
+      break;
+}
 }
