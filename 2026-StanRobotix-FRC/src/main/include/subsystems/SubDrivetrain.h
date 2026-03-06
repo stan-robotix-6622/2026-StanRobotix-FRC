@@ -21,7 +21,6 @@
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
-#include <pathplanner/lib/config/RobotConfig.h>
 #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
 
 #include <units/voltage.h>
@@ -30,7 +29,7 @@
 #include <units/angular_velocity.h>
 
 #include "Constants.h"
-// #include "LimelightHelpers.h"
+#include "LimelightHelpers.h"
 #include "subsystems/SubIMU.h"
 #include "subsystems/SwerveModule.h"
 
@@ -57,7 +56,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
   // Method that returns a ChassisSpeeds from the robot relative speeds
   frc::ChassisSpeeds getRobotRelativeSpeeds();
   // Method that drives the robot in robot relative drive
-  void driveRobotRelative(frc::ChassisSpeeds iSpeeds, double SpeedModulation);
+  void driveRobotRelative(frc::ChassisSpeeds iSpeeds);
 
   // Method that returns the robot's pose
   frc::Pose2d getPose();
@@ -67,6 +66,8 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::Pose2d getClosestPoseAtDistanceFromHub(units::meter_t iDesiredDistance);
 
   frc2::CommandPtr getGoToDistanceFromHubCommand(units::meter_t iDesiredDistance);
+
+  frc::Pose2d standardizePose(frc::Pose2d iPose);
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -115,7 +116,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
   SubIMU* mIMU = nullptr;
 
   // These attributes are used to not create new variables every time a function is called
-  // LimelightHelpers::PoseEstimate mt2;
+  LimelightHelpers::PoseEstimate mLimelightPoseEstimate;
   bool rejectCameraUpdate;
   frc::ChassisSpeeds mDesiredChassisSpeeds;
   frc::ChassisSpeeds mCurrentChassisSpeeds;
@@ -129,5 +130,5 @@ class SubDrivetrain : public frc2::SubsystemBase {
 
   // Load the RobotConfig from the GUI settings. You should probably
   // store this in your Constants file
-  pathplanner::RobotConfig config = pathplanner::RobotConfig::fromGUISettings();
+  pathplanner::RobotConfig PathPlannerConfig = pathplanner::RobotConfig::fromGUISettings();
 };

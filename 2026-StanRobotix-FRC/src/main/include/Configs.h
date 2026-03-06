@@ -15,15 +15,15 @@ namespace Configs
     {
       static SparkMaxConfig drivingConfig{};
 
-      constexpr double drivingFactor = ModuleConstants::kWheelPerimeter.value() / ModuleConstants::kDrivingFactor;
-      constexpr double nominalVoltage = 12.0;
-      constexpr double drivingVelocityFeedForward = nominalVoltage / ModuleConstants::kDriveWheelFreeSpeedRps;
+      constexpr double drivingFactor = ModuleConstants::kDrivingFactor;
+      // units::compound_unit<units::volts, units::inverse<units::meters_per_second>>
+      constexpr double drivingVelocityFeedForward = ModuleConstants::kNominalVoltage.value() / ModuleConstants::kDriveWheelMaxSpeed.value();
 
       drivingConfig.Inverted(iDrivingInverted);
       drivingConfig.SetIdleMode(ModuleConstants::Config::kDrivingIdleMode);
       drivingConfig.Apply(SparkBaseConfig::Presets::REV_NEO());
 
-      drivingConfig.encoder.VelocityConversionFactor(drivingFactor / ModuleConstants::kRPMtoRPSFactor);
+      drivingConfig.encoder.VelocityConversionFactor(drivingFactor / ModuleConstants::Config::kRPMtoRPSFactor);
       drivingConfig.encoder.PositionConversionFactor(drivingFactor);
 
       drivingConfig.closedLoop.SetFeedbackSensor(ModuleConstants::Config::kDrivingClosedLoopFeedbackSensor);
@@ -45,7 +45,7 @@ namespace Configs
       turningConfig.SetIdleMode(ModuleConstants::Config::kTurningIdleMode);
       turningConfig.Apply(SparkBaseConfig::Presets::REV_NEO_550());
 
-      turningConfig.absoluteEncoder.VelocityConversionFactor(turningFactor / ModuleConstants::kRPMtoRPSFactor);
+      turningConfig.absoluteEncoder.VelocityConversionFactor(turningFactor / ModuleConstants::Config::kRPMtoRPSFactor);
       turningConfig.absoluteEncoder.PositionConversionFactor(turningFactor);
       turningConfig.absoluteEncoder.Inverted(iEncoderInverted);
       turningConfig.absoluteEncoder.ZeroCentered(ModuleConstants::Config::kTurningEncoderZeroCentered);
@@ -59,6 +59,8 @@ namespace Configs
       turningConfig.closedLoop.PositionWrappingMaxInput(ModuleConstants::Config::kTurningClosedLoopMaxInput);
 
       turningConfig.closedLoop.maxMotion.AllowedProfileError(ModuleConstants::Config::kTurningClosedLoopTolerance);
+      turningConfig.closedLoop.maxMotion.CruiseVelocity(ModuleConstants::Config::kTurningCruiseVelocity.value());
+      turningConfig.closedLoop.maxMotion.MaxAcceleration(ModuleConstants::Config::kTurningMaxAcceleration.value());
 
       return turningConfig;
     }

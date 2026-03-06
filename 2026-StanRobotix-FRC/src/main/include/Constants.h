@@ -18,6 +18,7 @@
 #include <frc/geometry/Pose2d.h>
 #include <rev/SparkBase.h>              // Include Spark variable types
 #include <rev/config/SparkBaseConfig.h> // For the spark IdleMode
+#include <pathplanner/lib/config/RobotConfig.h>
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -39,13 +40,13 @@ namespace OperatorConstants
   // Button mappings
   // For XboxController:
   // A = 1; B = 2; X = 3; Y = 4; RightBumper = 5; LeftBumper = 6
-  constexpr int kPivotUpButton = 4;   // Y
   constexpr int kPivotDownButton = 2; // B
 
-  constexpr int kResetIMUButton = 5; // RightBumper
+  constexpr int kResetIMUButton = 5;  // RightBumper
+  constexpr int kResetPoseButton = 6; // LeftBumper
 
-  constexpr int kShootButton = 3;       // X
-  constexpr int kUnstuckFuelButton = 6; // LeftBumper
+  constexpr int kShootButton = 4;       // Y
+  constexpr int kUnstuckFuelButton = 3; // X
   constexpr int kFeedButton = 1;        // A
   // constexpr int kIndexButton = 6;       // LeftBumper
 } // namespace OperatorConstants
@@ -105,7 +106,6 @@ namespace PathPlannerConstants
   constexpr double kIRotation = 0.0;
   constexpr double kDRotation = 0.0;
 
-  constexpr double kPathPlannerSpeedModulation = 1.0;
   constexpr units::meters_per_second_t kMaxVelocity = .3_mps;
   constexpr units::meters_per_second_squared_t kMaxAcceleration = 0.3_mps_sq;
   constexpr units::degrees_per_second_t kMaxAngularVelocity = 36.0_deg_per_s;
@@ -122,7 +122,6 @@ namespace DrivetrainConstants
   constexpr units::meter_t kModuleCornerOffset = 1.75_in;
 
   // We take for granted a rectangular frame
-  // TODO: Input the new offset for the frame
   constexpr frc::Translation2d kFrontLeftTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
   constexpr frc::Translation2d kFrontRightTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
   constexpr frc::Translation2d kBackLeftTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
@@ -134,24 +133,24 @@ namespace DrivetrainConstants
 
 namespace ModuleConstants
 {
-  constexpr double kDrivingMotorGearRatio = 5.08;                                          // 5.08 rotations of the motor for 1 rotation of the ouput
-  constexpr units::volt_t kNominalVoltage = 12_V;                                          // The voltage at which the
-  constexpr units::meter_t kWheelPerimeter = 3_in * std::numbers::pi;                      // in meters (diametre in inches * convertion to meters * pi)
-  constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260029_rad_per_s; // TODO: Verify?
-  constexpr units::meters_per_second_t kDriveWheelMaxSpeed = 117.671989_mps;               // TODO: Verify?
-  constexpr double kDriveWheelFreeSpeedRps = kDriveWheelMaxSpeed.value() / kWheelPerimeter.value();
+  constexpr double kDrivingMotorGearRatio = 4.71;                                       // 5.08 rotations of the motor for 1 rotation of the ouput
+  constexpr units::volt_t kNominalVoltage = 12_V;                                       // The voltage at which the max speeds are mesured
+  constexpr units::meter_t kWheelRadius = 1.5_in;                                       // The radius of REV's plastic wheels
+  constexpr units::meter_t kWheelPerimeter = kWheelRadius * 2 * std::numbers::pi;       // in meters (diametre in inches * convertion to meters * pi)
+  constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260_rad_per_s; // TODO: Verify?
+  constexpr units::meters_per_second_t kDriveWheelMaxSpeed = 4.9180_mps;                // TODO: Verify?
 
-  constexpr double kDrivingFactor = kDrivingMotorGearRatio;
+  constexpr double kDrivingFactor = ModuleConstants::kWheelPerimeter.value() / kDrivingMotorGearRatio;
   constexpr double kTurningFactor = 2 * std::numbers::pi;
 
   constexpr rev::spark::SparkLowLevel::ControlType kDrivingClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kVelocity;
   constexpr rev::spark::SparkLowLevel::ControlType kTurningClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kMAXMotionPositionControl;
 
-  constexpr rev::ResetMode kDrivingResetMode = rev::ResetMode::kResetSafeParameters;
-  constexpr rev::ResetMode kTurningResetMode = rev::ResetMode::kResetSafeParameters;
-
   constexpr rev::spark::SparkLowLevel::MotorType kDrivingMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
   constexpr rev::spark::SparkLowLevel::MotorType kTurningMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+
+  constexpr rev::ResetMode kDrivingResetMode = rev::ResetMode::kResetSafeParameters;
+  constexpr rev::ResetMode kTurningResetMode = rev::ResetMode::kResetSafeParameters;
 
   constexpr rev::PersistMode kDrivingPersistMode = rev::PersistMode::kPersistParameters;
   constexpr rev::PersistMode kTurningPersistMode = rev::PersistMode::kPersistParameters;
@@ -163,10 +162,13 @@ namespace ModuleConstants
   constexpr double kDrivingI = 0.0;
   constexpr double kDrivingD = 0.0;
 
-  constexpr double kRPMtoRPSFactor = 60;
-
   namespace Config
   {
+    constexpr double kRPMtoRPSFactor = 60;
+
+    constexpr units::radians_per_second_t kTurningCruiseVelocity = 2_rad_per_s * std::numbers::pi;
+    constexpr units::radians_per_second_squared_t kTurningMaxAcceleration = 4_rad_per_s_sq * std::numbers::pi;
+
     constexpr rev::spark::SparkBaseConfig::IdleMode kDrivingIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
     constexpr rev::spark::SparkBaseConfig::IdleMode kTurningIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 
@@ -184,15 +186,31 @@ namespace ModuleConstants
 
 namespace LimelightConstants
 {
+  constexpr bool kUseMegaTag2 = true;
+
+  const std::string kName = "";
+
+  constexpr units::meter_t kForward = -1.125_in;
+  constexpr units::meter_t kRight = -9.75_in;
+  constexpr units::meter_t kUp = 20.25_in;
+
+  constexpr units::degree_t kRoll = 0_deg;
+  constexpr units::degree_t kPitch = 0_deg;
+  constexpr units::degree_t kYaw = -90_deg;
+
   constexpr double kPoseEstimatorStandardDeviationX = 0.7;      // Default/Recommended values
   constexpr double kPoseEstimatorStandardDeviationY = 0.7;      // Default/Recommended values
   constexpr double kPoseEstimatorStandardDeviationYaw = 999999; // Default/Recommended values
 }
 
-namespace HubConstants
+// Values found at https://firstfrc.blob.core.windows.net/frc2026/FieldAssets/2026-field-dimension-dwgs.pdf#page=3
+// For the Welded Field
+namespace FieldConstants
 {
-  constexpr frc::Translation2d kHubCenterTranslation2d = frc::Translation2d{182.11_in, 158.32_in}; // From the right corner of blue alliance wall
-  constexpr frc::Pose2d kHubCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};            // From the right corner of blue alliance wall
+  constexpr frc::Translation2d kHubCenterTranslation2d = frc::Translation2d{182.11_in, 158.32_in};   // From the right corner of blue alliance wall
+  constexpr frc::Pose2d kHubCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};              // From the right corner of blue alliance wall
+  constexpr frc::Translation2d kFieldCenterTranslation2d = frc::Translation2d{325.61_in, 158.32_in}; // From the right corner of blue alliance wall
+  constexpr frc::Pose2d kFieldCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};            // From the right corner of blue alliance wall
 }
 
 namespace CANid
@@ -230,13 +248,13 @@ namespace IntakeConstants
 namespace PivotConstants
 {
   constexpr double kGearRatio = 16;
-  constexpr double kOffset = 6.357144;
+  constexpr double kOffset = 5.66666;
   constexpr double kP = 1.3;  // en attendant
   constexpr double kI = 0.4;  // en attendant
   constexpr double kD = 0.15; // en attendant
   constexpr units::volt_t kG = 0.80_V;
-  constexpr double setpointUp = std::numbers::pi / 2; // 90 deg
-  constexpr double setpointDown = std::numbers::pi / 18; // 10 deg
+  constexpr double setpointUp = std::numbers::pi / 2;    // 90 deg up
+  constexpr double setpointDown = std::numbers::pi / 36; // 5 deg up
 
   constexpr bool kInverted = false;
   constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;

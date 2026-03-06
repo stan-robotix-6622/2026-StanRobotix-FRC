@@ -69,6 +69,11 @@ private:
   SubPivotIntake* mSubPivotIntake = nullptr;
 
   void ConfigureBindings();
+<<<<<<< HEAD
 
   Auto mAutonomousPhase = EightPath;
+=======
+  void RegisterCommandsPathPlanner();
+  void SetSubsystemDefaultCommands();
+>>>>>>> 0fd7815dfb8734fc163d82ab1c021a7fd936e8df
 };

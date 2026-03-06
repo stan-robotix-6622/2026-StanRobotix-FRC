@@ -38,7 +38,7 @@ public:
   void InitSendable(wpi::SendableBuilder &builder) override;
 
   // Méthode qui fait rouler le module à partir du SwerveModuleState désiré
-  void setDesiredState(frc::SwerveModuleState iDesiredState, double iSpeedModulation);
+  void setDesiredState(frc::SwerveModuleState iDesiredState);
 
   void setTurningVoltage(units::volt_t iVoltage);
   void setDrivingVoltage(units::volt_t iVoltage);
@@ -53,7 +53,7 @@ private:
   rev::spark::SparkMax* mDrivingMotor;
   rev::spark::SparkMax* mTurningMotor;
 
-  rev::spark::SparkClosedLoopController* mDrivingClosedLoopController; // Not used currently (please do)
+  rev::spark::SparkClosedLoopController* mDrivingClosedLoopController;
   rev::spark::SparkClosedLoopController* mTurningClosedLoopController;
   frc::PIDController* mTurningPID; // TODO: Remove if ClosedLoop working
 
