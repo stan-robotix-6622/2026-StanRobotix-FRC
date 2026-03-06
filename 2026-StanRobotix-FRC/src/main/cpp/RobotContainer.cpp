@@ -116,5 +116,29 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
    case BlueRightTrenchPath:
       return mDrivetrain->getFollowPathCommand("BlueRightTrenchPath");
       break;
+
+    case RedCenterBumpPath:
+      return mDrivetrain->getFollowPathCommand("RedCenterBumpPath");
+      break;
+
+    case RedCenterTrenchPath:
+      return mDrivetrain->getFollowPathCommand("RedCenterTrenchPath");
+      break;
+
+    case RedLeftBumpPath:
+      return mDrivetrain->getFollowPathCommand("RedLeftBumpPath");
+      break;
+    
+    case RedLeftTrenchPath:
+      return mDrivetrain->getFollowPathCommand("RedLeftTrenchPath");
+      break;
+
+    case RedRightBumpPath:
+      return mDrivetrain->getFollowPathCommand("RedRightBumpPath");
+      break;
+
+    case RedRightTrenchPath:
+      return mDrivetrain->getFollowPathCommand("RedRightTrenchPath");
+      break;
 }
 }

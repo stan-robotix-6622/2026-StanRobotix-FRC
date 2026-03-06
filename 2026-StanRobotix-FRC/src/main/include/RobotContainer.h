@@ -41,6 +41,12 @@ public:
     BlueRightBumpPath,
     BlueRightTrenchPath,
     EightPath,
+    RedCenterBumpPath,
+    RedCenterTrenchPath,
+    RedLeftBumpPath,
+    RedLeftTrenchPath,
+    RedRightBumpPath,
+    RedRightTrenchPath
   };
 
   frc2::CommandPtr GetAutonomousCommand();
