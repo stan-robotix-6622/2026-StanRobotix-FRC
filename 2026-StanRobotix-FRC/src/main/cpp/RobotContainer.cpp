@@ -153,5 +153,9 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
     case RedRightTrenchPath:
       return mDrivetrain->getFollowPathCommand("RedRightTrenchPath");
       break;
+      
+    default:
+      return frc2::cmd::Print("There is no case for this automonous command");
+      break;
 }
 }
