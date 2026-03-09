@@ -15,6 +15,11 @@
 #include "commands/Shoot.h"
 
 RobotContainer::RobotContainer() {
+  while (!frc::DriverStation::WaitForDsConnection(3_s))
+  {
+      frc::DataLogManager::Log("Waiting for Driver Station connection (RobotContainer)");
+  }
+  frc::DataLogManager::Log("The Driver Station is connected!");
   mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
   
   // Initialize all of your commands and subsystems here
@@ -87,7 +92,8 @@ void RobotContainer::ConfigureBindings() {
   mCommandXboxController->Button(OperatorConstants::kUnstuckFuelButton).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
   // mCommandXboxController->Button(OperatorConstants::kIndexButton).WhileTrue(mSubIntake->getIntakeCommand());
   
-  mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] {mIMU->resetAngle();}, {mIMU}));
+  mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
+    {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_rad));}, {mIMU}));
   mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
     {mDrivetrain->resetPose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()));}, {mIMU}));
 
