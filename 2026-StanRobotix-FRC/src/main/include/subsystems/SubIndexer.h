@@ -5,10 +5,9 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include <rev/SparkMax.h>
-#include "Constants.h"
-#include <rev/SparkBase.h>
 #include <frc2/command/CommandPtr.h>
+#include <rev/SparkMax.h>
+#include <rev/config/SparkMaxConfig.h>
 
 class SubIndexer : public frc2::SubsystemBase
 {

@@ -4,6 +4,8 @@
 
 #include "subsystems/SubDrivetrain.h"
 
+#include "Constants.h"
+
 SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
 {
     frc::DataLogManager::Log("Debut initialisation du Drivetrain");
@@ -34,9 +36,10 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
     mTargetPose2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Target Pose2d").Publish();
     mCurrentPose2dSubscriber = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Subscribe(*mStartingRobotPose);
 
+    mLimelightName = std::string(LimelightConstants::kName);
     // Set Limelight's position on the robot
     LimelightHelpers::setCameraPose_RobotSpace(
-        LimelightConstants::kName,
+        mLimelightName,
         LimelightConstants::kForward.value(),
         LimelightConstants::kRight.value(),
         LimelightConstants::kUp.value(),
@@ -116,15 +119,15 @@ void SubDrivetrain::Periodic()
 
     // Update la rotation du robot pour la Limelight
 
-    LimelightHelpers::SetRobotOrientation(LimelightConstants::kName, mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
+    LimelightHelpers::SetRobotOrientation(mLimelightName, mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
 
     if (LimelightConstants::kUseMegaTag2)
     {
-        mLimelightPoseEstimate = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2(LimelightConstants::kName);
+        mLimelightPoseEstimate = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2(mLimelightName);
     }
     else
     {
-        mLimelightPoseEstimate = LimelightHelpers::getBotPoseEstimate_wpiBlue(LimelightConstants::kName);
+        mLimelightPoseEstimate = LimelightHelpers::getBotPoseEstimate_wpiBlue(mLimelightName);
     }
 
     // reject the camera update if the PoseEstimate is not valid

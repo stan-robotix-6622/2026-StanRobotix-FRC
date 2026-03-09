@@ -4,12 +4,14 @@
 
 #include "subsystems/SubShooter.h"
 
+#include "Constants.h"
+
 SubShooter::SubShooter()
 {
-    // mPIDcontroller = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
     mLeaderShooterController =  new rev::spark::SparkMax{CANid::kLeaderMotorShooterID, rev::spark::SparkLowLevel::MotorType::kBrushless};
     mFollowerShooterController =  new rev::spark::SparkMax{CANid::kFollowerMotorShooterID, rev::spark::SparkLowLevel::MotorType::kBrushless};
     mRelativeEncoder = new rev::spark::SparkRelativeEncoder{mLeaderShooterController->GetEncoder()};
+    mFeedforward = new frc::SimpleMotorFeedforward<units::turns>{ShooterConstants::kS, ShooterConstants::kV};
     mSparkConfigLeaderShooter = new rev::spark::SparkMaxConfig{};
     mSparkConfigFollowerShooter = new rev::spark::SparkMaxConfig{};
     Configure();
@@ -27,7 +29,7 @@ void SubShooter::setVoltage(units::volt_t iVoltage)
 
 void SubShooter::setVelocity(units::turns_per_second_t iNextVelocity)
 {
-    mLeaderShooterController->SetVoltage(mFeedforward.Calculate(iNextVelocity));
+    mLeaderShooterController->SetVoltage(mFeedforward->Calculate(iNextVelocity));
 };
 
 units::turns_per_second_t SubShooter::getVelocity()

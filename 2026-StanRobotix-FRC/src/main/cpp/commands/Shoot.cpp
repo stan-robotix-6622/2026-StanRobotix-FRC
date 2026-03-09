@@ -5,6 +5,7 @@
 
 #include "commands/Shoot.h"
 
+#include "Constants.h"
 
 Shoot::Shoot(SubShooter* iSubShooter) {
   mSubShooter = iSubShooter;

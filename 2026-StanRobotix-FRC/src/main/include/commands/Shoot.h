@@ -7,13 +7,11 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc/controller/PIDController.h>
-#include <rev/SparkAnalogSensor.h>
-#include "subsystems/SubShooter.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include <units/angular_velocity.h>
 
-#include "Constants.h"
+#include "subsystems/SubShooter.h"
 
 /*
  * An example command.

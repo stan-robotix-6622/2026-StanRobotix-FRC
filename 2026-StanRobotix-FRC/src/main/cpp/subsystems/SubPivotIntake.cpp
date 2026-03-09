@@ -3,8 +3,10 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "subsystems/SubPivotIntake.h"
+
 #include <numbers>
 
+#include "Constants.h"
 
 SubPivotIntake::SubPivotIntake() {
     mPivotMotor = new rev::spark::SparkMax{CANid::kMotorPivotID, rev::spark::SparkLowLevel::MotorType::kBrushless};

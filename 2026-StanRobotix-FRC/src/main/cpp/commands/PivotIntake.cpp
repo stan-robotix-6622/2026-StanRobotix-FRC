@@ -4,6 +4,7 @@
 
 #include "commands/PivotIntake.h"
 
+#include "Constants.h"
 
 PivotIntake::PivotIntake(SubPivotIntake* iPivotIntake, StatePivotIntake iTarget) {
   mPivotIntake = iPivotIntake;

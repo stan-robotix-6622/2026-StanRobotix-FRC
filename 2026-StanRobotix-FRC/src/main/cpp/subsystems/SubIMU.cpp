@@ -4,6 +4,8 @@
 
 #include "subsystems/SubIMU.h"
 
+#include "Constants.h"
+
 SubIMU::SubIMU()
 {
     mIMU = new ctre::phoenix6::hardware::Pigeon2{CANid::kIMUPigeonID};

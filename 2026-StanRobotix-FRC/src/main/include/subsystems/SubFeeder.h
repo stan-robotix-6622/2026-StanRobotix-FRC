@@ -5,10 +5,9 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
+#include <frc2/command/CommandPtr.h>
 #include <rev/SparkMax.h>
 #include <rev/config/SparkMaxConfig.h>
-#include <frc2/command/CommandPtr.h>
-#include "Constants.h"
 
 #include <units/voltage.h>
 
