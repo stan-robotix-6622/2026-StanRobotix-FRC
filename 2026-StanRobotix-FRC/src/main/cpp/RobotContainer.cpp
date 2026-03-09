@@ -17,11 +17,6 @@
 #include "Constants.h"
 
 RobotContainer::RobotContainer() {
-  while (!frc::DriverStation::WaitForDsConnection(3_s))
-  {
-      frc::DataLogManager::Log("Waiting for Driver Station connection (RobotContainer)");
-  }
-  frc::DataLogManager::Log("The Driver Station is connected!");
   mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
   
   // Initialize all of your commands and subsystems here
