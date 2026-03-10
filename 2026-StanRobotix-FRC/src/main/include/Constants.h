@@ -62,7 +62,7 @@ namespace ShooterConstants
   inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 
-  inline constexpr units::turns_per_second_t kVitesseVoulue = 60_tps;
+  inline constexpr units::turns_per_second_t kVitesseVoulue = 80_tps;
 
   inline constexpr bool kFollowerinverted = false;
 
@@ -72,13 +72,13 @@ namespace ShooterConstants
     inline constexpr double kI = 0;
     inline constexpr double kD = 0;
 
-    inline constexpr units::turns_per_second_t setpoint = 60_tps; // its NOT(it actually is) a placeholder :)
+    inline constexpr units::turns_per_second_t setpoint = 80_tps; // its NOT(it actually is) a placeholder :)
   }
 }
 
 namespace FeederConstants
 {
-  inline constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
+  inline constexpr units::volt_t kDesiredVoltage = 5_V; // placeholder :)
 
   inline constexpr bool kInverted = true;
   inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
@@ -127,8 +127,8 @@ namespace DrivetrainConstants
   inline constexpr frc::Translation2d kBackLeftTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
   inline constexpr frc::Translation2d kBackRightTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
 
-  inline constexpr units::meters_per_second_t kSpeedConstant = 1_mps;                              // Temporary value
-  inline constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 0.5_rad_per_s; // Temporary value
+  inline constexpr units::meters_per_second_t kSpeedConstant = 2_mps;                              // Temporary value
+  inline constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 1_rad_per_s; // Temporary value
 }
 
 namespace ModuleConstants
@@ -248,13 +248,13 @@ namespace IntakeConstants
 namespace PivotConstants
 {
   inline constexpr double kGearRatio = 16;
-  inline constexpr double kOffset = 5.66666;
+  inline constexpr double kOffset = 6.2;
   inline constexpr double kP = 1.3;  // en attendant
   inline constexpr double kI = 0.4;  // en attendant
   inline constexpr double kD = 0.15; // en attendant
   inline constexpr units::volt_t kG = 0.80_V;
   inline constexpr double setpointUp = std::numbers::pi / 2;    // 90 deg up
-  inline constexpr double setpointDown = std::numbers::pi / 36; // 5 deg up
+  inline constexpr double setpointDown = std::numbers::pi / 18; // 10 deg up
 
   inline constexpr bool kInverted = false;
   inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;

@@ -67,7 +67,7 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
     frc::SmartDashboard::PutData("drivetrain/Field2d", mField2d);
 
     // Wait for the robot to be connected to the DriverStation
-    while (!frc::DriverStation::WaitForDsConnection(1_s))
+    while (!frc::DriverStation::WaitForDsConnection(3_s))
     {
         frc::DataLogManager::Log("Waiting for Driver Station connection");
     }
@@ -157,7 +157,6 @@ void SubDrivetrain::Periodic()
     mCurrentModuleStatesPublisher.Set(getSwerveModuleStates());
     mRotation2dPublisher.Set(mCurrentRotation2d.Degrees());
     mCurrentPose2dPublisher.Set(mPoseEstimator->GetEstimatedPosition());
-    resetPose(mCurrentPose2dSubscriber.Get());
 }
 
 void SubDrivetrain::ConfigurePathplanner()
@@ -241,10 +240,20 @@ wpi::array<frc::SwerveModulePosition, 4> SubDrivetrain::getSwerveModulePositions
 void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation)
 {
     // Creating a ChassisSpeeds from the wanted speeds and the robot's rotation
-    mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kSpeedConstant * iX,
-                                                                        iSpeedModulation * DrivetrainConstants::kSpeedConstant * iY,
-                                                                        iSpeedModulation * DrivetrainConstants::kSpeedConstant0 * i0,
-                                                                        mIMU->getRotation2d());
+    if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue)
+    {
+        mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kSpeedConstant * iX,
+                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant * iY,
+                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant0 * i0,
+                                                                            mIMU->getRotation2d());
+    }
+    else
+    {
+        mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kSpeedConstant * -iX,
+                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant * -iY,
+                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant0 * i0,
+                                                                            mIMU->getRotation2d());
+    }
 
     // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
     mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
@@ -289,9 +298,10 @@ void SubDrivetrain::resetPose(frc::Pose2d iRobotPose)
     // Only change the IMU config if there are more than 1 deg of difference 
     // between the current and future rotation
     // to prevent repeated configurations of the IMU
-    double wCurrentRotation =  abs(mPoseEstimator->GetEstimatedPosition().Rotation().Degrees().value());
-    double wFutureRotation = abs(iRobotPose.Rotation().Degrees().value());
-    if (int(abs(wCurrentRotation - wFutureRotation)) % 360 >= 1)
+    units::degree_t wCurrentRotation = mPoseEstimator->GetEstimatedPosition().Rotation().Degrees();
+    units::degree_t wFutureRotation = iRobotPose.Rotation().Degrees();
+    units::degree_t wDeltaRotation = units::math::fmod(units::math::abs(wCurrentRotation - wFutureRotation), 360_deg);
+    if (wDeltaRotation >= 1_deg)
     {
         mIMU->setAngleYaw(iRobotPose.Rotation().Degrees());
     }

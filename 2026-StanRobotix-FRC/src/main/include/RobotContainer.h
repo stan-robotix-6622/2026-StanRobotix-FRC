@@ -34,6 +34,22 @@ public:
   RobotContainer();
 
   void ConfigureWhenConnectedToDS();
+  
+  enum Auto{
+    BlueCenterBumpPath,
+    BlueCenterTrenchPath,
+    BlueLeftBumpPath,
+    BlueLeftTrenchPath,
+    BlueRightBumpPath,
+    BlueRightTrenchPath,
+    EightPath,
+    RedCenterBumpPath,
+    RedCenterTrenchPath,
+    RedLeftBumpPath,
+    RedLeftTrenchPath,
+    RedRightBumpPath,
+    RedRightTrenchPath
+  };
 
   frc2::CommandPtr GetAutonomousCommand();
 
@@ -55,6 +71,8 @@ private:
   SubPivotIntake* mSubPivotIntake = nullptr;
 
   void ConfigureBindings();
+
+  Auto mAutonomousPhase = EightPath;
   void RegisterCommandsPathPlanner();
   void SetSubsystemDefaultCommands();
 };
