@@ -162,6 +162,7 @@ void SubDrivetrain::Periodic()
 
 void SubDrivetrain::ConfigurePathplanner()
 {
+    frc::DataLogManager::Log("Start PathPlanner Configuration");
     pathplanner::AutoBuilder::configure(
         [this]()
         { return getPose(); }, // Robot pose supplier
@@ -191,6 +192,26 @@ void SubDrivetrain::ConfigurePathplanner()
         },
         this // Reference to this subsystem to set requirements
     );
+    frc::DataLogManager::Log("Finish Autobuilder Configuration");
+    
+    // Logging callback for current robot pose
+    pathplanner::PathPlannerLogging::setLogCurrentPoseCallback([this](frc::Pose2d pose) {
+        // Do whatever you want with the pose here
+        mField2d->SetRobotPose(pose);
+    });
+
+    // Logging callback for target robot pose
+    pathplanner::PathPlannerLogging::setLogTargetPoseCallback([this](frc::Pose2d pose) {
+        // Do whatever you want with the pose here
+        mField2d->GetObject("target pose")->SetPose(pose);
+    });
+
+    // Logging callback for the active path, this is sent as a vector of poses
+    pathplanner::PathPlannerLogging::setLogActivePathCallback([this](std::vector<frc::Pose2d> poses) {
+        // Do whatever you want with the poses here
+        mField2d->GetObject("path")->SetPoses(poses);
+    });
+    frc::DataLogManager::Log("Finish Pathplanner Configuration");
 }
 
 void SubDrivetrain::refreshSwerveModules()

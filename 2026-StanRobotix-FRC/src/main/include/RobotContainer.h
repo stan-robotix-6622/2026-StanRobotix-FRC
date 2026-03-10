@@ -10,6 +10,8 @@
 #include <frc/DriverStation.h>
 #include <frc/DataLogManager.h>
 
+#include <pathplanner/lib/auto/NamedCommands.h>
+
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubPivotIntake.h"

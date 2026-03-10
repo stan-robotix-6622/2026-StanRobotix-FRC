@@ -20,6 +20,7 @@
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/util/PathPlannerLogging.h>
 #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
 
 #include <units/voltage.h>
