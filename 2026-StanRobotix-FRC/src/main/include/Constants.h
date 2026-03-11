@@ -29,9 +29,8 @@
  * command-specific namespaces within this header, which can then be used where
  * they are needed.
  */
-
-typedef units::unit_t<units::compound_unit<units::volts, units::inverse<units::turns_per_second_squared>>, double, units::linear_scale> kAunit; // V / turn / s^2
-typedef units::unit_t<units::compound_unit<units::volts, units::inverse<units::turns_per_second>>, double, units::linear_scale> kVunit;         // V / turn / s
+template <typename Unit>
+using voltage_inverse_unit = units::unit_t<units::detail::unit_multiply<units::voltage::volts, units::inverse<Unit>>, double, units::linear_scale>;
 
 namespace OperatorConstants
 {
@@ -54,8 +53,8 @@ namespace OperatorConstants
 namespace ShooterConstants
 {
   inline constexpr units::volt_t kS = 0_V;
-  inline constexpr kVunit kV = 8_V / 61.523844_tps;
-  // inline constexpr kAunit kA = 0_V / 1_tr_per_s_sq;
+  inline constexpr voltage_inverse_unit<units::turns_per_second> kV = 8_V / 61.523844_tps;
+  inline constexpr voltage_inverse_unit<units::turns_per_second_squared> kA = 0_V / 1_tr_per_s_sq;
 
   inline constexpr bool kInverted = false;
   inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
@@ -127,8 +126,16 @@ namespace DrivetrainConstants
   inline constexpr frc::Translation2d kBackLeftTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
   inline constexpr frc::Translation2d kBackRightTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
 
-  inline constexpr units::meters_per_second_t kSpeedConstant = 2_mps;                              // Temporary value
+  inline constexpr units::meters_per_second_t kSpeedConstant = 2_mps;                            // Temporary value
   inline constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 1_rad_per_s; // Temporary value
+  namespace Commands
+  {
+    inline constexpr units::second_t kFeedforwartStartDelay = 2.0_s;
+    inline constexpr voltage_inverse_unit<units::seconds> kFeedforwardRampRate = 1_V / 1_s;
+    inline constexpr units::second_t kWheelRadiusMeasurementStartDelay = 1.0_s;
+    inline constexpr units::radians_per_second_t kWheelRadiusMaxVelocity = 0.25_rad_per_s;
+    inline constexpr units::radians_per_second_squared_t kWheelRadiusRampRate = 0.05_rad_per_s_sq;
+  }
 }
 
 namespace ModuleConstants

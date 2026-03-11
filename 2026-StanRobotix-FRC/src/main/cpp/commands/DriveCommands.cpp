@@ -39,7 +39,7 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand(SubDrivetr
             iDrivetrain->mesureSwerveFeedforward(0_V);
           },
           {iDrivetrain})
-          .WithTimeout(kFeedforwartStartDelay),
+          .WithTimeout(DrivetrainConstants::Commands::kFeedforwartStartDelay),
 
       // Start timer
       frc2::cmd::RunOnce([wTimer] mutable
@@ -49,7 +49,7 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand(SubDrivetr
       frc2::cmd::Run(
           [iDrivetrain, wTimer, wVelocitySamples, wVoltageSamples] mutable
           {
-            units::volt_t wVoltage = wTimer.Get() * (kFeedforwardRampRate);
+            units::volt_t wVoltage = wTimer.Get() * (DrivetrainConstants::Commands::kFeedforwardRampRate);
             iDrivetrain->mesureSwerveFeedforward(wVoltage);
             std::array<frc::SwerveModuleState, 4U> wModuleStates = iDrivetrain->getSwerveModuleStates();
             units::radians_per_second_t wAverageAngularSpeed = 0.0_rad_per_s;
@@ -92,7 +92,7 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand(SubDrivetr
 
 frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand(SubDrivetrain* iDrivetrain)
 {
-  frc::SlewRateLimiter<units::radians_per_second> limiter{kWheelRadiusRampRate};
+  frc::SlewRateLimiter<units::radians_per_second> limiter{DrivetrainConstants::Commands::kWheelRadiusRampRate};
   WheelRadiusCharacterizationState state;
 
   return frc2::cmd::Parallel(
@@ -109,7 +109,7 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand(SubDrivetr
           frc2::cmd::Run(
               [limiter, iDrivetrain] mutable
               {
-                units::radians_per_second_t speed = limiter.Calculate(kWheelRadiusMaxVelocity);
+                units::radians_per_second_t speed = limiter.Calculate(DrivetrainConstants::Commands::kWheelRadiusMaxVelocity);
                 iDrivetrain->driveRobotRelative(frc::ChassisSpeeds(0.0_mps, 0.0_mps, speed));
               },
               {iDrivetrain})),
@@ -117,13 +117,13 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand(SubDrivetr
       // Measurement sequence
       frc2::cmd::Sequence(
           // Wait for modules to fully orient before starting measurement
-          frc2::cmd::Wait(1.0_s),
+          frc2::cmd::Wait(DrivetrainConstants::Commands::kWheelRadiusMeasurementStartDelay),
 
           // Record starting measurement
           frc2::cmd::RunOnce(
               [state, iDrivetrain] mutable
               {
-                auto wSwervePositions = iDrivetrain->getSwerveModulePositions();
+                wpi::array<frc::SwerveModulePosition, 4U> wSwervePositions = iDrivetrain->getSwerveModulePositions();
                 for (int i = 0; i < 4; i++)
                 {
                   // Divide the distance traveled by the current WheelPerimeter to get the number of rotations
@@ -148,7 +148,7 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand(SubDrivetr
                   [state, iDrivetrain]
                   {
                     std::array<units::radian_t, 4> wPositions;
-                    auto wSwervePositions = iDrivetrain->getSwerveModulePositions();
+                    wpi::array<frc::SwerveModulePosition, 4U> wSwervePositions = iDrivetrain->getSwerveModulePositions();
                     for (int i = 0; i < 4; i++)
                     {
                       wPositions[i] = units::radian_t(wSwervePositions[i].distance / ModuleConstants::kWheelPerimeter);

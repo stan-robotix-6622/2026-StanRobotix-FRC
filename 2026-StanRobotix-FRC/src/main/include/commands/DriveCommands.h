@@ -28,9 +28,4 @@ class DriveCommands {
     frc::Rotation2d lastAngle = 0.0_rad;
     units::radian_t gyroDelta = 0.0_rad;
   };
- private:
-  static constexpr units::second_t kFeedforwartStartDelay = 2.0_s;
-  static constexpr volts_per_second kFeedforwardRampRate = 1_V / 1_s;
-  static constexpr units::radians_per_second_t kWheelRadiusMaxVelocity = 0.25_rad_per_s;
-  static constexpr units::radians_per_second_squared_t kWheelRadiusRampRate = 0.05_rad_per_s_sq;
 };
