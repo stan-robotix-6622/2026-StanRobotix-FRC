@@ -39,7 +39,7 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand(SubDrivetr
             iDrivetrain->mesureSwerveFeedforward(0_V);
           },
           {iDrivetrain})
-          .WithTimeout(2.0_s),
+          .WithTimeout(kFeedforwartStartDelay),
 
       // Start timer
       frc2::cmd::RunOnce([wTimer] mutable
@@ -49,10 +49,10 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand(SubDrivetr
       frc2::cmd::Run(
           [iDrivetrain, wTimer, wVelocitySamples, wVoltageSamples] mutable
           {
-            units::volt_t wVoltage = wTimer.Get() * (0.1_V / 1_s);
+            units::volt_t wVoltage = wTimer.Get() * (kFeedforwardRampRate);
             iDrivetrain->mesureSwerveFeedforward(wVoltage);
             std::array<frc::SwerveModuleState, 4U> wModuleStates = iDrivetrain->getSwerveModuleStates();
-            units::radians_per_second_t wAverageAngularSpeed = 0_rad_per_s;
+            units::radians_per_second_t wAverageAngularSpeed = 0.0_rad_per_s;
             for (int i = 0; i < 4; i++)
             {
               wAverageAngularSpeed += units::radian_t(std::numbers::pi) * wModuleStates[i].speed / (ModuleConstants::kWheelPerimeter * 4);
@@ -92,7 +92,7 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand(SubDrivetr
 
 frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand(SubDrivetrain* iDrivetrain)
 {
-  frc::SlewRateLimiter<units::radians_per_second> limiter{0.05_rad / 1_s / 1_s};
+  frc::SlewRateLimiter<units::radians_per_second> limiter{kWheelRadiusRampRate};
   WheelRadiusCharacterizationState state;
 
   return frc2::cmd::Parallel(
@@ -109,7 +109,7 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand(SubDrivetr
           frc2::cmd::Run(
               [limiter, iDrivetrain] mutable
               {
-                units::radians_per_second_t speed = limiter.Calculate(0.25_rad_per_s);
+                units::radians_per_second_t speed = limiter.Calculate(kWheelRadiusMaxVelocity);
                 iDrivetrain->driveRobotRelative(frc::ChassisSpeeds(0.0_mps, 0.0_mps, speed));
               },
               {iDrivetrain})),

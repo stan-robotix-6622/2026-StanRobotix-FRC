@@ -9,9 +9,12 @@
 #include <frc/geometry/Rotation2d.h>
 
 #include <array>
+#include <units/time.h>
 #include <units/angle.h>
 
 #include "subsystems/SubDrivetrain.h"
+
+using volts_per_second = units::unit_t<units::detail::unit_multiply<units::voltage::volts, units::inverse<units::time::seconds>>, double, units::linear_scale>;
 
 // Made based on the drive commands found at
 // https://github.com/Mechanical-Advantage/AdvantageKit/blob/main/template_projects/sources/spark_swerve/src/main/java/frc/robot/commands/DriveCommands.java
@@ -25,4 +28,9 @@ class DriveCommands {
     frc::Rotation2d lastAngle = 0.0_rad;
     units::radian_t gyroDelta = 0.0_rad;
   };
+ private:
+  static constexpr units::second_t kFeedforwartStartDelay = 2.0_s;
+  static constexpr volts_per_second kFeedforwardRampRate = 1_V / 1_s;
+  static constexpr units::radians_per_second_t kWheelRadiusMaxVelocity = 0.25_rad_per_s;
+  static constexpr units::radians_per_second_squared_t kWheelRadiusRampRate = 0.05_rad_per_s_sq;
 };
