@@ -159,6 +159,14 @@ void SubDrivetrain::Periodic()
     mCurrentPose2dPublisher.Set(mPoseEstimator->GetEstimatedPosition());
 }
 
+void SubDrivetrain::setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4> iStates)
+{
+    mFrontLeftModule->setDesiredState(iStates[0]);
+    mFrontRightModule->setDesiredState(iStates[1]);
+    mBackLeftModule->setDesiredState(iStates[2]);
+    mBackRightModule->setDesiredState(iStates[3]);
+}
+
 void SubDrivetrain::refreshSwerveModules()
 {
     mFrontLeftModule->refreshModule();
@@ -210,10 +218,7 @@ void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
     mDesiredModuleStatesPublisher.Set(mDesiredSwerveStates);
 
     // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
-    mFrontLeftModule->setDesiredState(mDesiredSwerveStates[0]);
-    mFrontRightModule->setDesiredState(mDesiredSwerveStates[1]);
-    mBackLeftModule->setDesiredState(mDesiredSwerveStates[2]);
-    mBackRightModule->setDesiredState(mDesiredSwerveStates[3]);
+    setSwerveModuleStates(mDesiredSwerveStates);
 }
 
 void SubDrivetrain::mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units::volt_t iTurningVoltage)
@@ -223,10 +228,20 @@ void SubDrivetrain::mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units
     mBackLeftModule->setDrivingVoltage(iDrivingVoltage);
     mBackRightModule->setDrivingVoltage(iDrivingVoltage);
 
-    mFrontLeftModule->setTurningVoltage(iTurningVoltage);
-    mFrontRightModule->setTurningVoltage(iTurningVoltage);
-    mBackLeftModule->setTurningVoltage(iTurningVoltage);
-    mBackRightModule->setTurningVoltage(iTurningVoltage);
+    if (iTurningVoltage != 0_V)
+    {
+        mFrontLeftModule->setTurningVoltage(iTurningVoltage);
+        mFrontRightModule->setTurningVoltage(iTurningVoltage);
+        mBackLeftModule->setTurningVoltage(iTurningVoltage);
+        mBackRightModule->setTurningVoltage(iTurningVoltage);
+    }
+    else
+    {
+        mFrontLeftModule->setDesiredHeading(0_rad);
+        mFrontRightModule->setDesiredHeading(0_rad);
+        mBackLeftModule->setDesiredHeading(0_rad);
+        mBackRightModule->setDesiredHeading(0_rad);
+    }
 
     frc::SmartDashboard::PutNumber("drivetrain/Driving Voltage", iDrivingVoltage.value());
     frc::SmartDashboard::PutNumber("drivetrain/Turning Voltage", iTurningVoltage.value());
@@ -268,10 +283,7 @@ void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds)
     mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(iDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
 
     // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
-    mFrontLeftModule->setDesiredState(mDesiredSwerveStates[0]);
-    mFrontRightModule->setDesiredState(mDesiredSwerveStates[1]);
-    mBackLeftModule->setDesiredState(mDesiredSwerveStates[2]);
-    mBackRightModule->setDesiredState(mDesiredSwerveStates[3]);
+    setSwerveModuleStates(mDesiredSwerveStates);
 }
 
 frc2::CommandPtr SubDrivetrain::getFollowPathCommand(std::string iPathName)

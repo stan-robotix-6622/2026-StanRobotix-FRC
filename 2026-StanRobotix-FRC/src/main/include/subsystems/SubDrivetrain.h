@@ -43,7 +43,9 @@ class SubDrivetrain : public frc2::SubsystemBase {
 
   void refreshSwerveModules();
 
-  void mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units::volt_t iTurningVoltage);
+  void mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units::volt_t iTurningVoltage = 0_V);
+
+  void setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4>);
 
   wpi::array<frc::SwerveModuleState, 4> getSwerveModuleStates();
   wpi::array<frc::SwerveModulePosition, 4> getSwerveModulePositions();

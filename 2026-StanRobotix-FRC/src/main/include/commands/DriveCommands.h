@@ -1,0 +1,18 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+#pragma once
+
+#include <frc2/command/CommandPtr.h>
+#include <frc2/command/Commands.h>
+
+#include "subsystems/SubDrivetrain.h"
+
+// Made based on the drive commands found at 
+// https://github.com/Mechanical-Advantage/AdvantageKit/blob/main/template_projects/sources/spark_swerve/src/main/java/frc/robot/commands/DriveCommands.java
+class DriveCommands {
+ public:
+  static frc2::CommandPtr getFeedforwardCharacterizationCommand(SubDrivetrain* iDrivetrain);
+  static frc2::CommandPtr getWheelRadiusCharacterizationCommand(SubDrivetrain* iDrivetrain);
+};
