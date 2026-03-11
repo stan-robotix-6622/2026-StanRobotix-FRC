@@ -13,13 +13,13 @@
 
 #include "subsystems/SubDrivetrain.h"
 
-// Made based on the drive commands found at 
+// Made based on the drive commands found at
 // https://github.com/Mechanical-Advantage/AdvantageKit/blob/main/template_projects/sources/spark_swerve/src/main/java/frc/robot/commands/DriveCommands.java
 class DriveCommands {
  public:
   static frc2::CommandPtr getFeedforwardCharacterizationCommand(SubDrivetrain* iDrivetrain);
   static frc2::CommandPtr getWheelRadiusCharacterizationCommand(SubDrivetrain* iDrivetrain);
-  
+
   struct WheelRadiusCharacterizationState {
     std::array<units::radian_t, 4> positions;
     frc::Rotation2d lastAngle = 0.0_rad;
