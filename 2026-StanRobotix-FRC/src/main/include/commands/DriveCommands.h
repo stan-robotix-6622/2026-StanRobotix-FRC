@@ -6,6 +6,10 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/Commands.h>
+#include <frc/geometry/Rotation2d.h>
+
+#include <array>
+#include <units/angle.h>
 
 #include "subsystems/SubDrivetrain.h"
 
@@ -15,4 +19,10 @@ class DriveCommands {
  public:
   static frc2::CommandPtr getFeedforwardCharacterizationCommand(SubDrivetrain* iDrivetrain);
   static frc2::CommandPtr getWheelRadiusCharacterizationCommand(SubDrivetrain* iDrivetrain);
+  
+  struct WheelRadiusCharacterizationState {
+    std::array<units::radian_t, 4> positions;
+    frc::Rotation2d lastAngle = 0.0_rad;
+    units::radian_t gyroDelta = 0.0_rad;
+  };
 };
