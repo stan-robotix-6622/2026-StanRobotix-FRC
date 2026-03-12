@@ -34,6 +34,9 @@ RobotContainer::RobotContainer() {
   RegisterCommandsPathPlanner();
   // Configure the button bindings
   ConfigureBindings();
+
+  pathplanner::EventTrigger("Intake").OnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
+
 }
 
 void RobotContainer::SetSubsystemDefaultCommands() {
