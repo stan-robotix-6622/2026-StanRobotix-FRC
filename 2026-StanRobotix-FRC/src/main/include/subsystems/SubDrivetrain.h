@@ -61,6 +61,8 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::Pose2d getPose();
   // Method that redefines the robot's pose with its input
   void resetPose(frc::Pose2d iRobotPose);
+
+  SubIMU* getIMU();
   
   frc::Pose2d getClosestPoseAtDistanceFromHub(units::meter_t iDesiredDistance);
 

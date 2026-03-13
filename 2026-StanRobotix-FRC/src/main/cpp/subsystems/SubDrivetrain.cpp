@@ -270,6 +270,11 @@ void SubDrivetrain::resetPose(frc::Pose2d iRobotPose)
     mPoseEstimator->ResetPose(iRobotPose);
 }
 
+SubIMU* SubDrivetrain::getIMU()
+{
+    return mIMU;
+}
+
 frc::ChassisSpeeds SubDrivetrain::getRobotRelativeSpeeds()
 {
     // Getting the current chassis speeds from the SwerveModules' state

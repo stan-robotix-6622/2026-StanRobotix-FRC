@@ -55,8 +55,9 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand(SubDrivetr
             units::radians_per_second_t wAverageAngularSpeed = 0.0_rad_per_s;
             for (int i = 0; i < 4; i++)
             {
-              wAverageAngularSpeed += units::radian_t(std::numbers::pi) * wModuleStates[i].speed / (ModuleConstants::kWheelPerimeter * 4);
+              wAverageAngularSpeed += units::radian_t(std::numbers::pi) * wModuleStates[i].speed / (ModuleConstants::kWheelPerimeter);
             }
+            wAverageAngularSpeed /= 4;
             wVelocitySamples.emplace_back(wAverageAngularSpeed);
             wVoltageSamples.emplace_back(wVoltage);
           },
@@ -130,7 +131,7 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand(SubDrivetr
                   // And then convert it to radians
                   state.positions[i] = units::radian_t(std::numbers::pi) * wSwervePositions[i].distance / ModuleConstants::kWheelPerimeter;
                 }
-                state.lastAngle = iDrivetrain->getPose().Rotation();
+                state.lastAngle = iDrivetrain->getIMU()->getRotation2d();
                 state.gyroDelta = 0.0_rad;
               }),
 
@@ -138,7 +139,7 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand(SubDrivetr
           frc2::cmd::Run(
               [state, iDrivetrain] mutable
               {
-                frc::Rotation2d rotation = iDrivetrain->getPose().Rotation();
+                frc::Rotation2d rotation = iDrivetrain->getIMU()->getRotation2d();
                 state.gyroDelta += units::math::abs(rotation.Radians() - state.lastAngle.Radians());
                 state.lastAngle = rotation;
               })
@@ -156,8 +157,9 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand(SubDrivetr
                     units::radian_t wWheelDelta;
                     for (int i = 0; i < 4; i++)
                     {
-                      wWheelDelta += units::math::abs(wPositions[i] - state.positions[i]) / 4.0;
+                      wWheelDelta += units::math::abs(wPositions[i] - state.positions[i]);
                     }
+                    wWheelDelta /= 4;
                     units::meter_t wheelRadius =
                         (state.gyroDelta * DrivetrainConstants::kFrontLeftTranslation.Norm()) / wWheelDelta;
 
