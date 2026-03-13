@@ -20,6 +20,7 @@
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/util/PathPlannerLogging.h>
 #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
 
 #include <units/voltage.h>
@@ -38,12 +39,16 @@ class SubDrivetrain : public frc2::SubsystemBase {
    */
   void Periodic() override;
 
+  void ConfigurePathplanner();
+
   // Method that drives the robot in field relative drive
   void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
 
   void refreshSwerveModules();
 
-  void mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units::volt_t iTurningVoltage);
+  void mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units::volt_t iTurningVoltage = 0_V);
+
+  void setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4>);
 
   wpi::array<frc::SwerveModuleState, 4> getSwerveModuleStates();
   wpi::array<frc::SwerveModulePosition, 4> getSwerveModulePositions();
@@ -59,6 +64,8 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::Pose2d getPose();
   // Method that redefines the robot's pose with its input
   void resetPose(frc::Pose2d iRobotPose);
+
+  SubIMU* getIMU();
   
   frc::Pose2d getClosestPoseAtDistanceFromHub(units::meter_t iDesiredDistance);
 

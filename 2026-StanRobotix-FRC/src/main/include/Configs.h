@@ -17,7 +17,7 @@ namespace Configs
 
       constexpr double drivingFactor = ModuleConstants::kDrivingFactor;
       // units::compound_unit<units::volts, units::inverse<units::meters_per_second>>
-      constexpr double drivingVelocityFeedForward = ModuleConstants::kNominalVoltage.value() / ModuleConstants::kDriveWheelMaxSpeed.value();
+      constexpr TemplateUnits::VoltageInverse<units::meters_per_second> drivingVelocityFeedForward = ModuleConstants::kNominalVoltage / ModuleConstants::kDriveWheelMaxSpeed;
 
       drivingConfig.Inverted(iDrivingInverted);
       drivingConfig.SetIdleMode(ModuleConstants::Config::kDrivingIdleMode);
@@ -30,7 +30,7 @@ namespace Configs
       drivingConfig.closedLoop.Pid(ModuleConstants::kDrivingP, ModuleConstants::kDrivingI, ModuleConstants::kDrivingD);
       drivingConfig.closedLoop.OutputRange(-1, 1);
 
-      drivingConfig.closedLoop.feedForward.kV(drivingVelocityFeedForward);
+      drivingConfig.closedLoop.feedForward.kV(drivingVelocityFeedForward.value());
 
       return drivingConfig;
     }

@@ -11,10 +11,12 @@
 #include <wpi/sendable/Sendable.h>
 #include <wpi/sendable/SendableBuilder.h>
 #include <frc/controller/PIDController.h>
+#include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
+#include <units/voltage.h>
 #include <units/velocity.h>
 #include <units/angle.h>
 #include <units/angular_velocity.h>
@@ -36,6 +38,7 @@ public:
 
   // Méthode qui fait rouler le module à partir du SwerveModuleState désiré
   void setDesiredState(frc::SwerveModuleState iDesiredState);
+  void setDesiredHeading(frc::Rotation2d iDesiredHeading);
 
   void setTurningVoltage(units::volt_t iVoltage);
   void setDrivingVoltage(units::volt_t iVoltage);
