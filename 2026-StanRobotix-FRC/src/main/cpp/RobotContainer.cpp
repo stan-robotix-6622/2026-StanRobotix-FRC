@@ -27,6 +27,8 @@ RobotContainer::RobotContainer() {
   mDrivetrain = new SubDrivetrain{mIMU};
   mSubIntake = new SubIntake{};
   mSubPivotIntake = new SubPivotIntake{};
+
+  mDriverStation = new frc::DriverStation();
   
   // Set the default commands for all subsystems
   SetSubsystemDefaultCommands();
@@ -166,4 +168,8 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
       return frc2::cmd::Print("There is no case for this automonous command");
       break;
 }
+}
+
+std::string RobotContainer::GetActiveHubColor() {
+  return frc::DriverStation::GetGameSpecificMessage();
 }
