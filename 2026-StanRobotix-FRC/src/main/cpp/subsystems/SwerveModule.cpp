@@ -55,6 +55,13 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
     mDrivingClosedLoopController->SetSetpoint(mOptimizedState.speed.value(), ModuleConstants::kDrivingClosedLoopControlType);
 }
 
+void SwerveModule::setDesiredHeading(frc::Rotation2d iDesiredHeading)
+{
+    mTurningCurrentAngle = frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()));
+    mTurningPID->SetSetpoint(iDesiredHeading.Radians().value());
+    mTurningMotor->Set(mTurningPID->Calculate(mTurningCurrentAngle.Radians().value()));
+}
+
 void SwerveModule::setTurningVoltage(units::volt_t iVoltage)
 {
     mTurningMotor->SetVoltage(iVoltage);

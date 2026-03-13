@@ -67,7 +67,7 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
     frc::SmartDashboard::PutData("drivetrain/Field2d", mField2d);
 
     // Wait for the robot to be connected to the DriverStation
-    while (!frc::DriverStation::WaitForDsConnection(3_s))
+    /* while (!frc::DriverStation::WaitForDsConnection(3_s))
     {
         frc::DataLogManager::Log("Waiting for Driver Station connection");
     }
@@ -101,7 +101,7 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
         },
         this // Reference to this subsystem to set requirements
     );
-    frc::DataLogManager::Log("Drivetrain initialise");
+    frc::DataLogManager::Log("Drivetrain initialise"); */
 }
 
 // This method will be called once per scheduler run
@@ -157,6 +157,14 @@ void SubDrivetrain::Periodic()
     mCurrentModuleStatesPublisher.Set(getSwerveModuleStates());
     mRotation2dPublisher.Set(mCurrentRotation2d.Degrees());
     mCurrentPose2dPublisher.Set(mPoseEstimator->GetEstimatedPosition());
+}
+
+void SubDrivetrain::setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4> iStates)
+{
+    mFrontLeftModule->setDesiredState(iStates[0]);
+    mFrontRightModule->setDesiredState(iStates[1]);
+    mBackLeftModule->setDesiredState(iStates[2]);
+    mBackRightModule->setDesiredState(iStates[3]);
 }
 
 void SubDrivetrain::ConfigurePathplanner()
@@ -264,10 +272,7 @@ void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
     mDesiredModuleStatesPublisher.Set(mDesiredSwerveStates);
 
     // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
-    mFrontLeftModule->setDesiredState(mDesiredSwerveStates[0]);
-    mFrontRightModule->setDesiredState(mDesiredSwerveStates[1]);
-    mBackLeftModule->setDesiredState(mDesiredSwerveStates[2]);
-    mBackRightModule->setDesiredState(mDesiredSwerveStates[3]);
+    setSwerveModuleStates(mDesiredSwerveStates);
 }
 
 void SubDrivetrain::mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units::volt_t iTurningVoltage)
@@ -277,10 +282,20 @@ void SubDrivetrain::mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units
     mBackLeftModule->setDrivingVoltage(iDrivingVoltage);
     mBackRightModule->setDrivingVoltage(iDrivingVoltage);
 
-    mFrontLeftModule->setTurningVoltage(iTurningVoltage);
-    mFrontRightModule->setTurningVoltage(iTurningVoltage);
-    mBackLeftModule->setTurningVoltage(iTurningVoltage);
-    mBackRightModule->setTurningVoltage(iTurningVoltage);
+    if (iTurningVoltage != 0_V)
+    {
+        mFrontLeftModule->setTurningVoltage(iTurningVoltage);
+        mFrontRightModule->setTurningVoltage(iTurningVoltage);
+        mBackLeftModule->setTurningVoltage(iTurningVoltage);
+        mBackRightModule->setTurningVoltage(iTurningVoltage);
+    }
+    else
+    {
+        mFrontLeftModule->setDesiredHeading(0_rad);
+        mFrontRightModule->setDesiredHeading(0_rad);
+        mBackLeftModule->setDesiredHeading(0_rad);
+        mBackRightModule->setDesiredHeading(0_rad);
+    }
 
     frc::SmartDashboard::PutNumber("drivetrain/Driving Voltage", iDrivingVoltage.value());
     frc::SmartDashboard::PutNumber("drivetrain/Turning Voltage", iTurningVoltage.value());
@@ -309,6 +324,11 @@ void SubDrivetrain::resetPose(frc::Pose2d iRobotPose)
     mPoseEstimator->ResetPose(iRobotPose);
 }
 
+SubIMU* SubDrivetrain::getIMU()
+{
+    return mIMU;
+}
+
 frc::ChassisSpeeds SubDrivetrain::getRobotRelativeSpeeds()
 {
     // Getting the current chassis speeds from the SwerveModules' state
@@ -322,10 +342,7 @@ void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds)
     mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(iDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
 
     // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
-    mFrontLeftModule->setDesiredState(mDesiredSwerveStates[0]);
-    mFrontRightModule->setDesiredState(mDesiredSwerveStates[1]);
-    mBackLeftModule->setDesiredState(mDesiredSwerveStates[2]);
-    mBackRightModule->setDesiredState(mDesiredSwerveStates[3]);
+    setSwerveModuleStates(mDesiredSwerveStates);
 }
 
 frc2::CommandPtr SubDrivetrain::getFollowPathCommand(std::string iPathName)
