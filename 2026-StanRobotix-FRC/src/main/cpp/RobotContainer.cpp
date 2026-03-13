@@ -7,6 +7,7 @@
 #include <frc2/command/button/Trigger.h>
 #include <frc2/command/Commands.h>
 #include <pathplanner/lib/auto/NamedCommands.h>
+#include <pathplanner/lib/events/EventTrigger.h>
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
@@ -36,7 +37,7 @@ RobotContainer::RobotContainer() {
   ConfigureBindings();
 
   pathplanner::EventTrigger("Intake").OnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
-
+  pathplanner::EventTrigger("Shoot").OnTrue(Shoot(mSubShooter).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter"));
 }
 
 void RobotContainer::SetSubsystemDefaultCommands() {
