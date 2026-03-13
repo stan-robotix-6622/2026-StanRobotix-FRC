@@ -20,6 +20,7 @@
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/util/PathPlannerLogging.h>
 #include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
 
 #include <units/voltage.h>
@@ -37,6 +38,8 @@ class SubDrivetrain : public frc2::SubsystemBase {
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
+
+  void ConfigurePathplanner();
 
   // Method that drives the robot in field relative drive
   void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);

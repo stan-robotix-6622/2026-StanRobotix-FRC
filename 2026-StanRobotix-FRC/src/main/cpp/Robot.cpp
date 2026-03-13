@@ -22,6 +22,16 @@ Robot::Robot() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
+  if (!mConnectedToDriveStation)
+  {
+    frc::DataLogManager::Log("Robot not connected to DriverStation");
+    if (frc::DriverStation::IsDSAttached())
+    {
+      frc::DataLogManager::Log("Robot is connected to DriverStation");
+      m_container.ConfigureWhenConnectedToDS();
+      mConnectedToDriveStation = true;
+    }
+  }
   frc2::CommandScheduler::GetInstance().Run();
 }
 

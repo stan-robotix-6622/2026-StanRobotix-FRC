@@ -34,6 +34,9 @@ RobotContainer::RobotContainer() {
   RegisterCommandsPathPlanner();
   // Configure the button bindings
   ConfigureBindings();
+
+  pathplanner::EventTrigger("Intake").OnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
+
 }
 
 void RobotContainer::SetSubsystemDefaultCommands() {
@@ -96,6 +99,11 @@ void RobotContainer::ConfigureBindings() {
 
   mCommandXboxController->Button(8).WhileTrue(mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(2.3_m);}));
 };
+
+void RobotContainer::ConfigureWhenConnectedToDS()
+{
+  mDrivetrain->ConfigurePathplanner();
+}
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   // An example command will be run in autonomous

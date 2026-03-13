@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.545504151838672,
-        "y": 6.8485290628707
+        "x": 6.939733333333334,
+        "y": 4.024922222222221
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7397746144667434,
-        "y": 5.288446026102651
+        "x": 6.324988888888889,
+        "y": 5.546666666666668
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.892823250296561,
-        "y": 4.49226571767497
+        "x": 3.059788888888889,
+        "y": 5.062933333333333
       },
       "prevControl": {
-        "x": 6.4947330960800285,
-        "y": 5.137817319103838
+        "x": 5.4986111111111144,
+        "y": 5.939699999999999
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,11 +30,11 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.2563237774030381,
+      "waypointRelativePos": 0.33,
       "rotationDegrees": -45.0
     },
     {
-      "waypointRelativePos": 0.7453625632377795,
+      "waypointRelativePos": 0.859649122807022,
       "rotationDegrees": -45.0
     }
   ],
@@ -42,29 +42,29 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Intake",
-      "waypointRelativePos": 0.8739583333333306,
+      "name": "Shoot",
+      "waypointRelativePos": 0.5864583333333306,
       "endWaypointRelativePos": 1.0,
       "command": null
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 0.3,
-    "maxAcceleration": 0.3,
-    "maxAngularVelocity": 54.0,
-    "maxAngularAcceleration": 72.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -38.48019824834307
   },
   "reversed": false,
   "folder": "Blue",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -176.98721249581672
   },
   "useDefaultConstraints": true
 }

@@ -67,7 +67,7 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
     frc::SmartDashboard::PutData("drivetrain/Field2d", mField2d);
 
     // Wait for the robot to be connected to the DriverStation
-    while (!frc::DriverStation::WaitForDsConnection(3_s))
+    /* while (!frc::DriverStation::WaitForDsConnection(3_s))
     {
         frc::DataLogManager::Log("Waiting for Driver Station connection");
     }
@@ -101,7 +101,7 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
         },
         this // Reference to this subsystem to set requirements
     );
-    frc::DataLogManager::Log("Drivetrain initialise");
+    frc::DataLogManager::Log("Drivetrain initialise"); */
 }
 
 // This method will be called once per scheduler run
@@ -165,6 +165,60 @@ void SubDrivetrain::setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4> 
     mFrontRightModule->setDesiredState(iStates[1]);
     mBackLeftModule->setDesiredState(iStates[2]);
     mBackRightModule->setDesiredState(iStates[3]);
+}
+
+void SubDrivetrain::ConfigurePathplanner()
+{
+    frc::DataLogManager::Log("Start PathPlanner Configuration");
+    pathplanner::AutoBuilder::configure(
+        [this]()
+        { return getPose(); }, // Robot pose supplier
+        [this](frc::Pose2d pose)
+        { resetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
+        [this]()
+        { return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        [this](auto speeds, auto feedforwards)
+        { driveRobotRelative(speeds); },                                                           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+        std::make_shared<pathplanner::PPHolonomicDriveController>(                                                                                    // PPHolonomicController is the built in path following controller for holonomic drive trains
+            pathplanner::PIDConstants(PathPlannerConstants::kPTranslation, PathPlannerConstants::kITranslation, PathPlannerConstants::kDTranslation), // Translation PID constants
+            pathplanner::PIDConstants(PathPlannerConstants::kPRotation, PathPlannerConstants::kIRotation, PathPlannerConstants::kDRotation)           // Rotation PID constants
+            ),
+        PathPlannerConfig, // The robot configuration
+        []()
+        {
+            // Boolean supplier that controls when the path will be mirrored for the red alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+            std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
+            if (alliance) {
+                frc::SmartDashboard::PutNumber("alliance color", frc::DriverStation::GetAlliance().value());
+                return alliance.value() == frc::DriverStation::Alliance::kRed;
+            }
+            return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
+    frc::DataLogManager::Log("Finish Autobuilder Configuration");
+    
+    // Logging callback for current robot pose
+    pathplanner::PathPlannerLogging::setLogCurrentPoseCallback([this](frc::Pose2d pose) {
+        // Do whatever you want with the pose here
+        mField2d->SetRobotPose(pose);
+    });
+
+    // Logging callback for target robot pose
+    pathplanner::PathPlannerLogging::setLogTargetPoseCallback([this](frc::Pose2d pose) {
+        // Do whatever you want with the pose here
+        mField2d->GetObject("target pose")->SetPose(pose);
+    });
+
+    // Logging callback for the active path, this is sent as a vector of poses
+    pathplanner::PathPlannerLogging::setLogActivePathCallback([this](std::vector<frc::Pose2d> poses) {
+        // Do whatever you want with the poses here
+        mField2d->GetObject("path")->SetPoses(poses);
+    });
+    frc::DataLogManager::Log("Finish Pathplanner Configuration");
 }
 
 void SubDrivetrain::refreshSwerveModules()
