@@ -88,6 +88,8 @@ class SubDrivetrain : public frc2::SubsystemBase {
   nt::StructPublisher<frc::Pose2d> mCurrentPose2dPublisher;
   nt::StructPublisher<frc::Pose2d> mTargetPose2dPublisher;
   nt::StructSubscriber<frc::Pose2d> mCurrentPose2dSubscriber;
+  nt::StructPublisher<frc::Pose2d> mLimelightPoseEstimatorPublisher;
+  nt::StructPublisher<frc::Pose2d> mLimelightPoseEstimatorSubscriber;
 
   // Declaring the four SwerveModule objects
   SwerveModule* mFrontLeftModule;
