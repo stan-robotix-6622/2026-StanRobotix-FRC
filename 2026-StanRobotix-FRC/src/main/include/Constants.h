@@ -29,9 +29,11 @@
  * command-specific namespaces within this header, which can then be used where
  * they are needed.
  */
-template <typename Unit>
-using voltage_inverse_unit = units::unit_t<units::detail::unit_multiply<units::voltage::volts, units::inverse<Unit>>, double, units::linear_scale>;
+namespace TemplateUnits {
+  template <typename Unit>
+using VoltageInverse = units::unit_t<units::detail::unit_multiply<units::voltage::volts, units::inverse<Unit>>, double, units::linear_scale>;
 
+}
 namespace OperatorConstants
 {
   inline constexpr int kDriverControllerPort = 0;
@@ -53,8 +55,8 @@ namespace OperatorConstants
 namespace ShooterConstants
 {
   inline constexpr units::volt_t kS = 0_V;
-  inline constexpr voltage_inverse_unit<units::turns_per_second> kV = 8_V / 61.523844_tps;
-  inline constexpr voltage_inverse_unit<units::turns_per_second_squared> kA = 0_V / 1_tr_per_s_sq;
+  inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.523844_tps;
+  inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second_squared> kA = 0_V / 1_tr_per_s_sq;
 
   inline constexpr bool kInverted = false;
   inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
@@ -131,7 +133,7 @@ namespace DrivetrainConstants
   namespace Commands
   {
     inline constexpr units::second_t kFeedforwartStartDelay = 2.0_s;
-    inline constexpr voltage_inverse_unit<units::seconds> kFeedforwardRampRate = 1_V / 1_s;
+    inline constexpr TemplateUnits::VoltageInverse<units::seconds> kFeedforwardRampRate = 1_V / 1_s;
     inline constexpr units::second_t kWheelRadiusMeasurementStartDelay = 1.0_s;
     inline constexpr units::radians_per_second_t kWheelRadiusMaxVelocity = 0.25_rad_per_s;
     inline constexpr units::radians_per_second_squared_t kWheelRadiusRampRate = 0.05_rad_per_s_sq;
