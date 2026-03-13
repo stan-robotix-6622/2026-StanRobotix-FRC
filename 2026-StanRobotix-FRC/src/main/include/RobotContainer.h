@@ -9,9 +9,7 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/DriverStation.h>
 #include <frc/DataLogManager.h>
-#include <pathplanner/lib/events/EventTrigger.h>
 
-#include <pathplanner/lib/auto/NamedCommands.h>
 
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/SubIntake.h"
