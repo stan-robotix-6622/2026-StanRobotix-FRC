@@ -43,16 +43,16 @@
   "eventMarkers": [
     {
       "name": "Shoot",
-      "waypointRelativePos": 0.5864583333333306,
+      "waypointRelativePos": 0.59,
       "endWaypointRelativePos": 1.0,
       "command": null
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 1.5,
+    "maxAngularVelocity": 270.0,
+    "maxAngularAcceleration": 360.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },

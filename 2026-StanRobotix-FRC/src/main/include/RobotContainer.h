@@ -10,7 +10,6 @@
 #include <frc/DriverStation.h>
 #include <frc/DataLogManager.h>
 
-
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubPivotIntake.h"
@@ -36,6 +35,7 @@ public:
   
   enum Auto{
     BlueCenterBumpPath,
+    BlueCenterBumpReversed,
     BlueCenterTrenchPath,
     BlueLeftBumpPath,
     BlueLeftTrenchPath,
@@ -47,7 +47,7 @@ public:
     RedLeftBumpPath,
     RedLeftTrenchPath,
     RedRightBumpPath,
-    RedRightTrenchPath
+    RedRightTrenchPath,
   };
 
   frc2::CommandPtr GetAutonomousCommand();

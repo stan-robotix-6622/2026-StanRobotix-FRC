@@ -82,12 +82,11 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand(SubDrivetr
                 double kS = (sumY * sumX2 - sumX * sumXY) / (n * sumX2 - sumX * sumX);
                 double kV = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
 
-                printf("********** Drive FF Characterization Results **********");
-                printf("kS: %f", kS);
-                printf("kV: %f", kV);
-                //   frc::DataLogManager::Log("********** Drive FF Characterization Results **********");
-                //   frc::DataLogManager::Log(std::format("kS: {}", kS));
-                //   frc::DataLogManager::Log(std::format("kV: {}", kV));
+                frc::DataLogManager::Log("********** Drive FF Characterization Results **********");
+                frc::DataLogManager::Log("kS:");
+                frc::DataLogManager::Log(std::to_string(kS));
+                frc::DataLogManager::Log("kV:");
+                frc::DataLogManager::Log(std::to_string(kV));
               }));
 }
 
@@ -142,12 +141,17 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand(SubDrivetr
                 frc::Rotation2d rotation = iDrivetrain->getIMU()->getRotation2d();
                 state.gyroDelta += units::math::abs(rotation.Radians() - state.lastAngle.Radians());
                 state.lastAngle = rotation;
+                frc::SmartDashboard::PutNumber("Last Angle", state.lastAngle.Radians().value());
+                frc::SmartDashboard::PutNumber("Gyro Diff", units::math::abs(rotation.Radians() - state.lastAngle.Radians()).value());
+                frc::SmartDashboard::PutNumber("Gyro Delta", state.gyroDelta.value());
               })
 
               // When cancelled, calculate and print results
               .FinallyDo(
                   [state, iDrivetrain]
                   {
+                    frc::SmartDashboard::PutNumber("Last Angle", state.lastAngle.Radians().value());
+                    frc::SmartDashboard::PutNumber("Gyro Delta", state.gyroDelta.value());
                     std::array<units::radian_t, 4> wPositions;
                     wpi::array<frc::SwerveModulePosition, 4U> wSwervePositions = iDrivetrain->getSwerveModulePositions();
                     for (int i = 0; i < 4; i++)
@@ -163,13 +167,12 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand(SubDrivetr
                     units::meter_t wheelRadius =
                         (state.gyroDelta * DrivetrainConstants::kFrontLeftTranslation.Norm()) / wWheelDelta;
 
-                    printf("********** Wheel Radius Characterization Results **********");
-                    printf("Wheel Delta: %f radians", wWheelDelta);
-                    printf("Gyro Delta: %f radians", state.gyroDelta);
-                    printf("Wheel Radius: %f meters", wheelRadius);
-                    // frc::DataLogManager::Log("********** Wheel Radius Characterization Results **********");
-                    // frc::DataLogManager::Log(std::format("Wheel Delta: {} radians", wWheelDelta));
-                    // frc::DataLogManager::Log(std::format("Gyro Delta: {} radians", state.gyroDelta));
-                    // frc::DataLogManager::Log(std::format("Wheel Radius: {} meters", wheelRadius));
+                    frc::DataLogManager::Log("********** Wheel Radius Characterization Results **********");
+                    frc::DataLogManager::Log("Wheel Delta: (in radians)");
+                    frc::DataLogManager::Log(std::to_string(wWheelDelta.value()));
+                    frc::DataLogManager::Log("Gyro Delta: (in radians)");
+                    frc::DataLogManager::Log(std::to_string(state.gyroDelta.value()));
+                    frc::DataLogManager::Log("Wheel Radius: (in meters)");
+                    frc::DataLogManager::Log(std::to_string(wheelRadius.value()));
                   })));
 }

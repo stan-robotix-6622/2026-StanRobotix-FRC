@@ -11,6 +11,7 @@
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
+#include "commands/DriveCommands.h"
 #include "commands/PivotIntake.h"
 #include "commands/FullIntake.h"
 #include "commands/Shoot.h"
@@ -35,9 +36,6 @@ RobotContainer::RobotContainer() {
   RegisterCommandsPathPlanner();
   // Configure the button bindings
   ConfigureBindings();
-
-  pathplanner::EventTrigger("Intake").OnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
-  pathplanner::EventTrigger("Shoot").OnTrue(Shoot(mSubShooter).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter"));
 }
 
 void RobotContainer::SetSubsystemDefaultCommands() {
@@ -79,14 +77,15 @@ void RobotContainer::RegisterCommandsPathPlanner() {
   pathplanner::NamedCommands::registerCommand("Feed Shooter", mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
   pathplanner::NamedCommands::registerCommand("Unstuck Feeder", mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
   // pathplanner::NamedCommands::registerCommand("Index Fuel", mSubIntake->getIntakeCommand());
+
+  pathplanner::EventTrigger("Intake").OnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
+  pathplanner::EventTrigger("Shoot").OnTrue(Shoot(mSubShooter).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter"));
 }
 
 void RobotContainer::ConfigureBindings() {
   // Configure your trigger bindings here
-
+  
   mCommandXboxController->Button(OperatorConstants::kPivotDownButton).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
-
-  mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("'8' Path").Repeatedly());
   
   mCommandXboxController->Button(OperatorConstants::kShootButton).ToggleOnTrue(Shoot(mSubShooter).ToPtr());
   mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
@@ -95,15 +94,18 @@ void RobotContainer::ConfigureBindings() {
   
   mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
     {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_rad));}, {mIMU}));
-  mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
-    {mDrivetrain->resetPose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()));}, {mIMU}));
+    mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
+      {mDrivetrain->resetPose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()));}, {mIMU}));
 
-  mCommandXboxController->Button(8).WhileTrue(mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(2.3_m);}));
-};
+  // mCommandXboxController->Button(7).WhileTrue(DriveCommands::getFeedforwardCharacterizationCommand(mDrivetrain));
+  // mCommandXboxController->Button(8).WhileTrue(DriveCommands::getWheelRadiusCharacterizationCommand(mDrivetrain));
+}
 
 void RobotContainer::ConfigureWhenConnectedToDS()
 {
   mDrivetrain->ConfigurePathplanner();
+  mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("EightPath").Repeatedly());
+  mCommandXboxController->Button(8).WhileTrue(mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(2.3_m);}));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
@@ -117,6 +119,10 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 
     case BlueCenterBumpPath:
       return mDrivetrain->getFollowPathCommand("BlueCenterBumpPath");
+      break;
+
+    case BlueCenterBumpReversed:
+      return mDrivetrain->getFollowPathCommand("BlueCenterBumpReversed");
       break;
 
     case BlueCenterTrenchPath:

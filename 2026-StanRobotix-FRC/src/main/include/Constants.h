@@ -63,7 +63,7 @@ namespace ShooterConstants
   inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 
-  inline constexpr units::turns_per_second_t kVitesseVoulue = 80_tps;
+  inline constexpr units::turns_per_second_t kVitesseVoulue = 55_tps;
 
   inline constexpr bool kFollowerinverted = false;
 
@@ -73,13 +73,13 @@ namespace ShooterConstants
     inline constexpr double kI = 0;
     inline constexpr double kD = 0;
 
-    inline constexpr units::turns_per_second_t setpoint = 80_tps; // its NOT(it actually is) a placeholder :)
+    inline constexpr units::turns_per_second_t setpoint = 55_tps; // its NOT(it actually is) a placeholder :)
   }
 }
 
 namespace FeederConstants
 {
-  inline constexpr units::volt_t kDesiredVoltage = 5_V; // placeholder :)
+  inline constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
 
   inline constexpr bool kInverted = true;
   inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
@@ -251,7 +251,7 @@ namespace IntakeConstants
   inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 
-  inline constexpr double kSpeed = 0.5; // a modifier (valeur temporaire)
+  inline constexpr double kSpeed = 0.8; // a modifier (valeur temporaire)
 }
 
 namespace PivotConstants

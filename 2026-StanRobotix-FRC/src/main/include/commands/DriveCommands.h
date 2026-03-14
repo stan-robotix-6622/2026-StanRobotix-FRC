@@ -28,4 +28,6 @@ class DriveCommands {
     frc::Rotation2d lastAngle = 0.0_rad;
     units::radian_t gyroDelta = 0.0_rad;
   };
+ private:
+  static WheelRadiusCharacterizationState mState;
 };
