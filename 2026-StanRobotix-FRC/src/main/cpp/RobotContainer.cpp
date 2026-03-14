@@ -28,8 +28,6 @@ RobotContainer::RobotContainer() {
   mDrivetrain = new SubDrivetrain{mIMU};
   mSubIntake = new SubIntake{};
   mSubPivotIntake = new SubPivotIntake{};
-
-  mDriverStation = new frc::DriverStation;
   
   // Set the default commands for all subsystems
   SetSubsystemDefaultCommands();

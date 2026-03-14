@@ -75,6 +75,5 @@ private:
   void RegisterCommandsPathPlanner();
   void SetSubsystemDefaultCommands();
 
-  frc::DriverStation* mDriverStation;
   std::string GetActiveHubColor();
 };
