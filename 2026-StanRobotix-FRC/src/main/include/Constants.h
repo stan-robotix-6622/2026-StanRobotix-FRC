@@ -199,13 +199,13 @@ namespace LimelightConstants
 
   inline constexpr std::string_view kName = "";
 
-  inline constexpr units::meter_t kForward = -1.125_in;
-  inline constexpr units::meter_t kRight = -9.75_in;
-  inline constexpr units::meter_t kUp = 20.25_in;
+  inline constexpr units::meter_t kForward = 13.6875_in;
+  inline constexpr units::meter_t kRight = -11.875_in;
+  inline constexpr units::meter_t kUp = 20.875_in;
 
   inline constexpr units::degree_t kRoll = 0_deg;
   inline constexpr units::degree_t kPitch = 0_deg;
-  inline constexpr units::degree_t kYaw = -90_deg;
+  inline constexpr units::degree_t kYaw = 0_deg;
 
   inline constexpr double kPoseEstimatorStandardDeviationX = 0.7;      // Default/Recommended values
   inline constexpr double kPoseEstimatorStandardDeviationY = 0.7;      // Default/Recommended values
@@ -262,7 +262,7 @@ namespace PivotConstants
   inline constexpr double kI = 0.4;  // en attendant
   inline constexpr double kD = 0.15; // en attendant
   inline constexpr units::volt_t kG = 0.80_V;
-  inline constexpr double setpointUp = std::numbers::pi / 2;    // 90 deg up
+  inline constexpr double setpointUp = std::numbers::pi * 7 / 16;    // 90 deg up
   inline constexpr double setpointDown = std::numbers::pi / 18; // 10 deg up
 
   inline constexpr bool kInverted = false;

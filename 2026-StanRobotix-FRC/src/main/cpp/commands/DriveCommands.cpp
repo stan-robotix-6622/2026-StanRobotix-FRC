@@ -2,82 +2,84 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+#include "commands/DriveCommands.h"
+
 // #include <format>
-#include <vector>
 #include <numbers>
 
 #include <frc/DataLogManager.h>
-#include <frc/filter/SlewRateLimiter.h>
-
-#include <units/angle.h>
-#include <units/velocity.h>
-#include <units/angular_velocity.h>
-#include <units/voltage.h>
 
 #include "Constants.h"
-#include "commands/DriveCommands.h"
 
-frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand(SubDrivetrain* iDrivetrain)
+DriveCommands::DriveCommands(SubDrivetrain* iDrivetrain)
 {
-  std::vector<units::radians_per_second_t> wVelocitySamples;
-  std::vector<units::volt_t> wVoltageSamples;
-  frc::Timer wTimer;
+  mDrivetrain = iDrivetrain;
 
+  mLimiter = new frc::SlewRateLimiter<units::radians_per_second>{DrivetrainConstants::Commands::kWheelRadiusRampRate};
+  mState = new WheelRadiusCharacterizationState{};
+  
+  mVelocitySamples = new std::vector<units::radians_per_second_t>{};
+  mVoltageSamples = new std::vector<units::volt_t>{};
+  mTimer = new frc::Timer{};
+}
+
+frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand()
+{
   return frc2::cmd::Sequence(
       // Reset data
       frc2::cmd::RunOnce(
-          [wVelocitySamples, wVoltageSamples] mutable
+          [this]
           {
-            wVelocitySamples.clear();
-            wVoltageSamples.clear();
+            mVelocitySamples->clear();
+            mVoltageSamples->clear();
           }),
 
       // Allow modules to orient
       frc2::cmd::Run(
-          [iDrivetrain]
+          [this]
           {
-            iDrivetrain->mesureSwerveFeedforward(0_V);
+            mDrivetrain->mesureSwerveFeedforward(0_V);
           },
-          {iDrivetrain})
+          {mDrivetrain})
           .WithTimeout(DrivetrainConstants::Commands::kFeedforwartStartDelay),
 
       // Start timer
-      frc2::cmd::RunOnce([wTimer] mutable
-                         { wTimer.Restart(); }),
+      frc2::cmd::RunOnce([this]
+                         { mTimer->Restart(); }),
 
       // Accelerate and gather data
       frc2::cmd::Run(
-          [iDrivetrain, wTimer, wVelocitySamples, wVoltageSamples] mutable
+          [this]
           {
-            units::volt_t wVoltage = wTimer.Get() * (DrivetrainConstants::Commands::kFeedforwardRampRate);
-            iDrivetrain->mesureSwerveFeedforward(wVoltage);
-            std::array<frc::SwerveModuleState, 4U> wModuleStates = iDrivetrain->getSwerveModuleStates();
+            units::volt_t wVoltage = mTimer->Get() * (DrivetrainConstants::Commands::kFeedforwardRampRate);
+            mDrivetrain->mesureSwerveFeedforward(wVoltage);
+            std::array<frc::SwerveModuleState, 4U> wModuleStates = mDrivetrain->getSwerveModuleStates();
             units::radians_per_second_t wAverageAngularSpeed = 0.0_rad_per_s;
             for (int i = 0; i < 4; i++)
             {
               wAverageAngularSpeed += units::radian_t(std::numbers::pi) * wModuleStates[i].speed / (ModuleConstants::kWheelPerimeter);
             }
             wAverageAngularSpeed /= 4;
-            wVelocitySamples.emplace_back(wAverageAngularSpeed);
-            wVoltageSamples.emplace_back(wVoltage);
+            mVelocitySamples->emplace_back(wAverageAngularSpeed);
+            mVoltageSamples->emplace_back(wVoltage);
           },
-          {iDrivetrain})
+          {mDrivetrain})
 
           // When cancelled, calculate and print results
           .FinallyDo(
-              [wVelocitySamples, wVoltageSamples] mutable
+              [this]
               {
-                int n = wVelocitySamples.size();
+                int n = mVelocitySamples->size();
                 double sumX = 0.0;
                 double sumY = 0.0;
                 double sumXY = 0.0;
                 double sumX2 = 0.0;
                 for (int i = 0; i < n; i++)
                 {
-                  sumX += wVelocitySamples[i].value();
-                  sumY += wVoltageSamples[i].value();
-                  sumXY += wVelocitySamples[i].value() * wVoltageSamples[i].value();
-                  sumX2 += wVelocitySamples[i].value() * wVelocitySamples[i].value();
+                  // sumX += *mVelocitySamples[i].value();
+                  // sumY += *mVoltageSamples[i].value();
+                  // sumXY += *mVelocitySamples[i].value() * *mVoltageSamples[i].value();
+                  // sumX2 += *mVelocitySamples[i].value() * *mVelocitySamples[i].value();
                 }
                 double kS = (sumY * sumX2 - sumX * sumXY) / (n * sumX2 - sumX * sumX);
                 double kV = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
@@ -90,29 +92,28 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand(SubDrivetr
               }));
 }
 
-frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand(SubDrivetrain* iDrivetrain)
+frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand()
 {
-  frc::SlewRateLimiter<units::radians_per_second> limiter{DrivetrainConstants::Commands::kWheelRadiusRampRate};
-  WheelRadiusCharacterizationState state;
+  mState = new WheelRadiusCharacterizationState{};
 
   return frc2::cmd::Parallel(
       // Drive control sequence
       frc2::cmd::Sequence(
           // Reset acceleration limiter
           frc2::cmd::RunOnce(
-              [limiter] mutable
+              [this]
               {
-                limiter.Reset(0.0_rad_per_s);
+                mLimiter->Reset(0.0_rad_per_s);
               }),
 
           // Turn in place, accelerating up to full speed
           frc2::cmd::Run(
-              [limiter, iDrivetrain] mutable
+              [this]
               {
-                units::radians_per_second_t speed = limiter.Calculate(DrivetrainConstants::Commands::kWheelRadiusMaxVelocity);
-                iDrivetrain->driveRobotRelative(frc::ChassisSpeeds(0.0_mps, 0.0_mps, speed));
+                units::radians_per_second_t speed = mLimiter->Calculate(DrivetrainConstants::Commands::kWheelRadiusMaxVelocity);
+                mDrivetrain->driveRobotRelative(frc::ChassisSpeeds(0.0_mps, 0.0_mps, speed));
               },
-              {iDrivetrain})),
+              {mDrivetrain})),
 
       // Measurement sequence
       frc2::cmd::Sequence(
@@ -121,39 +122,39 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand(SubDrivetr
 
           // Record starting measurement
           frc2::cmd::RunOnce(
-              [state, iDrivetrain] mutable
+              [this]
               {
-                wpi::array<frc::SwerveModulePosition, 4U> wSwervePositions = iDrivetrain->getSwerveModulePositions();
+                wpi::array<frc::SwerveModulePosition, 4U> wSwervePositions = mDrivetrain->getSwerveModulePositions();
                 for (int i = 0; i < 4; i++)
                 {
                   // Divide the distance traveled by the current WheelPerimeter to get the number of rotations
                   // And then convert it to radians
-                  state.positions[i] = units::radian_t(std::numbers::pi) * wSwervePositions[i].distance / ModuleConstants::kWheelPerimeter;
+                  mState->positions[i] = units::radian_t(std::numbers::pi) * wSwervePositions[i].distance / ModuleConstants::kWheelPerimeter;
                 }
-                state.lastAngle = iDrivetrain->getIMU()->getRotation2d();
-                state.gyroDelta = 0.0_rad;
+                mState->lastAngle = mDrivetrain->getIMU()->getRotation2d();
+                mState->gyroDelta = 0.0_rad;
               }),
 
           // Update gyro delta
           frc2::cmd::Run(
-              [state, iDrivetrain] mutable
+              [this]
               {
-                frc::Rotation2d rotation = iDrivetrain->getIMU()->getRotation2d();
-                state.gyroDelta += units::math::abs(rotation.Radians() - state.lastAngle.Radians());
-                state.lastAngle = rotation;
-                frc::SmartDashboard::PutNumber("Last Angle", state.lastAngle.Radians().value());
-                frc::SmartDashboard::PutNumber("Gyro Diff", units::math::abs(rotation.Radians() - state.lastAngle.Radians()).value());
-                frc::SmartDashboard::PutNumber("Gyro Delta", state.gyroDelta.value());
+                frc::Rotation2d rotation = mDrivetrain->getIMU()->getRotation2d();
+                mState->gyroDelta += units::math::abs(rotation.Radians() - mState->lastAngle.Radians());
+                mState->lastAngle = rotation;
+                frc::SmartDashboard::PutNumber("Last Angle", mState->lastAngle.Radians().value());
+                frc::SmartDashboard::PutNumber("Gyro Diff", units::math::abs(rotation.Radians() - mState->lastAngle.Radians()).value());
+                frc::SmartDashboard::PutNumber("Gyro Delta", mState->gyroDelta.value());
               })
 
               // When cancelled, calculate and print results
               .FinallyDo(
-                  [state, iDrivetrain]
+                  [this]
                   {
-                    frc::SmartDashboard::PutNumber("Last Angle", state.lastAngle.Radians().value());
-                    frc::SmartDashboard::PutNumber("Gyro Delta", state.gyroDelta.value());
+                    frc::SmartDashboard::PutNumber("Last Angle", mState->lastAngle.Radians().value());
+                    frc::SmartDashboard::PutNumber("Gyro Delta", mState->gyroDelta.value());
                     std::array<units::radian_t, 4> wPositions;
-                    wpi::array<frc::SwerveModulePosition, 4U> wSwervePositions = iDrivetrain->getSwerveModulePositions();
+                    wpi::array<frc::SwerveModulePosition, 4U> wSwervePositions = mDrivetrain->getSwerveModulePositions();
                     for (int i = 0; i < 4; i++)
                     {
                       wPositions[i] = units::radian_t(wSwervePositions[i].distance / ModuleConstants::kWheelPerimeter);
@@ -161,17 +162,17 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand(SubDrivetr
                     units::radian_t wWheelDelta;
                     for (int i = 0; i < 4; i++)
                     {
-                      wWheelDelta += units::math::abs(wPositions[i] - state.positions[i]);
+                      wWheelDelta += units::math::abs(wPositions[i]);
                     }
                     wWheelDelta /= 4;
                     units::meter_t wheelRadius =
-                        (state.gyroDelta * DrivetrainConstants::kFrontLeftTranslation.Norm()) / wWheelDelta;
+                        (mState->gyroDelta * DrivetrainConstants::kFrontLeftTranslation.Norm()) / wWheelDelta;
 
                     frc::DataLogManager::Log("********** Wheel Radius Characterization Results **********");
                     frc::DataLogManager::Log("Wheel Delta: (in radians)");
                     frc::DataLogManager::Log(std::to_string(wWheelDelta.value()));
                     frc::DataLogManager::Log("Gyro Delta: (in radians)");
-                    frc::DataLogManager::Log(std::to_string(state.gyroDelta.value()));
+                    frc::DataLogManager::Log(std::to_string(mState->gyroDelta.value()));
                     frc::DataLogManager::Log("Wheel Radius: (in meters)");
                     frc::DataLogManager::Log(std::to_string(wheelRadius.value()));
                   })));

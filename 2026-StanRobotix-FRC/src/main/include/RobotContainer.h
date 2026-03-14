@@ -10,6 +10,8 @@
 #include <frc/DriverStation.h>
 #include <frc/DataLogManager.h>
 
+#include "commands/DriveCommands.h"
+
 #include "subsystems/ExampleSubsystem.h"
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubPivotIntake.h"
@@ -68,6 +70,8 @@ private:
 
   SubIntake* mSubIntake = nullptr;
   SubPivotIntake* mSubPivotIntake = nullptr;
+
+  DriveCommands* mDriveCommands;
 
   void ConfigureBindings();
 

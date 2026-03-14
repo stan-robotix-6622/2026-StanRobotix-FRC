@@ -30,6 +30,8 @@ RobotContainer::RobotContainer() {
   mSubIntake = new SubIntake{};
   mSubPivotIntake = new SubPivotIntake{};
   
+  mDriveCommands = new DriveCommands{mDrivetrain};
+
   // Set the default commands for all subsystems
   SetSubsystemDefaultCommands();
   // Register all relevant commands to pathplanner
@@ -93,12 +95,14 @@ void RobotContainer::ConfigureBindings() {
   // mCommandXboxController->Button(OperatorConstants::kIndexButton).WhileTrue(mSubIntake->getIntakeCommand());
   
   mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
-    {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_rad));}, {mIMU}));
-    mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
-      {mDrivetrain->resetPose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()));}, {mIMU}));
+    {if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
+      {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_rad));}
+    else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_rad));}}, {mIMU}));
+  mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
+    {mDrivetrain->resetPose(frc::Pose2d(14_m, 2_m, mDrivetrain->getPose().Rotation()));}, {mIMU}));
 
-  // mCommandXboxController->Button(7).WhileTrue(DriveCommands::getFeedforwardCharacterizationCommand(mDrivetrain));
-  // mCommandXboxController->Button(8).WhileTrue(DriveCommands::getWheelRadiusCharacterizationCommand(mDrivetrain));
+  // mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
+  // mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
 }
 
 void RobotContainer::ConfigureWhenConnectedToDS()
