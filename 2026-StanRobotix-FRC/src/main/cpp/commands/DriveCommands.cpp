@@ -124,13 +124,7 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand()
           frc2::cmd::RunOnce(
               [this]
               {
-                wpi::array<frc::SwerveModulePosition, 4U> wSwervePositions = mDrivetrain->getSwerveModulePositions();
-                for (int i = 0; i < 4; i++)
-                {
-                  // Divide the distance traveled by the current WheelPerimeter to get the number of rotations
-                  // And then convert it to radians
-                  mState->positions[i] = units::radian_t(std::numbers::pi) * wSwervePositions[i].distance / ModuleConstants::kWheelPerimeter;
-                }
+                mState->positions = mDrivetrain->getSwerveModulePositions();
                 mState->lastAngle = mDrivetrain->getIMU()->getRotation2d();
                 mState->gyroDelta = 0.0_rad;
               }),
@@ -142,22 +136,17 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand()
                 frc::Rotation2d rotation = mDrivetrain->getIMU()->getRotation2d();
                 mState->gyroDelta += units::math::abs(rotation.Radians() - mState->lastAngle.Radians());
                 mState->lastAngle = rotation;
-                frc::SmartDashboard::PutNumber("Last Angle", mState->lastAngle.Radians().value());
-                frc::SmartDashboard::PutNumber("Gyro Diff", units::math::abs(rotation.Radians() - mState->lastAngle.Radians()).value());
-                frc::SmartDashboard::PutNumber("Gyro Delta", mState->gyroDelta.value());
               })
 
               // When cancelled, calculate and print results
               .FinallyDo(
                   [this]
                   {
-                    frc::SmartDashboard::PutNumber("Last Angle", mState->lastAngle.Radians().value());
-                    frc::SmartDashboard::PutNumber("Gyro Delta", mState->gyroDelta.value());
                     std::array<units::radian_t, 4> wPositions;
                     wpi::array<frc::SwerveModulePosition, 4U> wSwervePositions = mDrivetrain->getSwerveModulePositions();
                     for (int i = 0; i < 4; i++)
                     {
-                      wPositions[i] = units::radian_t(wSwervePositions[i].distance / ModuleConstants::kWheelPerimeter);
+                      wPositions[i] = units::radian_t(std::numbers::pi * 2 * (wSwervePositions[i].distance - mState->positions[i].distance) / ModuleConstants::kWheelPerimeter);
                     }
                     units::radian_t wWheelDelta;
                     for (int i = 0; i < 4; i++)

@@ -31,8 +31,13 @@ class DriveCommands {
   frc2::CommandPtr getWheelRadiusCharacterizationCommand();
 
  private:
-  struct WheelRadiusCharacterizationState {
-    std::array<units::radian_t, 4> positions = {0_rad, 0_rad, 0_rad, 0_rad};
+  struct WheelRadiusCharacterizationState
+  {
+    std::array<frc::SwerveModulePosition, 4> positions = {
+      frc::SwerveModulePosition{0_m, 0_rad},
+      frc::SwerveModulePosition{0_m, 0_rad},
+      frc::SwerveModulePosition{0_m, 0_rad}, 
+      frc::SwerveModulePosition{0_m, 0_rad}};
     frc::Rotation2d lastAngle = 0.0_rad;
     units::radian_t gyroDelta = 0.0_rad;
   };
