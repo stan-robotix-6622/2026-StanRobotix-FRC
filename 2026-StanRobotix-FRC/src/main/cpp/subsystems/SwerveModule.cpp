@@ -4,7 +4,6 @@
 
 #include "subsystems/SwerveModule.h"
 
-#include "Constants.h"
 #include "Configs.h"
 
 SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInverted, bool iTurningInverted)

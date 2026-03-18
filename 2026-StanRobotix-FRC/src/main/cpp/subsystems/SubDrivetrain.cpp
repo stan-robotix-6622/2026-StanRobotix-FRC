@@ -6,7 +6,7 @@
 
 #include "Constants.h"
 
-SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
+SubDrivetrain::SubDrivetrain()
 {
     frc::DataLogManager::Log("Debut initialisation du Drivetrain");
     // Initialization of the SwerveModules' location relative to the robot center
@@ -49,16 +49,13 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
         LimelightConstants::kYaw.value()
     );
 
-    // Initialization of the IMU
-    mIMU = iIMU;
+    mIMU = new IMU{};
+    frc::SmartDashboard::PutData("drivetrain/IMU", mIMU);
 
-    // Initialization of the swerve kinematics with the SwerveModules' location
     mKinematics = new frc::SwerveDriveKinematics<4>{*mFrontLeftLocation, *mFrontRightLocation, *mBackLeftLocation, *mBackRightLocation};
 
-    // Initialization of the swerve pose estimator with the kinematics, the robot's rotation, an array of the SwerveModules' position, and the robot's pose
     mPoseEstimator = new frc::SwerveDrivePoseEstimator<4>{*mKinematics, mIMU->getRotation2d(), getSwerveModulePositions(), *mStartingRobotPose};
 
-    // Initialization des standard deviations de la vision
     visionMeasurementStdDevs = new wpi::array<double, 3>{LimelightConstants::kPoseEstimatorStandardDeviationX,
                                                          LimelightConstants::kPoseEstimatorStandardDeviationY,
                                                          LimelightConstants::kPoseEstimatorStandardDeviationYaw};
@@ -66,59 +63,18 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
 
     mField2d = new frc::Field2d{};
     frc::SmartDashboard::PutData("drivetrain/Field2d", mField2d);
-
-    // Wait for the robot to be connected to the DriverStation
-    /* while (!frc::DriverStation::WaitForDsConnection(3_s))
-    {
-        frc::DataLogManager::Log("Waiting for Driver Station connection");
-    }
-    frc::DataLogManager::Log("The Driver Station is connected!");
-    pathplanner::AutoBuilder::configure(
-        [this]()
-        { return getPose(); }, // Robot pose supplier
-        [this](frc::Pose2d pose)
-        { resetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
-        [this]()
-        { return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-        [this](auto speeds, auto feedforwards)
-        { driveRobotRelative(speeds); },                                                           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-        std::make_shared<pathplanner::PPHolonomicDriveController>(                                                                                    // PPHolonomicController is the built in path following controller for holonomic drive trains
-            pathplanner::PIDConstants(PathPlannerConstants::kPTranslation, PathPlannerConstants::kITranslation, PathPlannerConstants::kDTranslation), // Translation PID constants
-            pathplanner::PIDConstants(PathPlannerConstants::kPRotation, PathPlannerConstants::kIRotation, PathPlannerConstants::kDRotation)           // Rotation PID constants
-            ),
-        PathPlannerConfig, // The robot configuration
-        []()
-        {
-            // Boolean supplier that controls when the path will be mirrored for the red alliance
-            // This will flip the path being followed to the red side of the field.
-            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-            std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
-            if (alliance) {
-                frc::SmartDashboard::PutNumber("alliance color", frc::DriverStation::GetAlliance().value());
-                return alliance.value() == frc::DriverStation::Alliance::kRed;
-            }
-            return false;
-        },
-        this // Reference to this subsystem to set requirements
-    );
-    frc::DataLogManager::Log("Drivetrain initialise"); */
 }
 
 // This method will be called once per scheduler run
 void SubDrivetrain::Periodic()
 {
-    // Refreshing the SwerveModules' position and states
     refreshSwerveModules();
 
-    // Update of the robot's pose with the robot's rotation and an array of the SwerveModules' position
     mCurrentRotation2d = mIMU->getRotation2d();
 
     mPoseEstimator->Update(mCurrentRotation2d, getSwerveModulePositions());
 
     mField2d->SetRobotPose(mPoseEstimator->GetEstimatedPosition());
-
-    // Update la rotation du robot pour la Limelight
 
     LimelightHelpers::SetRobotOrientation(mLimelightName, mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
 
@@ -268,8 +224,6 @@ void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
     // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
     mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
 
-    frc::SmartDashboard::PutNumber("drivetrain/SetPoint", mDesiredSwerveStates[0].angle.Radians().value());
-    frc::SmartDashboard::PutNumber("drivetrain/Position", mFrontLeftModule->getModuleState().angle.Radians().value());
     mDesiredChassisSpeedsPublisher.Set(mDesiredChassisSpeeds);
     mDesiredModuleStatesPublisher.Set(mDesiredSwerveStates);
 
@@ -284,19 +238,19 @@ void SubDrivetrain::mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units
     mBackLeftModule->setDrivingVoltage(iDrivingVoltage);
     mBackRightModule->setDrivingVoltage(iDrivingVoltage);
 
-    if (iTurningVoltage != 0_V)
-    {
-        mFrontLeftModule->setTurningVoltage(iTurningVoltage);
-        mFrontRightModule->setTurningVoltage(iTurningVoltage);
-        mBackLeftModule->setTurningVoltage(iTurningVoltage);
-        mBackRightModule->setTurningVoltage(iTurningVoltage);
-    }
-    else
+    if (iTurningVoltage == 0_V)
     {
         mFrontLeftModule->setDesiredHeading(0_rad);
         mFrontRightModule->setDesiredHeading(0_rad);
         mBackLeftModule->setDesiredHeading(0_rad);
         mBackRightModule->setDesiredHeading(0_rad);
+    }
+    else
+    {
+        mFrontLeftModule->setTurningVoltage(iTurningVoltage);
+        mFrontRightModule->setTurningVoltage(iTurningVoltage);
+        mBackLeftModule->setTurningVoltage(iTurningVoltage);
+        mBackRightModule->setTurningVoltage(iTurningVoltage);
     }
 
     frc::SmartDashboard::PutNumber("drivetrain/Driving Voltage", iDrivingVoltage.value());
@@ -326,7 +280,7 @@ void SubDrivetrain::resetPose(frc::Pose2d iRobotPose)
     mPoseEstimator->ResetPose(iRobotPose);
 }
 
-SubIMU* SubDrivetrain::getIMU()
+IMU* SubDrivetrain::getIMU()
 {
     return mIMU;
 }

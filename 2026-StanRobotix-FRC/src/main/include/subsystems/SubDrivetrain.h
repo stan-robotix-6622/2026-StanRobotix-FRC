@@ -28,56 +28,43 @@
 #include <units/time.h>
 #include <units/angular_velocity.h>
 #include "LimelightHelpers.h"
-#include "subsystems/SubIMU.h"
+#include "subsystems/IMU.h"
 #include "subsystems/SwerveModule.h"
 
 class SubDrivetrain : public frc2::SubsystemBase {
  public:
-  SubDrivetrain(SubIMU* iIMU);
-  /**
-   * Will be called periodically whenever the CommandScheduler runs.
-   */
+  SubDrivetrain();
+
   void Periodic() override;
 
   void ConfigurePathplanner();
 
-  // Method that drives the robot in field relative drive
   void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
 
-  void refreshSwerveModules();
-
   void mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units::volt_t iTurningVoltage = 0_V);
-
   void setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4>);
-
+  void refreshSwerveModules();
   wpi::array<frc::SwerveModuleState, 4> getSwerveModuleStates();
   wpi::array<frc::SwerveModulePosition, 4> getSwerveModulePositions();
 
   frc2::CommandPtr getFollowPathCommand(std::string iPathName);
 
-  // Method that returns a ChassisSpeeds from the robot relative speeds
   frc::ChassisSpeeds getRobotRelativeSpeeds();
-  // Method that drives the robot in robot relative drive
   void driveRobotRelative(frc::ChassisSpeeds iSpeeds);
 
-  // Method that returns the robot's pose
   frc::Pose2d getPose();
-  // Method that redefines the robot's pose with its input
   void resetPose(frc::Pose2d iRobotPose);
 
-  SubIMU* getIMU();
-  
+  IMU* getIMU();
+
   frc::Pose2d getClosestPoseAtDistanceFromHub(units::meter_t iDesiredDistance);
-
   frc2::CommandPtr getGoToDistanceFromHubCommand(units::meter_t iDesiredDistance);
-
   frc::Pose2d standardizePose(frc::Pose2d iPose);
 
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  // Declaring the locations of the SwerveModules
   frc::Translation2d* mFrontLeftLocation;
   frc::Translation2d* mFrontRightLocation;
   frc::Translation2d* mBackLeftLocation;
@@ -103,13 +90,9 @@ class SubDrivetrain : public frc2::SubsystemBase {
   SwerveModule* mBackLeftModule;
   SwerveModule* mBackRightModule;
 
-  // Declaring my swerve kinematics object
   frc::SwerveDriveKinematics<4>* mKinematics;
-  // Declaring the robot starting pose object
   frc::Pose2d* mStartingRobotPose = new frc::Pose2d{2_m, 7_m, 0_rad};
-  // Declaring the swerve odometry object
   frc::SwerveDriveOdometry<4>* mOdometry;
-  // Declaring the pose estimator
   frc::SwerveDrivePoseEstimator<4>* mPoseEstimator;
 
   frc::Field2d* mField2d;
@@ -117,8 +100,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
   wpi::array<double, 3>* visionMeasurementStdDevs;
   wpi::array<double, 3>* stateStdDevs;
 
-  // Declaring the IMU object
-  SubIMU* mIMU = nullptr;
+  IMU* mIMU;
 
   // These attributes are used to not create new variables every time a function is called
   std::string mLimelightName;

@@ -19,7 +19,6 @@
 #include "subsystems/subFeeder.h"
 #include "subsystems/subIndexer.h"
 #include "subsystems/SubDrivetrain.h"
-#include "subsystems/SubIMU.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -66,7 +65,6 @@ private:
   SubFeeder* mSubFeeder = nullptr;
   // SubIndexer* mSubIndexer = nullptr;
 
-  SubIMU* mIMU = nullptr;
   SubDrivetrain* mDrivetrain = nullptr;
 
   SubIntake* mSubIntake = nullptr;

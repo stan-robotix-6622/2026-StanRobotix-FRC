@@ -27,8 +27,7 @@ RobotContainer::RobotContainer() {
   mSubShooter = new SubShooter{};
   mSubFeeder = new SubFeeder{};
   // mSubIndexer = new SubIndexer{};
-  mIMU = new SubIMU{};
-  mDrivetrain = new SubDrivetrain{mIMU};
+  mDrivetrain = new SubDrivetrain{};
   mSubIntake = new SubIntake{};
   mSubPivotIntake = new SubPivotIntake{};
   
@@ -44,7 +43,6 @@ RobotContainer::RobotContainer() {
 
 void RobotContainer::SetSubsystemDefaultCommands() {
   frc::SmartDashboard::PutData("Xbox Controller", &mCommandXboxController->GetHID());
-  frc::SmartDashboard::PutData("drivetrain/IMU", mIMU);
 
   mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
     [this]
@@ -101,20 +99,20 @@ void RobotContainer::ConfigureBindings() {
   mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
     {if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
       {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_rad));}
-    else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_rad));}}, {mIMU}));
+    else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_rad));}}));
 
   mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
-    {mDrivetrain->resetPose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()));}, {mIMU}));
+    {mDrivetrain->resetPose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()));}));
 
-  mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
-  mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
+  // mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
+  // mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
 }
 
 void RobotContainer::ConfigureWhenConnectedToDS()
 {
   mDrivetrain->ConfigurePathplanner();
-  // mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("EightPath").Repeatedly());
-  // mCommandXboxController->Button(8).WhileTrue(mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(2.3_m);}));
+  mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("EightPath").Repeatedly());
+  mCommandXboxController->Button(8).WhileTrue(mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(2.3_m);}));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
