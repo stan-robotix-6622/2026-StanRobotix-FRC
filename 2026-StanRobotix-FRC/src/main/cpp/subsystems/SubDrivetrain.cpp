@@ -34,19 +34,17 @@ SubDrivetrain::SubDrivetrain(SubIMU* iIMU)
     mRotation2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Rotation2d>("Current Rotation2d").Publish();
     mCurrentPose2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
     mTargetPose2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Target Pose2d").Publish();
-    mLimelightPoseEstimatorPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Limelight Pose Estimator").Publish();
     mCurrentPose2dSubscriber = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Subscribe(*mStartingRobotPose);
 
-    mLimelightName = std::string(LimelightConstants::kName);
+    mLimelight = new Limelight{LimelightConstants::kName};
     // Set Limelight's position on the robot
-    LimelightHelpers::setCameraPose_RobotSpace(
-        mLimelightName,
-        LimelightConstants::kForward.value(),
-        LimelightConstants::kRight.value(),
-        LimelightConstants::kUp.value(),
-        LimelightConstants::kRoll.value(),
-        LimelightConstants::kPitch.value(),
-        LimelightConstants::kYaw.value()
+    mLimelight->setCameraPosition(
+        LimelightConstants::kForward,
+        LimelightConstants::kRight,
+        LimelightConstants::kUp,
+        LimelightConstants::kRoll,
+        LimelightConstants::kPitch,
+        LimelightConstants::kYaw
     );
 
     // Initialization of the IMU
@@ -119,38 +117,10 @@ void SubDrivetrain::Periodic()
     mField2d->SetRobotPose(mPoseEstimator->GetEstimatedPosition());
 
     // Update la rotation du robot pour la Limelight
-
-    LimelightHelpers::SetRobotOrientation(mLimelightName, mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
-
-    if (LimelightConstants::kUseMegaTag2)
+    mLimelightEstimatedPose = mLimelight->getPoseEstimation(getPose(), mIMU->getYawRate());
+    if (mLimelightEstimatedPose)
     {
-        mLimelightPoseEstimate = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2(mLimelightName);
-    }
-    else
-    {
-        mLimelightPoseEstimate = LimelightHelpers::getBotPoseEstimate_wpiBlue(mLimelightName);
-    }
-
-    // reject the camera update if the PoseEstimate is not valid
-    bool rejectCameraUpdate = !LimelightHelpers::validPoseEstimate(mLimelightPoseEstimate);
-
-    if (units::math::abs(mIMU->getYawRate()) > 360_deg_per_s)
-    {
-        rejectCameraUpdate = true;
-    }
-    else if (mLimelightPoseEstimate.tagCount == 0)
-    {
-        rejectCameraUpdate = true;
-    }
-    else if (mLimelightPoseEstimate.pose == frc::Pose2d(0_m, 0_m, 0_rad))
-    {
-        rejectCameraUpdate = true;
-    }
-
-    if (!rejectCameraUpdate)
-    {
-        LimelightHelpers::PrintPoseEstimate(mLimelightPoseEstimate);
-        mPoseEstimator->AddVisionMeasurement(mLimelightPoseEstimate.pose, frc::Timer::GetFPGATimestamp());
+        mPoseEstimator->AddVisionMeasurement(mLimelightEstimatedPose.value(), frc::Timer::GetFPGATimestamp());
     }
 
     // Publication de valeurs sur le NetworkTables
@@ -158,7 +128,6 @@ void SubDrivetrain::Periodic()
     mCurrentModuleStatesPublisher.Set(getSwerveModuleStates());
     mRotation2dPublisher.Set(mCurrentRotation2d.Degrees());
     mCurrentPose2dPublisher.Set(mPoseEstimator->GetEstimatedPosition());
-    mLimelightPoseEstimatorPublisher.Set(mLimelightPoseEstimate.pose);
 }
 
 void SubDrivetrain::setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4> iStates)
