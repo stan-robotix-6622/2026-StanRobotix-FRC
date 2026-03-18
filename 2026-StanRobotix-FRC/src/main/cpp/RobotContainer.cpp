@@ -173,5 +173,44 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
 }
 
 std::string RobotContainer::GetActiveHubColor() {
-  return frc::DriverStation::GetGameSpecificMessage();
+  //return frc::DriverStation::GetGameSpecificMessage();
+  std::string gameData = frc::DriverStation::GetGameSpecificMessage();
+  double matchTime = (double)frc::DriverStation::GetMatchTime();
+
+  if (0 <= matchTime <= 30 || 130 <= matchTime >= 160) {
+    return "Both Hubs enabled";
+  }
+
+  if (gameData.length() > 0) {
+    switch (gameData[0]) {
+      case 'B':
+        // Blue case code
+        if (30 <= matchTime <= 55 || 80 <= matchTime <= 105) {
+          return "Red Hub enabled";
+        }
+        else {
+          return "Blue Hub enabled";
+        }
+        break;
+      case 'R':
+        // Red case code
+        if (30 <= matchTime <= 55 || 80 <= matchTime <= 105) {
+          return "Blue Hub enabled";
+        }
+        else {
+          return "Red Hub enabled";
+        }
+        break;
+      default:
+        return "Corrupted data";
+        // This is corrupt data
+        break;
+    }
+  }
+  
+  else {
+    //Code for no data received yet
+    return "No data";
+  }
+
 }
