@@ -6,8 +6,10 @@
 
 #include <frc2/command/button/Trigger.h>
 #include <frc2/command/Commands.h>
+#include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include <pathplanner/lib/events/EventTrigger.h>
+#include <pathplanner/lib/events/PointTowardsZoneTrigger.h>
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
@@ -80,8 +82,10 @@ void RobotContainer::RegisterCommandsPathPlanner() {
   pathplanner::NamedCommands::registerCommand("Unstuck Feeder", mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
   // pathplanner::NamedCommands::registerCommand("Index Fuel", mSubIntake->getIntakeCommand());
 
-  pathplanner::EventTrigger("Intake").OnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
-  pathplanner::EventTrigger("Shoot").OnTrue(Shoot(mSubShooter).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter"));
+  pathplanner::EventTrigger("Intake").WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
+  pathplanner::EventTrigger("Shoot").WhileTrue(Shoot(mSubShooter).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter"));
+
+  pathplanner::PointTowardsZoneTrigger("Hub").WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("feed Shooter"));
 }
 
 void RobotContainer::ConfigureBindings() {
@@ -98,18 +102,19 @@ void RobotContainer::ConfigureBindings() {
     {if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
       {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_rad));}
     else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_rad));}}, {mIMU}));
-  mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
-    {mDrivetrain->resetPose(frc::Pose2d(14_m, 2_m, mDrivetrain->getPose().Rotation()));}, {mIMU}));
 
-  // mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
-  // mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
+  mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
+    {mDrivetrain->resetPose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()));}, {mIMU}));
+
+  mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
+  mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
 }
 
 void RobotContainer::ConfigureWhenConnectedToDS()
 {
   mDrivetrain->ConfigurePathplanner();
-  mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("EightPath").Repeatedly());
-  mCommandXboxController->Button(8).WhileTrue(mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(2.3_m);}));
+  // mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("EightPath").Repeatedly());
+  // mCommandXboxController->Button(8).WhileTrue(mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(2.3_m);}));
 }
 
 frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
@@ -119,63 +124,51 @@ frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
   switch (mAutonomousPhase){
     case EightPath:
       return mDrivetrain->getFollowPathCommand("EightPath");
-      break;
 
     case BlueCenterBumpPath:
       return mDrivetrain->getFollowPathCommand("BlueCenterBumpPath");
-      break;
 
     case BlueCenterBumpReversed:
       return mDrivetrain->getFollowPathCommand("BlueCenterBumpReversed");
-      break;
 
     case BlueCenterTrenchPath:
       return mDrivetrain->getFollowPathCommand("BlueCenterTrenchPath");
-      break;
 
     case BlueLeftBumpPath:
       return mDrivetrain->getFollowPathCommand("BlueLeftBumpPath");
-      break;
 
     case BlueLeftTrenchPath:
       return mDrivetrain->getFollowPathCommand("BlueLeftTrenchPath");
-      break;
 
    case BlueRightBumpPath:
       return mDrivetrain->getFollowPathCommand("BlueRightBumpPath");
-      break;
 
    case BlueRightTrenchPath:
       return mDrivetrain->getFollowPathCommand("BlueRightTrenchPath");
-      break;
 
     case RedCenterBumpPath:
       return mDrivetrain->getFollowPathCommand("RedCenterBumpPath");
-      break;
 
     case RedCenterTrenchPath:
       return mDrivetrain->getFollowPathCommand("RedCenterTrenchPath");
-      break;
 
     case RedLeftBumpPath:
       return mDrivetrain->getFollowPathCommand("RedLeftBumpPath");
-      break;
     
     case RedLeftTrenchPath:
       return mDrivetrain->getFollowPathCommand("RedLeftTrenchPath");
-      break;
 
     case RedRightBumpPath:
       return mDrivetrain->getFollowPathCommand("RedRightBumpPath");
-      break;
 
     case RedRightTrenchPath:
       return mDrivetrain->getFollowPathCommand("RedRightTrenchPath");
-      break;
+
+    case TestAuto:
+      return pathplanner::PathPlannerAuto("Test Auto").ToPtr();
       
     default:
       return frc2::cmd::Print("There is no case for this automonous command");
-      break;
 }
 }
 

@@ -6,6 +6,7 @@
 
 // #include <format>
 #include <numbers>
+#include <iostream>
 
 #include <frc/DataLogManager.h>
 
@@ -76,10 +77,10 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand()
                 double sumX2 = 0.0;
                 for (int i = 0; i < n; i++)
                 {
-                  // sumX += *mVelocitySamples[i].value();
-                  // sumY += *mVoltageSamples[i].value();
-                  // sumXY += *mVelocitySamples[i].value() * *mVoltageSamples[i].value();
-                  // sumX2 += *mVelocitySamples[i].value() * *mVelocitySamples[i].value();
+                  sumX += mVelocitySamples->at(i).value();
+                  sumY += mVoltageSamples->at(i).value();
+                  sumXY += mVelocitySamples->at(i).value() * mVoltageSamples->at(i).value();
+                  sumX2 += mVelocitySamples->at(i).value() * mVelocitySamples->at(i).value();
                 }
                 double kS = (sumY * sumX2 - sumX * sumXY) / (n * sumX2 - sumX * sumX);
                 double kV = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);

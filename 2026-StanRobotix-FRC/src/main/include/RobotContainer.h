@@ -50,6 +50,7 @@ public:
     RedLeftTrenchPath,
     RedRightBumpPath,
     RedRightTrenchPath,
+    TestAuto
   };
 
   frc2::CommandPtr GetAutonomousCommand();
@@ -75,7 +76,7 @@ private:
 
   void ConfigureBindings();
 
-  Auto mAutonomousPhase = EightPath;
+  Auto mAutonomousPhase = TestAuto;
   void RegisterCommandsPathPlanner();
   void SetSubsystemDefaultCommands();
 
