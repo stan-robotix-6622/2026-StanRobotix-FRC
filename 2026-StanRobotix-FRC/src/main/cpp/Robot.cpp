@@ -32,6 +32,9 @@ void Robot::RobotPeriodic() {
       mConnectedToDriveStation = true;
     }
   }
+  frc::SmartDashboard::PutBoolean("Dashboard/Hub Active", m_container.isHubActive());
+  frc::SmartDashboard::PutNumber("Dashboard/MatchTime", frc::DriverStation::GetMatchTime().value());
+  frc::SmartDashboard::PutNumber("Dashboard/Alliance", frc::DriverStation::GetAlliance().value());
   frc2::CommandScheduler::GetInstance().Run();
 }
 

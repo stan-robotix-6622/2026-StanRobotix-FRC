@@ -33,30 +33,12 @@ public:
   RobotContainer();
 
   void ConfigureWhenConnectedToDS();
-  
-  enum Auto{
-    BlueCenterBumpPath,
-    BlueCenterBumpReversed,
-    BlueCenterTrenchPath,
-    BlueLeftBumpPath,
-    BlueLeftTrenchPath,
-    BlueRightBumpPath,
-    BlueRightTrenchPath,
-    EightPath,
-    RedCenterBumpPath,
-    RedCenterTrenchPath,
-    RedLeftBumpPath,
-    RedLeftTrenchPath,
-    RedRightBumpPath,
-    RedRightTrenchPath,
-    TestAuto
-  };
 
   frc2::Command* GetAutonomousCommand();
   frc2::CommandPtr GetShooterWhenInZone();
 
+  bool isHubActive();
 private:
-  // Replace with CommandPS4Controller or CommandJoystick if needed
   frc2::CommandXboxController* mCommandXboxController;
 
   // The robot's subsystems are defined here...
@@ -74,12 +56,8 @@ private:
   DriveCommands* mDriveCommands;
 
   void ConfigureBindings();
-
-  Auto mAutonomousPhase = TestAuto;
   void RegisterCommandsPathPlanner();
   void SetSubsystemDefaultCommands();
 
-  std::string GetActiveHubColor();
-
-  frc::SendableChooser<frc2::Command*> autoChooser;
+  frc::SendableChooser<frc2::Command*> mAutoChooser;
 };
