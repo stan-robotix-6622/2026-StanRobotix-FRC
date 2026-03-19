@@ -48,7 +48,7 @@ SubDrivetrain::SubDrivetrain()
     );
 
     // Initialization of the IMU
-    mIMU = iIMU;
+    mIMU = new IMU{};
 
     // Initialization of the swerve kinematics with the SwerveModules' location
     mKinematics = new frc::SwerveDriveKinematics<4>{*mFrontLeftLocation, *mFrontRightLocation, *mBackLeftLocation, *mBackRightLocation};
@@ -75,7 +75,6 @@ void SubDrivetrain::Periodic()
 
     mField2d->SetRobotPose(mPoseEstimator->GetEstimatedPosition());
 
-    // Update la rotation du robot pour la Limelight
     mLimelightEstimatedPose = mLimelight->getPoseEstimation(getPose(), mIMU->getYawRate());
     if (mLimelightEstimatedPose)
     {

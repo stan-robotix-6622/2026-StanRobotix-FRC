@@ -23,7 +23,7 @@ class Limelight {
   void setCameraPosition(units::meter_t forward ,units::meter_t right ,units::meter_t up ,units::degree_t roll ,units::degree_t pitch ,units::degree_t yaw);
  private:
   LimelightHelpers::PoseEstimate mLimelightPoseEstimate;
-  bool rejectCameraUpdate;
+  bool mRejectCameraUpdate;
 
   std::string mName;
   nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();

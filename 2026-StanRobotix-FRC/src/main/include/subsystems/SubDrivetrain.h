@@ -106,6 +106,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
   IMU* mIMU;
 
   // These attributes are used to not create new variables every time a function is called
+  std::optional<frc::Pose2d> mLimelightEstimatedPose;
   frc::ChassisSpeeds mDesiredChassisSpeeds;
   frc::ChassisSpeeds mCurrentChassisSpeeds;
   frc::Rotation2d mCurrentRotation2d;
