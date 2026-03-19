@@ -53,7 +53,7 @@ public:
   };
 
   frc2::Command* GetAutonomousCommand();
-  frc2::CommandPtr GetShooterWhenInZone();
+
 
 private:
   // Replace with CommandPS4Controller or CommandJoystick if needed
