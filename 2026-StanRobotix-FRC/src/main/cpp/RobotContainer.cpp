@@ -10,6 +10,7 @@
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include <pathplanner/lib/events/EventTrigger.h>
 #include <pathplanner/lib/events/PointTowardsZoneTrigger.h>
+#include <pathplanner/lib/auto/AutoBuilder.h>
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
@@ -113,61 +114,10 @@ void RobotContainer::ConfigureWhenConnectedToDS()
   mDrivetrain->ConfigurePathplanner();
   mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("EightPath").Repeatedly());
   mCommandXboxController->Button(8).WhileTrue(mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(2.3_m);}));
-}
+  
+  autoChooser = pathplanner::AutoBuilder::buildAutoChooser();
 
-frc2::CommandPtr RobotContainer::GetAutonomousCommand() {
-  // An example command will be run in autonomous
- // return mDrivetrain->getFollowPathCommand("Blue Left - Left Blue Bump");
-
-  switch (mAutonomousPhase){
-    case EightPath:
-      return mDrivetrain->getFollowPathCommand("EightPath");
-
-    case BlueCenterBumpPath:
-      return mDrivetrain->getFollowPathCommand("BlueCenterBumpPath");
-
-    case BlueCenterBumpReversed:
-      return mDrivetrain->getFollowPathCommand("BlueCenterBumpReversed");
-
-    case BlueCenterTrenchPath:
-      return mDrivetrain->getFollowPathCommand("BlueCenterTrenchPath");
-
-    case BlueLeftBumpPath:
-      return mDrivetrain->getFollowPathCommand("BlueLeftBumpPath");
-
-    case BlueLeftTrenchPath:
-      return mDrivetrain->getFollowPathCommand("BlueLeftTrenchPath");
-
-   case BlueRightBumpPath:
-      return mDrivetrain->getFollowPathCommand("BlueRightBumpPath");
-
-   case BlueRightTrenchPath:
-      return mDrivetrain->getFollowPathCommand("BlueRightTrenchPath");
-
-    case RedCenterBumpPath:
-      return mDrivetrain->getFollowPathCommand("RedCenterBumpPath");
-
-    case RedCenterTrenchPath:
-      return mDrivetrain->getFollowPathCommand("RedCenterTrenchPath");
-
-    case RedLeftBumpPath:
-      return mDrivetrain->getFollowPathCommand("RedLeftBumpPath");
-    
-    case RedLeftTrenchPath:
-      return mDrivetrain->getFollowPathCommand("RedLeftTrenchPath");
-
-    case RedRightBumpPath:
-      return mDrivetrain->getFollowPathCommand("RedRightBumpPath");
-
-    case RedRightTrenchPath:
-      return mDrivetrain->getFollowPathCommand("RedRightTrenchPath");
-
-    case TestAuto:
-      return pathplanner::PathPlannerAuto("Test Auto").ToPtr();
-      
-    default:
-      return frc2::cmd::Print("There is no case for this automonous command");
-}
+  frc::SmartDashboard::PutData("Auto Chooser", &autoChooser);
 }
 
 std::string RobotContainer::GetActiveHubColor() {
@@ -210,5 +160,9 @@ std::string RobotContainer::GetActiveHubColor() {
     //Code for no data received yet
     return "No data";
   }
+}
 
+frc2::Command* RobotContainer::GetAutonomousCommand() {
+  // Runs the chosen command in autonomous
+  return autoChooser.GetSelected();
 }

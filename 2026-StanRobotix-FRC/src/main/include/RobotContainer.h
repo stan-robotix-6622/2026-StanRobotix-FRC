@@ -52,7 +52,7 @@ public:
     TestAuto
   };
 
-  frc2::CommandPtr GetAutonomousCommand();
+  frc2::Command* GetAutonomousCommand();
 
 private:
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -79,4 +79,6 @@ private:
   void SetSubsystemDefaultCommands();
 
   std::string GetActiveHubColor();
+
+  frc::SendableChooser<frc2::Command*> autoChooser;
 };
