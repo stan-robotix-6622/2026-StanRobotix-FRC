@@ -12,7 +12,6 @@
 
 #include "commands/DriveCommands.h"
 
-#include "subsystems/ExampleSubsystem.h"
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubPivotIntake.h"
 #include "subsystems/SubShooter.h"
@@ -40,9 +39,6 @@ public:
   bool isHubActive();
 private:
   frc2::CommandXboxController* mCommandXboxController;
-
-  // The robot's subsystems are defined here...
-  ExampleSubsystem mSubsystem;
 
   SubShooter* mSubShooter = nullptr;
   SubFeeder* mSubFeeder = nullptr;

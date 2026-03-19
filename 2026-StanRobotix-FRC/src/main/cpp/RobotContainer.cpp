@@ -11,9 +11,6 @@
 #include <pathplanner/lib/events/EventTrigger.h>
 #include <pathplanner/lib/events/PointTowardsZoneTrigger.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
-
-#include "commands/Autos.h"
-#include "commands/ExampleCommand.h"
 #include "commands/DriveCommands.h"
 #include "commands/PivotIntake.h"
 #include "commands/FullIntake.h"
@@ -21,8 +18,10 @@
 
 #include "Constants.h"
 
-RobotContainer::RobotContainer() {
+RobotContainer::RobotContainer()
+{
   mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
+  frc::SmartDashboard::PutData("Xbox Controller", &mCommandXboxController->GetHID());
 
   // Initialize all of your commands and subsystems here
   mSubShooter = new SubShooter{};
@@ -42,9 +41,8 @@ RobotContainer::RobotContainer() {
   ConfigureBindings();
 }
 
-void RobotContainer::SetSubsystemDefaultCommands() {
-  frc::SmartDashboard::PutData("Xbox Controller", &mCommandXboxController->GetHID());
-
+void RobotContainer::SetSubsystemDefaultCommands()
+{
   mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
       [this]
       {
@@ -58,7 +56,8 @@ void RobotContainer::SetSubsystemDefaultCommands() {
   mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
 }
 
-void RobotContainer::RegisterCommandsPathPlanner() {
+void RobotContainer::RegisterCommandsPathPlanner()
+{
   pathplanner::NamedCommands::registerCommand("Pivot Up", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
   pathplanner::NamedCommands::registerCommand("Pivot Down", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
   pathplanner::NamedCommands::registerCommand("Full Intake", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
@@ -75,9 +74,8 @@ void RobotContainer::RegisterCommandsPathPlanner() {
   pathplanner::PointTowardsZoneTrigger("Hub").WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("feed Shooter"));
 }
 
-void RobotContainer::ConfigureBindings() {
-  // Configure your trigger bindings here
-
+void RobotContainer::ConfigureBindings()
+{
   mCommandXboxController->Button(OperatorConstants::kPivotDownButton).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
 
   mCommandXboxController->Button(OperatorConstants::kShootButton).ToggleOnTrue(Shoot(mSubShooter).ToPtr());
@@ -99,7 +97,8 @@ void RobotContainer::ConfigureBindings() {
   // mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
 }
 
-void RobotContainer::ConfigureWhenConnectedToDS() {
+void RobotContainer::ConfigureWhenConnectedToDS()
+{
   mDrivetrain->ConfigurePathplanner();
   // Bindings that need the AutoBuilder to be configures
   mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("EightPath").Repeatedly());
