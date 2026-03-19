@@ -5,7 +5,7 @@
 #include "RobotContainer.h"
 
 #include <frc2/command/button/Trigger.h>
-#include <frc2/command/Commands.h>
+#include <frc2/command/Command.h>
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include <pathplanner/lib/events/EventTrigger.h>
@@ -133,7 +133,7 @@ std::string RobotContainer::GetActiveHubColor() {
     switch (gameData[0]) {
       case 'B':
         // Blue case code
-        if (30 <= matchTime <= 55 || 80 <= matchTime <= 105) {
+        if ((30 <= matchTime && matchTime <= 55) || (80 <= matchTime && matchTime <= 105)) {
           return "Red Hub enabled";
         }
         else {
@@ -142,7 +142,7 @@ std::string RobotContainer::GetActiveHubColor() {
         break;
       case 'R':
         // Red case code
-        if (30 <= matchTime <= 55 || 80 <= matchTime <= 105) {
+        if ((30 <= matchTime && matchTime <= 55) || (80 <= matchTime && matchTime <= 105)) {
           return "Blue Hub enabled";
         }
         else {
@@ -161,6 +161,20 @@ std::string RobotContainer::GetActiveHubColor() {
     return "No data";
   }
 }
+
+/*frc2::CommandPtr RobotContainer::GetShooterWhenInZone()
+  {
+    if()
+    {
+      return S;
+    }
+    else
+    {
+      return 
+    }
+    
+
+  }*/
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
   // Runs the chosen command in autonomous
