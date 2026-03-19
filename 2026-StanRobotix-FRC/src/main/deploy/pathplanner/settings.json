@@ -4,13 +4,14 @@
   "holonomicMode": true,
   "pathFolders": [
     "Blue",
+    "Tests",
     "Red"
   ],
   "autoFolders": [],
-  "defaultMaxVel": 1.5,
-  "defaultMaxAccel": 1.5,
-  "defaultMaxAngVel": 270.0,
-  "defaultMaxAngAccel": 360.0,
+  "defaultMaxVel": 0.5,
+  "defaultMaxAccel": 0.5,
+  "defaultMaxAngVel": 90.0,
+  "defaultMaxAngAccel": 120.0,
   "defaultNominalVoltage": 12.0,
   "robotMass": 50.0,
   "robotMOI": 6.883,

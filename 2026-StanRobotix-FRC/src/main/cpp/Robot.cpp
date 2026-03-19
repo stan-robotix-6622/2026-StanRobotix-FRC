@@ -32,6 +32,9 @@ void Robot::RobotPeriodic() {
       mConnectedToDriveStation = true;
     }
   }
+  frc::SmartDashboard::PutBoolean("Dashboard/Hub Active", m_container.isHubActive());
+  frc::SmartDashboard::PutNumber("Dashboard/MatchTime", frc::DriverStation::GetMatchTime().value());
+  frc::SmartDashboard::PutNumber("Dashboard/Alliance", frc::DriverStation::GetAlliance().value());
   frc2::CommandScheduler::GetInstance().Run();
 }
 
@@ -51,7 +54,7 @@ void Robot::DisabledPeriodic() {}
 void Robot::AutonomousInit() {
   m_autonomousCommand = m_container.GetAutonomousCommand();
 
-  if (m_autonomousCommand) {
+  if (m_autonomousCommand && m_autonomousCommand.value() != nullptr) {
     frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand.value());
   }
 }
@@ -64,7 +67,7 @@ void Robot::TeleopInit() {
   // continue until interrupted by another command, remove
   // this line or comment it out.
   if (m_autonomousCommand) {
-    m_autonomousCommand->Cancel();
+    m_autonomousCommand.value()->Cancel();
   }
 }
 
