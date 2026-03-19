@@ -149,7 +149,7 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand()
                     {
                       wPositions[i] = units::radian_t(std::numbers::pi * 2 * (wSwervePositions[i].distance - mState->positions[i].distance) / ModuleConstants::kWheelPerimeter);
                     }
-                    units::radian_t wWheelDelta;
+                    units::radian_t wWheelDelta = 0_rad;
                     for (int i = 0; i < 4; i++)
                     {
                       wWheelDelta += units::math::abs(wPositions[i]);
