@@ -26,8 +26,13 @@ void SubPivotIntake::Stop() {
     mPivotMotor->StopMotor();
 }
 
-void SubPivotIntake::SetVoltage(units::volt_t iVoltage){
+void SubPivotIntake::SetVoltage(units::volt_t iVoltage) {
     mPivotMotor->SetVoltage(iVoltage);
+}
+
+void SubPivotIntake::SetVelocity(units::radians_per_second_t iVelocity)
+{
+    mPivotMotor->SetVoltage(mFeedForward->Calculate(GetAngle(), iVelocity));
 }
 
 void SubPivotIntake::KeepPosition()

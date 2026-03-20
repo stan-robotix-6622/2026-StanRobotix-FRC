@@ -21,7 +21,9 @@ public:
 
   void KeepPosition();
 
-  void SetVoltage(double iVoltage);
+  void SetVoltage(units::volt_t iVoltage);
+
+  void SetVelocity(units::radians_per_second_t iVelocity);
 
   units::radian_t GetAngle();
 
