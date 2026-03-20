@@ -105,7 +105,6 @@ void SubDrivetrain::Periodic()
 
     if (!rejectCameraUpdate)
     {
-        LimelightHelpers::PrintPoseEstimate(mLimelightPoseEstimate);
         mPoseEstimator->AddVisionMeasurement(mLimelightPoseEstimate.pose, frc::Timer::GetFPGATimestamp());
     }
 
@@ -278,6 +277,11 @@ void SubDrivetrain::resetPose(frc::Pose2d iRobotPose)
     }
     // Reset the PoseEstimator's robot pose
     mPoseEstimator->ResetPose(iRobotPose);
+}
+
+void SubDrivetrain::resetIMU(units::degree_t iAngle)
+{
+    mIMU->setAngleYaw(iAngle);
 }
 
 IMU* SubDrivetrain::getIMU()

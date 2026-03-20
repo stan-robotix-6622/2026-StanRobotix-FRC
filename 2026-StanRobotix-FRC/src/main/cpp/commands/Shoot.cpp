@@ -20,7 +20,7 @@ Shoot::Shoot(SubShooter* iSubShooter) {
 // Called when the command is initially scheduled.
 void Shoot::Initialize() 
 {
-  mSetpointVelocity = (units::radians_per_second_t)frc::SmartDashboard::GetNumber("Shooter Setpoint", ShooterConstants::PIDConstants::setpoint.value());
+  mSetpointVelocity = (units::turns_per_second_t)frc::SmartDashboard::GetNumber("Shooter Setpoint", ShooterConstants::PIDConstants::setpoint.value());
   mPIDController->SetSetpoint(mSetpointVelocity.value());
 }
 

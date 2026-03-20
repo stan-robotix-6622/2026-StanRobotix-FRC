@@ -55,7 +55,7 @@ namespace OperatorConstants
 namespace ShooterConstants
 {
   inline constexpr units::volt_t kS = 0_V;
-  inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.523844_tps;
+  inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.904761_tps;
   inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second_squared> kA = 0_V / 1_tr_per_s_sq;
 
   inline constexpr bool kInverted = false;
@@ -257,7 +257,7 @@ namespace IntakeConstants
 namespace PivotConstants
 {
   inline constexpr double kGearRatio = 16;
-  inline constexpr double kOffset = 6.2;
+  inline constexpr double kOffset = 6.40;
   inline constexpr double kP = 1.3;  // en attendant
   inline constexpr double kI = 0.4;  // en attendant
   inline constexpr double kD = 0.15; // en attendant

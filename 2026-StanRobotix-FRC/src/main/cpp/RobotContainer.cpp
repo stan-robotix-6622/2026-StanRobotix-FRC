@@ -27,13 +27,13 @@ RobotContainer::RobotContainer()
   frc::SmartDashboard::PutNumber("Drivetrain Distance Setpoint", 3);
   // Initialize all of your commands and subsystems here
   mSubShooter = new SubShooter{};
-  frc::SmartDashboard::PutData(mSubShooter);
+  frc::SmartDashboard::PutData("shooter", mSubShooter);
   mSubFeeder = new SubFeeder{};
   // mSubIndexer = new SubIndexer{};
   mDrivetrain = new SubDrivetrain{};
   mSubIntake = new SubIntake{};
   mSubPivotIntake = new SubPivotIntake{};
-  frc::SmartDashboard::PutData(mSubPivotIntake);
+  frc::SmartDashboard::PutData("pivot", mSubPivotIntake);
   
   mDriveCommands = new DriveCommands{mDrivetrain};
   
@@ -56,15 +56,6 @@ void RobotContainer::SetSubsystemDefaultCommands()
                                         (1 - mCommandXboxController->GetRightTriggerAxis()));
       },
       {mDrivetrain}));
-
-  mSubShooter->SetDefaultCommand(frc2::cmd::Run(
-    [this]
-    {
-      frc::SmartDashboard::PutNumber("Shooter Voltage", 12 * mCommandXboxController->GetLeftTriggerAxis());
-      frc::SmartDashboard::PutNumber("Shooter Velocity", mSubShooter->getVelocity().value());
-      mSubShooter->setVoltage(12_V * mCommandXboxController->GetLeftTriggerAxis());
-    },
-    {mSubShooter}));
 
   mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
 }
@@ -92,7 +83,6 @@ void RobotContainer::ConfigureBindings()
   mCommandXboxController->Button(OperatorConstants::kPivotDownButton).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
 
   mCommandXboxController->Button(OperatorConstants::kShootButton).ToggleOnTrue(Shoot(mSubShooter).ToPtr());
-  mCommandXboxController->Button(OperatorConstants::kShootButton).ToggleOnTrue(Shoot(mSubShooter).ToPtr());
   mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
   mCommandXboxController->Button(OperatorConstants::kUnstuckFuelButton).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
   // mCommandXboxController->Button(OperatorConstants::kIndexButton).WhileTrue(mSubIntake->getIntakeCommand());
@@ -105,8 +95,9 @@ void RobotContainer::ConfigureBindings()
     }));
 
   mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
-    { mDrivetrain->resetPose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation())); }));
+    { mDrivetrain->resetPose(frc::Pose2d(14_m, 4.021328_m, mDrivetrain->getPose().Rotation())); }));
 
+  mCommandXboxController->Button(7).OnTrue(frc2::cmd::RunOnce([this] {frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue ? mDrivetrain->resetIMU(0_deg) : mDrivetrain->resetIMU(180_deg);}, {}));
   // mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
   // mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
 }
@@ -115,7 +106,7 @@ void RobotContainer::ConfigureWhenConnectedToDS()
 {
   mDrivetrain->ConfigurePathplanner();
   // Bindings that need the AutoBuilder to be configures
-  mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("EightPath").Repeatedly());
+  // mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("EightPath").Repeatedly());
   mCommandXboxController->Button(8).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
   (units::meter_t)frc::SmartDashboard::GetNumber("Drivetrain Distance Setpoint", 3)); }));
 

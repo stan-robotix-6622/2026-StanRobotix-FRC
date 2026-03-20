@@ -54,6 +54,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
 
   frc::Pose2d getPose();
   void resetPose(frc::Pose2d iRobotPose);
+  void resetIMU(units::degree_t iAngle);
 
   IMU* getIMU();
 
