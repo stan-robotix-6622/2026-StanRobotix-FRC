@@ -18,9 +18,7 @@ SubShooter::SubShooter()
 }
 
 // This method will be called once per scheduler run
-void SubShooter::Periodic() {
-    frc::SmartDashboard::PutNumber("shooter/velocity", getVelocity().value());
-}
+void SubShooter::Periodic() {}
 
 void SubShooter::setVoltage(units::volt_t iVoltage)
 {
@@ -48,3 +46,13 @@ std::array<rev::REVLibError, 2> SubShooter::Configure()
     oConfigureResult[1] = mFollowerShooterController->Configure(*mSparkConfigFollowerShooter, ShooterConstants::kReset, ShooterConstants::kPersist);
     return oConfigureResult;
 };
+
+void SubShooter::InitSendable(wpi::SendableBuilder& builder)
+{
+    builder.SetSmartDashboardType("shooter");
+    builder.AddDoubleProperty("velocity (tps)", [this] {return getVelocity().value();}, nullptr);
+    builder.AddDoubleProperty("velocity (rpm)", [this] {return units::revolutions_per_minute_t(getVelocity()).value();}, nullptr);
+    builder.AddDoubleProperty("kA", [this] {return mFeedforward->GetKa().value();}, [this] (double iKa) {return mFeedforward->SetKa(TemplateUnits::VoltageInverse<units::turns_per_second_squared>(iKa));});
+    builder.AddDoubleProperty("kV", [this] {return mFeedforward->GetKv().value();}, [this] (double iKv) {return mFeedforward->SetKv(TemplateUnits::VoltageInverse<units::turns_per_second>(iKv));});
+    builder.AddDoubleProperty("kS", [this] {return mFeedforward->GetKs().value();}, [this] (double iKs) {return mFeedforward->SetKs(units::volt_t(iKs));});
+}

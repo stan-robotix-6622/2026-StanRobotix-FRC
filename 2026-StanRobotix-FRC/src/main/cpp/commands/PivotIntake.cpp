@@ -31,9 +31,9 @@ void PivotIntake::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void PivotIntake::Execute() {
-  double wVoltage = mPIDController->Calculate(mPivotIntake->GetAngle());
+  double wVoltage = mPIDController->Calculate(mPivotIntake->GetAngle().value());
   frc::SmartDashboard::PutNumber("pivot/Arm PID adjust", wVoltage);
-  mPivotIntake->SetVoltage(wVoltage + (PivotConstants::kG.value() * cos(mPivotIntake->GetAngle())));
+  mPivotIntake->SetVoltage(wVoltage + (PivotConstants::kG.value() * cos(mPivotIntake->GetAngle().value())));
 }
 
 // Called once the command ends or is interrupted.

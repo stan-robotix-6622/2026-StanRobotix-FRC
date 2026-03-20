@@ -8,6 +8,7 @@
 #include <frc/controller/PIDController.h>
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <wpi/sendable/SendableBuilder.h>
 #include <rev/SparkMax.h>
 #include <rev/config/SparkMaxConfig.h>
 #include <rev/SparkRelativeEncoder.h>
@@ -32,6 +33,8 @@ public:
    * Will be called periodically whenever the CommandScheduler runs.
    */
   void Periodic() override;
+
+  void InitSendable(wpi::SendableBuilder &builder) override;
 
 private:
   // Components (e.g. motor controllers and sensors) should generally be
