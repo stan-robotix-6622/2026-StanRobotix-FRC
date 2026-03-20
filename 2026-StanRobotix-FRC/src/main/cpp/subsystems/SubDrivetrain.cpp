@@ -222,6 +222,7 @@ void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
 
     // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
     mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
+    mKinematics->DesaturateWheelSpeeds(&mDesiredSwerveStates, ModuleConstants::kDriveWheelMaxSpeed * 0.8);
 
     mDesiredChassisSpeedsPublisher.Set(mDesiredChassisSpeeds);
     mDesiredModuleStatesPublisher.Set(mDesiredSwerveStates);
@@ -230,32 +231,20 @@ void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
     setSwerveModuleStates(mDesiredSwerveStates);
 }
 
-void SubDrivetrain::mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units::volt_t iTurningVoltage)
+void SubDrivetrain::mesureSwerveFeedforward(units::volt_t iDrivingVoltage, wpi::array<frc::Rotation2d, 4> iDesiredHeadings)
 {
     mFrontLeftModule->setDrivingVoltage(iDrivingVoltage);
     mFrontRightModule->setDrivingVoltage(iDrivingVoltage);
     mBackLeftModule->setDrivingVoltage(iDrivingVoltage);
     mBackRightModule->setDrivingVoltage(iDrivingVoltage);
 
-    if (iTurningVoltage == 0_V)
-    {
-        mFrontLeftModule->setDesiredHeading(0_rad);
-        mFrontRightModule->setDesiredHeading(0_rad);
-        mBackLeftModule->setDesiredHeading(0_rad);
-        mBackRightModule->setDesiredHeading(0_rad);
-    }
-    else
-    {
-        mFrontLeftModule->setTurningVoltage(iTurningVoltage);
-        mFrontRightModule->setTurningVoltage(iTurningVoltage);
-        mBackLeftModule->setTurningVoltage(iTurningVoltage);
-        mBackRightModule->setTurningVoltage(iTurningVoltage);
-    }
+    mFrontLeftModule->setDesiredHeading(iDesiredHeadings[0]);
+    mFrontRightModule->setDesiredHeading(iDesiredHeadings[1]);
+    mBackLeftModule->setDesiredHeading(iDesiredHeadings[2]);
+    mBackRightModule->setDesiredHeading(iDesiredHeadings[3]);
 
     frc::SmartDashboard::PutNumber("drivetrain/Driving Voltage", iDrivingVoltage.value());
-    frc::SmartDashboard::PutNumber("drivetrain/Turning Voltage", iTurningVoltage.value());
     frc::SmartDashboard::PutNumber("drivetrain/Driving Velocity", mFrontLeftModule->getModuleState().speed.value());
-    frc::SmartDashboard::PutNumber("drivetrain/Turning Velocity", mFrontLeftModule->getTurningVelocity().value());
 }
 
 frc::Pose2d SubDrivetrain::getPose()
@@ -307,6 +296,7 @@ void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds)
 
 frc2::CommandPtr SubDrivetrain::getFollowPathCommand(std::string iPathName)
 {
+    // wPath is of type std::shared_ptr<pathplanner::PathPlannerPath>
     auto wPath = pathplanner::PathPlannerPath::fromPathFile(iPathName);
 
     return pathplanner::AutoBuilder::followPath(wPath);
@@ -314,6 +304,7 @@ frc2::CommandPtr SubDrivetrain::getFollowPathCommand(std::string iPathName)
 
 frc::Pose2d SubDrivetrain::standardizePose(frc::Pose2d iPose)
 {
+    // mAlliance is of type std::optional<frc::DriverStation::Alliance>
     auto mAlliance = frc::DriverStation::GetAlliance();
     if (mAlliance && mAlliance.value() == frc::DriverStation::kRed)
     {
@@ -359,6 +350,7 @@ frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHu
         PathPlannerConstants::kMaxAngularVelocity,
         PathPlannerConstants::kMaxAngularAcceleration};
 
+    // wDistanceFromHubPath is of type std::shared_ptr<pathplanner::PathPlannerPath>
     auto wDistanceFromHubPath = std::make_shared<pathplanner::PathPlannerPath>(
         wWaypoints,
         wConstraints,

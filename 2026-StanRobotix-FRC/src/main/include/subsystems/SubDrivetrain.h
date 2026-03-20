@@ -41,7 +41,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
 
   void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
 
-  void mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units::volt_t iTurningVoltage = 0_V);
+  void mesureSwerveFeedforward(units::volt_t iDrivingVoltage, wpi::array<frc::Rotation2d, 4> iDesiredHeadings);
   void setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4>);
   void refreshSwerveModules();
   wpi::array<frc::SwerveModuleState, 4> getSwerveModuleStates();

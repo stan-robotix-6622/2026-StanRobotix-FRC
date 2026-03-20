@@ -39,7 +39,7 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand()
       frc2::cmd::Run(
           [this]
           {
-            mDrivetrain->mesureSwerveFeedforward(0_V);
+            mDrivetrain->mesureSwerveFeedforward(0_V, {0_rad, 0_rad, 0_rad, 0_rad});
           },
           {mDrivetrain})
           .WithTimeout(DrivetrainConstants::Commands::kFeedforwartStartDelay),
@@ -53,7 +53,7 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand()
           [this]
           {
             units::volt_t wVoltage = mTimer->Get() * (DrivetrainConstants::Commands::kFeedforwardRampRate);
-            mDrivetrain->mesureSwerveFeedforward(wVoltage);
+            mDrivetrain->mesureSwerveFeedforward(wVoltage, {0_rad, 0_rad, 0_rad, 0_rad});
             std::array<frc::SwerveModuleState, 4U> wModuleStates = mDrivetrain->getSwerveModuleStates();
             units::radians_per_second_t wAverageAngularSpeed = 0.0_rad_per_s;
             for (int i = 0; i < 4; i++)
