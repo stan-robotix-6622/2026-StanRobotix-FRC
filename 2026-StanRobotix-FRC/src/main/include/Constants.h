@@ -85,7 +85,6 @@ namespace FeederConstants
   inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
   inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
-
 }
 
 namespace IndexerConstants
@@ -220,6 +219,8 @@ namespace FieldConstants
   inline constexpr frc::Pose2d kHubCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};              // From the right corner of blue alliance wall
   inline constexpr frc::Translation2d kFieldCenterTranslation2d = frc::Translation2d{325.61_in, 158.32_in}; // From the right corner of blue alliance wall
   inline constexpr frc::Pose2d kFieldCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};            // From the right corner of blue alliance wall
+  inline constexpr frc::Translation2d kOptimalShootingPositionTranslation2d = frc::Translation2d{0_m, 0_m}; // placeholder
+  inline constexpr frc::Pose2d kOptimalShootingPositionPose2d = frc::Pose2d{kOptimalShootingPositionTranslation2d, 0_rad}; //placeholder
 }
 
 namespace CANid

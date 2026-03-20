@@ -11,6 +11,7 @@
 #include <pathplanner/lib/events/EventTrigger.h>
 #include <pathplanner/lib/events/PointTowardsZoneTrigger.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
+#include <cmath>
 
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
@@ -108,9 +109,16 @@ void RobotContainer::ConfigureBindings() {
     frc2::Trigger{[this]
     {return SubDrivetrain::standardizePose(mDrivetrain->getPose()).X() < FieldConstants::kHubCenterTranslation2d.X();}}
     .WhileTrue(Shoot(mSubShooter).ToPtr());
+
+    frc2::Trigger{[this]
+      {return units::math::abs(FieldConstants::kOptimalShootingPositionTranslation2d.X() - SubDrivetrain::standardizePose(mDrivetrain->getPose()).X()) < 0.03_m 
+        && units::math::abs(FieldConstants::kOptimalShootingPositionTranslation2d.Y() - SubDrivetrain::standardizePose(mDrivetrain->getPose()).Y()) < 0.03_m && mSubShooter->getVelocity() <= ShooterConstants::kVitesseVoulue;}}
+      .WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
+
+    };
   // mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
   // mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
-}
+
 
 void RobotContainer::ConfigureWhenConnectedToDS()
 {
