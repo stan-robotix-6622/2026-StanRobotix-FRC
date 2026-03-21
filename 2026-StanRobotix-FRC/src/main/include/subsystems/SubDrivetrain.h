@@ -60,7 +60,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::Pose2d getClosestPoseAtDistanceFromHub(units::meter_t iDesiredDistance);
   frc2::CommandPtr getGoToDistanceFromHubCommand(units::meter_t iDesiredDistance);
   static frc::Pose2d standardizePose(frc::Pose2d iPose);
-
+  bool isTowardsHub();
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
@@ -119,4 +119,5 @@ class SubDrivetrain : public frc2::SubsystemBase {
   // Load the RobotConfig from the GUI settings. You should probably
   // store this in your Constants file
   pathplanner::RobotConfig PathPlannerConfig = pathplanner::RobotConfig::fromGUISettings();
+
 };

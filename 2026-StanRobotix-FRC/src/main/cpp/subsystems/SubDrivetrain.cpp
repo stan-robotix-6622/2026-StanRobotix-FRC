@@ -2,7 +2,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+#include <numbers>
 #include "subsystems/SubDrivetrain.h"
+
 
 #include "Constants.h"
 
@@ -370,3 +372,15 @@ frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHu
     return wGoToPoseCommand;
 }
 
+// bool SubDrivetrain::isTowardsHub()
+// {
+//      frc::Translation2d wOriginToRobotTranslation = standardizePose(getPose()).Translation();
+//     units::meter_t wRobotToHubX = FieldConstants::kHubCenterTranslation2d.X() - wOriginToRobotTranslation.X();
+//     units::meter_t wRobotToHubY = FieldConstants::kHubCenterTranslation2d.Y() - wOriginToRobotTranslation.Y();
+//     frc::Translation2d wRobotToHubTranslation = frc::Translation2d{wRobotToHubX, wRobotToHubY};
+//     frc::Rotation2d wRobotAngle = standardizePose(getPose()).Rotation();
+
+//      return wRobotAngle - wRobotToHubTranslation.Angle() < 1 * units::degree_t;
+
+//      units::
+// }
