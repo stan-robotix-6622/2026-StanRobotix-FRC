@@ -222,7 +222,7 @@ void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
 
     // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
     mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
-    mKinematics->DesaturateWheelSpeeds(&mDesiredSwerveStates, ModuleConstants::kDriveWheelMaxSpeed * 0.8);
+    mKinematics->DesaturateWheelSpeeds(&mDesiredSwerveStates, ModuleConstants::kDriveWheelMaxFreeSpeed * 0.8);
 
     mDesiredChassisSpeedsPublisher.Set(mDesiredChassisSpeeds);
     mDesiredModuleStatesPublisher.Set(mDesiredSwerveStates);

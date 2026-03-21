@@ -27,6 +27,7 @@ class DriveCommands {
  public:
   DriveCommands(SubDrivetrain* iDrivetrain);
 
+  frc2::CommandPtr getMeasureMaxAttainableSpeedCommand();
   frc2::CommandPtr getFeedforwardCharacterizationCommand();
   frc2::CommandPtr getWheelRadiusCharacterizationCommand();
 
@@ -45,7 +46,8 @@ class DriveCommands {
   SubDrivetrain* mDrivetrain = nullptr;
 
   WheelRadiusCharacterizationState* mState;
-  frc::SlewRateLimiter<units::radians_per_second>* mLimiter;
+  frc::SlewRateLimiter<units::radians_per_second>* mRotationLimiter;
+  frc::SlewRateLimiter<units::meters_per_second>* mSpeedLimiter;
 
   std::vector<units::radians_per_second_t>* mVelocitySamples;
   std::vector<units::volt_t>* mVoltageSamples;

@@ -16,8 +16,7 @@ namespace Configs
       static SparkMaxConfig drivingConfig{};
 
       constexpr double drivingFactor = ModuleConstants::kDrivingFactor;
-      // units::compound_unit<units::volts, units::inverse<units::meters_per_second>>
-      constexpr TemplateUnits::VoltageInverse<units::meters_per_second> drivingVelocityFeedForward = ModuleConstants::kNominalVoltage / ModuleConstants::kDriveWheelMaxSpeed;
+      constexpr TemplateUnits::VoltageInverse<units::meters_per_second> drivingVelocityFeedForward = ModuleConstants::kNominalVoltage / ModuleConstants::kDriveWheelMaxFreeSpeed;
 
       drivingConfig.Inverted(iDrivingInverted);
       drivingConfig.SetIdleMode(ModuleConstants::Config::kDrivingIdleMode);

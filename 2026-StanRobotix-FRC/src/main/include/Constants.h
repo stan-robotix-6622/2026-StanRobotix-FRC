@@ -113,33 +113,6 @@ namespace PathPlannerConstants
   inline constexpr units::degrees_per_second_squared_t kMaxAngularAcceleration = 72.0_deg_per_s_sq;
 }
 
-namespace DrivetrainConstants
-{
-  // Left-Right
-  inline constexpr units::meter_t kRobotWidth = 28_in;
-  // Front-Back
-  inline constexpr units::meter_t kRobotLength = 26.875_in;
-  // In both directions
-  inline constexpr units::meter_t kModuleCornerOffset = 1.75_in;
-
-  // We take for granted a rectangular frame
-  inline constexpr frc::Translation2d kFrontLeftTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
-  inline constexpr frc::Translation2d kFrontRightTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
-  inline constexpr frc::Translation2d kBackLeftTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
-  inline constexpr frc::Translation2d kBackRightTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
-
-  inline constexpr units::meters_per_second_t kSpeedConstant = 2_mps;                            // Temporary value
-  inline constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 1_rad_per_s; // Temporary value
-  namespace Commands
-  {
-    inline constexpr units::second_t kFeedforwartStartDelay = 2.0_s;
-    inline constexpr TemplateUnits::VoltageInverse<units::seconds> kFeedforwardRampRate = 1_V / 1_s;
-    inline constexpr units::second_t kWheelRadiusMeasurementStartDelay = 1.0_s;
-    inline constexpr units::radians_per_second_t kWheelRadiusMaxVelocity = 0.25_rad_per_s;
-    inline constexpr units::radians_per_second_squared_t kWheelRadiusRampRate = 0.05_rad_per_s_sq;
-  }
-}
-
 namespace ModuleConstants
 {
   inline constexpr double kDrivingMotorGearRatio = 4.71;                                       // 5.08 rotations of the motor for 1 rotation of the ouput
@@ -147,7 +120,7 @@ namespace ModuleConstants
   inline constexpr units::meter_t kWheelRadius = 0.035609_m;                                   // The radius of REV's plastic wheels, masured with the wheelCaracterizationCommand
   inline constexpr units::meter_t kWheelPerimeter = kWheelRadius * 2 * std::numbers::pi;       // in meters (diametre in inches * convertion to meters * pi)
   inline constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260_rad_per_s; // TODO: Verify?
-  inline constexpr units::meters_per_second_t kDriveWheelMaxSpeed = 4.9180_mps;                // TODO: Verify?
+  inline constexpr units::meters_per_second_t kDriveWheelMaxFreeSpeed = 4.9180_mps;                // TODO: Verify?
 
   inline constexpr double kDrivingFactor = ModuleConstants::kWheelPerimeter.value() / kDrivingMotorGearRatio;
   inline constexpr double kTurningFactor = 2 * std::numbers::pi;
@@ -190,6 +163,36 @@ namespace ModuleConstants
     inline constexpr double kTurningClosedLoopMinInput = -ModuleConstants::kTurningFactor / 2;
     inline constexpr double kTurningClosedLoopMaxInput = ModuleConstants::kTurningFactor / 2;
     inline constexpr double kTurningClosedLoopTolerance = 0.01 * ModuleConstants::kTurningFactor;
+  }
+}
+
+namespace DrivetrainConstants
+{
+  // Left-Right
+  inline constexpr units::meter_t kRobotWidth = 28_in;
+  // Front-Back
+  inline constexpr units::meter_t kRobotLength = 26.875_in;
+  // In both directions
+  inline constexpr units::meter_t kModuleCornerOffset = 1.75_in;
+
+  // We take for granted a rectangular frame
+  inline constexpr frc::Translation2d kFrontLeftTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
+  inline constexpr frc::Translation2d kFrontRightTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
+  inline constexpr frc::Translation2d kBackLeftTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
+  inline constexpr frc::Translation2d kBackRightTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
+
+  inline constexpr units::meters_per_second_t kSpeedConstant = 2_mps;                            // Temporary value
+  inline constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 1_rad_per_s; // Temporary value
+  namespace Commands
+  {
+    inline constexpr units::second_t kMaxSpeedStartDelay = 2.0_s;
+    inline constexpr units::meters_per_second_squared_t kMaxSpeedRampRate = 0.5_mps_sq;
+    inline constexpr units::meters_per_second_t kMaxSpeedMaxVelocity = ModuleConstants::kDriveWheelMaxFreeSpeed;
+    inline constexpr units::second_t kFeedforwartStartDelay = 2.0_s;
+    inline constexpr TemplateUnits::VoltageInverse<units::seconds> kFeedforwardRampRate = 1_V / 1_s;
+    inline constexpr units::second_t kWheelRadiusMeasurementStartDelay = 1.0_s;
+    inline constexpr units::radians_per_second_t kWheelRadiusMaxVelocity = 0.25_rad_per_s;
+    inline constexpr units::radians_per_second_squared_t kWheelRadiusRampRate = 0.05_rad_per_s_sq;
   }
 }
 
