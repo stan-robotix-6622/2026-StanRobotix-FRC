@@ -4,6 +4,8 @@
 
 #include "RobotContainer.h"
 
+#include <math.h>
+
 #include <frc2/command/button/Trigger.h>
 #include <frc2/command/Command.h>
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
@@ -51,6 +53,10 @@ void RobotContainer::SetSubsystemDefaultCommands()
   mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
       [this]
       {
+        // frc::DataLogManager::Log("Joystick left Y: " + std::to_string(Deadband(-mCommandXboxController->GetLeftY(), 0.05)));
+        // frc::DataLogManager::Log("Joystick left X: " + std::to_string(Deadband(-mCommandXboxController->GetLeftX(), 0.05)));
+        // frc::DataLogManager::Log("Joystick left Y squared: " + std::to_string(Deadband(-mCommandXboxController->GetLeftY(), 0.05, true)));
+        // frc::DataLogManager::Log("Joystick left X squared: " + std::to_string(Deadband(-mCommandXboxController->GetLeftX(), 0.05, true)));
         mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
                                         -mCommandXboxController->GetLeftX(),
                                         -mCommandXboxController->GetRightX(),
@@ -113,6 +119,24 @@ void RobotContainer::ConfigureWhenConnectedToDS()
 
 frc2::Command *RobotContainer::GetAutonomousCommand() {
   return mAutoChooser.GetSelected();
+}
+
+double Deadband(double iInput, double iThreshold, bool iSquared)
+{
+  if (abs(iInput) < iThreshold)
+  {
+    return 0.0;
+  }
+  if (!iSquared)
+  {
+    // (iInput > 0) - (iInput < 0) gives us the sign of iInput
+    // Then we scale the value of iInput over the range [-1; iThreshold] or [iTheshold; 1]
+    return (1 / (1 - iThreshold)) * (iInput - ((iInput > 0) - (iInput < 0) * iThreshold));
+  }
+  // Same as above but we square the value and keep the sign of the initial iInput
+  return (iInput > 0) - (iInput < 0) *
+    (1 / (1 - iThreshold)) * (iInput + ((iInput > 0) - (iInput < 0) * iThreshold)) * // Squared
+    (1 / (1 - iThreshold)) * (iInput + ((iInput > 0) - (iInput < 0) * iThreshold));
 }
 
 bool RobotContainer::isHubActive()
