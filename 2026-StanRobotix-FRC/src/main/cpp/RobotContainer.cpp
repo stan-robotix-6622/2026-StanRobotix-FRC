@@ -110,9 +110,13 @@ void RobotContainer::ConfigureBindings() {
     {return SubDrivetrain::standardizePose(mDrivetrain->getPose()).X() < FieldConstants::kHubCenterTranslation2d.X();}}
     .WhileTrue(Shoot(mSubShooter).ToPtr());
 
+    // frc2::Trigger{[this]
+    //   {return units::math::abs(FieldConstants::kOptimalShootingPositionTranslation2d.X() - SubDrivetrain::standardizePose(mDrivetrain->getPose()).X()) < 0.03_m 
+    //     && units::math::abs(FieldConstants::kOptimalShootingPositionTranslation2d.Y() - SubDrivetrain::standardizePose(mDrivetrain->getPose()).Y()) < 0.03_m && mSubShooter->getVelocity() <= ShooterConstants::kVitesseVoulue;}}
+    //   .WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
+
     frc2::Trigger{[this]
-      {return units::math::abs(FieldConstants::kOptimalShootingPositionTranslation2d.X() - SubDrivetrain::standardizePose(mDrivetrain->getPose()).X()) < 0.03_m 
-        && units::math::abs(FieldConstants::kOptimalShootingPositionTranslation2d.Y() - SubDrivetrain::standardizePose(mDrivetrain->getPose()).Y()) < 0.03_m && mSubShooter->getVelocity() <= ShooterConstants::kVitesseVoulue;}}
+      {return mDrivetrain->isTowardsHub() && mSubShooter->getVelocity() <= ShooterConstants::kVitesseVoulue;}}
       .WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
     };
