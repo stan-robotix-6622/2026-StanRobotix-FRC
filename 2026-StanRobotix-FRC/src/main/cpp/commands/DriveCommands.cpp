@@ -49,7 +49,7 @@ frc2::CommandPtr DriveCommands::getMeasureMaxAttainableSpeedCommand()
             frc::ChassisSpeeds::FromRobotRelativeSpeeds(mSpeedLimiter->Calculate(DrivetrainConstants::Commands::kMaxSpeedMaxVelocity),
             0_mps,
             0_rad_per_s,
-            mDrivetrain->getPose().Rotation()));
+            0_deg));
         },
         {mDrivetrain}
       ).FinallyDo(

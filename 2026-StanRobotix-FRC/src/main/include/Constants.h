@@ -181,13 +181,13 @@ namespace DrivetrainConstants
   inline constexpr frc::Translation2d kBackLeftTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
   inline constexpr frc::Translation2d kBackRightTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
 
-  inline constexpr units::meters_per_second_t kSpeedConstant = 2_mps;                            // Temporary value
-  inline constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 1_rad_per_s; // Temporary value
+  inline constexpr units::meters_per_second_t kSpeedConstant = 4.50_mps;                         // Temporary value
+  inline constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 2_rad_per_s; // Temporary value
   namespace Commands
   {
     inline constexpr units::second_t kMaxSpeedStartDelay = 2.0_s;
     inline constexpr units::meters_per_second_squared_t kMaxSpeedRampRate = 0.5_mps_sq;
-    inline constexpr units::meters_per_second_t kMaxSpeedMaxVelocity = ModuleConstants::kDriveWheelMaxFreeSpeed;
+    inline constexpr units::meters_per_second_t kMaxSpeedMaxVelocity = 5_mps;
     inline constexpr units::second_t kFeedforwartStartDelay = 2.0_s;
     inline constexpr TemplateUnits::VoltageInverse<units::seconds> kFeedforwardRampRate = 1_V / 1_s;
     inline constexpr units::second_t kWheelRadiusMeasurementStartDelay = 1.0_s;
@@ -198,7 +198,7 @@ namespace DrivetrainConstants
 
 namespace LimelightConstants
 {
-  inline constexpr bool kUseMegaTag2 = true;
+  inline constexpr bool kUseMegaTag2 = false;
 
   inline constexpr std::string_view kName = "";
 
@@ -260,7 +260,7 @@ namespace IntakeConstants
 namespace PivotConstants
 {
   inline constexpr double kGearRatio = 16;
-  inline constexpr double kOffset = 6.40;
+  inline constexpr double kOffset = 5.9523773193359375;
   inline constexpr double kP = 1.3;  // en attendant
   inline constexpr double kI = 0.4;  // en attendant
   inline constexpr double kD = 0.15; // en attendant

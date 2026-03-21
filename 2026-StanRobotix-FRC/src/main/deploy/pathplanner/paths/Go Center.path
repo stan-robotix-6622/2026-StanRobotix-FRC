@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.17,
-        "y": 2.4587781731909844
+        "x": 3.062550415183868,
+        "y": 2.6954804270462636
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.17,
-        "y": 2.458778173190984
+        "x": 4.062550415183868,
+        "y": 2.695480427046263
       },
       "isLocked": false,
       "linkedName": "Tests/FinishedShooting"
     },
     {
       "anchor": {
-        "x": 6.463,
-        "y": 2.459
+        "x": 7.52761565836299,
+        "y": 1.748671411625148
       },
       "prevControl": {
-        "x": 5.463,
-        "y": 2.459
+        "x": 6.52761565836299,
+        "y": 1.748671411625148
       },
       "nextControl": null,
       "isLocked": false,
