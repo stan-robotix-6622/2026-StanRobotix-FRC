@@ -38,6 +38,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
   void Periodic() override;
 
   void ConfigurePathplanner();
+  void InitSendable(wpi::SendableBuilder& builder) override;
 
   void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
 
@@ -92,7 +93,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
   SwerveModule* mBackRightModule;
 
   frc::SwerveDriveKinematics<4>* mKinematics;
-  frc::Pose2d* mStartingRobotPose = new frc::Pose2d{2_m, 7_m, 0_rad};
+  frc::Pose2d* mStartingRobotPose = new frc::Pose2d{0_m, 0_m, 0_rad};
   frc::SwerveDriveOdometry<4>* mOdometry;
   frc::SwerveDrivePoseEstimator<4>* mPoseEstimator;
 

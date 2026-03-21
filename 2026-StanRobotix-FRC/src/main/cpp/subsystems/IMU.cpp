@@ -26,7 +26,7 @@ units::degrees_per_second_t IMU::getYawRate()
     return mIMU->GetAngularVelocityZWorld().GetValue();
 }
 
-void IMU::resetAngle()
+void IMU::reset()
 {
     mIMU->Reset();
 }

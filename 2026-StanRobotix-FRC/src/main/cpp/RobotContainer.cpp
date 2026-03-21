@@ -31,6 +31,7 @@ RobotContainer::RobotContainer()
   mSubFeeder = new SubFeeder{};
   // mSubIndexer = new SubIndexer{};
   mDrivetrain = new SubDrivetrain{};
+  frc::SmartDashboard::PutData("swerve", mDrivetrain);
   mSubIntake = new SubIntake{};
   mSubPivotIntake = new SubPivotIntake{};
   frc::SmartDashboard::PutData("pivot", mSubPivotIntake);
@@ -87,21 +88,15 @@ void RobotContainer::ConfigureBindings()
   mCommandXboxController->Button(OperatorConstants::kUnstuckFuelButton).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
   // mCommandXboxController->Button(OperatorConstants::kIndexButton).WhileTrue(mSubIntake->getIntakeCommand());
 
-  mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] {mDrivetrain->getIMU()->resetAngle();}, {}));
-  // mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
-  //   {
-  //     if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
-  //     {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_rad));}
-  //     else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_rad));}
-  //   }));
+  mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
+    {
+      if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
+      {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_rad));}
+      else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_rad));}
+    }));
 
   mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
     { mDrivetrain->resetPose(frc::Pose2d(14_m, 4.021328_m, mDrivetrain->getPose().Rotation())); }));
-
-  // mCommandXboxController->Button(7).OnTrue(frc2::cmd::RunOnce([this] {frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue ? mDrivetrain->resetIMU(0_deg) : mDrivetrain->resetIMU(180_deg);}, {}));
-  mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getMeasureMaxAttainableSpeedCommand());
-  // mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
-  // mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
 }
 
 void RobotContainer::ConfigureWhenConnectedToDS()

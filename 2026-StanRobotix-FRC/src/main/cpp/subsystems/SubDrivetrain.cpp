@@ -21,11 +21,6 @@ SubDrivetrain::SubDrivetrain()
     mBackLeftModule   = new SwerveModule{CANid::kBackLeftMotorID  , CANid::kBackLeftMotor550ID, true};
     mBackRightModule  = new SwerveModule{CANid::kBackRightMotorID , CANid::kBackRightMotor550ID, true};
 
-    frc::SmartDashboard::PutData("swerve/fl module", mFrontLeftModule);
-    frc::SmartDashboard::PutData("swerve/fr module", mFrontRightModule);
-    frc::SmartDashboard::PutData("swerve/bl module", mBackLeftModule);
-    frc::SmartDashboard::PutData("swerve/br module", mBackRightModule);
-
     // Initialization of the Swerve Data Publishers
     mCurrentModuleStatesPublisher = mNTDrivetrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
     mCurrentChassisSpeedsPublisher = mNTDrivetrainTable->GetStructTopic<frc::ChassisSpeeds>("Current ChassisSpeeds").Publish();
@@ -50,6 +45,7 @@ SubDrivetrain::SubDrivetrain()
     );
 
     mIMU = new IMU{};
+    mIMU->reset();
     frc::SmartDashboard::PutData("drivetrain/IMU", mIMU);
 
     mKinematics = new frc::SwerveDriveKinematics<4>{*mFrontLeftLocation, *mFrontRightLocation, *mBackLeftLocation, *mBackRightLocation};
@@ -254,18 +250,7 @@ frc::Pose2d SubDrivetrain::getPose()
 
 void SubDrivetrain::resetPose(frc::Pose2d iRobotPose)
 {
-    // Only change the IMU config if there are more than 1 deg of difference 
-    // between the current and future rotation
-    // to prevent repeated configurations of the IMU
-    units::degree_t wCurrentRotation = mPoseEstimator->GetEstimatedPosition().Rotation().Degrees();
-    units::degree_t wFutureRotation = iRobotPose.Rotation().Degrees();
-    units::degree_t wDeltaRotation = units::math::fmod(units::math::abs(wCurrentRotation - wFutureRotation), 360_deg);
-    if (wDeltaRotation >= 1_deg)
-    {
-        mIMU->setAngleYaw(iRobotPose.Rotation().Degrees());
-    }
-    // Reset the PoseEstimator's robot pose
-    mPoseEstimator->ResetPose(iRobotPose);
+    mPoseEstimator->ResetPosition(mIMU->getRotation2d(), getSwerveModulePositions(), iRobotPose);
 }
 
 void SubDrivetrain::resetIMU(units::degree_t iAngle)
@@ -364,4 +349,23 @@ frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHu
     frc2::CommandPtr wGoToPoseCommand = pathplanner::AutoBuilder::followPath(wDistanceFromHubPath);
 
     return wGoToPoseCommand;
+}
+
+void SubDrivetrain::InitSendable(wpi::SendableBuilder& builder)
+{
+    builder.SetSmartDashboardType("SwerveDrive");
+
+    builder.AddDoubleProperty("Front Left Angle", [this] {return mFrontLeftModule->getModuleState().angle.Radians().value();}, nullptr);
+    builder.AddDoubleProperty("Front Left Velocity", [this] {return mFrontLeftModule->getModuleState().speed.value();}, nullptr);
+
+    builder.AddDoubleProperty("Front Right Angle", [this] {return mFrontRightModule->getModuleState().angle.Radians().value();}, nullptr);
+    builder.AddDoubleProperty("Front Right Velocity", [this] {return mFrontRightModule->getModuleState().speed.value();}, nullptr);
+
+    builder.AddDoubleProperty("Back Left Angle", [this] {return mBackLeftModule->getModuleState().angle.Radians().value();}, nullptr);
+    builder.AddDoubleProperty("Back Left Velocity", [this] {return mBackLeftModule->getModuleState().speed.value();}, nullptr);
+
+    builder.AddDoubleProperty("Back Right Angle", [this] {return mBackRightModule->getModuleState().angle.Radians().value();}, nullptr);
+    builder.AddDoubleProperty("Back Right Velocity", [this] {return mBackRightModule->getModuleState().speed.value();}, nullptr);
+
+    builder.AddDoubleProperty("Robot Angle", [this] {return mIMU->getRotation2d().Radians().value();}, nullptr);
 }
