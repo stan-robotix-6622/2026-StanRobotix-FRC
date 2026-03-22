@@ -38,19 +38,28 @@ namespace OperatorConstants
 {
   inline constexpr int kDriverControllerPort = 0;
 
-  // Button mappings
-  // For XboxController:
-  // A = 1; B = 2; X = 3; Y = 4; RightBumper = 5; LeftBumper = 6
-  inline constexpr int kPivotDownButton = 2; // B
+  namespace Button {
+    inline constexpr int A = 1;
+    inline constexpr int B = 2;
+    inline constexpr int X = 3;
+    inline constexpr int Y = 4;
+    inline constexpr int RightBumper = 5;
+    inline constexpr int LeftBumper = 6;
+    inline constexpr int Back = 7;
+    inline constexpr int Start = 8;
+    inline constexpr int RightJoystick = 9;
+    inline constexpr int LeftJoystick = 10;
+  }
 
-  inline constexpr int kResetIMUButton = 5;  // RightBumper
-  inline constexpr int kResetPoseButton = 6; // LeftBumper
+  inline constexpr int kPivotDownButton = Button::B;
 
-  inline constexpr int kShootButton = 4;       // Y
-  inline constexpr int kUnstuckFuelButton = 3; // X
-  inline constexpr int kFeedButton = 1;        // A
-  // inline constexpr int kIndexButton = 6;       // LeftBumper
-} // namespace OperatorConstants
+  inline constexpr int kResetIMUButton = Button::RightBumper;
+  inline constexpr int kResetPoseButton = Button::LeftBumper;
+
+  inline constexpr int kShootButton = Button::Y;
+  inline constexpr int kUnstuckFuelButton = Button::X;
+  inline constexpr int kFeedButton = Button::A;
+}
 
 namespace ShooterConstants
 {
@@ -63,8 +72,6 @@ namespace ShooterConstants
   inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 
-  inline constexpr units::turns_per_second_t kVitesseVoulue = 55_tps;
-
   inline constexpr bool kFollowerinverted = false;
 
   namespace PIDConstants
@@ -73,7 +80,7 @@ namespace ShooterConstants
     inline constexpr double kI = 0;
     inline constexpr double kD = 0;
 
-    inline constexpr units::turns_per_second_t setpoint = 55_tps; // its NOT(it actually is) a placeholder :)
+    inline constexpr units::turns_per_second_t setpoint = 55_tps; // its a placeholder :)
   }
 }
 
