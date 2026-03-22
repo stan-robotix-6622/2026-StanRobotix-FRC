@@ -12,7 +12,7 @@
 
 #include "Constants.h"
 
-DriveCommands::DriveCommands(SubDrivetrain* iDrivetrain)
+DriveCommands::DriveCommands(SubDrivetrain *iDrivetrain)
 {
   mDrivetrain = iDrivetrain;
 
@@ -29,7 +29,7 @@ DriveCommands::DriveCommands(SubDrivetrain* iDrivetrain)
 frc2::CommandPtr DriveCommands::getMeasureMaxAttainableSpeedCommand()
 {
   return frc2::cmd::Sequence(
-          // Reset acceleration limiter
+      // Reset acceleration limiter
       frc2::cmd::RunOnce(
           [this]
           {
@@ -43,22 +43,20 @@ frc2::CommandPtr DriveCommands::getMeasureMaxAttainableSpeedCommand()
           {mDrivetrain})
           .WithTimeout(DrivetrainConstants::Commands::kMaxSpeedStartDelay),
       frc2::cmd::Run(
-        [this]
-        {
-          mDrivetrain->driveRobotRelative(
-            frc::ChassisSpeeds::FromRobotRelativeSpeeds(mSpeedLimiter->Calculate(DrivetrainConstants::Commands::kMaxSpeedMaxVelocity),
-            0_mps,
-            0_rad_per_s,
-            0_deg));
-        },
-        {mDrivetrain}
-      ).FinallyDo(
-        [this]
-        {
-          frc::DataLogManager::Log("Acheived Speed: " + std::to_string(mDrivetrain->getRobotRelativeSpeeds().vx.value()) + " meters per second");
-        }
-      )
-  );
+          [this]
+          {
+            mDrivetrain->driveRobotRelative(
+                frc::ChassisSpeeds::FromRobotRelativeSpeeds(mSpeedLimiter->Calculate(DrivetrainConstants::Commands::kMaxSpeedMaxVelocity),
+                                                            0_mps,
+                                                            0_rad_per_s,
+                                                            0_deg));
+          },
+          {mDrivetrain})
+          .FinallyDo(
+              [this]
+              {
+                frc::DataLogManager::Log("Acheived Speed: " + std::to_string(mDrivetrain->getRobotRelativeSpeeds().vx.value()) + " meters per second");
+              }));
 }
 
 frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand()

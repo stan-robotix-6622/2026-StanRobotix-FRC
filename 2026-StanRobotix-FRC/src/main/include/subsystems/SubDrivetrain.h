@@ -36,37 +36,34 @@ class SubDrivetrain : public frc2::SubsystemBase {
   SubDrivetrain();
 
   void Periodic() override;
-
-  void ConfigurePathplanner();
   void InitSendable(wpi::SendableBuilder& builder) override;
 
-  void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
+  void ConfigurePathplanner();
 
   void mesureSwerveFeedforward(units::volt_t iDrivingVoltage, wpi::array<frc::Rotation2d, 4> iDesiredHeadings);
+
   void setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4>);
   void refreshSwerveModules();
   wpi::array<frc::SwerveModuleState, 4> getSwerveModuleStates();
   wpi::array<frc::SwerveModulePosition, 4> getSwerveModulePositions();
-
+  
   frc2::CommandPtr getFollowPathCommand(std::string iPathName);
-
+  
   frc::ChassisSpeeds getRobotRelativeSpeeds();
+  void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
   void driveRobotRelative(frc::ChassisSpeeds iSpeeds);
 
   frc::Pose2d getPose();
   void resetPose(frc::Pose2d iRobotPose);
+  
   void resetIMU(units::degree_t iAngle);
-
   IMU* getIMU();
 
+  frc::Pose2d standardizePose(frc::Pose2d iPose);
   frc::Pose2d getClosestPoseAtDistanceFromHub(units::meter_t iDesiredDistance);
   frc2::CommandPtr getGoToDistanceFromHubCommand(units::meter_t iDesiredDistance);
-  frc::Pose2d standardizePose(frc::Pose2d iPose);
 
  private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
-
   frc::Translation2d* mFrontLeftLocation;
   frc::Translation2d* mFrontRightLocation;
   frc::Translation2d* mBackLeftLocation;
@@ -83,10 +80,8 @@ class SubDrivetrain : public frc2::SubsystemBase {
   nt::StructPublisher<frc::Rotation2d> mRotation2dPublisher;
   nt::StructPublisher<frc::Pose2d> mCurrentPose2dPublisher;
   nt::StructPublisher<frc::Pose2d> mTargetPose2dPublisher;
-  nt::StructSubscriber<frc::Pose2d> mCurrentPose2dSubscriber;
   nt::StructPublisher<frc::Pose2d> mLimelightPoseEstimatorPublisher;
 
-  // Declaring the four SwerveModule objects
   SwerveModule* mFrontLeftModule;
   SwerveModule* mFrontRightModule;
   SwerveModule* mBackLeftModule;
@@ -117,8 +112,4 @@ class SubDrivetrain : public frc2::SubsystemBase {
                                                                 frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
                                                                 frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
                                                                 frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)}};
-
-  // Load the RobotConfig from the GUI settings. You should probably
-  // store this in your Constants file
-  pathplanner::RobotConfig PathPlannerConfig = pathplanner::RobotConfig::fromGUISettings();
 };
