@@ -53,10 +53,6 @@ void RobotContainer::SetSubsystemDefaultCommands()
   mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
       [this]
       {
-        // frc::DataLogManager::Log("Joystick left Y: " + std::to_string(Deadband(-mCommandXboxController->GetLeftY(), 0.05)));
-        // frc::DataLogManager::Log("Joystick left X: " + std::to_string(Deadband(-mCommandXboxController->GetLeftX(), 0.05)));
-        // frc::DataLogManager::Log("Joystick left Y squared: " + std::to_string(Deadband(-mCommandXboxController->GetLeftY(), 0.05, true)));
-        // frc::DataLogManager::Log("Joystick left X squared: " + std::to_string(Deadband(-mCommandXboxController->GetLeftX(), 0.05, true)));
         mDrivetrain->driveFieldRelative(Deadband(-mCommandXboxController->GetLeftY(), 0.05),
                                         Deadband(-mCommandXboxController->GetLeftX(), 0.05),
                                         Deadband(-mCommandXboxController->GetRightX(), 0.05),
@@ -135,8 +131,8 @@ double RobotContainer::Deadband(double iInput, double iThreshold, bool iSquared)
   }
   // Same as above but we square the value and keep the sign of the initial iInput
   return ((iInput > 0) - (iInput < 0)) *
-    (1 / (1 - iThreshold)) * (iInput + (((iInput > 0) - (iInput < 0)) * iThreshold)) * // Squared
-    (1 / (1 - iThreshold)) * (iInput + (((iInput > 0) - (iInput < 0)) * iThreshold));
+    (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold)) * // Squared
+    (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold));
 }
 
 bool RobotContainer::isHubActive()
