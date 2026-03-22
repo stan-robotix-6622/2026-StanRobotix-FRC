@@ -12,7 +12,7 @@
 
 #include "Constants.h"
 
-DriveCommands::DriveCommands(SubDrivetrain *iDrivetrain)
+DriveCommands::DriveCommands(SubDrivetrain* iDrivetrain)
 {
   mDrivetrain = iDrivetrain;
 

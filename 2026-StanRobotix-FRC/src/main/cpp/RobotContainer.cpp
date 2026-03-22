@@ -98,7 +98,7 @@ void RobotContainer::ConfigureBindings()
     }));
 
   mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
-    { mDrivetrain->resetPose(frc::Pose2d(14_m, 4.021328_m, mDrivetrain->getPose().Rotation())); }));
+    { mDrivetrain->resetPose(SubDrivetrain::standardizePose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()))); }));
 }
 
 void RobotContainer::ConfigureWhenConnectedToDS()
