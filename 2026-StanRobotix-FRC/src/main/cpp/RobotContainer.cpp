@@ -122,18 +122,15 @@ bool RobotContainer::isHubActive()
 	{
 		return true;
 	}
-	if (mAlliance)
-	{
-		switch (gameData[0])
-		{
+	if (mAlliance) {
+		switch (gameData[0]) {
 			case 'B':																					// Blue starts inactive
 				if ((30_s <= matchTime && matchTime <= 55_s) || /* Shift 4 */
 						(80_s <= matchTime && matchTime <= 105_s))	/* Shift 2 */
 				{
 					return mAlliance.value() == frc::DriverStation::kBlue;
 				}
-				else
-				{
+				else {
 					return mAlliance.value() == frc::DriverStation::kRed;
 				}
 			case 'R':																					// Red starts inactive
@@ -142,16 +139,14 @@ bool RobotContainer::isHubActive()
 				{
 					return mAlliance.value() == frc::DriverStation::kRed;
 				}
-				else
-				{
+				else {
 					return mAlliance.value() == frc::DriverStation::kBlue;
 				}
 			default:	// If unexpected value
 				return false;
 		}
 	}
-	else
-	{	 // If Alliance color not accessible
+	else {	// If Alliance color not accessible
 		return false;
 	}
 }

@@ -24,11 +24,9 @@ Robot::Robot()
  */
 void Robot::RobotPeriodic()
 {
-	if (!mConnectedToDriveStation)
-	{
+	if (!mConnectedToDriveStation) {
 		frc::DataLogManager::Log("Robot not connected to DriverStation");
-		if (frc::DriverStation::IsDSAttached())
-		{
+		if (frc::DriverStation::IsDSAttached()) {
 			frc::DataLogManager::Log("Robot is connected to DriverStation");
 			m_container.ConfigureWhenConnectedToDS();
 			mConnectedToDriveStation = true;
@@ -57,8 +55,7 @@ void Robot::AutonomousInit()
 {
 	m_autonomousCommand = m_container.GetAutonomousCommand();
 
-	if (m_autonomousCommand && m_autonomousCommand.value() != nullptr)
-	{
+	if (m_autonomousCommand && m_autonomousCommand.value() != nullptr) {
 		frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand.value());
 	}
 }
@@ -71,8 +68,7 @@ void Robot::TeleopInit()
 	// teleop starts running. If you want the autonomous to
 	// continue until interrupted by another command, remove
 	// this line or comment it out.
-	if (m_autonomousCommand)
-	{
+	if (m_autonomousCommand) {
 		m_autonomousCommand.value()->Cancel();
 	}
 }

@@ -50,8 +50,7 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand()
 						mDrivetrain->mesureSwerveFeedforward(wVoltage);
 						std::array<frc::SwerveModuleState, 4U> wModuleStates = mDrivetrain->getSwerveModuleStates();
 						units::radians_per_second_t wAverageAngularSpeed = 0.0_rad_per_s;
-						for (int i = 0; i < 4; i++)
-						{
+						for (int i = 0; i < 4; i++) {
 							wAverageAngularSpeed += units::radian_t(std::numbers::pi) * wModuleStates[i].speed / (ModuleConstants::kWheelPerimeter);
 						}
 						wAverageAngularSpeed /= 4;
@@ -68,8 +67,7 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand()
 								double sumY = 0.0;
 								double sumXY = 0.0;
 								double sumX2 = 0.0;
-								for (int i = 0; i < n; i++)
-								{
+								for (int i = 0; i < n; i++) {
 									sumX += mVelocitySamples->at(i).value();
 									sumY += mVoltageSamples->at(i).value();
 									sumXY += mVelocitySamples->at(i).value() * mVoltageSamples->at(i).value();
@@ -133,13 +131,11 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand()
 									[this] {
 										std::array<units::radian_t, 4> wPositions;
 										wpi::array<frc::SwerveModulePosition, 4U> wSwervePositions = mDrivetrain->getSwerveModulePositions();
-										for (int i = 0; i < 4; i++)
-										{
+										for (int i = 0; i < 4; i++) {
 											wPositions[i] = units::radian_t(std::numbers::pi * 2 * (wSwervePositions[i].distance - mState->positions[i].distance) / ModuleConstants::kWheelPerimeter);
 										}
 										units::radian_t wWheelDelta = 0_rad;
-										for (int i = 0; i < 4; i++)
-										{
+										for (int i = 0; i < 4; i++) {
 											wWheelDelta += units::math::abs(wPositions[i]);
 										}
 										wWheelDelta /= 4;

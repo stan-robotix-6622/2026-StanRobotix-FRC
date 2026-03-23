@@ -61,7 +61,7 @@ BracedInitializerIndentWidth: 2
 BraceWrapping:
   AfterCaseLabel:  false
   AfterClass:      false
-  AfterControlStatement: true
+  AfterControlStatement: false
   AfterEnum:       false
   AfterExternBlock: false
   AfterFunction:   true

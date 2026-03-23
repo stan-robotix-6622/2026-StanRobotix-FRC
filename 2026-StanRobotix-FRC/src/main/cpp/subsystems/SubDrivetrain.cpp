@@ -77,33 +77,27 @@ void SubDrivetrain::Periodic()
 
 	LimelightHelpers::SetRobotOrientation(mLimelightName, mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
 
-	if (LimelightConstants::kUseMegaTag2)
-	{
+	if (LimelightConstants::kUseMegaTag2) {
 		mLimelightPoseEstimate = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2(mLimelightName);
 	}
-	else
-	{
+	else {
 		mLimelightPoseEstimate = LimelightHelpers::getBotPoseEstimate_wpiBlue(mLimelightName);
 	}
 
 	// reject the camera update if the PoseEstimate is not valid
 	bool rejectCameraUpdate = !LimelightHelpers::validPoseEstimate(mLimelightPoseEstimate);
 
-	if (units::math::abs(mIMU->getYawRate()) > 360_deg_per_s)
-	{
+	if (units::math::abs(mIMU->getYawRate()) > 360_deg_per_s) {
 		rejectCameraUpdate = true;
 	}
-	else if (mLimelightPoseEstimate.tagCount == 0)
-	{
+	else if (mLimelightPoseEstimate.tagCount == 0) {
 		rejectCameraUpdate = true;
 	}
-	else if (mLimelightPoseEstimate.pose == frc::Pose2d(0_m, 0_m, 0_rad))
-	{
+	else if (mLimelightPoseEstimate.pose == frc::Pose2d(0_m, 0_m, 0_rad)) {
 		rejectCameraUpdate = true;
 	}
 
-	if (!rejectCameraUpdate)
-	{
+	if (!rejectCameraUpdate) {
 		LimelightHelpers::PrintPoseEstimate(mLimelightPoseEstimate);
 		mPoseEstimator->AddVisionMeasurement(mLimelightPoseEstimate.pose, frc::Timer::GetFPGATimestamp());
 	}
@@ -143,8 +137,7 @@ void SubDrivetrain::ConfigurePathplanner()
 				// THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
 				std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
-				if (alliance)
-				{
+				if (alliance) {
 					frc::SmartDashboard::PutNumber("alliance color", frc::DriverStation::GetAlliance().value());
 					return alliance.value() == frc::DriverStation::Alliance::kRed;
 				}
@@ -201,15 +194,13 @@ wpi::array<frc::SwerveModulePosition, 4> SubDrivetrain::getSwerveModulePositions
 void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation)
 {
 	// Creating a ChassisSpeeds from the wanted speeds and the robot's rotation
-	if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue)
-	{
+	if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue) {
 		mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kSpeedConstant * iX,
 																																				iSpeedModulation * DrivetrainConstants::kSpeedConstant * iY,
 																																				iSpeedModulation * DrivetrainConstants::kSpeedConstant0 * i0,
 																																				mIMU->getRotation2d());
 	}
-	else
-	{
+	else {
 		mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kSpeedConstant * -iX,
 																																				iSpeedModulation * DrivetrainConstants::kSpeedConstant * -iY,
 																																				iSpeedModulation * DrivetrainConstants::kSpeedConstant0 * i0,
@@ -233,15 +224,13 @@ void SubDrivetrain::mesureSwerveFeedforward(units::volt_t iDrivingVoltage, units
 	mBackLeftModule->setDrivingVoltage(iDrivingVoltage);
 	mBackRightModule->setDrivingVoltage(iDrivingVoltage);
 
-	if (iTurningVoltage == 0_V)
-	{
+	if (iTurningVoltage == 0_V) {
 		mFrontLeftModule->setDesiredHeading(0_rad);
 		mFrontRightModule->setDesiredHeading(0_rad);
 		mBackLeftModule->setDesiredHeading(0_rad);
 		mBackRightModule->setDesiredHeading(0_rad);
 	}
-	else
-	{
+	else {
 		mFrontLeftModule->setTurningVoltage(iTurningVoltage);
 		mFrontRightModule->setTurningVoltage(iTurningVoltage);
 		mBackLeftModule->setTurningVoltage(iTurningVoltage);
@@ -267,8 +256,7 @@ void SubDrivetrain::resetPose(frc::Pose2d iRobotPose)
 	units::degree_t wCurrentRotation = mPoseEstimator->GetEstimatedPosition().Rotation().Degrees();
 	units::degree_t wFutureRotation = iRobotPose.Rotation().Degrees();
 	units::degree_t wDeltaRotation = units::math::fmod(units::math::abs(wCurrentRotation - wFutureRotation), 360_deg);
-	if (wDeltaRotation >= 1_deg)
-	{
+	if (wDeltaRotation >= 1_deg) {
 		mIMU->setAngleYaw(iRobotPose.Rotation().Degrees());
 	}
 	// Reset the PoseEstimator's robot pose
@@ -306,8 +294,7 @@ frc2::CommandPtr SubDrivetrain::getFollowPathCommand(std::string iPathName)
 frc::Pose2d SubDrivetrain::standardizePose(frc::Pose2d iPose)
 {
 	auto mAlliance = frc::DriverStation::GetAlliance();
-	if (mAlliance && mAlliance.value() == frc::DriverStation::kRed)
-	{
+	if (mAlliance && mAlliance.value() == frc::DriverStation::kRed) {
 		return iPose.RotateAround(FieldConstants::kFieldCenterTranslation2d, 180_deg);
 	}
 	return iPose;
@@ -320,8 +307,7 @@ frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubto
 	units::meter_t wRobotToHubY = FieldConstants::kHubCenterTranslation2d.Y() - wOriginToRobotTranslation.Y();
 	frc::Translation2d wRobotToHubTranslation = frc::Translation2d{wRobotToHubX, wRobotToHubY};
 	// If the Robot is not in the alliance zone
-	if (wRobotToHubTranslation.X() < 0_m)
-	{
+	if (wRobotToHubTranslation.X() < 0_m) {
 		return mPoseEstimator->GetEstimatedPosition();
 	}
 

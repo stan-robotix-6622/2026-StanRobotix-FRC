@@ -20,8 +20,7 @@ PivotIntake::PivotIntake(SubPivotIntake* iPivotIntake, StatePivotIntake iTarget)
 void PivotIntake::Initialize()
 {
 	mPIDController->Reset();
-	switch (mState)
-	{
+	switch (mState) {
 		case kUp:
 			mPIDController->SetSetpoint(PivotConstants::setpointUp);
 			break;
