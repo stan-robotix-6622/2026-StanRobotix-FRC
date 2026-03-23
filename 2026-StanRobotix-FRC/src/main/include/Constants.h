@@ -43,12 +43,21 @@ namespace OperatorConstants
     inline constexpr int B = 2;
     inline constexpr int X = 3;
     inline constexpr int Y = 4;
-    inline constexpr int RightBumper = 5;
-    inline constexpr int LeftBumper = 6;
+    inline constexpr int LeftBumper = 5;
+    inline constexpr int RightBumper = 6;
     inline constexpr int Back = 7;
     inline constexpr int Start = 8;
-    inline constexpr int RightJoystick = 9;
-    inline constexpr int LeftJoystick = 10;
+    inline constexpr int LeftJoystick = 9;
+    inline constexpr int RightJoystick = 10;
+  }
+
+  namespace Axis {
+    inline constexpr int LeftX = 0;
+    inline constexpr int LeftY = 1;
+    inline constexpr int LeftTrigger = 2;
+    inline constexpr int RightTrigger = 3;
+    inline constexpr int RightX = 4;
+    inline constexpr int RightY = 5;
   }
 
   inline constexpr int kPivotDownButton = Button::B;
