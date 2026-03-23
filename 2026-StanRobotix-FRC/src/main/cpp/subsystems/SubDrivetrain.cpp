@@ -275,12 +275,25 @@ frc::Pose2d SubDrivetrain::standardizePose(frc::Pose2d iPose)
     return iPose;
 }
 
+frc::Translation2d SubDrivetrain::standardizeTranslation(frc::Translation2d iTranslation)
+{
+    // mAlliance is of type std::optional<frc::DriverStation::Alliance>
+    auto mAlliance = frc::DriverStation::GetAlliance();
+    if (mAlliance && mAlliance.value() == frc::DriverStation::kRed)
+    {
+        return iTranslation.RotateAround(FieldConstants::kFieldCenterTranslation2d, 180_deg);
+    }
+    return iTranslation;
+}
+
+frc::Translation2d SubDrivetrain::getTranslationToHub(frc::Translation2d iCurrentTranslation)
+{
+  return standardizeTranslation(FieldConstants::kHubCenterTranslation2d - standardizeTranslation(iCurrentTranslation));
+}
+
 frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubtoRobotDistance)
 {
-    frc::Translation2d wOriginToRobotTranslation = standardizePose(getPose()).Translation();
-    units::meter_t wRobotToHubX = FieldConstants::kHubCenterTranslation2d.X() - wOriginToRobotTranslation.X();
-    units::meter_t wRobotToHubY = FieldConstants::kHubCenterTranslation2d.Y() - wOriginToRobotTranslation.Y();
-    frc::Translation2d wRobotToHubTranslation = frc::Translation2d{wRobotToHubX, wRobotToHubY};
+    frc::Translation2d wRobotToHubTranslation = getTranslationToHub(getPose().Translation());
     // If the Robot is not in the alliance zone
     if (wRobotToHubTranslation.X() < 0_m)
     {
@@ -291,8 +304,8 @@ frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubto
         wRobotToHubTranslation.Norm() - iHubtoRobotDistance,
         wRobotToHubTranslation.Angle()};
 
-    frc::Translation2d wOriginToTargetTranslation = wOriginToRobotTranslation + wRobotToTargetTranslation;
-    frc::Pose2d oOriginToTargetPose = standardizePose(frc::Pose2d{wOriginToTargetTranslation, wRobotToHubTranslation.Angle()});
+    frc::Translation2d wOriginToTargetTranslation = getPose().Translation() + wRobotToTargetTranslation;
+    frc::Pose2d oOriginToTargetPose = frc::Pose2d{wOriginToTargetTranslation, wRobotToHubTranslation.Angle()};
     mTargetPose2dPublisher.Set(oOriginToTargetPose);
     return oOriginToTargetPose;
 }
