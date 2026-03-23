@@ -249,6 +249,15 @@ frc::ChassisSpeeds SubDrivetrain::getRobotRelativeSpeeds()
     return mCurrentChassisSpeeds;
 }
 
+frc::ChassisSpeeds SubDrivetrain::getRobotRelativeSpeeds()
+{
+    mCurrentChassisSpeeds = mKinematics->ToChassisSpeeds(getSwerveModuleStates());
+    return frc::ChassisSpeeds::FromRobotRelativeSpeeds(mCurrentChassisSpeeds.vx,
+                                                       mCurrentChassisSpeeds.vy,
+                                                       mCurrentChassisSpeeds.omega,
+                                                       mIMU->getRotation2d());
+}
+
 void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds)
 {
     mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(iDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
@@ -286,14 +295,14 @@ frc::Translation2d SubDrivetrain::standardizeTranslation(frc::Translation2d iTra
     return iTranslation;
 }
 
-frc::Translation2d SubDrivetrain::getTranslationToHub(frc::Translation2d iCurrentTranslation)
+frc::Translation2d SubDrivetrain::getTranslationToHub()
 {
-  return standardizeTranslation(FieldConstants::kHubCenterTranslation2d - standardizeTranslation(iCurrentTranslation));
+  return standardizeTranslation(FieldConstants::kHubCenterTranslation2d - standardizeTranslation(getPose().Translation()));
 }
 
 frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubtoRobotDistance)
 {
-    frc::Translation2d wRobotToHubTranslation = getTranslationToHub(getPose().Translation());
+    frc::Translation2d wRobotToHubTranslation = getTranslationToHub();
     // If the Robot is not in the alliance zone
     if (wRobotToHubTranslation.X() < 0_m)
     {

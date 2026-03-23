@@ -50,10 +50,12 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc2::CommandPtr getFollowPathCommand(std::string iPathName);
   
   frc::ChassisSpeeds getRobotRelativeSpeeds();
+  frc::ChassisSpeeds getFieldRelativeSpeeds();
   void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
   void driveRobotRelative(frc::ChassisSpeeds iSpeeds);
 
   frc::Pose2d getPose();
+  frc::Translation2d getTranslationToHub();
   void resetPose(frc::Pose2d iRobotPose);
   
   void resetIMU(units::degree_t iAngle);
@@ -61,7 +63,6 @@ class SubDrivetrain : public frc2::SubsystemBase {
 
   static frc::Pose2d standardizePose(frc::Pose2d iPose);
   static frc::Translation2d standardizeTranslation(frc::Translation2d iTranslation);
-  static frc::Translation2d getTranslationToHub(frc::Translation2d iCurrentTranslation);
   frc::Pose2d getClosestPoseAtDistanceFromHub(units::meter_t iDesiredDistance);
   frc2::CommandPtr getGoToDistanceFromHubCommand(units::meter_t iDesiredDistance);
 
