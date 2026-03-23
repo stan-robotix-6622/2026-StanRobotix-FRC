@@ -35,4 +35,9 @@ class ShootDynamically
  private:
   SubDrivetrain* mDrivetrain;
   SubShooter* mShooter;
+
+  frc::PIDController* mShooterPIDController;
+  units::turns_per_second_t mCurrentVelocity;
+  units::turns_per_second_t mAdjustedVelocity;
+  units::turns_per_second_t mPIDAdjustment;
 };
