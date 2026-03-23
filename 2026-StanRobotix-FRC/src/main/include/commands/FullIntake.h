@@ -9,7 +9,6 @@
 
 #include "commands/PivotIntake.h"
 
-
 /**
  * An example command.
  *
@@ -19,8 +18,8 @@
  */
 class FullIntake {
  public:
-  /* You should consider using the more terse Command factories API instead
-   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
-   */
-  static frc2::CommandPtr FullIntakeCommand(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake iTargetState);
+	/* You should consider using the more terse Command factories API instead
+	 * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
+	 */
+	static frc2::CommandPtr FullIntakeCommand(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake iTargetState);
 };

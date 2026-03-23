@@ -4,14 +4,13 @@
 
 #pragma once
 
-#include <frc2/command/Command.h>
-#include <frc2/command/CommandHelper.h>
 #include <frc/controller/PIDController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/Command.h>
+#include <frc2/command/CommandHelper.h>
 
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubPivotIntake.h"
-
 
 /**
  * An example command.
@@ -21,32 +20,30 @@
  * Command will *not* work!
  */
 class PivotIntake
-    : public frc2::CommandHelper<frc2::Command, PivotIntake> {
+		: public frc2::CommandHelper<frc2::Command, PivotIntake> {
  public:
-  /* You should consider using the more terse Command factories API instead
-   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
-   */
+	/* You should consider using the more terse Command factories API instead
+	 * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
+	 */
 
-  enum StatePivotIntake{
-    kUp,
-    kDown
-  };
+	enum StatePivotIntake {
+		kUp,
+		kDown
+	};
 
-  PivotIntake(SubPivotIntake*, StatePivotIntake iTarget);
+	PivotIntake(SubPivotIntake*, StatePivotIntake iTarget);
 
-  void Initialize() override;
+	void Initialize() override;
 
-  void Execute() override;
+	void Execute() override;
 
-  void End(bool interrupted) override;
+	void End(bool interrupted) override;
 
-  bool IsFinished() override;
+	bool IsFinished() override;
 
-  private:
+ private:
+	SubPivotIntake* mPivotIntake;
+	frc::PIDController* mPIDController;
 
-  
-  SubPivotIntake* mPivotIntake;
-  frc::PIDController* mPIDController;
- 
-  StatePivotIntake mState;
+	StatePivotIntake mState;
 };

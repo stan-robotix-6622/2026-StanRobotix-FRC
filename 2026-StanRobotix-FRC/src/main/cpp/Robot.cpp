@@ -6,11 +6,12 @@
 
 #include <frc2/command/CommandScheduler.h>
 
-Robot::Robot() {
-  frc::DataLogManager::Start();
-  frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog());
+Robot::Robot()
+{
+	frc::DataLogManager::Start();
+	frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog());
 
-  frc::SmartDashboard::PutData("CommandScheduler", &frc2::CommandScheduler::GetInstance());
+	frc::SmartDashboard::PutData("CommandScheduler", &frc2::CommandScheduler::GetInstance());
 }
 
 /**
@@ -21,21 +22,22 @@ Robot::Robot() {
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
-void Robot::RobotPeriodic() {
-  if (!mConnectedToDriveStation)
-  {
-    frc::DataLogManager::Log("Robot not connected to DriverStation");
-    if (frc::DriverStation::IsDSAttached())
-    {
-      frc::DataLogManager::Log("Robot is connected to DriverStation");
-      m_container.ConfigureWhenConnectedToDS();
-      mConnectedToDriveStation = true;
-    }
-  }
-  frc::SmartDashboard::PutBoolean("Dashboard/Hub Active", m_container.isHubActive());
-  frc::SmartDashboard::PutNumber("Dashboard/MatchTime", frc::DriverStation::GetMatchTime().value());
-  frc::SmartDashboard::PutNumber("Dashboard/Alliance", frc::DriverStation::GetAlliance().value());
-  frc2::CommandScheduler::GetInstance().Run();
+void Robot::RobotPeriodic()
+{
+	if (!mConnectedToDriveStation)
+	{
+		frc::DataLogManager::Log("Robot not connected to DriverStation");
+		if (frc::DriverStation::IsDSAttached())
+		{
+			frc::DataLogManager::Log("Robot is connected to DriverStation");
+			m_container.ConfigureWhenConnectedToDS();
+			mConnectedToDriveStation = true;
+		}
+	}
+	frc::SmartDashboard::PutBoolean("Dashboard/Hub Active", m_container.isHubActive());
+	frc::SmartDashboard::PutNumber("Dashboard/MatchTime", frc::DriverStation::GetMatchTime().value());
+	frc::SmartDashboard::PutNumber("Dashboard/Alliance", frc::DriverStation::GetAlliance().value());
+	frc2::CommandScheduler::GetInstance().Run();
 }
 
 /**
@@ -51,24 +53,28 @@ void Robot::DisabledPeriodic() {}
  * This autonomous runs the autonomous command selected by your {@link
  * RobotContainer} class.
  */
-void Robot::AutonomousInit() {
-  m_autonomousCommand = m_container.GetAutonomousCommand();
+void Robot::AutonomousInit()
+{
+	m_autonomousCommand = m_container.GetAutonomousCommand();
 
-  if (m_autonomousCommand && m_autonomousCommand.value() != nullptr) {
-    frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand.value());
-  }
+	if (m_autonomousCommand && m_autonomousCommand.value() != nullptr)
+	{
+		frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand.value());
+	}
 }
 
 void Robot::AutonomousPeriodic() {}
 
-void Robot::TeleopInit() {
-  // This makes sure that the autonomous stops running when
-  // teleop starts running. If you want the autonomous to
-  // continue until interrupted by another command, remove
-  // this line or comment it out.
-  if (m_autonomousCommand) {
-    m_autonomousCommand.value()->Cancel();
-  }
+void Robot::TeleopInit()
+{
+	// This makes sure that the autonomous stops running when
+	// teleop starts running. If you want the autonomous to
+	// continue until interrupted by another command, remove
+	// this line or comment it out.
+	if (m_autonomousCommand)
+	{
+		m_autonomousCommand.value()->Cancel();
+	}
 }
 
 /**
@@ -92,7 +98,8 @@ void Robot::SimulationInit() {}
 void Robot::SimulationPeriodic() {}
 
 #ifndef RUNNING_FRC_TESTS
-int main() {
-  return frc::StartRobot<Robot>();
+int main()
+{
+	return frc::StartRobot<Robot>();
 }
 #endif

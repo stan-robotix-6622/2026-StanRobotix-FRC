@@ -8,11 +8,11 @@
 
 #include "Constants.h"
 
-SubIndexer::SubIndexer() 
+SubIndexer::SubIndexer()
 {
-    mIndexerController = new rev::spark::SparkMax{CANid::kMotorIndexerID, rev::spark::SparkLowLevel::MotorType::kBrushless};
-    mSparkConfigIndexer = new rev::spark::SparkBaseConfig;
-    Configure();
+	mIndexerController = new rev::spark::SparkMax{CANid::kMotorIndexerID, rev::spark::SparkLowLevel::MotorType::kBrushless};
+	mSparkConfigIndexer = new rev::spark::SparkBaseConfig;
+	Configure();
 }
 
 // This method will be called once per scheduler run
@@ -20,28 +20,26 @@ void SubIndexer::Periodic() {}
 
 void SubIndexer::setVoltage(units::volt_t iOutput)
 {
-    mIndexerController->SetVoltage(iOutput);
+	mIndexerController->SetVoltage(iOutput);
 };
 
 rev::REVLibError SubIndexer::Configure()
 {
-    mSparkConfigIndexer->Inverted(IndexerConstants::kInverted);
-    mSparkConfigIndexer->SetIdleMode(IndexerConstants::kIdleMode);
+	mSparkConfigIndexer->Inverted(IndexerConstants::kInverted);
+	mSparkConfigIndexer->SetIdleMode(IndexerConstants::kIdleMode);
 
-    return mIndexerController->Configure(*mSparkConfigIndexer, IndexerConstants::kReset, IndexerConstants::kPersist);
+	return mIndexerController->Configure(*mSparkConfigIndexer, IndexerConstants::kReset, IndexerConstants::kPersist);
 };
 
 frc2::CommandPtr SubIndexer::getIndexCommand()
 {
-    return frc2::cmd::RunEnd(
-        [this]
-        {
-            setVoltage(IndexerConstants::kDesiredVoltage);
-        },
+	return frc2::cmd::RunEnd(
+			[this] {
+				setVoltage(IndexerConstants::kDesiredVoltage);
+			},
 
-        [this] {
-            setVoltage(0_V);
-        },
-        {}
-    );
+			[this] {
+				setVoltage(0_V);
+			},
+			{});
 }

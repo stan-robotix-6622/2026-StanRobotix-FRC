@@ -8,43 +8,43 @@
 
 #include "Constants.h"
 
-SubIntake::SubIntake() {
-    mIntakeMotor = new rev::spark::SparkMax(CANid::kMotorIntakeID, rev::spark::SparkLowLevel::MotorType::kBrushless);
- 
-    mIntakeMotorConfig = new rev::spark::SparkMaxConfig{};
-    mIntakeMotorConfig->Inverted(IntakeConstants::kInverted);
-    mIntakeMotorConfig->SetIdleMode(IntakeConstants::kIdleMode);
-    mIntakeMotor->Configure(*mIntakeMotorConfig, IntakeConstants::kReset, IntakeConstants::kPersist);
+SubIntake::SubIntake()
+{
+	mIntakeMotor = new rev::spark::SparkMax(CANid::kMotorIntakeID, rev::spark::SparkLowLevel::MotorType::kBrushless);
+
+	mIntakeMotorConfig = new rev::spark::SparkMaxConfig{};
+	mIntakeMotorConfig->Inverted(IntakeConstants::kInverted);
+	mIntakeMotorConfig->SetIdleMode(IntakeConstants::kIdleMode);
+	mIntakeMotor->Configure(*mIntakeMotorConfig, IntakeConstants::kReset, IntakeConstants::kPersist);
 }
 
 // This method will be called once per scheduler run
 void SubIntake::Periodic() {}
 
-void SubIntake::Stop() {
-    mIntakeMotor->StopMotor();
+void SubIntake::Stop()
+{
+	mIntakeMotor->StopMotor();
 }
 
 void SubIntake::SetVoltage(double iVoltage)
 {
-    mIntakeMotor->SetVoltage(units::volt_t(iVoltage));
+	mIntakeMotor->SetVoltage(units::volt_t(iVoltage));
 }
 
 void SubIntake::SetSpeed(double iSpeed)
 {
-    mIntakeMotor->Set(iSpeed);
+	mIntakeMotor->Set(iSpeed);
 }
 
-frc2::CommandPtr SubIntake::getIntakeCommand() {
-    return frc2::cmd::RunEnd(
-        [this]
-        {
-            SetSpeed(IntakeConstants::kSpeed);
-        },
+frc2::CommandPtr SubIntake::getIntakeCommand()
+{
+	return frc2::cmd::RunEnd(
+			[this] {
+				SetSpeed(IntakeConstants::kSpeed);
+			},
 
-        [this]
-        {
-            Stop();
-        },
-        {}
-    );
+			[this] {
+				Stop();
+			},
+			{});
 }

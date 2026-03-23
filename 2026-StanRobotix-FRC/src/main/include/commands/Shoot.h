@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include <frc2/command/Command.h>
-#include <frc2/command/CommandHelper.h>
 #include <frc/controller/PIDController.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/Command.h>
+#include <frc2/command/CommandHelper.h>
 
 #include <units/angular_velocity.h>
 
@@ -19,30 +19,30 @@
  * <p>Note that this extends CommandHelper, rather extending Command
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!*/
- 
+
 class Shoot
-    : public frc2::CommandHelper<frc2::Command, Shoot> {
+		: public frc2::CommandHelper<frc2::Command, Shoot> {
  public:
-  /* You should consider using the more terse Command factories API instead
-   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands*/
-   
-  explicit Shoot(SubShooter* iSubShooter);
+	/* You should consider using the more terse Command factories API instead
+	 * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands*/
 
-  void Initialize() override;
+	explicit Shoot(SubShooter* iSubShooter);
 
-  void Execute() override;
+	void Initialize() override;
 
-  void End(bool interrupted) override;
+	void Execute() override;
 
-  bool IsFinished() override;
+	void End(bool interrupted) override;
+
+	bool IsFinished() override;
 
  private:
-  SubShooter* mSubShooter;
-  frc::PIDController* mPIDController;
+	SubShooter* mSubShooter;
+	frc::PIDController* mPIDController;
 
-  units::turns_per_second_t mSetpointVelocity;
-  
-  units::turns_per_second_t mCurrentVelocity;
-  units::turns_per_second_t mAdjustedVelocity;
-  units::turns_per_second_t mPIDAdjustment;
+	units::turns_per_second_t mSetpointVelocity;
+
+	units::turns_per_second_t mCurrentVelocity;
+	units::turns_per_second_t mAdjustedVelocity;
+	units::turns_per_second_t mPIDAdjustment;
 };

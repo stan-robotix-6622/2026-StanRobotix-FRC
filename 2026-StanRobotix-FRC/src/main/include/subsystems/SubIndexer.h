@@ -4,29 +4,28 @@
 
 #pragma once
 
-#include <frc2/command/SubsystemBase.h>
 #include <frc2/command/CommandPtr.h>
-#include <rev/SparkMax.h>
+#include <frc2/command/SubsystemBase.h>
 #include <rev/config/SparkMaxConfig.h>
+#include <rev/SparkMax.h>
 
-class SubIndexer : public frc2::SubsystemBase
-{
-public:
-  SubIndexer();
+class SubIndexer : public frc2::SubsystemBase {
+ public:
+	SubIndexer();
 
-  /**
-   * Will be called periodically whenever the CommandScheduler runs.
-   */
-  void Periodic() override;
+	/**
+	 * Will be called periodically whenever the CommandScheduler runs.
+	 */
+	void Periodic() override;
 
-  void setVoltage(units::volt_t iOutput);
-  rev::REVLibError Configure();
-  frc2::CommandPtr getIndexCommand();
+	void setVoltage(units::volt_t iOutput);
+	rev::REVLibError Configure();
+	frc2::CommandPtr getIndexCommand();
 
-private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
+ private:
+	// Components (e.g. motor controllers and sensors) should generally be
+	// declared private and exposed only through public methods.
 
-  rev::spark::SparkMax* mIndexerController;
-  rev::spark::SparkBaseConfig* mSparkConfigIndexer;
+	rev::spark::SparkMax* mIndexerController;
+	rev::spark::SparkBaseConfig* mSparkConfigIndexer;
 };

@@ -4,36 +4,35 @@
 
 #pragma once
 
-#include <frc2/command/SubsystemBase.h>
-#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/controller/ArmFeedforward.h>
-#include <rev/SparkMax.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc2/command/SubsystemBase.h>
 #include <rev/config/SparkMaxConfig.h>
+#include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 
-class SubPivotIntake : public frc2::SubsystemBase
-{
-public:
-  SubPivotIntake();
+class SubPivotIntake : public frc2::SubsystemBase {
+ public:
+	SubPivotIntake();
 
-  void Stop();
+	void Stop();
 
-  void KeepPosition();
+	void KeepPosition();
 
-  void SetVoltage(double iVoltage);
+	void SetVoltage(double iVoltage);
 
-  double GetAngle();
+	double GetAngle();
 
-  /**
-   * Will be called periodically whenever the CommandScheduler runs.
-   */
-  void Periodic() override;
+	/**
+	 * Will be called periodically whenever the CommandScheduler runs.
+	 */
+	void Periodic() override;
 
-private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
-  rev::spark::SparkMax* mPivotMotor;
-  rev::spark::SparkRelativeEncoder* mEncoder;
-  frc::ArmFeedforward* mFeedForward;
-  rev::spark::SparkMaxConfig* mPivotMotorConfig;
+ private:
+	// Components (e.g. motor controllers and sensors) should generally be
+	// declared private and exposed only through public methods.
+	rev::spark::SparkMax* mPivotMotor;
+	rev::spark::SparkRelativeEncoder* mEncoder;
+	frc::ArmFeedforward* mFeedForward;
+	rev::spark::SparkMaxConfig* mPivotMotorConfig;
 };
