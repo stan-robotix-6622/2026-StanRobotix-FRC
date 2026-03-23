@@ -1,0 +1,16 @@
+cppHeaderFileInclude {
+   \.h$
+   \.hpp$
+   \.inc$
+   \.inl$
+}
+cppSrcFileInclude {
+   \.cpp$
+}
+modifiableFileExclude {
+   src/main/include/LimelightHelpers.h$
+   src/main/deploy/*
+   src/test/*
+   gradle/*
+   .json$
+}
