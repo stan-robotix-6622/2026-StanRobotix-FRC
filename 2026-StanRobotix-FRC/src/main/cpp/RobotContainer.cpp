@@ -17,6 +17,7 @@
 #include "commands/PivotIntake.h"
 #include "commands/FullIntake.h"
 #include "commands/Shoot.h"
+#include "commands/ShootDynamically.h"
 
 #include "Constants.h"
 
@@ -99,14 +100,15 @@ void RobotContainer::ConfigureBindings()
 
   mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
     { mDrivetrain->resetPose(SubDrivetrain::standardizePose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()))); }));
+
+  mCommandXboxController->Button(OperatorConstants::Button::Back).ToggleOnTrue(ShootDynamically(mSubShooter, mDrivetrain).ToPtr());
 }
 
 void RobotContainer::ConfigureWhenConnectedToDS()
 {
   mDrivetrain->ConfigurePathplanner();
   // Bindings that need the AutoBuilder to be configures
-  // mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("EightPath").Repeatedly());
-  mCommandXboxController->Button(8).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
+  mCommandXboxController->Button(OperatorConstants::Button::Start).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
   (units::meter_t)frc::SmartDashboard::GetNumber("Drivetrain Distance Setpoint", 3)); }));
 
   mAutoChooser = pathplanner::AutoBuilder::buildAutoChooser();
