@@ -35,6 +35,4 @@ class ShootDynamically
  private:
   SubDrivetrain* mDrivetrain;
   SubShooter* mShooter;
-
-  units::second_t mLastTime = frc::Timer::GetFPGATimestamp();
 };

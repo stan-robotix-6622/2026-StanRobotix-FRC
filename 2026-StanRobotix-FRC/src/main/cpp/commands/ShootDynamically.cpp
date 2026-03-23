@@ -22,12 +22,17 @@ void ShootDynamically::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void ShootDynamically::Execute()
 {
-  units::second_t wCurrentTime = frc::Timer::GetFPGATimestamp();
-  units::meter_t wDistanceToTarget = mDrivetrain->getTranslationToHub().Norm();
+  units::meter_t wDistanceToTarget = 0_m;
   frc::ChassisSpeeds wRobotMovement = mDrivetrain->getFieldRelativeSpeeds();
-  frc::Transform2d wTargetMovement = frc::Transform2d(wRobotMovement.vx * (mLastTime - wCurrentTime),
-                                                      wRobotMovement.vy * (mLastTime - wCurrentTime),
-                                                      wRobotMovement.omega * (mLastTime - wCurrentTime));
+  frc::Translation2d wTargetMovement = {0_m, 0_m};
+  ShooterLookupTable::Status wShooterStatus = {0_m, 0_tps, 0_s};
+  for (int i = 0; i < 5; i++)
+  {
+    wDistanceToTarget = (mDrivetrain->getTranslationToHub() + wTargetMovement).Norm();
+    wShooterStatus = ShooterLookupTable::interpolate(wDistanceToTarget);
+    wTargetMovement = {-wRobotMovement.vx * wShooterStatus.timeOfFlight,
+                       -wRobotMovement.vy * wShooterStatus.timeOfFlight};
+  }
 }
 
 // Called once the command ends or is interrupted.
