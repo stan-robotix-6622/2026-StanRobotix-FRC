@@ -19,13 +19,11 @@
 
 #include "subsystems/SubDrivetrain.h"
 
-using volts_per_second = units::unit_t<units::detail::unit_multiply<units::voltage::volts, units::inverse<units::time::seconds>>, double, units::linear_scale>;
-
 // Made based on the drive commands found at
 // https://github.com/Mechanical-Advantage/AdvantageKit/blob/main/template_projects/sources/spark_swerve/src/main/java/frc/robot/commands/DriveCommands.java
 class DriveCommands {
  public:
-  DriveCommands(SubDrivetrain* iDrivetrain);
+  explicit DriveCommands(SubDrivetrain* iDrivetrain);
 
   frc2::CommandPtr getFeedforwardCharacterizationCommand();
   frc2::CommandPtr getWheelRadiusCharacterizationCommand();
