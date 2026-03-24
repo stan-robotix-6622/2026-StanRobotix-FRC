@@ -17,7 +17,7 @@ class ShooterLookupTable {
   static Status interpolate(units::meter_t iDistance)
   {
     for (unsigned int i = 0; i < LookupTable.size(); i++) {
-      if (LookupTable[i].distanceToTarget > iDistance) {
+      if (LookupTable[i].distanceToTarget >= iDistance) {
         units::meter_t wDeltaNextPreviousDistance = LookupTable[i].distanceToTarget - LookupTable[i - 1].distanceToTarget;
         units::meter_t wDeltaCurrentPreviousDistance = iDistance - LookupTable[i - 1].distanceToTarget;
         double interpolationRatio = (wDeltaNextPreviousDistance / wDeltaCurrentPreviousDistance);
