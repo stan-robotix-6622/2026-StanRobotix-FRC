@@ -7,8 +7,12 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 
+#include <frc/geometry/Translation2d.h>
+#include <frc/kinematics/ChassisSpeeds.h>
+
 #include "subsystems/SubDrivetrain.h"
 #include "subsystems/SubShooter.h"
+#include "ShooterLookupTable.h"
 
 /**
  * An example command.
@@ -40,4 +44,9 @@ class ShootDynamically
   units::turns_per_second_t mCurrentVelocity;
   units::turns_per_second_t mAdjustedVelocity;
   units::turns_per_second_t mPIDAdjustment;
+
+  units::meter_t mDistanceToTarget = 0_m;
+  frc::ChassisSpeeds mRobotMovement = {0_mps, 0_mps, 0_rad_per_s};
+  frc::Translation2d mTargetMovement = {0_m, 0_m};
+  ShooterLookupTable::Status mShooterStatus = {0_m, 0_tps, 0_s};
 };

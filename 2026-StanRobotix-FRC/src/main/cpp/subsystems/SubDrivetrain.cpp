@@ -249,7 +249,7 @@ frc::ChassisSpeeds SubDrivetrain::getRobotRelativeSpeeds()
     return mCurrentChassisSpeeds;
 }
 
-frc::ChassisSpeeds SubDrivetrain::getRobotRelativeSpeeds()
+frc::ChassisSpeeds SubDrivetrain::getFieldRelativeSpeeds()
 {
     mCurrentChassisSpeeds = mKinematics->ToChassisSpeeds(getSwerveModuleStates());
     return frc::ChassisSpeeds::FromRobotRelativeSpeeds(mCurrentChassisSpeeds.vx,

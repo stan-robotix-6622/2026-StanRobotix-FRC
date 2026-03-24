@@ -4,10 +4,7 @@
 
 #include "commands/ShootDynamically.h"
 
-#include <frc/geometry/Transform2d.h>
-
 #include "Constants.h"
-#include "ShooterLookupTable.h"
 
 ShootDynamically::ShootDynamically(SubShooter* iShooter, SubDrivetrain* iDrivetrain) {
   mShooter = iShooter;
@@ -24,18 +21,17 @@ void ShootDynamically::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void ShootDynamically::Execute()
 {
-  units::meter_t wDistanceToTarget = 0_m;
-  frc::ChassisSpeeds wRobotMovement = mDrivetrain->getFieldRelativeSpeeds();
-  frc::Translation2d wTargetMovement = {0_m, 0_m};
-  ShooterLookupTable::Status wShooterStatus = {0_m, 0_tps, 0_s};
+  mRobotMovement = mDrivetrain->getFieldRelativeSpeeds();
+  mTargetMovement = {0_m, 0_m};
+  mShooterStatus = {0_m, 0_tps, 0_s};
   for (int i = 0; i < 5; i++)
   {
-    wDistanceToTarget = (mDrivetrain->getTranslationToHub() + wTargetMovement).Norm();
-    wShooterStatus = ShooterLookupTable::interpolate(wDistanceToTarget);
-    wTargetMovement = {-wRobotMovement.vx * wShooterStatus.timeOfFlight,
-                       -wRobotMovement.vy * wShooterStatus.timeOfFlight};
+    mDistanceToTarget = (mDrivetrain->getTranslationToHub() + mTargetMovement).Norm();
+    mShooterStatus = ShooterLookupTable::interpolate(mDistanceToTarget);
+    mTargetMovement = {-mRobotMovement.vx * mShooterStatus.timeOfFlight,
+                       -mRobotMovement.vy * mShooterStatus.timeOfFlight};
   }
-  mShooterPIDController->SetSetpoint(wShooterStatus.shooterVelocity.value());
+  mShooterPIDController->SetSetpoint(mShooterStatus.shooterVelocity.value());
 
   mPIDAdjustment = units::turns_per_second_t(mShooterPIDController->Calculate(mShooter->getVelocity().value()));
   mCurrentVelocity = mShooter->getVelocity();
