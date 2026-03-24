@@ -20,7 +20,7 @@ class ShooterLookupTable {
       if (LookupTable[i].distanceToTarget >= iDistance) {
         units::meter_t wDeltaNextPreviousDistance = LookupTable[i].distanceToTarget - LookupTable[i - 1].distanceToTarget;
         units::meter_t wDeltaCurrentPreviousDistance = iDistance - LookupTable[i - 1].distanceToTarget;
-        double interpolationRatio = (wDeltaNextPreviousDistance / wDeltaCurrentPreviousDistance);
+        double interpolationRatio = (wDeltaCurrentPreviousDistance / wDeltaNextPreviousDistance);
         units::turns_per_second_t wDeltaNextPreviousVelocity = (LookupTable[i].shooterVelocity - LookupTable[i - 1].shooterVelocity);
         units::turns_per_second_t wDesiredVelocity = wDeltaNextPreviousVelocity * interpolationRatio + LookupTable[i - 1].shooterVelocity;
         units::second_t wDeltaNextPreviousTOF = (LookupTable[i].timeOfFlight - LookupTable[i - 1].timeOfFlight);
