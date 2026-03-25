@@ -32,7 +32,7 @@ class ShooterLookupTable {
   }
  private:
   // This array needs to be sorted by the distanceToTarget value of the structs
-  static constexpr std::array<Status, 65> LookupTable = {
+  static constexpr std::array<Status, 56> LookupTable = {
     Status{0.5_m, 4.49_tps, 0.71_s},
     Status{0.6_m, 5.67_tps, 0.77_s},
     Status{0.7_m, 6.92_tps, 0.84_s},
