@@ -46,7 +46,7 @@ SwerveModuleSim::SwerveModuleSim(int iDrivingMotorID, int iTurningMotorID, bool 
     refreshModule();
 }
 
-void SwerveModuleSim::setDesiredState(frc::SwerveModuleState iDesiredState, double iSpeedModulation)
+void SwerveModuleSim::setDesiredState(frc::SwerveModuleState iDesiredState)
 {
     mTurningCurrentAngle = units::radian_t(mTurningAbsoluteEncoderSim->GetPosition());
     mOptimizedState = iDesiredState;
@@ -55,13 +55,13 @@ void SwerveModuleSim::setDesiredState(frc::SwerveModuleState iDesiredState, doub
 
     // frc::SmartDashboard::PutNumber("Drivetrain/Turning RPM", mTurningPID->Calculate(mTurningCurrentAngle.Radians().value()) / kTurningVelocityFactor);
     frc::SmartDashboard::PutNumber("Drivetrain/Turning RPM", mOptimizedState.angle.Radians().value() / kTurningVelocityFactor);
-    frc::SmartDashboard::PutNumber("Drivetrain/Driving RPM", mOptimizedState.speed.value() * iSpeedModulation / kDrivingVelocityFactor);
+    frc::SmartDashboard::PutNumber("Drivetrain/Driving RPM", mOptimizedState.speed.value() / kDrivingVelocityFactor);
     
     // mTurningPID->SetSetpoint(mOptimizedState.angle.Radians().value());
     // mTurningMotorSim->iterate(mTurningPID->Calculate(mTurningCurrentAngle.Radians().value()), 12, 0.02);
-    mDrivingMotorSim->iterate(-mOptimizedState.speed.value() * iSpeedModulation, 12, 0.02);
+    mDrivingMotorSim->iterate(-mOptimizedState.speed.value(), 12, 0.02);
     // mDrivingEncoderSim->SetPosition(mDrivingEncoderSim->GetPosition() + mDrivingEncoderSim->GetVelocity() * 0.020);
-    // mDrivingEncoderSim->SetVelocity(-mOptimizedState.speed.value() * iSpeedModulation);
+    // mDrivingEncoderSim->SetVelocity(-mOptimizedState.speed.value());
     mTurningAbsoluteEncoderSim->SetPosition(mOptimizedState.angle.Radians().value());
 }
 

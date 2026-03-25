@@ -36,7 +36,7 @@ class SwerveModuleSim{
   frc::SwerveModuleState getModuleState();
 
 // Méthode qui fait rouler le module à partir du SwerveModuleState désiré
-  void setDesiredState(frc::SwerveModuleState iDesiredState, double iSpeedModulation);
+  void setDesiredState(frc::SwerveModuleState iDesiredState);
 
   void setPIDValues(double iP, double iI, double iD);
 

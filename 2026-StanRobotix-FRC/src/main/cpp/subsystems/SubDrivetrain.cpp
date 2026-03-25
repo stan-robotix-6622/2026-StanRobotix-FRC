@@ -4,189 +4,193 @@
 
 #include "subsystems/SubDrivetrain.h"
 
-#include <iostream>
-
-SubDrivetrain::SubDrivetrain(SubIMU * iIMU)
+SubDrivetrain::SubDrivetrain()
 {
-    // Initialization of the SwerveModules' location relative to the robot center
-    m_frontLeftLocation  = new frc::Translation2d{DrivetrainConstants::kFrontLeftTranslation};
-    m_frontRightLocation = new frc::Translation2d{DrivetrainConstants::kFrontRightTranslation};
-    m_backLeftLocation   = new frc::Translation2d{DrivetrainConstants::kBackLeftTranslation};
-    m_backRightLocation  = new frc::Translation2d{DrivetrainConstants::kBackRightTranslation};
+    mFrontLeftLocation  = new frc::Translation2d{DrivetrainConstants::kFrontLeftTranslation};
+    mFrontRightLocation = new frc::Translation2d{DrivetrainConstants::kFrontRightTranslation};
+    mBackLeftLocation   = new frc::Translation2d{DrivetrainConstants::kBackLeftTranslation};
+    mBackRightLocation  = new frc::Translation2d{DrivetrainConstants::kBackRightTranslation};
 
-    // Initialization of the SwerveModules with the motor IDs
     if (frc::RobotBase::IsReal())
     {    
-        std::cout << "The robot is real" << std::endl;
-        m_frontLeftModule  = new SwerveModule{DrivetrainConstants::kFrontLeftMotorID , DrivetrainConstants::kFrontLeftMotor550ID, true};
-        m_frontRightModule = new SwerveModule{DrivetrainConstants::kFrontRightMotorID, DrivetrainConstants::kFrontRightMotor550ID, true};
-        m_backLeftModule   = new SwerveModule{DrivetrainConstants::kBackLeftMotorID  , DrivetrainConstants::kBackLeftMotor550ID, false};
-        m_backRightModule  = new SwerveModule{DrivetrainConstants::kBackRightMotorID , DrivetrainConstants::kBackRightMotor550ID, false};
+        frc::DataLogManager::Log("The robot is real");
+        mFrontLeftModule  = new SwerveModule{CANid::kFrontLeftMotorID , CANid::kFrontLeftMotor550ID, true};
+        mFrontRightModule = new SwerveModule{CANid::kFrontRightMotorID, CANid::kFrontRightMotor550ID, true};
+        mBackLeftModule   = new SwerveModule{CANid::kBackLeftMotorID  , CANid::kBackLeftMotor550ID, false};
+        mBackRightModule  = new SwerveModule{CANid::kBackRightMotorID , CANid::kBackRightMotor550ID, false};
     }
     else
     {
-        std::cout << "The robot is simulated" << std::endl;
-        m_frontLeftModuleSim  = new SwerveModuleSim{DrivetrainConstants::kFrontLeftMotorID , DrivetrainConstants::kFrontLeftMotor550ID, false, true};
-        m_frontRightModuleSim = new SwerveModuleSim{DrivetrainConstants::kFrontRightMotorID, DrivetrainConstants::kFrontRightMotor550ID, false, true};
-        m_backLeftModuleSim   = new SwerveModuleSim{DrivetrainConstants::kBackLeftMotorID  , DrivetrainConstants::kBackLeftMotor550ID, false, true};
-        m_backRightModuleSim  = new SwerveModuleSim{DrivetrainConstants::kBackRightMotorID , DrivetrainConstants::kBackRightMotor550ID, false, true};
+        frc::DataLogManager::Log("The robot is simulated");
+        mFrontLeftModuleSim  = new SwerveModuleSim{CANid::kFrontLeftMotorID , CANid::kFrontLeftMotor550ID, false, true};
+        mFrontRightModuleSim = new SwerveModuleSim{CANid::kFrontRightMotorID, CANid::kFrontRightMotor550ID, false, true};
+        mBackLeftModuleSim   = new SwerveModuleSim{CANid::kBackLeftMotorID  , CANid::kBackLeftMotor550ID, false, true};
+        mBackRightModuleSim  = new SwerveModuleSim{CANid::kBackRightMotorID , CANid::kBackRightMotor550ID, false, true};
     }
-    
 
-    // Initialization of the Swerve Data Publishers
-    m_currentModuleStatesPublisher = mNTDriveTrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
-    m_desiredModuleStatesPublisher = mNTDriveTrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Desired SwerveModuleStates").Publish();
-    m_currentChassisSpeedsPublisher = mNTDriveTrainTable->GetStructTopic<frc::ChassisSpeeds>("Current ChassisSpeeds").Publish();
-    m_desiredChassisSpeedsPublisher = mNTDriveTrainTable->GetStructTopic<frc::ChassisSpeeds>("Desired ChassisSpeeds").Publish();
-    m_rotation2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Rotation2d>("Current Rotation2d").Publish();
-    m_pose2dPublisher = mNTDriveTrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
-    frc::SmartDashboard::PutNumber("Drivetrain/kP", ModuleConstants::kTurningP);
-    frc::SmartDashboard::PutNumber("Drivetrain/kI", ModuleConstants::kTurningI);
-    frc::SmartDashboard::PutNumber("Drivetrain/kD", ModuleConstants::kTurningD);
+    mCurrentModuleStatesPublisher = mNTDrivetrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
+    mCurrentChassisSpeedsPublisher = mNTDrivetrainTable->GetStructTopic<frc::ChassisSpeeds>("Current ChassisSpeeds").Publish();
+    mDesiredModuleStatesPublisher = mNTDrivetrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Desired SwerveModuleStates").Publish();
+    mDesiredChassisSpeedsPublisher = mNTDrivetrainTable->GetStructTopic<frc::ChassisSpeeds>("Desired ChassisSpeeds").Publish();
+    mRotation2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Rotation2d>("Current Rotation2d").Publish();
+    mCurrentPose2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
+    mTargetPose2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Target Pose2d").Publish();
+    mLimelightPoseEstimatorPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Limelight Pose Estimator").Publish();
 
-    // Initialization of the IMU
-    mIMU = iIMU;
+    mLimelightName = std::string(LimelightConstants::kName);
+    LimelightHelpers::setCameraPose_RobotSpace(
+        mLimelightName,
+        LimelightConstants::kForward.value(),
+        LimelightConstants::kRight.value(),
+        LimelightConstants::kUp.value(),
+        LimelightConstants::kRoll.value(),
+        LimelightConstants::kPitch.value(),
+        LimelightConstants::kYaw.value()
+    );
 
-    // Initialization of the swerve kinematics with the SwerveModules' location
-    m_kinematics = new frc::SwerveDriveKinematics<4>{*m_frontLeftLocation, *m_frontRightLocation, *m_backLeftLocation, *m_backRightLocation};
+    mIMU = new IMU{};
+    mIMU->reset();
+    frc::SmartDashboard::PutData("drivetrain/IMU", mIMU);
 
-    // Initialization of the swerve pose estimator with the kinematics, the robot's rotation, an array of the SwerveModules' position, and the robot's pose
-    m_poseEstimator = new frc::SwerveDrivePoseEstimator<4>{*m_kinematics, mIMU->getRotation2d(), getSwerveModulePositions(), *m_startingRobotPose};
-	// Initialization des standard deviations de la vision
+    mKinematics = new frc::SwerveDriveKinematics<4>{*mFrontLeftLocation, *mFrontRightLocation, *mBackLeftLocation, *mBackRightLocation};
+    mPoseEstimator = new frc::SwerveDrivePoseEstimator<4>{*mKinematics, mIMU->getRotation2d(), getSwerveModulePositions(), *mStartingRobotPose};
+
     visionMeasurementStdDevs = new wpi::array<double, 3>{LimelightConstants::kPoseEstimatorStandardDeviationX,
                                                          LimelightConstants::kPoseEstimatorStandardDeviationY,
                                                          LimelightConstants::kPoseEstimatorStandardDeviationYaw};
-    m_poseEstimator->SetVisionMeasurementStdDevs(*visionMeasurementStdDevs);
+    mPoseEstimator->SetVisionMeasurementStdDevs(*visionMeasurementStdDevs);
 
     mField2d = new frc::Field2d{};
-
-    // pathplanner::AutoBuilder::configure(
-    //     [this]()
-    //     { return getPose(); }, // Robot pose supplier
-    //     [this](frc::Pose2d pose)
-    //     { resetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
-    //     [this]()
-    //     { return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-    //     [this](auto speeds, auto feedforwards)
-    //     { driveRobotRelative(speeds, PathPlannerConstants::kPathPlannerSpeedModulation); },                                                           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-    //     std::make_shared<pathplanner::PPHolonomicDriveController>(                                                                                    // PPHolonomicController is the built in path following controller for holonomic drive trains
-    //         pathplanner::PIDConstants(PathPlannerConstants::kPTranslation, PathPlannerConstants::kITranslation, PathPlannerConstants::kDTranslation), // Translation PID constants
-    //         pathplanner::PIDConstants(PathPlannerConstants::kPRotation, PathPlannerConstants::kIRotation, PathPlannerConstants::kDRotation)           // Rotation PID constants
-    //         ),
-    //     config, // The robot configuration
-    //     []()
-    //     {
-    //         // Boolean supplier that controls when the path will be mirrored for the red alliance
-    //         // This will flip the path being followed to the red side of the field.
-    //         // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-    //         std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
-    //         std::cout << alliance.value() << std::endl;
-    //         if (alliance) {
-    //             std::cout << alliance.value() << std::endl;
-    //             return alliance.value() == frc::DriverStation::Alliance::kRed;
-    //         }
-    //         return false;
-    //     },
-    //     this // Reference to this subsystem to set requirements
-    // );
+    frc::SmartDashboard::PutData("drivetrain/Field2d", mField2d);
 }
 
-// This method will be called once per scheduler run
 void SubDrivetrain::Periodic()
 {
-    // Refreshing the SwerveModules' position and states
     refreshSwerveModules();
 
-    refreshSwervePID();
+    mCurrentRotation2d = mIMU->getRotation2d();
+    mPoseEstimator->Update(mCurrentRotation2d, getSwerveModulePositions());
+    mField2d->SetRobotPose(getPose());
 
-    // Update of the robot's pose with the robot's rotation and an array of the SwerveModules' position
-    if (frc::RobotBase::IsReal())
+    LimelightHelpers::SetRobotOrientation(mLimelightName, mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
+
+    if (LimelightConstants::kUseMegaTag2)
     {
-        mCurrentRotation2d = mIMU->getRotation2d();
+        mLimelightPoseEstimate = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2(mLimelightName);
     }
     else
     {
-        mIMU->setSimYawRate(m_kinematics->ToChassisSpeeds(getSwerveModuleStates()).omega);
-        mIMU->setSimAngleYaw(mIMU->getAngleYaw() + mIMU->getYawRate() * 0.02_s);
-        mCurrentRotation2d = mIMU->getRotation2d();
+        mLimelightPoseEstimate = LimelightHelpers::getBotPoseEstimate_wpiBlue(mLimelightName);
     }
 
-    m_poseEstimator->Update(mCurrentRotation2d, getSwerveModulePositions());
+    // reject the camera update if the PoseEstimate is not valid
+    bool rejectCameraUpdate = !LimelightHelpers::validPoseEstimate(mLimelightPoseEstimate);
 
-    mField2d->SetRobotPose(m_poseEstimator->GetEstimatedPosition());
-    frc::SmartDashboard::PutData("Drivetrain/Field2d", mField2d);
-
-    // Update la rotation du robot pour la Limelight
-  
-    /* LimelightHelpers::SetRobotOrientation("", mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
-
-    mt2 = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2("");
-
-    bool rejectCameraUpdate = false;
-
-    if (abs(mIMU->getYawRate()) > 360)
+    if (units::math::abs(mIMU->getYawRate()) > 360_deg_per_s)
     {
         rejectCameraUpdate = true;
     }
-    else if (mt2.tagCount == 0)
+    else if (mLimelightPoseEstimate.tagCount == 0)
     {
         rejectCameraUpdate = true;
     }
-    else if (mt2.pose == frc::Pose2d(0_m, 0_m, 0_rad))
+    else if (mLimelightPoseEstimate.pose == frc::Pose2d(0_m, 0_m, 0_rad))
     {
         rejectCameraUpdate = true;
     }
 
     if (!rejectCameraUpdate)
     {
-        m_poseEstimator->AddVisionMeasurement(mt2.pose, frc::Timer::GetFPGATimestamp());
-    }*/
-    
+        mPoseEstimator->AddVisionMeasurement(mLimelightPoseEstimate.pose, frc::Timer::GetFPGATimestamp());
+    }
+
     // Publication de valeurs sur le NetworkTables
-    m_currentChassisSpeedsPublisher.Set(getRobotRelativeSpeeds());
-    m_rotation2dPublisher.Set(mCurrentRotation2d.Degrees());
-    m_pose2dPublisher.Set(m_poseEstimator->GetEstimatedPosition());
-    m_currentModuleStatesPublisher.Set(getSwerveModuleStates());
+    mCurrentChassisSpeedsPublisher.Set(getRobotRelativeSpeeds());
+    mCurrentModuleStatesPublisher.Set(getSwerveModuleStates());
+    mRotation2dPublisher.Set(mCurrentRotation2d.Degrees());
+    mCurrentPose2dPublisher.Set(mPoseEstimator->GetEstimatedPosition());
+    mLimelightPoseEstimatorPublisher.Set(mLimelightPoseEstimate.pose);
+}
+
+void SubDrivetrain::setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4> iStates)
+{
+    if (frc::RobotBase::IsReal())
+    {
+        mFrontLeftModule->setDesiredState(iStates[0]);
+        mFrontRightModule->setDesiredState(iStates[1]);
+        mBackLeftModule->setDesiredState(iStates[2]);
+        mBackRightModule->setDesiredState(iStates[3]);
+    }
+    else
+    {
+        mFrontLeftModuleSim->setDesiredState(iStates[0]);
+        mFrontRightModuleSim->setDesiredState(iStates[1]);
+        mBackLeftModuleSim->setDesiredState(iStates[2]);
+        mBackRightModuleSim->setDesiredState(iStates[3]);
+    }
+}
+
+void SubDrivetrain::ConfigurePathplanner()
+{
+    frc::DataLogManager::Log("Started PathPlanner Configuration");
+
+    // Load the RobotConfig from the GUI settings. You should probably
+    // store this in your Constants file
+    pathplanner::RobotConfig PathPlannerConfig = pathplanner::RobotConfig::fromGUISettings();
+
+    pathplanner::AutoBuilder::configure(
+        [this]()
+        { return getPose(); }, // Robot pose supplier
+        [this](frc::Pose2d pose)
+        { resetPose(pose); }, // Method to reset odometry (will be called if your auto has a starting pose)
+        [this]()
+        { return getRobotRelativeSpeeds(); }, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        [this](auto speeds, auto feedforwards)
+        { driveRobotRelative(speeds); },                                                           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+        std::make_shared<pathplanner::PPHolonomicDriveController>(                                                                                    // PPHolonomicController is the built in path following controller for holonomic drive trains
+            pathplanner::PIDConstants(PathPlannerConstants::kPTranslation, PathPlannerConstants::kITranslation, PathPlannerConstants::kDTranslation), // Translation PID constants
+            pathplanner::PIDConstants(PathPlannerConstants::kPRotation, PathPlannerConstants::kIRotation, PathPlannerConstants::kDRotation)           // Rotation PID constants
+            ),
+        PathPlannerConfig, // The robot configuration
+        []()
+        {
+            // Boolean supplier that controls when the path will be mirrored for the red alliance
+            // This will flip the path being followed to the red side of the field.
+            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+            std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
+            if (alliance) {
+                return alliance.value() == frc::DriverStation::Alliance::kRed;
+            }
+            return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
+    frc::DataLogManager::Log("Finished Autobuilder Configuration");
+
+    // Logging callback for the active path, this is sent as a vector of poses
+    pathplanner::PathPlannerLogging::setLogActivePathCallback([this](std::vector<frc::Pose2d> poses) {
+        // Do whatever you want with the poses here
+        mField2d->GetObject("path")->SetPoses(poses);
+    });
+    frc::DataLogManager::Log("Finished Pathplanner Configuration");
 }
 
 void SubDrivetrain::refreshSwerveModules()
 {
     if (frc::RobotBase::IsReal())
     {
-        m_frontLeftModule->refreshModule();
-        m_frontRightModule->refreshModule();
-        m_backLeftModule->refreshModule();
-        m_backRightModule->refreshModule();
+        mFrontLeftModule->refreshModule();
+        mFrontRightModule->refreshModule();
+        mBackLeftModule->refreshModule();
+        mBackRightModule->refreshModule();
     }
     else
     {
-        m_frontLeftModuleSim->refreshModule();
-        m_frontRightModuleSim->refreshModule();
-        m_backLeftModuleSim->refreshModule();
-        m_backRightModuleSim->refreshModule();
-    }
-}
-
-void SubDrivetrain::refreshSwervePID()
-{
-    double wP = frc::SmartDashboard::GetNumber("Drivetrain/kP", ModuleConstants::kTurningP);
-    double wI = frc::SmartDashboard::GetNumber("Drivetrain/kI", ModuleConstants::kTurningI);
-    double wD = frc::SmartDashboard::GetNumber("Drivetrain/kD", ModuleConstants::kTurningD);
-
-    if (frc::RobotBase::IsReal())
-    {
-        m_frontLeftModule->setPIDValues(wP, wI, wD);
-        m_frontRightModule->setPIDValues(wP, wI, wD);
-        m_backLeftModule->setPIDValues(wP, wI, wD);
-        m_backRightModule->setPIDValues(wP, wI, wD);
-    }
-    else
-    {
-        m_frontLeftModuleSim->setPIDValues(wP, wI, wD);
-        m_frontRightModuleSim->setPIDValues(wP, wI, wD);
-        m_backLeftModuleSim->setPIDValues(wP, wI, wD);
-        m_backRightModuleSim->setPIDValues(wP, wI, wD);
+        mFrontLeftModuleSim->refreshModule();
+        mFrontRightModuleSim->refreshModule();
+        mBackLeftModuleSim->refreshModule();
+        mBackRightModuleSim->refreshModule();
     }
 }
 
@@ -194,17 +198,17 @@ wpi::array<frc::SwerveModuleState, 4> SubDrivetrain::getSwerveModuleStates()
 {
     if (frc::RobotBase::IsReal())
     {
-        return wpi::array<frc::SwerveModuleState, 4> {m_frontLeftModule->getModuleState(),
-                                                      m_frontRightModule->getModuleState(),
-                                                      m_backLeftModule->getModuleState(),
-                                                      m_backRightModule->getModuleState()};
+        return wpi::array<frc::SwerveModuleState, 4> {mFrontLeftModule->getModuleState(),
+                                                      mFrontRightModule->getModuleState(),
+                                                      mBackLeftModule->getModuleState(),
+                                                      mBackRightModule->getModuleState()};
     }
     else
     {
-        return wpi::array<frc::SwerveModuleState, 4> {m_frontLeftModuleSim->getModuleState(),
-                                                      m_frontRightModuleSim->getModuleState(),
-                                                      m_backLeftModuleSim->getModuleState(),
-                                                      m_backRightModuleSim->getModuleState()};
+        return wpi::array<frc::SwerveModuleState, 4> {mFrontLeftModuleSim->getModuleState(),
+                                                      mFrontRightModuleSim->getModuleState(),
+                                                      mBackLeftModuleSim->getModuleState(),
+                                                      mBackRightModuleSim->getModuleState()};
     }
 }
 
@@ -212,89 +216,206 @@ wpi::array<frc::SwerveModulePosition, 4> SubDrivetrain::getSwerveModulePositions
 {
     if (frc::RobotBase::IsReal())
     {
-        return wpi::array<frc::SwerveModulePosition, 4>{m_frontLeftModule->getModulePosition(),
-                                                        m_frontRightModule->getModulePosition(),
-                                                        m_backLeftModule->getModulePosition(),
-                                                        m_backRightModule->getModulePosition()};
+        return wpi::array<frc::SwerveModulePosition, 4>{mFrontLeftModule->getModulePosition(),
+                                                        mFrontRightModule->getModulePosition(),
+                                                        mBackLeftModule->getModulePosition(),
+                                                        mBackRightModule->getModulePosition()};
     }
     else
     {
-        return wpi::array<frc::SwerveModulePosition, 4>{m_frontLeftModuleSim->getModulePosition(),
-                                                        m_frontRightModuleSim->getModulePosition(),
-                                                        m_backLeftModuleSim->getModulePosition(),
-                                                        m_backRightModuleSim->getModulePosition()};
+        return wpi::array<frc::SwerveModulePosition, 4>{mFrontLeftModuleSim->getModulePosition(),
+                                                        mFrontRightModuleSim->getModulePosition(),
+                                                        mBackLeftModuleSim->getModulePosition(),
+                                                        mBackRightModuleSim->getModulePosition()};
     }
 }
 
 void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation)
 {
-    // Creating a ChassisSpeeds from the wanted speeds and the robot's rotation
-    mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(DrivetrainConstants::kSpeedConstant * iX,
-                                                                        DrivetrainConstants::kSpeedConstant * iY,
-                                                                        DrivetrainConstants::kSpeedConstant0 * i0,
-                                                                        mIMU->getRotation2d());
-
-    // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
-    mDesiredSwerveStates = m_kinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
-    
-    frc::SmartDashboard::PutNumber("Drivetrain/SetPoint", mDesiredSwerveStates[0].angle.Radians().value());
-    m_desiredChassisSpeedsPublisher.Set(mDesiredChassisSpeeds);
-    m_desiredModuleStatesPublisher.Set(mDesiredSwerveStates);
-    // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
-    if (frc::RobotBase::IsReal())
+    if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue)
     {
-        frc::SmartDashboard::PutNumber("Drivetrain/Position", m_frontLeftModule->getModuleState().angle.Radians().value());
-        m_frontLeftModule->setDesiredState(mDesiredSwerveStates[0], iSpeedModulation);
-        m_frontRightModule->setDesiredState(mDesiredSwerveStates[1], iSpeedModulation);
-        m_backLeftModule->setDesiredState(mDesiredSwerveStates[2], iSpeedModulation);
-        m_backRightModule->setDesiredState(mDesiredSwerveStates[3], iSpeedModulation);
+        mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kSpeedConstant * iX,
+                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant * iY,
+                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant0 * i0,
+                                                                            mIMU->getRotation2d());
     }
     else
     {
-        frc::SmartDashboard::PutNumber("Drivetrain/Position", m_frontLeftModuleSim->getModuleState().angle.Radians().value());
-        m_frontLeftModuleSim->setDesiredState(mDesiredSwerveStates[0], iSpeedModulation);
-        m_frontRightModuleSim->setDesiredState(mDesiredSwerveStates[1], iSpeedModulation);
-        m_backLeftModuleSim->setDesiredState(mDesiredSwerveStates[2], iSpeedModulation);
-        m_backRightModuleSim->setDesiredState(mDesiredSwerveStates[3], iSpeedModulation);
+        mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kSpeedConstant * -iX,
+                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant * -iY,
+                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant0 * i0,
+                                                                            mIMU->getRotation2d());
     }
+    // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
+    mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
+    
+    frc::SmartDashboard::PutNumber("Drivetrain/SetPoint", mDesiredSwerveStates[0].angle.Radians().value());
+    mDesiredChassisSpeedsPublisher.Set(mDesiredChassisSpeeds);
+    mDesiredModuleStatesPublisher.Set(mDesiredSwerveStates);
+
+    setSwerveModuleStates(mDesiredSwerveStates);
+}
+
+void SubDrivetrain::mesureSwerveFeedforward(units::volt_t iDrivingVoltage, wpi::array<frc::Rotation2d, 4> iDesiredHeadings)
+{
+    mFrontLeftModule->setDrivingVoltage(iDrivingVoltage);
+    mFrontRightModule->setDrivingVoltage(iDrivingVoltage);
+    mBackLeftModule->setDrivingVoltage(iDrivingVoltage);
+    mBackRightModule->setDrivingVoltage(iDrivingVoltage);
+
+    mFrontLeftModule->setDesiredHeading(iDesiredHeadings[0]);
+    mFrontRightModule->setDesiredHeading(iDesiredHeadings[1]);
+    mBackLeftModule->setDesiredHeading(iDesiredHeadings[2]);
+    mBackRightModule->setDesiredHeading(iDesiredHeadings[3]);
+
+    frc::SmartDashboard::PutNumber("drivetrain/Driving Voltage", iDrivingVoltage.value());
+    frc::SmartDashboard::PutNumber("drivetrain/Driving Velocity", mFrontLeftModule->getModuleState().speed.value());
 }
 
 frc::Pose2d SubDrivetrain::getPose()
 {
-    return m_poseEstimator->GetEstimatedPosition();
+    return mPoseEstimator->GetEstimatedPosition();
 }
 
 void SubDrivetrain::resetPose(frc::Pose2d iRobotPose)
 {
-    m_poseEstimator->ResetPose(iRobotPose);
-    mIMU->setAngleYaw(iRobotPose.Rotation().Degrees());
+    mPoseEstimator->ResetPosition(mIMU->getRotation2d(), getSwerveModulePositions(), iRobotPose);
+}
+
+void SubDrivetrain::resetIMU(units::degree_t iAngle)
+{
+    mPoseEstimator->ResetRotation(iAngle);
+    mIMU->setAngleYaw(iAngle);
+}
+
+IMU* SubDrivetrain::getIMU()
+{
+    return mIMU;
 }
 
 frc::ChassisSpeeds SubDrivetrain::getRobotRelativeSpeeds()
 {
     // Getting the current chassis speeds from the SwerveModules' state
-    mCurrentChassisSpeeds = m_kinematics->ToChassisSpeeds(getSwerveModuleStates());
+    mCurrentChassisSpeeds = mKinematics->ToChassisSpeeds(getSwerveModuleStates());
     return mCurrentChassisSpeeds;
 }
 
-void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds, double iSpeedModulation)
+frc::ChassisSpeeds SubDrivetrain::getFieldRelativeSpeeds()
 {
-    // Tansforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
-    mDesiredSwerveStates = m_kinematics->ToSwerveModuleStates(iDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
+    mCurrentChassisSpeeds = mKinematics->ToChassisSpeeds(getSwerveModuleStates());
+    return frc::ChassisSpeeds::FromRobotRelativeSpeeds(mCurrentChassisSpeeds.vx,
+                                                       mCurrentChassisSpeeds.vy,
+                                                       mCurrentChassisSpeeds.omega,
+                                                       mIMU->getRotation2d());
+}
 
-    // Setting the desired state of each SwerveModule to the corresponding SwerveModuleState
-    if (frc::RobotBase::IsReal())
+void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds)
+{
+    mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(iDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
+
+    setSwerveModuleStates(mDesiredSwerveStates);
+}
+
+frc2::CommandPtr SubDrivetrain::getFollowPathCommand(std::string iPathName)
+{
+    // wPath is of type std::shared_ptr<pathplanner::PathPlannerPath>
+    auto wPath = pathplanner::PathPlannerPath::fromPathFile(iPathName);
+
+    return pathplanner::AutoBuilder::followPath(wPath);
+}
+
+frc::Pose2d SubDrivetrain::standardizePose(frc::Pose2d iPose)
+{
+    // mAlliance is of type std::optional<frc::DriverStation::Alliance>
+    auto mAlliance = frc::DriverStation::GetAlliance();
+    if (mAlliance && mAlliance.value() == frc::DriverStation::kRed)
     {
-        m_frontLeftModule->setDesiredState(mDesiredSwerveStates[0], iSpeedModulation);
-        m_frontRightModule->setDesiredState(mDesiredSwerveStates[1], iSpeedModulation);
-        m_backLeftModule->setDesiredState(mDesiredSwerveStates[2], iSpeedModulation);
-        m_backRightModule->setDesiredState(mDesiredSwerveStates[3], iSpeedModulation);
+        return iPose.RotateAround(FieldConstants::kFieldCenterTranslation2d, 180_deg);
     }
-    else
+    return iPose;
+}
+
+frc::Translation2d SubDrivetrain::standardizeTranslation(frc::Translation2d iTranslation)
+{
+    // mAlliance is of type std::optional<frc::DriverStation::Alliance>
+    auto mAlliance = frc::DriverStation::GetAlliance();
+    if (mAlliance && mAlliance.value() == frc::DriverStation::kRed)
     {
-        m_frontLeftModuleSim->setDesiredState(mDesiredSwerveStates[0], iSpeedModulation);
-        m_frontRightModuleSim->setDesiredState(mDesiredSwerveStates[1], iSpeedModulation);
-        m_backLeftModuleSim->setDesiredState(mDesiredSwerveStates[2], iSpeedModulation);
-        m_backRightModuleSim->setDesiredState(mDesiredSwerveStates[3], iSpeedModulation);
+        return iTranslation.RotateAround(FieldConstants::kFieldCenterTranslation2d, 180_deg);
     }
+    return iTranslation;
+}
+
+frc::Translation2d SubDrivetrain::getTranslationToHub()
+{
+  return standardizeTranslation(FieldConstants::kHubCenterTranslation2d - standardizeTranslation(getPose().Translation()));
+}
+
+frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubtoRobotDistance)
+{
+    frc::Translation2d wRobotToHubTranslation = getTranslationToHub();
+    // If the Robot is not in the alliance zone
+    if (wRobotToHubTranslation.X() < 0_m)
+    {
+        return mPoseEstimator->GetEstimatedPosition();
+    }
+
+    frc::Translation2d wRobotToTargetTranslation = frc::Translation2d{
+        wRobotToHubTranslation.Norm() - iHubtoRobotDistance,
+        wRobotToHubTranslation.Angle()};
+
+    frc::Translation2d wOriginToTargetTranslation = getPose().Translation() + wRobotToTargetTranslation;
+    frc::Pose2d oOriginToTargetPose = frc::Pose2d{wOriginToTargetTranslation, wRobotToHubTranslation.Angle()};
+    mTargetPose2dPublisher.Set(oOriginToTargetPose);
+    return oOriginToTargetPose;
+}
+
+frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHubtoRobotDistance)
+{
+    frc::Pose2d wDesiredPose = getClosestPoseAtDistanceFromHub(iHubtoRobotDistance);
+
+    std::vector<frc::Pose2d> wPoses{
+        mPoseEstimator->GetEstimatedPosition(),
+        wDesiredPose};
+    std::vector<pathplanner::Waypoint> wWaypoints = pathplanner::PathPlannerPath::waypointsFromPoses(wPoses);
+
+    pathplanner::PathConstraints wConstraints{
+        PathPlannerConstants::kMaxVelocity,
+        PathPlannerConstants::kMaxAcceleration,
+        PathPlannerConstants::kMaxAngularVelocity,
+        PathPlannerConstants::kMaxAngularAcceleration};
+
+    // wDistanceFromHubPath is of type std::shared_ptr<pathplanner::PathPlannerPath>
+    auto wDistanceFromHubPath = std::make_shared<pathplanner::PathPlannerPath>(
+        wWaypoints,
+        wConstraints,
+        std::nullopt,                                               // The ideal starting state, this is only relevant for pre-planned paths, so can be nullopt for on-the-fly paths.
+        pathplanner::GoalEndState(0.0_mps, wDesiredPose.Rotation()) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+    );
+
+    // The path is already different depending on the Alliance color
+    wDistanceFromHubPath->preventFlipping = true;
+
+    frc2::CommandPtr wGoToPoseCommand = pathplanner::AutoBuilder::followPath(wDistanceFromHubPath);
+
+    return wGoToPoseCommand;
+}
+
+void SubDrivetrain::InitSendable(wpi::SendableBuilder& builder)
+{
+    builder.SetSmartDashboardType("SwerveDrive");
+
+    builder.AddDoubleProperty("Front Left Angle", [this] {return mFrontLeftModule->getModuleState().angle.Radians().value();}, nullptr);
+    builder.AddDoubleProperty("Front Left Velocity", [this] {return mFrontLeftModule->getModuleState().speed.value();}, nullptr);
+
+    builder.AddDoubleProperty("Front Right Angle", [this] {return mFrontRightModule->getModuleState().angle.Radians().value();}, nullptr);
+    builder.AddDoubleProperty("Front Right Velocity", [this] {return mFrontRightModule->getModuleState().speed.value();}, nullptr);
+
+    builder.AddDoubleProperty("Back Left Angle", [this] {return mBackLeftModule->getModuleState().angle.Radians().value();}, nullptr);
+    builder.AddDoubleProperty("Back Left Velocity", [this] {return mBackLeftModule->getModuleState().speed.value();}, nullptr);
+
+    builder.AddDoubleProperty("Back Right Angle", [this] {return mBackRightModule->getModuleState().angle.Radians().value();}, nullptr);
+    builder.AddDoubleProperty("Back Right Velocity", [this] {return mBackRightModule->getModuleState().speed.value();}, nullptr);
+
+    builder.AddDoubleProperty("Robot Angle", [this] {return mIMU->getRotation2d().Radians().value();}, nullptr);
 }

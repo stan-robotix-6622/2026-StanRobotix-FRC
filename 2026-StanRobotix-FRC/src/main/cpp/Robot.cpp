@@ -7,9 +7,10 @@
 #include <frc2/command/CommandScheduler.h>
 
 Robot::Robot() {
-  ctre::phoenix6::SignalLogger::Stop();
-  StatusLogger::DisableAutoLogging();
-  StatusLogger::Stop();
+  frc::DataLogManager::Start();
+  frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog());
+
+  frc::SmartDashboard::PutData("CommandScheduler", &frc2::CommandScheduler::GetInstance());
 }
 
 /**
@@ -21,6 +22,20 @@ Robot::Robot() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
+  if (!mConnectedToDriveStation)
+  {
+    if (frc::DriverStation::IsDSAttached())
+    {
+      frc::DataLogManager::Log("Robot is connected to DriverStation");
+      m_container.ConfigureWhenConnectedToDS();
+      mConnectedToDriveStation = true;
+    }
+  }
+  else {
+    frc::SmartDashboard::PutNumber("Dashboard/MatchTime", frc::DriverStation::GetMatchTime().value());
+    frc::SmartDashboard::PutNumber("Dashboard/Alliance", frc::DriverStation::GetAlliance().value());
+  }
+  frc::SmartDashboard::PutBoolean("Dashboard/Hub Active", m_container.isHubActive());
   frc2::CommandScheduler::GetInstance().Run();
 }
 
@@ -40,7 +55,7 @@ void Robot::DisabledPeriodic() {}
 void Robot::AutonomousInit() {
   m_autonomousCommand = m_container.GetAutonomousCommand();
 
-  if (m_autonomousCommand) {
+  if (m_autonomousCommand && m_autonomousCommand.value() != nullptr) {
     frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand.value());
   }
 }
@@ -53,7 +68,7 @@ void Robot::TeleopInit() {
   // continue until interrupted by another command, remove
   // this line or comment it out.
   if (m_autonomousCommand) {
-    m_autonomousCommand->Cancel();
+    frc2::CommandScheduler::GetInstance().Cancel(m_autonomousCommand.value());
   }
 }
 
