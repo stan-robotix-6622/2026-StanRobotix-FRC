@@ -83,6 +83,8 @@ namespace ShooterConstants
 
   inline constexpr bool kFollowerinverted = false;
 
+  inline constexpr rev::spark::SparkLowLevel::ControlType kShooterClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kVelocity;
+
   namespace PIDConstants
   {
     inline constexpr double kP = 2; // T'is be a placeholder :)
@@ -90,6 +92,10 @@ namespace ShooterConstants
     inline constexpr double kD = 0;
 
     inline constexpr units::turns_per_second_t setpoint = 55_tps; // its a placeholder :)
+  }
+  namespace Config
+  {
+    inline constexpr rev::spark::FeedbackSensor kShooterClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kPrimaryEncoder;
   }
 }
 

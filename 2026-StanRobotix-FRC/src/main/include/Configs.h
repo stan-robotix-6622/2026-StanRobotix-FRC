@@ -64,4 +64,31 @@ namespace Configs
       return turningConfig;
     }
   };
+  class Shooter
+  {
+  public:
+    static SparkMaxConfig &ShooterLeaderConfig()
+    {
+      static SparkMaxConfig leaderConfig{};
+      leaderConfig.Inverted(ShooterConstants::kInverted);
+      leaderConfig.SetIdleMode(ShooterConstants::kIdleMode);
+
+      leaderConfig.closedLoop.SetFeedbackSensor(ShooterConstants::Config::kShooterClosedLoopFeedbackSensor);
+      leaderConfig.closedLoop.Pid(ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD);
+      leaderConfig.closedLoop.OutputRange(-1, 1);
+
+      leaderConfig.closedLoop.feedForward.kV(ShooterConstants::kV.value());
+      leaderConfig.closedLoop.feedForward.kS(ShooterConstants::kS.value());
+      leaderConfig.closedLoop.feedForward.kA(ShooterConstants::kA.value());
+
+      return leaderConfig;
+    }
+    static SparkMaxConfig &ShooterFollowerConfig()
+    {
+      static SparkMaxConfig followerConfig{};
+      followerConfig.Apply(Configs::Shooter::ShooterFollowerConfig());
+      followerConfig.Follow(CANid::kLeaderMotorShooterID, ShooterConstants::kFollowerinverted);
+      return followerConfig;
+    }
+  };
 } // namespace Configs

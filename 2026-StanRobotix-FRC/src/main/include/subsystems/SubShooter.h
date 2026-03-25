@@ -12,6 +12,7 @@
 #include <rev/SparkMax.h>
 #include <rev/config/SparkMaxConfig.h>
 #include <rev/SparkRelativeEncoder.h>
+#include <rev/SparkClosedLoopController.h>
 
 #include <units/angle.h>
 #include <units/angular_velocity.h>
@@ -28,7 +29,7 @@ public:
 
   // The first index of the array is the result of the Leader's configuration and
   // the second is the result of the Follower's configuration
-  std::array<rev::REVLibError, 2> Configure();
+  void Configure();
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */
@@ -46,6 +47,5 @@ private:
   rev::spark::SparkMax* mFollowerShooterController;
   frc::PIDController* mPIDcontroller;
   rev::spark::SparkRelativeEncoder* mRelativeEncoder;
-  rev::spark::SparkMaxConfig* mSparkConfigLeaderShooter;
-  rev::spark::SparkMaxConfig* mSparkConfigFollowerShooter;
+  rev::spark::SparkClosedLoopController* mClossedLoopController;
 };
