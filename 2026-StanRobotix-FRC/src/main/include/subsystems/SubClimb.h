@@ -10,7 +10,7 @@
 #include <rev/SparkRelativeEncoder.h>
 #include <frc2/command/CommandPtr.h>
 
-enum ClimbCommands {
+enum ClimbDirection {
   Up,
   Down
 };
@@ -19,9 +19,9 @@ class SubClimb : public frc2::SubsystemBase {
  public:
   SubClimb();
   void SetSpeed(double iSpeed);
-  void StopMotor();
+  void StopMotors();
   double GetPosition();
-  frc2::CommandPtr GetClimbCommand(ClimbCommands iCommand);
+  frc2::CommandPtr GetClimbCommand(ClimbDirection iDirection);
   
   /**
    * Will be called periodically whenever the CommandScheduler runs.

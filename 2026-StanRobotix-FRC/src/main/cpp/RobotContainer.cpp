@@ -5,8 +5,6 @@
 #include "RobotContainer.h"
 
 #include <frc2/command/button/Trigger.h>
-#include "commands/ClimbUp.h"
-#include "commands/ClimbDown.h"
 #include "commands/Autos.h"
 #include "commands/ExampleCommand.h"
 
@@ -29,11 +27,11 @@ void RobotContainer::ConfigureBindings() {
 
    frc2::Trigger([this] {
     return mXboxController->GetYButtonPressed();
-  }).OnTrue(ClimbUp(mClimb).ToPtr());
+  }).OnTrue(mClimb->GetClimbCommand(Up));
 
   frc2::Trigger([this] {
     return mXboxController->GetAButtonPressed();
-  }).OnTrue(ClimbDown(mClimb).ToPtr());
+  }).OnTrue(mClimb->GetClimbCommand(Down));
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.

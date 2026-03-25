@@ -2,31 +2,41 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "commands/ClimbDown.h"
+#include "commands/Climb.h"
 
-ClimbDown::ClimbDown(SubClimb * iSubClimb) {
+Climb::Climb(SubClimb * iSubClimb, ClimbDirection iDirection) {
   // Use addRequirements() here to declare subsystem dependencies.
   mSubClimb = iSubClimb;
   AddRequirements(mSubClimb);
-  mPIDController = new frc::PIDController(ClimbConstants::kp, ClimbConstants::ki, ClimbConstants::kd);
+  mPIDController = new frc::PIDController(ClimbConstants::kP, ClimbConstants::kI, ClimbConstants::kD);
+  mDirection = iDirection;
 }
 
 // Called when the command is initially scheduled.
-void ClimbDown::Initialize() {
-  mPIDController->SetSetpoint(mSubClimb->GetPosition() - ClimbConstants::kPoseUp);
+void Climb::Initialize() {
+  switch (mDirection) {
+    case Up:
+      mPIDController->SetSetpoint(mSubClimb->GetPosition() + ClimbConstants::kPoseUp);
+      break;
+    case Down:
+      mPIDController->SetSetpoint(mSubClimb->GetPosition() - ClimbConstants::kPoseUp);
+      break;
+    default:
+      break;
+  }
 }
 
 // Called repeatedly when this Command is scheduled to run
-void ClimbDown::Execute() {
+void Climb::Execute() {
   mSubClimb->SetSpeed(mPIDController->Calculate(mSubClimb->GetPosition()) * ClimbConstants::kSpeedMultiplier);
 }
 
 // Called once the command ends or is interrupted.
-void ClimbDown::End(bool interrupted) {
-  mSubClimb->StopMotor();
+void Climb::End(bool interrupted) {
+  mSubClimb->StopMotors();
 }
 
 // Returns true when the command should end.
-bool ClimbDown::IsFinished() {
+bool Climb::IsFinished() {
   return mPIDController->AtSetpoint();
 }

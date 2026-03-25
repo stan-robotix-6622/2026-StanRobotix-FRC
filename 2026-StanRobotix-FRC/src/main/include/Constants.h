@@ -23,24 +23,21 @@ inline constexpr int kDriverControllerPort = 0;
 }  // namespace OperatorConstants
 
 namespace ClimbConstants {
-    
-
     constexpr rev::spark::SparkLowLevel::MotorType kMotorTypeSparkMax1 = rev::spark::SparkLowLevel::MotorType::kBrushless;
     constexpr rev::spark::SparkLowLevel::MotorType kMotorTypeSparkMax2 = rev::spark::SparkLowLevel::MotorType::kBrushless;
-
-    constexpr double kp = 0.1;
-    constexpr double ki = 0;
-    constexpr double kd = 0;
+    constexpr double kP = 0.1;
+    constexpr double kI = 0;
+    constexpr double kD = 0;
     constexpr double kSpeedMultiplier = 0.5;
-    constexpr double kPoseUp = 0;
+    constexpr double kPoseUp = 1;
 }
 
 namespace XboxControllerConstants {
-    constexpr int deviceIDXboxController = 3;
+    constexpr int deviceIDXboxController = 0;
 }
 
 namespace CANid 
 {
-  constexpr int kMotorClimb1ID = 14;
-  constexpr int kMotorClimb2ID = 15;
+    constexpr int kMotorClimb1ID = 14;
+    constexpr int kMotorClimb2ID = 15;
 }
