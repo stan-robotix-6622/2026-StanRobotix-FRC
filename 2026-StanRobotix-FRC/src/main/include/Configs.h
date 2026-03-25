@@ -81,6 +81,11 @@ namespace Configs
       leaderConfig.closedLoop.feedForward.kS(ShooterConstants::kS.value());
       leaderConfig.closedLoop.feedForward.kA(ShooterConstants::kA.value());
 
+      // Configs added according to https://www.chiefdelphi.com/t/psa-rev-spark-default-velocity-filtering-is-still-really-bad-for-flywheels/514567
+      leaderConfig.encoder.UvwMeasurementPeriod(8);
+      leaderConfig.encoder.QuadratureAverageDepth(2);
+      leaderConfig.encoder.QuadratureMeasurementPeriod(8);
+
       return leaderConfig;
     }
     static SparkMaxConfig &ShooterFollowerConfig()
