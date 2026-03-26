@@ -31,7 +31,7 @@ std::optional<frc::Pose2d> Limelight::getPoseEstimation(frc::Pose2d iCurrentRobo
     // reject the camera update if the PoseEstimate is not valid
     mRejectCameraUpdate = !LimelightHelpers::validPoseEstimate(mLimelightPoseEstimate);
 
-    if (units::math::abs(iRobotRotationalVelocity) > 360_deg_per_s) 
+    if (units::math::abs(iRobotRotationalVelocity) > 180_deg_per_s) 
     {
         mRejectCameraUpdate = true;
     }
@@ -46,7 +46,7 @@ std::optional<frc::Pose2d> Limelight::getPoseEstimation(frc::Pose2d iCurrentRobo
 
     if (!mRejectCameraUpdate)
     {
-        LimelightHelpers::PrintPoseEstimate(mLimelightPoseEstimate);
+        // LimelightHelpers::PrintPoseEstimate(mLimelightPoseEstimate);
         mPoseEstimatorPublisher.Set(mLimelightPoseEstimate.pose);
         return mLimelightPoseEstimate.pose;
     }
