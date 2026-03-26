@@ -27,7 +27,8 @@
 #include <units/angle.h>
 #include <units/time.h>
 #include <units/angular_velocity.h>
-#include "LimelightHelpers.h"
+
+#include "subsystems/Limelight.h"
 #include "subsystems/IMU.h"
 #include "subsystems/SwerveModule.h"
 
@@ -83,7 +84,6 @@ class SubDrivetrain : public frc2::SubsystemBase {
   nt::StructPublisher<frc::Rotation2d> mRotation2dPublisher;
   nt::StructPublisher<frc::Pose2d> mCurrentPose2dPublisher;
   nt::StructPublisher<frc::Pose2d> mTargetPose2dPublisher;
-  nt::StructPublisher<frc::Pose2d> mLimelightPoseEstimatorPublisher;
 
   SwerveModule* mFrontLeftModule;
   SwerveModule* mFrontRightModule;
@@ -100,12 +100,13 @@ class SubDrivetrain : public frc2::SubsystemBase {
   wpi::array<double, 3>* visionMeasurementStdDevs;
   wpi::array<double, 3>* stateStdDevs;
 
+  Limelight* mLimelight;
+
+  // Declaring the IMU object
   IMU* mIMU;
 
   // These attributes are used to not create new variables every time a function is called
-  std::string mLimelightName;
-  LimelightHelpers::PoseEstimate mLimelightPoseEstimate;
-  bool rejectCameraUpdate;
+  std::optional<frc::Pose2d> mLimelightEstimatedPose;
   frc::ChassisSpeeds mDesiredChassisSpeeds;
   frc::ChassisSpeeds mCurrentChassisSpeeds;
   frc::Rotation2d mCurrentRotation2d;
