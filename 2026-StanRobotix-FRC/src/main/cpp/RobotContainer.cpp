@@ -111,10 +111,10 @@ void RobotContainer::ConfigureBindings()
   //   .WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
   frc2::Trigger{[this]
-                { return mDrivetrain->isTowardsHub() && mSubShooter->getVelocity() <= ShooterConstants::PIDConstants::setpoint; }}
+                { return mDrivetrain->isTowardsHub()
+                  && units::math::abs(mSubShooter->getVelocity() - ShooterConstants::PIDConstants::setpoint) < 0.5_tps; }}
       .WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
-      
   mCommandXboxController->Button(OperatorConstants::Button::Back).ToggleOnTrue(ShootDynamically(mSubShooter, mDrivetrain).ToPtr());
   // mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
   // mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
