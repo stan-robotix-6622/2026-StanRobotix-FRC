@@ -28,7 +28,6 @@ void SubShooter::setVoltage(units::volt_t iVoltage)
 
 void SubShooter::setVelocity(units::turns_per_second_t iNextVelocity)
 {
-    // mLeaderShooterController->SetVoltage(mFeedforward->Calculate(iNextVelocity));
     mClossedLoopController->SetSetpoint(iNextVelocity.value(), ShooterConstants::kShooterClosedLoopControlType);
 };
 
