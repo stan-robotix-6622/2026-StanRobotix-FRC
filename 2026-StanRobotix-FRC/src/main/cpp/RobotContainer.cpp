@@ -33,6 +33,8 @@ void RobotContainer::ConfigureBindings() {
     return mXboxController->GetAButtonPressed();
   }).OnTrue(mClimb->GetClimbCommand(Down));
 
+  mClimb->SetDefaultCommand(mClimb->GetClimbCommand(Down));
+
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.
   m_driverController.B().WhileTrue(m_subsystem.ExampleMethodCommand());

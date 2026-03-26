@@ -4,11 +4,15 @@
 
 #include "commands/Climb.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 Climb::Climb(SubClimb * iSubClimb, ClimbDirection iDirection) {
   // Use addRequirements() here to declare subsystem dependencies.
   mSubClimb = iSubClimb;
   AddRequirements(mSubClimb);
   mPIDController = new frc::PIDController(ClimbConstants::kP, ClimbConstants::kI, ClimbConstants::kD);
+
+  frc::SmartDashboard::PutData("climb/PID Controller", mPIDController);
   mDirection = iDirection;
 }
 
@@ -16,10 +20,10 @@ Climb::Climb(SubClimb * iSubClimb, ClimbDirection iDirection) {
 void Climb::Initialize() {
   switch (mDirection) {
     case Up:
-      mPIDController->SetSetpoint(mSubClimb->GetPosition() + ClimbConstants::kPoseUp);
+      mPIDController->SetSetpoint(ClimbConstants::kSetpointUp);
       break;
     case Down:
-      mPIDController->SetSetpoint(mSubClimb->GetPosition() - ClimbConstants::kPoseUp);
+      mPIDController->SetSetpoint(ClimbConstants::kSetpointDown);
       break;
     default:
       break;
@@ -28,7 +32,7 @@ void Climb::Initialize() {
 
 // Called repeatedly when this Command is scheduled to run
 void Climb::Execute() {
-  mSubClimb->SetSpeed(mPIDController->Calculate(mSubClimb->GetPosition()) * ClimbConstants::kSpeedMultiplier);
+  mSubClimb->SetSpeed(mPIDController->Calculate(mSubClimb->GetPosition()));
 }
 
 // Called once the command ends or is interrupted.
@@ -38,5 +42,5 @@ void Climb::End(bool interrupted) {
 
 // Returns true when the command should end.
 bool Climb::IsFinished() {
-  return mPIDController->AtSetpoint();
+  return false;
 }

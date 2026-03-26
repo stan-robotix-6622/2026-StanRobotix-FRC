@@ -16,7 +16,7 @@ SubClimb::SubClimb() {
     mSparkMaxConfig1 = new rev::spark::SparkMaxConfig;
     mSparkMaxConfig2 = new rev::spark::SparkMaxConfig;
 
-    mSparkMaxConfig1->Inverted(true);
+    mSparkMaxConfig1->Inverted(false);
     mSparkMaxConfig2->Inverted(false);
 
     mSparkMax1->Configure(*mSparkMaxConfig1, rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kPersistParameters);

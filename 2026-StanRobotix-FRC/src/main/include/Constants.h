@@ -25,11 +25,11 @@ inline constexpr int kDriverControllerPort = 0;
 namespace ClimbConstants {
     constexpr rev::spark::SparkLowLevel::MotorType kMotorTypeSparkMax1 = rev::spark::SparkLowLevel::MotorType::kBrushless;
     constexpr rev::spark::SparkLowLevel::MotorType kMotorTypeSparkMax2 = rev::spark::SparkLowLevel::MotorType::kBrushless;
-    constexpr double kP = 0.1;
+    constexpr double kP = 0.008;
     constexpr double kI = 0;
     constexpr double kD = 0;
-    constexpr double kSpeedMultiplier = 0.5;
-    constexpr double kPoseUp = 1;
+    constexpr double kSetpointUp = 1;
+    constexpr double kSetpointDown = 15;
 }
 
 namespace XboxControllerConstants {
