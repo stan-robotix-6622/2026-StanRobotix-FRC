@@ -13,13 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Go Center"
+            "pathName": "Intake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Intake"
+            "pathName": "Come back"
           }
         }
       ]

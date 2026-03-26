@@ -16,8 +16,7 @@ namespace Configs
       static SparkMaxConfig drivingConfig{};
 
       constexpr double drivingFactor = ModuleConstants::kDrivingFactor;
-      // units::compound_unit<units::volts, units::inverse<units::meters_per_second>>
-      constexpr TemplateUnits::VoltageInverse<units::meters_per_second> drivingVelocityFeedForward = ModuleConstants::kNominalVoltage / ModuleConstants::kDriveWheelMaxSpeed;
+      constexpr TemplateUnits::VoltageInverse<units::meters_per_second> drivingVelocityFeedForward = ModuleConstants::kNominalVoltage / ModuleConstants::kDriveWheelMaxFreeSpeed;
 
       drivingConfig.Inverted(iDrivingInverted);
       drivingConfig.SetIdleMode(ModuleConstants::Config::kDrivingIdleMode);
@@ -63,6 +62,38 @@ namespace Configs
       turningConfig.closedLoop.maxMotion.MaxAcceleration(ModuleConstants::Config::kTurningMaxAcceleration.value());
 
       return turningConfig;
+    }
+  };
+  class Shooter
+  {
+  public:
+    static SparkMaxConfig &ShooterLeaderConfig()
+    {
+      static SparkMaxConfig leaderConfig{};
+      leaderConfig.Inverted(ShooterConstants::kInverted);
+      leaderConfig.SetIdleMode(ShooterConstants::kIdleMode);
+
+      leaderConfig.closedLoop.SetFeedbackSensor(ShooterConstants::Config::kShooterClosedLoopFeedbackSensor);
+      leaderConfig.closedLoop.Pid(ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD);
+      leaderConfig.closedLoop.OutputRange(-1, 1);
+
+      leaderConfig.closedLoop.feedForward.kV(ShooterConstants::kV.value());
+      leaderConfig.closedLoop.feedForward.kS(ShooterConstants::kS.value());
+      leaderConfig.closedLoop.feedForward.kA(ShooterConstants::kA.value());
+
+      // Configs added according to https://www.chiefdelphi.com/t/psa-rev-spark-default-velocity-filtering-is-still-really-bad-for-flywheels/514567
+      leaderConfig.encoder.UvwMeasurementPeriod(8);
+      leaderConfig.encoder.QuadratureAverageDepth(2);
+      leaderConfig.encoder.QuadratureMeasurementPeriod(8);
+
+      return leaderConfig;
+    }
+    static SparkMaxConfig &ShooterFollowerConfig()
+    {
+      static SparkMaxConfig followerConfig{};
+      followerConfig.Apply(Configs::Shooter::ShooterLeaderConfig());
+      followerConfig.Follow(CANid::kLeaderMotorShooterID, ShooterConstants::kFollowerinverted);
+      return followerConfig;
     }
   };
 } // namespace Configs

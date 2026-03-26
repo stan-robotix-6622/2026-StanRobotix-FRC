@@ -16,12 +16,47 @@ DriveCommands::DriveCommands(SubDrivetrain* iDrivetrain)
 {
   mDrivetrain = iDrivetrain;
 
-  mLimiter = new frc::SlewRateLimiter<units::radians_per_second>{DrivetrainConstants::Commands::kWheelRadiusRampRate};
+  mSpeedLimiter = new frc::SlewRateLimiter<units::meters_per_second>{DrivetrainConstants::Commands::kMaxSpeedRampRate};
+
+  mRotationLimiter = new frc::SlewRateLimiter<units::radians_per_second>{DrivetrainConstants::Commands::kWheelRadiusRampRate};
   mState = new WheelRadiusCharacterizationState{};
-  
+
   mVelocitySamples = new std::vector<units::radians_per_second_t>{};
   mVoltageSamples = new std::vector<units::volt_t>{};
   mTimer = new frc::Timer{};
+}
+
+frc2::CommandPtr DriveCommands::getMeasureMaxAttainableSpeedCommand()
+{
+  return frc2::cmd::Sequence(
+      // Reset acceleration limiter
+      frc2::cmd::RunOnce(
+          [this]
+          {
+            mSpeedLimiter->Reset(0.0_mps);
+          }),
+      frc2::cmd::Run(
+          [this]
+          {
+            mDrivetrain->mesureSwerveFeedforward(0_V, {0_rad, 0_rad, 0_rad, 0_rad});
+          },
+          {mDrivetrain})
+          .WithTimeout(DrivetrainConstants::Commands::kMaxSpeedStartDelay),
+      frc2::cmd::Run(
+          [this]
+          {
+            mDrivetrain->driveRobotRelative(
+                frc::ChassisSpeeds::FromRobotRelativeSpeeds(mSpeedLimiter->Calculate(DrivetrainConstants::Commands::kMaxSpeedMaxVelocity),
+                                                            0_mps,
+                                                            0_rad_per_s,
+                                                            0_deg));
+          },
+          {mDrivetrain})
+          .FinallyDo(
+              [this]
+              {
+                frc::DataLogManager::Log("Acheived Speed: " + std::to_string(mDrivetrain->getRobotRelativeSpeeds().vx.value()) + " meters per second");
+              }));
 }
 
 frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand()
@@ -39,7 +74,7 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand()
       frc2::cmd::Run(
           [this]
           {
-            mDrivetrain->mesureSwerveFeedforward(0_V);
+            mDrivetrain->mesureSwerveFeedforward(0_V, {0_rad, 0_rad, 0_rad, 0_rad});
           },
           {mDrivetrain})
           .WithTimeout(DrivetrainConstants::Commands::kFeedforwartStartDelay),
@@ -53,7 +88,7 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand()
           [this]
           {
             units::volt_t wVoltage = mTimer->Get() * (DrivetrainConstants::Commands::kFeedforwardRampRate);
-            mDrivetrain->mesureSwerveFeedforward(wVoltage);
+            mDrivetrain->mesureSwerveFeedforward(wVoltage, {0_rad, 0_rad, 0_rad, 0_rad});
             std::array<frc::SwerveModuleState, 4U> wModuleStates = mDrivetrain->getSwerveModuleStates();
             units::radians_per_second_t wAverageAngularSpeed = 0.0_rad_per_s;
             for (int i = 0; i < 4; i++)
@@ -86,10 +121,8 @@ frc2::CommandPtr DriveCommands::getFeedforwardCharacterizationCommand()
                 double kV = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
 
                 frc::DataLogManager::Log("********** Drive FF Characterization Results **********");
-                frc::DataLogManager::Log("kS:");
-                frc::DataLogManager::Log(std::to_string(kS));
-                frc::DataLogManager::Log("kV:");
-                frc::DataLogManager::Log(std::to_string(kV));
+                frc::DataLogManager::Log("kS:" + std::to_string(kS));
+                frc::DataLogManager::Log("kV:" + std::to_string(kV));
               }));
 }
 
@@ -104,14 +137,14 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand()
           frc2::cmd::RunOnce(
               [this]
               {
-                mLimiter->Reset(0.0_rad_per_s);
+                mRotationLimiter->Reset(0.0_rad_per_s);
               }),
 
           // Turn in place, accelerating up to full speed
           frc2::cmd::Run(
               [this]
               {
-                units::radians_per_second_t speed = mLimiter->Calculate(DrivetrainConstants::Commands::kWheelRadiusMaxVelocity);
+                units::radians_per_second_t speed = mRotationLimiter->Calculate(DrivetrainConstants::Commands::kWheelRadiusMaxVelocity);
                 mDrivetrain->driveRobotRelative(frc::ChassisSpeeds(0.0_mps, 0.0_mps, speed));
               },
               {mDrivetrain})),
@@ -149,7 +182,7 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand()
                     {
                       wPositions[i] = units::radian_t(std::numbers::pi * 2 * (wSwervePositions[i].distance - mState->positions[i].distance) / ModuleConstants::kWheelPerimeter);
                     }
-                    units::radian_t wWheelDelta;
+                    units::radian_t wWheelDelta = 0_rad;
                     for (int i = 0; i < 4; i++)
                     {
                       wWheelDelta += units::math::abs(wPositions[i]);
@@ -159,11 +192,8 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand()
                         (mState->gyroDelta * DrivetrainConstants::kFrontLeftTranslation.Norm()) / wWheelDelta;
 
                     frc::DataLogManager::Log("********** Wheel Radius Characterization Results **********");
-                    frc::DataLogManager::Log("Wheel Delta: (in radians)");
-                    frc::DataLogManager::Log(std::to_string(wWheelDelta.value()));
-                    frc::DataLogManager::Log("Gyro Delta: (in radians)");
-                    frc::DataLogManager::Log(std::to_string(mState->gyroDelta.value()));
-                    frc::DataLogManager::Log("Wheel Radius: (in meters)");
-                    frc::DataLogManager::Log(std::to_string(wheelRadius.value()));
+                    frc::DataLogManager::Log("Wheel Delta: " + std::to_string(wWheelDelta.value()) + " radians");
+                    frc::DataLogManager::Log("Gyro Delta: " + std::to_string(mState->gyroDelta.value()) + " radians");
+                    frc::DataLogManager::Log("Wheel Radius: " + std::to_string(wheelRadius.value()) + " meters, " + std::to_string(units::inch_t(wheelRadius).value()) + " inches");
                   })));
 }

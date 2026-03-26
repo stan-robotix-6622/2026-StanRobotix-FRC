@@ -24,7 +24,6 @@ Robot::Robot() {
 void Robot::RobotPeriodic() {
   if (!mConnectedToDriveStation)
   {
-    frc::DataLogManager::Log("Robot not connected to DriverStation");
     if (frc::DriverStation::IsDSAttached())
     {
       frc::DataLogManager::Log("Robot is connected to DriverStation");
@@ -32,6 +31,11 @@ void Robot::RobotPeriodic() {
       mConnectedToDriveStation = true;
     }
   }
+  else {
+    frc::SmartDashboard::PutNumber("Dashboard/MatchTime", frc::DriverStation::GetMatchTime().value());
+    frc::SmartDashboard::PutNumber("Dashboard/Alliance", frc::DriverStation::GetAlliance().value());
+  }
+  frc::SmartDashboard::PutBoolean("Dashboard/Hub Active", m_container.isHubActive());
   frc2::CommandScheduler::GetInstance().Run();
 }
 
@@ -52,7 +56,7 @@ void Robot::AutonomousInit() {
   m_autonomousCommand = m_container.GetAutonomousCommand();
 
   if (m_autonomousCommand && m_autonomousCommand.value() != nullptr) {
-    m_autonomousCommand.value()->Schedule();
+    frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand.value());
   }
 }
 
@@ -64,7 +68,7 @@ void Robot::TeleopInit() {
   // continue until interrupted by another command, remove
   // this line or comment it out.
   if (m_autonomousCommand) {
-    m_autonomousCommand.value()->Cancel();
+    frc2::CommandScheduler::GetInstance().Cancel(m_autonomousCommand.value());
   }
 }
 

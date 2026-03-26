@@ -12,7 +12,6 @@
 
 #include "commands/DriveCommands.h"
 
-#include "subsystems/ExampleSubsystem.h"
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubPivotIntake.h"
 #include "subsystems/SubShooter.h"
@@ -33,34 +32,16 @@ public:
   RobotContainer();
 
   void ConfigureWhenConnectedToDS();
-  
-  enum Auto{
-    BlueCenterBumpPath,
-    BlueCenterBumpReversed,
-    BlueCenterTrenchPath,
-    BlueLeftBumpPath,
-    BlueLeftTrenchPath,
-    BlueRightBumpPath,
-    BlueRightTrenchPath,
-    EightPath,
-    RedCenterBumpPath,
-    RedCenterTrenchPath,
-    RedLeftBumpPath,
-    RedLeftTrenchPath,
-    RedRightBumpPath,
-    RedRightTrenchPath,
-    TestAuto
-  };
 
   frc2::Command* GetAutonomousCommand();
 
 
-private:
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  frc2::CommandXboxController* mCommandXboxController;
+  // Made from the example code at https://www.chiefdelphi.com/uploads/default/original/3X/b/a/ba7ccfd90bac0934e374dd4459d813cee2903942.pdf
+  double Deadband(double iInput, double iThreshold, bool iSquared = false);
 
-  // The robot's subsystems are defined here...
-  ExampleSubsystem mSubsystem;
+  bool isHubActive();
+private:
+  frc2::CommandXboxController* mCommandXboxController;
 
   SubShooter* mSubShooter = nullptr;
   SubFeeder* mSubFeeder = nullptr;
@@ -74,12 +55,8 @@ private:
   DriveCommands* mDriveCommands;
 
   void ConfigureBindings();
-
-  Auto mAutonomousPhase = TestAuto;
   void RegisterCommandsPathPlanner();
   void SetSubsystemDefaultCommands();
 
-  std::string GetActiveHubColor();
-
-  frc::SendableChooser<frc2::Command*> autoChooser;
+  frc::SendableChooser<frc2::Command*> mAutoChooser;
 };
