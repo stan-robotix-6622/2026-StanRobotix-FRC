@@ -27,7 +27,6 @@ SubDrivetrain::SubDrivetrain()
     mTargetPose2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Target Pose2d").Publish();
 
     mLimelight = new Limelight{LimelightConstants::kName};
-    // Set Limelight's position on the robot
     mLimelight->setCameraPosition(
         LimelightConstants::kForward,
         LimelightConstants::kRight,
@@ -37,12 +36,10 @@ SubDrivetrain::SubDrivetrain()
         LimelightConstants::kYaw
     );
 
-    // Initialization of the IMU
     mIMU = new IMU{};
     mIMU->reset();
     frc::SmartDashboard::PutData("drivetrain/IMU", mIMU);
 
-    // Initialization of the swerve kinematics with the SwerveModules' location
     mKinematics = new frc::SwerveDriveKinematics<4>{*mFrontLeftLocation, *mFrontRightLocation, *mBackLeftLocation, *mBackRightLocation};
     mPoseEstimator = new frc::SwerveDrivePoseEstimator<4>{*mKinematics, mIMU->getRotation2d(), getSwerveModulePositions(), *mStartingRobotPose};
 
@@ -161,14 +158,14 @@ void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
         mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kSpeedConstant * iX,
                                                                             iSpeedModulation * DrivetrainConstants::kSpeedConstant * iY,
                                                                             iSpeedModulation * DrivetrainConstants::kSpeedConstant0 * i0,
-                                                                            mIMU->getRotation2d());
+                                                                            getPose().Rotation());
     }
     else
     {
         mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kSpeedConstant * -iX,
                                                                             iSpeedModulation * DrivetrainConstants::kSpeedConstant * -iY,
                                                                             iSpeedModulation * DrivetrainConstants::kSpeedConstant0 * i0,
-                                                                            mIMU->getRotation2d());
+                                                                            getPose().Rotation());
     }
 
     mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
@@ -229,7 +226,7 @@ frc::ChassisSpeeds SubDrivetrain::getFieldRelativeSpeeds()
     return frc::ChassisSpeeds::FromRobotRelativeSpeeds(mCurrentChassisSpeeds.vx,
                                                        mCurrentChassisSpeeds.vy,
                                                        mCurrentChassisSpeeds.omega,
-                                                       mIMU->getRotation2d());
+                                                       getPose().Rotation());
 }
 
 void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds)
@@ -340,5 +337,5 @@ void SubDrivetrain::InitSendable(wpi::SendableBuilder& builder)
     builder.AddDoubleProperty("Back Right Angle", [this] {return mBackRightModule->getModuleState().angle.Radians().value();}, nullptr);
     builder.AddDoubleProperty("Back Right Velocity", [this] {return mBackRightModule->getModuleState().speed.value();}, nullptr);
 
-    builder.AddDoubleProperty("Robot Angle", [this] {return mIMU->getRotation2d().Radians().value();}, nullptr);
+    builder.AddDoubleProperty("Robot Angle", [this] {return getPose().Rotation().Radians().value();}, nullptr);
 }
