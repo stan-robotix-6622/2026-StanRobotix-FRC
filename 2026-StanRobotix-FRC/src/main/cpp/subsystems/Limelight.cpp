@@ -50,6 +50,7 @@ std::optional<frc::Pose2d> Limelight::getPoseEstimation(frc::Pose2d iCurrentRobo
         mPoseEstimatorPublisher.Set(mLimelightPoseEstimate.pose);
         return mLimelightPoseEstimate.pose;
     }
+    return {};
 }
 
 void Limelight::setCameraPosition(units::meter_t iForward ,units::meter_t iRight ,units::meter_t iUp ,units::degree_t iRoll ,units::degree_t iPitch ,units::degree_t iYaw)
