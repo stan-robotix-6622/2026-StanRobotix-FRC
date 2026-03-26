@@ -3,9 +3,7 @@
   "robotLength": 0.85725,
   "holonomicMode": true,
   "pathFolders": [
-    "Blue",
-    "Tests",
-    "Red"
+    "Tests"
   ],
   "autoFolders": [],
   "defaultMaxVel": 0.5,
@@ -18,7 +16,7 @@
   "robotTrackwidth": 0.546,
   "driveWheelRadius": 0.0381,
   "driveGearing": 4.71,
-  "maxDriveSpeed": 4.918,
+  "maxDriveSpeed": 4.498,
   "driveMotorType": "NEO",
   "driveCurrentLimit": 40.0,
   "wheelCOF": 1.2,

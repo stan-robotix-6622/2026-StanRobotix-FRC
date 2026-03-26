@@ -38,24 +38,42 @@ namespace OperatorConstants
 {
   inline constexpr int kDriverControllerPort = 0;
 
-  // Button mappings
-  // For XboxController:
-  // A = 1; B = 2; X = 3; Y = 4; RightBumper = 5; LeftBumper = 6
-  inline constexpr int kPivotDownButton = 2; // B
+  namespace Button {
+    inline constexpr int A = 1;
+    inline constexpr int B = 2;
+    inline constexpr int X = 3;
+    inline constexpr int Y = 4;
+    inline constexpr int LeftBumper = 5;
+    inline constexpr int RightBumper = 6;
+    inline constexpr int Back = 7;
+    inline constexpr int Start = 8;
+    inline constexpr int LeftJoystick = 9;
+    inline constexpr int RightJoystick = 10;
+  }
 
-  inline constexpr int kResetIMUButton = 5;  // RightBumper
-  inline constexpr int kResetPoseButton = 6; // LeftBumper
+  namespace Axis {
+    inline constexpr int LeftX = 0;
+    inline constexpr int LeftY = 1;
+    inline constexpr int LeftTrigger = 2;
+    inline constexpr int RightTrigger = 3;
+    inline constexpr int RightX = 4;
+    inline constexpr int RightY = 5;
+  }
 
-  inline constexpr int kShootButton = 4;       // Y
-  inline constexpr int kUnstuckFuelButton = 3; // X
-  inline constexpr int kFeedButton = 1;        // A
-  // inline constexpr int kIndexButton = 6;       // LeftBumper
-} // namespace OperatorConstants
+  inline constexpr int kPivotDownButton = Button::B;
+
+  inline constexpr int kResetIMUButton = Button::RightBumper;
+  inline constexpr int kResetPoseButton = Button::LeftBumper;
+
+  inline constexpr int kShootButton = Button::Y;
+  inline constexpr int kUnstuckFuelButton = Button::X;
+  inline constexpr int kFeedButton = Button::A;
+}
 
 namespace ShooterConstants
 {
   inline constexpr units::volt_t kS = 0_V;
-  inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.523844_tps;
+  inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.904761_tps;
   inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second_squared> kA = 0_V / 1_tr_per_s_sq;
 
   inline constexpr bool kInverted = false;
@@ -63,9 +81,9 @@ namespace ShooterConstants
   inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 
-  inline constexpr units::turns_per_second_t kVitesseVoulue = 55_tps;
-
   inline constexpr bool kFollowerinverted = false;
+
+  inline constexpr rev::spark::SparkLowLevel::ControlType kShooterClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kVelocity;
 
   namespace PIDConstants
   {
@@ -73,7 +91,11 @@ namespace ShooterConstants
     inline constexpr double kI = 0;
     inline constexpr double kD = 0;
 
-    inline constexpr units::turns_per_second_t setpoint = 55_tps; // its NOT(it actually is) a placeholder :)
+    inline constexpr units::turns_per_second_t setpoint = 55_tps; // its a placeholder :)
+  }
+  namespace Config
+  {
+    inline constexpr rev::spark::FeedbackSensor kShooterClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kPrimaryEncoder;
   }
 }
 
@@ -113,33 +135,6 @@ namespace PathPlannerConstants
   inline constexpr units::degrees_per_second_squared_t kMaxAngularAcceleration = 72.0_deg_per_s_sq;
 }
 
-namespace DrivetrainConstants
-{
-  // Left-Right
-  inline constexpr units::meter_t kRobotWidth = 28_in;
-  // Front-Back
-  inline constexpr units::meter_t kRobotLength = 26.875_in;
-  // In both directions
-  inline constexpr units::meter_t kModuleCornerOffset = 1.75_in;
-
-  // We take for granted a rectangular frame
-  inline constexpr frc::Translation2d kFrontLeftTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
-  inline constexpr frc::Translation2d kFrontRightTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
-  inline constexpr frc::Translation2d kBackLeftTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
-  inline constexpr frc::Translation2d kBackRightTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
-
-  inline constexpr units::meters_per_second_t kSpeedConstant = 2_mps;                            // Temporary value
-  inline constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 1_rad_per_s; // Temporary value
-  namespace Commands
-  {
-    inline constexpr units::second_t kFeedforwartStartDelay = 2.0_s;
-    inline constexpr TemplateUnits::VoltageInverse<units::seconds> kFeedforwardRampRate = 1_V / 1_s;
-    inline constexpr units::second_t kWheelRadiusMeasurementStartDelay = 1.0_s;
-    inline constexpr units::radians_per_second_t kWheelRadiusMaxVelocity = 0.25_rad_per_s;
-    inline constexpr units::radians_per_second_squared_t kWheelRadiusRampRate = 0.05_rad_per_s_sq;
-  }
-}
-
 namespace ModuleConstants
 {
   inline constexpr double kDrivingMotorGearRatio = 4.71;                                       // 5.08 rotations of the motor for 1 rotation of the ouput
@@ -147,7 +142,7 @@ namespace ModuleConstants
   inline constexpr units::meter_t kWheelRadius = 0.035609_m;                                   // The radius of REV's plastic wheels, masured with the wheelCaracterizationCommand
   inline constexpr units::meter_t kWheelPerimeter = kWheelRadius * 2 * std::numbers::pi;       // in meters (diametre in inches * convertion to meters * pi)
   inline constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260_rad_per_s; // TODO: Verify?
-  inline constexpr units::meters_per_second_t kDriveWheelMaxSpeed = 4.9180_mps;                // TODO: Verify?
+  inline constexpr units::meters_per_second_t kDriveWheelMaxFreeSpeed = 4.9180_mps;                // TODO: Verify?
 
   inline constexpr double kDrivingFactor = ModuleConstants::kWheelPerimeter.value() / kDrivingMotorGearRatio;
   inline constexpr double kTurningFactor = 2 * std::numbers::pi;
@@ -193,9 +188,39 @@ namespace ModuleConstants
   }
 }
 
+namespace DrivetrainConstants
+{
+  // Left-Right
+  inline constexpr units::meter_t kRobotWidth = 28_in;
+  // Front-Back
+  inline constexpr units::meter_t kRobotLength = 26.875_in;
+  // In both directions
+  inline constexpr units::meter_t kModuleCornerOffset = 1.75_in;
+
+  // We take for granted a rectangular frame
+  inline constexpr frc::Translation2d kFrontLeftTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
+  inline constexpr frc::Translation2d kFrontRightTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
+  inline constexpr frc::Translation2d kBackLeftTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
+  inline constexpr frc::Translation2d kBackRightTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
+
+  inline constexpr units::meters_per_second_t kSpeedConstant = 4.50_mps;                         // Temporary value
+  inline constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 2_rad_per_s; // Temporary value
+  namespace Commands
+  {
+    inline constexpr units::second_t kMaxSpeedStartDelay = 2.0_s;
+    inline constexpr units::meters_per_second_squared_t kMaxSpeedRampRate = 0.5_mps_sq;
+    inline constexpr units::meters_per_second_t kMaxSpeedMaxVelocity = 5_mps;
+    inline constexpr units::second_t kFeedforwartStartDelay = 2.0_s;
+    inline constexpr TemplateUnits::VoltageInverse<units::seconds> kFeedforwardRampRate = 1_V / 1_s;
+    inline constexpr units::second_t kWheelRadiusMeasurementStartDelay = 1.0_s;
+    inline constexpr units::radians_per_second_t kWheelRadiusMaxVelocity = 0.25_rad_per_s;
+    inline constexpr units::radians_per_second_squared_t kWheelRadiusRampRate = 0.05_rad_per_s_sq;
+  }
+}
+
 namespace LimelightConstants
 {
-  inline constexpr bool kUseMegaTag2 = true;
+  inline constexpr bool kUseMegaTag2 = false;
 
   inline constexpr std::string_view kName = "";
 
@@ -257,13 +282,15 @@ namespace IntakeConstants
 namespace PivotConstants
 {
   inline constexpr double kGearRatio = 16;
-  inline constexpr double kOffset = 6.2;
+  inline constexpr double kOffset = 5.9523773193359375;
   inline constexpr double kP = 1.3;  // en attendant
   inline constexpr double kI = 0.4;  // en attendant
   inline constexpr double kD = 0.15; // en attendant
   inline constexpr units::volt_t kG = 0.80_V;
-  inline constexpr double setpointUp = std::numbers::pi * 7 / 16;    // 90 deg up
-  inline constexpr double setpointDown = std::numbers::pi / 18; // 10 deg up
+  inline constexpr units::volt_t kS = 0.0_V;
+  inline constexpr TemplateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
+  inline constexpr double setpointUp = std::numbers::pi * 7 / 16; // 90 deg up
+  inline constexpr double setpointDown = std::numbers::pi / 18;   // 10 deg up
 
   inline constexpr bool kInverted = false;
   inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;

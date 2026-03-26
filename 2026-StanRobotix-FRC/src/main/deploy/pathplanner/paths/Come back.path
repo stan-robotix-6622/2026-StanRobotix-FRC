@@ -3,47 +3,49 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.7899888888939284,
-        "y": 3.7528222222272616
+        "x": 7.528,
+        "y": 4.149
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0385529931571074,
-        "y": 3.779578269615535
+        "x": 7.1295255041518395,
+        "y": 2.5233333333333325
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Tests/With fuel"
     },
     {
       "anchor": {
-        "x": 6.9143416370106765,
-        "y": 4.621376037959667
+        "x": 1.954353499406881,
+        "y": 2.4802965599051015
       },
       "prevControl": {
-        "x": 2.2771293001186237,
-        "y": 7.117508896797152
+        "x": 5.935255041518385,
+        "y": 2.609406880189799
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [
     {
-      "waypointRelativePos": 0.5950032873109785,
-      "rotationDegrees": -135.0
-    },
-    {
-      "waypointRelativePos": 0.9544688026981479,
-      "rotationDegrees": -135.0
+      "fieldPosition": {
+        "x": 4.626,
+        "y": 4.021
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 0.8408851422550093,
+      "maxWaypointRelativePos": 1.0,
+      "name": "Hub"
     }
   ],
-  "constraintZones": [],
-  "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Intake",
-      "waypointRelativePos": 0.9293993677555323,
+      "name": "Shoot",
+      "waypointRelativePos": 0.7249736564805052,
       "endWaypointRelativePos": 1.0,
       "command": null
     }
@@ -58,13 +60,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Blue",
+  "folder": "Tests",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }

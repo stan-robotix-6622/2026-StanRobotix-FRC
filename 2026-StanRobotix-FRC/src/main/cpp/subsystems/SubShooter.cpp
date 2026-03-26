@@ -4,7 +4,7 @@
 
 #include "subsystems/SubShooter.h"
 
-#include "Constants.h"
+#include "Configs.h"
 
 SubShooter::SubShooter()
 {
@@ -12,15 +12,14 @@ SubShooter::SubShooter()
     mFollowerShooterController =  new rev::spark::SparkMax{CANid::kFollowerMotorShooterID, rev::spark::SparkLowLevel::MotorType::kBrushless};
     mRelativeEncoder = new rev::spark::SparkRelativeEncoder{mLeaderShooterController->GetEncoder()};
     mFeedforward = new frc::SimpleMotorFeedforward<units::turns>{ShooterConstants::kS, ShooterConstants::kV};
-    mSparkConfigLeaderShooter = new rev::spark::SparkMaxConfig{};
-    mSparkConfigFollowerShooter = new rev::spark::SparkMaxConfig{};
+
+    mClossedLoopController = new rev::spark::SparkClosedLoopController{mLeaderShooterController->GetClosedLoopController()};
+
     Configure();
 }
 
 // This method will be called once per scheduler run
-void SubShooter::Periodic() {
-    frc::SmartDashboard::PutNumber("shooter/velocity", getVelocity().value());
-}
+void SubShooter::Periodic() {}
 
 void SubShooter::setVoltage(units::volt_t iVoltage)
 {
@@ -29,7 +28,8 @@ void SubShooter::setVoltage(units::volt_t iVoltage)
 
 void SubShooter::setVelocity(units::turns_per_second_t iNextVelocity)
 {
-    mLeaderShooterController->SetVoltage(mFeedforward->Calculate(iNextVelocity));
+    // mLeaderShooterController->SetVoltage(mFeedforward->Calculate(iNextVelocity));
+    mClossedLoopController->SetSetpoint(iNextVelocity.value(), ShooterConstants::kShooterClosedLoopControlType);
 };
 
 units::turns_per_second_t SubShooter::getVelocity()
@@ -37,14 +37,18 @@ units::turns_per_second_t SubShooter::getVelocity()
     return units::revolutions_per_minute_t(mRelativeEncoder->GetVelocity());
 };
 
-std::array<rev::REVLibError, 2> SubShooter::Configure()
+void SubShooter::Configure()
 {
-    mSparkConfigLeaderShooter->Inverted(ShooterConstants::kInverted);
-    mSparkConfigLeaderShooter->SetIdleMode(ShooterConstants::kIdleMode);
-
-    std::array<rev::REVLibError, 2> oConfigureResult;
-    oConfigureResult[0] = mLeaderShooterController->Configure(*mSparkConfigLeaderShooter, ShooterConstants::kReset, ShooterConstants::kPersist);
-    mSparkConfigFollowerShooter->Apply(*mSparkConfigLeaderShooter).Follow(CANid::kLeaderMotorShooterID, ShooterConstants::kFollowerinverted);
-    oConfigureResult[1] = mFollowerShooterController->Configure(*mSparkConfigFollowerShooter, ShooterConstants::kReset, ShooterConstants::kPersist);
-    return oConfigureResult;
+    mLeaderShooterController->Configure(Configs::Shooter::ShooterLeaderConfig(), ShooterConstants::kReset, ShooterConstants::kPersist);
+    mFollowerShooterController->Configure(Configs::Shooter::ShooterFollowerConfig(), ShooterConstants::kReset, ShooterConstants::kPersist);
 };
+
+void SubShooter::InitSendable(wpi::SendableBuilder& builder)
+{
+    builder.SetSmartDashboardType("shooter");
+    builder.AddDoubleProperty("velocity (tps)", [this] {return getVelocity().value();}, nullptr);
+    builder.AddDoubleProperty("velocity (rpm)", [this] {return units::revolutions_per_minute_t(getVelocity()).value();}, nullptr);
+    builder.AddDoubleProperty("kA", [this] {return mFeedforward->GetKa().value();}, [this] (double iKa) {return mFeedforward->SetKa(TemplateUnits::VoltageInverse<units::turns_per_second_squared>(iKa));});
+    builder.AddDoubleProperty("kV", [this] {return mFeedforward->GetKv().value();}, [this] (double iKv) {return mFeedforward->SetKv(TemplateUnits::VoltageInverse<units::turns_per_second>(iKv));});
+    builder.AddDoubleProperty("kS", [this] {return mFeedforward->GetKs().value();}, [this] (double iKs) {return mFeedforward->SetKs(units::volt_t(iKs));});
+}

@@ -21,7 +21,7 @@ class IMU : public wpi::Sendable
   units::degree_t getAngleYaw();
   units::degrees_per_second_t getYawRate();
 
-  void resetAngle();
+  void reset();
   void setAngleYaw(units::degree_t iAngle);
 
   void InitSendable(wpi::SendableBuilder &builder) override;

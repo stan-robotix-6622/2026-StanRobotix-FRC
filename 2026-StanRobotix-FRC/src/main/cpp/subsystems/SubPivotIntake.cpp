@@ -11,8 +11,7 @@
 SubPivotIntake::SubPivotIntake() {
     mPivotMotor = new rev::spark::SparkMax{CANid::kMotorPivotID, rev::spark::SparkLowLevel::MotorType::kBrushless};
     mEncoder = new rev::spark::SparkRelativeEncoder{mPivotMotor->GetEncoder()};
-    mFeedForward = new frc::ArmFeedforward{0_V, PivotConstants::kG, 1_V/1_rad_per_s};
-    frc::SmartDashboard::PutNumber("pivot/Arm kG", PivotConstants::kG.value());
+    mFeedForward = new frc::ArmFeedforward{PivotConstants::kS, PivotConstants::kG, PivotConstants::kV};
 
     mPivotMotorConfig = new rev::spark::SparkMaxConfig{};
     mPivotMotorConfig->Inverted(PivotConstants::kInverted);
@@ -21,27 +20,40 @@ SubPivotIntake::SubPivotIntake() {
 }
 
 // This method will be called once per scheduler run
-void SubPivotIntake::Periodic() {
-    frc::SmartDashboard::PutNumber("pivot/Arm Position", mEncoder->GetPosition());
-    frc::SmartDashboard::PutNumber("pivot/Arm Angle", GetAngle());
-}
+void SubPivotIntake::Periodic() {}
 
 void SubPivotIntake::Stop() {
     mPivotMotor->StopMotor();
 }
 
-void SubPivotIntake::SetVoltage(double iVoltage){
-    mPivotMotor->SetVoltage(units::volt_t(iVoltage));
+void SubPivotIntake::SetVoltage(units::volt_t iVoltage) {
+    mPivotMotor->SetVoltage(iVoltage);
+}
+
+void SubPivotIntake::SetVelocity(units::radians_per_second_t iVelocity)
+{
+    mPivotMotor->SetVoltage(mFeedForward->Calculate(GetAngle(), iVelocity));
 }
 
 void SubPivotIntake::KeepPosition()
 {
     // units::volt_t wVoltage = PivotConstants::kG * cos(GetAngle());
-    units::volt_t wVoltage = units::volt_t(frc::SmartDashboard::GetNumber("pivot/Arm kG", PivotConstants::kG.value()) * cos(GetAngle()));
-    frc::SmartDashboard::PutNumber("pivot/kG voltage", wVoltage.value());
-    mPivotMotor->SetVoltage(wVoltage);
+    // units::volt_t wVoltage = units::volt_t(frc::SmartDashboard::GetNumber("pivot/Arm kG", PivotConstants::kG.value()) * cos(GetAngle().value()));
+    // frc::SmartDashboard::PutNumber("pivot/kG voltage", wVoltage.value());
+    mPivotMotor->SetVoltage(mFeedForward->Calculate(GetAngle(), 0_rad_per_s));
 }
 
-double SubPivotIntake::GetAngle(){
-    return (PivotConstants::kOffset + mEncoder->GetPosition()) * 2 * std::numbers::pi / PivotConstants::kGearRatio;
+units::radian_t SubPivotIntake::GetAngle(){
+    return (PivotConstants::kOffset + mEncoder->GetPosition()) * 2_rad * std::numbers::pi / PivotConstants::kGearRatio;
+}
+
+void SubPivotIntake::InitSendable(wpi::SendableBuilder& builder)
+{
+    builder.SetSmartDashboardType("pivot");
+    builder.AddDoubleProperty("position", [this] {return mEncoder->GetPosition();}, nullptr);
+    builder.AddDoubleProperty("angle (radians)", [this] {return GetAngle().value();}, nullptr);
+    builder.AddDoubleProperty("angle (degrees)", [this] {return units::degree_t(GetAngle()).value();}, nullptr);
+    builder.AddDoubleProperty("kV", [this] {return mFeedForward->GetKv().value();}, [this] (double iKv) {return mFeedForward->SetKv(TemplateUnits::VoltageInverse<units::radians_per_second>(iKv));});
+    builder.AddDoubleProperty("kG", [this] {return mFeedForward->GetKg().value();}, [this] (double iKg) {return mFeedForward->SetKg(units::volt_t(iKg));});
+    builder.AddDoubleProperty("kS", [this] {return mFeedForward->GetKs().value();}, [this] (double iKs) {return mFeedForward->SetKs(units::volt_t(iKs));});
 }

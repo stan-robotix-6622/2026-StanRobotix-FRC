@@ -4,6 +4,8 @@
 
 #include "RobotContainer.h"
 
+#include <math.h>
+
 #include <frc2/command/button/Trigger.h>
 #include <frc2/command/Command.h>
 #include <pathplanner/lib/commands/PathPlannerAuto.h>
@@ -15,6 +17,7 @@
 #include "commands/PivotIntake.h"
 #include "commands/FullIntake.h"
 #include "commands/Shoot.h"
+#include "commands/ShootDynamically.h"
 
 #include "Constants.h"
 
@@ -23,16 +26,21 @@ RobotContainer::RobotContainer()
   mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
   frc::SmartDashboard::PutData("Xbox Controller", &mCommandXboxController->GetHID());
 
+  frc::SmartDashboard::PutNumber("Shooter Setpoint", ShooterConstants::PIDConstants::setpoint.value());
+  frc::SmartDashboard::PutNumber("Drivetrain Distance Setpoint", 3);
   // Initialize all of your commands and subsystems here
   mSubShooter = new SubShooter{};
+  frc::SmartDashboard::PutData("shooter", mSubShooter);
   mSubFeeder = new SubFeeder{};
   // mSubIndexer = new SubIndexer{};
   mDrivetrain = new SubDrivetrain{};
+  frc::SmartDashboard::PutData("swerve", mDrivetrain);
   mSubIntake = new SubIntake{};
   mSubPivotIntake = new SubPivotIntake{};
-
+  frc::SmartDashboard::PutData("pivot", mSubPivotIntake);
+  
   mDriveCommands = new DriveCommands{mDrivetrain};
-
+  
   // Set the default commands for all subsystems
   SetSubsystemDefaultCommands();
   // Register all relevant commands to pathplanner
@@ -46,9 +54,9 @@ void RobotContainer::SetSubsystemDefaultCommands()
   mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
       [this]
       {
-        mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
-                                        -mCommandXboxController->GetLeftX(),
-                                        -mCommandXboxController->GetRightX(),
+        mDrivetrain->driveFieldRelative(Deadband(-mCommandXboxController->GetLeftY(), 0.05),
+                                        Deadband(-mCommandXboxController->GetLeftX(), 0.05),
+                                        Deadband(-mCommandXboxController->GetRightX(), 0.05),
                                         (1 - mCommandXboxController->GetRightTriggerAxis()));
       },
       {mDrivetrain}));
@@ -91,18 +99,17 @@ void RobotContainer::ConfigureBindings()
     }));
 
   mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
-    { mDrivetrain->resetPose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation())); }));
+    { mDrivetrain->resetPose(SubDrivetrain::standardizePose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()))); }));
 
-  // mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
-  // mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
+  mCommandXboxController->Button(OperatorConstants::Button::Back).ToggleOnTrue(ShootDynamically(mSubShooter, mDrivetrain).ToPtr());
 }
 
 void RobotContainer::ConfigureWhenConnectedToDS()
 {
   mDrivetrain->ConfigurePathplanner();
   // Bindings that need the AutoBuilder to be configures
-  mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("EightPath").Repeatedly());
-  mCommandXboxController->Button(8).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(2.3_m); }));
+  mCommandXboxController->Button(OperatorConstants::Button::Start).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
+  (units::meter_t)frc::SmartDashboard::GetNumber("Drivetrain Distance Setpoint", 3)); }));
 
   mAutoChooser = pathplanner::AutoBuilder::buildAutoChooser();
   frc::SmartDashboard::PutData("Auto Chooser", &mAutoChooser);
@@ -110,6 +117,24 @@ void RobotContainer::ConfigureWhenConnectedToDS()
 
 frc2::Command *RobotContainer::GetAutonomousCommand() {
   return mAutoChooser.GetSelected();
+}
+
+double RobotContainer::Deadband(double iInput, double iThreshold, bool iSquared)
+{
+  if (abs(iInput) < iThreshold)
+  {
+    return 0.0;
+  }
+  if (!iSquared)
+  {
+    // ((iInput > 0) - (iInput < 0)) gives us the sign of iInput
+    // Then we scale the value of iInput over the range [-1; iThreshold] or [iTheshold; 1]
+    return (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold));
+  }
+  // Same as above but we square the value and keep the sign of the initial iInput
+  return ((iInput > 0) - (iInput < 0)) *
+    (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold)) * // Squared
+    (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold));
 }
 
 bool RobotContainer::isHubActive()
