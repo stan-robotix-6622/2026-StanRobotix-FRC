@@ -91,7 +91,7 @@ namespace Configs
     static SparkMaxConfig &ShooterFollowerConfig()
     {
       static SparkMaxConfig followerConfig{};
-      followerConfig.Apply(Configs::Shooter::ShooterFollowerConfig());
+      followerConfig.Apply(Configs::Shooter::ShooterLeaderConfig());
       followerConfig.Follow(CANid::kLeaderMotorShooterID, ShooterConstants::kFollowerinverted);
       return followerConfig;
     }
