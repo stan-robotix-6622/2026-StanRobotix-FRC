@@ -18,7 +18,6 @@
 #include <frc/geometry/Pose2d.h>
 #include <rev/SparkBase.h>              // Include Spark variable types
 #include <rev/config/SparkBaseConfig.h> // For the spark IdleMode
-#include <pathplanner/lib/config/RobotConfig.h>
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -219,7 +218,7 @@ namespace DrivetrainConstants
 
 namespace LimelightConstants
 {
-  inline constexpr bool kUseMegaTag2 = false;
+  inline constexpr bool kUseMegaTag2 = true;
 
   inline constexpr std::string_view kName = "";
 
@@ -283,7 +282,7 @@ namespace IntakeConstants
 namespace PivotConstants
 {
   inline constexpr double kGearRatio = 16;
-  inline constexpr double kOffset = 5.9523773193359375;
+  inline constexpr double kOffset = 7.071438312530518;
   inline constexpr double kP = 1.3;  // en attendant
   inline constexpr double kI = 0.4;  // en attendant
   inline constexpr double kD = 0.15; // en attendant

@@ -70,8 +70,13 @@ namespace Configs
     static SparkMaxConfig &ShooterLeaderConfig()
     {
       static SparkMaxConfig leaderConfig{};
+      double shootingFactor = 1;
+
       leaderConfig.Inverted(ShooterConstants::kInverted);
       leaderConfig.SetIdleMode(ShooterConstants::kIdleMode);
+
+      leaderConfig.encoder.PositionConversionFactor(shootingFactor);
+      leaderConfig.encoder.VelocityConversionFactor(shootingFactor / 60);
 
       leaderConfig.closedLoop.SetFeedbackSensor(ShooterConstants::Config::kShooterClosedLoopFeedbackSensor);
       leaderConfig.closedLoop.Pid(ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD);

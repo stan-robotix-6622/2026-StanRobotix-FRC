@@ -28,13 +28,12 @@ void SubShooter::setVoltage(units::volt_t iVoltage)
 
 void SubShooter::setVelocity(units::turns_per_second_t iNextVelocity)
 {
-    // mLeaderShooterController->SetVoltage(mFeedforward->Calculate(iNextVelocity));
     mClossedLoopController->SetSetpoint(iNextVelocity.value(), ShooterConstants::kShooterClosedLoopControlType);
 };
 
 units::turns_per_second_t SubShooter::getVelocity()
 {
-    return units::revolutions_per_minute_t(mRelativeEncoder->GetVelocity());
+    return units::turns_per_second_t(mRelativeEncoder->GetVelocity());
 };
 
 void SubShooter::Configure()
