@@ -101,6 +101,13 @@ void RobotContainer::ConfigureBindings()
   mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
       { mDrivetrain->resetPose(SubDrivetrain::standardizePose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()))); }));
 
+  mCommandXboxController->Button(OperatorConstants::Button::Back).ToggleOnTrue(ShootDynamically(mSubShooter, mDrivetrain).ToPtr());
+  // mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
+  // mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
+}
+
+void RobotContainer::ConfigureTeleopAutomatisation()
+{
   frc2::Trigger{[this]
                 { return SubDrivetrain::standardizePose(mDrivetrain->getPose()).X() < FieldConstants::kHubCenterTranslation2d.X(); }}
       .WhileTrue(Shoot(mSubShooter).ToPtr());
@@ -109,10 +116,6 @@ void RobotContainer::ConfigureBindings()
                 { return mDrivetrain->isTowardsHub()
                   && units::math::abs(mSubShooter->getVelocity() - ShooterConstants::PIDConstants::setpoint) < 0.5_tps; }}
       .WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
-
-  mCommandXboxController->Button(OperatorConstants::Button::Back).ToggleOnTrue(ShootDynamically(mSubShooter, mDrivetrain).ToPtr());
-  // mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
-  // mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
 }
 
 void RobotContainer::ConfigureWhenConnectedToDS()

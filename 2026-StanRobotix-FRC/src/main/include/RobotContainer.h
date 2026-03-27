@@ -32,6 +32,7 @@ public:
   RobotContainer();
 
   void ConfigureWhenConnectedToDS();
+  void ConfigureTeleopAutomatisation();
 
   frc2::Command* GetAutonomousCommand();
 
