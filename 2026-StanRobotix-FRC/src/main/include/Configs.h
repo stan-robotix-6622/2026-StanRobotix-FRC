@@ -79,8 +79,7 @@ namespace Configs
       leaderConfig.encoder.VelocityConversionFactor(shootingFactor / 60);
 
       leaderConfig.closedLoop.SetFeedbackSensor(ShooterConstants::Config::kShooterClosedLoopFeedbackSensor);
-      leaderConfig.closedLoop.Pid(ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD);
-      leaderConfig.closedLoop.OutputRange(-1, 1);
+      // leaderConfig.closedLoop.Pid(1, 0, 0);
 
       leaderConfig.closedLoop.feedForward.kV(ShooterConstants::kV.value());
       leaderConfig.closedLoop.feedForward.kS(ShooterConstants::kS.value());
