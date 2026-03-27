@@ -63,7 +63,6 @@ class SubDrivetrain : public frc2::SubsystemBase {
   IMU* getIMU();
 
   static frc::Pose2d standardizePose(frc::Pose2d iPose);
-  static frc::Translation2d standardizeTranslation(frc::Translation2d iTranslation);
   frc::Pose2d getClosestPoseAtDistanceFromHub(units::meter_t iDesiredDistance);
   frc2::CommandPtr getGoToDistanceFromHubCommand(units::meter_t iDesiredDistance);
   bool isTowardsHub();

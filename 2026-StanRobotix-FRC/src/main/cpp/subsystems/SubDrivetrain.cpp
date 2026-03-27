@@ -252,25 +252,14 @@ frc::Pose2d SubDrivetrain::standardizePose(frc::Pose2d iPose)
     auto mAlliance = frc::DriverStation::GetAlliance();
     if (mAlliance && mAlliance.value() == frc::DriverStation::kRed)
     {
-        return iPose.RotateAround(FieldConstants::kFieldCenterTranslation2d, 180_deg);
+      return iPose.RotateAround(FieldConstants::kFieldCenterTranslation2d, 180_deg);
     }
     return iPose;
 }
 
-frc::Translation2d SubDrivetrain::standardizeTranslation(frc::Translation2d iTranslation)
-{
-    // mAlliance is of type std::optional<frc::DriverStation::Alliance>
-    auto mAlliance = frc::DriverStation::GetAlliance();
-    if (mAlliance && mAlliance.value() == frc::DriverStation::kRed)
-    {
-        return iTranslation.RotateAround(FieldConstants::kFieldCenterTranslation2d, 180_deg);
-    }
-    return iTranslation;
-}
-
 frc::Translation2d SubDrivetrain::getTranslationToHub()
 {
-  return standardizeTranslation(FieldConstants::kHubCenterTranslation2d - standardizeTranslation(getPose().Translation()));
+  return FieldConstants::kHubCenterTranslation2d - standardizePose(getPose()).Translation();
 }
 
 frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubtoRobotDistance)
@@ -286,8 +275,8 @@ frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubto
         wRobotToHubTranslation.Norm() - iHubtoRobotDistance,
         wRobotToHubTranslation.Angle()};
 
-    frc::Translation2d wOriginToTargetTranslation = getPose().Translation() + wRobotToTargetTranslation;
-    frc::Pose2d oOriginToTargetPose = frc::Pose2d{wOriginToTargetTranslation, wRobotToHubTranslation.Angle()};
+    frc::Translation2d wOriginToTargetTranslation = standardizePose(getPose()).Translation() + wRobotToTargetTranslation;
+    frc::Pose2d oOriginToTargetPose = standardizePose(frc::Pose2d{wOriginToTargetTranslation, wRobotToHubTranslation.Angle()});
     mTargetPose2dPublisher.Set(oOriginToTargetPose);
     return oOriginToTargetPose;
 }
@@ -325,8 +314,7 @@ frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHu
 
 bool SubDrivetrain::isTowardsHub()
 {
-    frc::Translation2d wOriginToRobotTranslation = standardizePose(getPose()).Translation();
-    frc::Translation2d wRobotToHubTranslation = FieldConstants::kHubCenterTranslation2d - wOriginToRobotTranslation;
+    frc::Translation2d wRobotToHubTranslation = getTranslationToHub();
     frc::Rotation2d wRobotAngle = standardizePose(getPose()).Rotation();
 
     return units::math::abs((wRobotAngle - wRobotToHubTranslation.Angle()).Degrees()) <  5_deg / (wRobotToHubTranslation.Norm()).value();
