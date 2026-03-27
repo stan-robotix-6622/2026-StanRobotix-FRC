@@ -16,9 +16,6 @@ SubClimb::SubClimb() {
     mSparkMaxConfigLeader = new rev::spark::SparkMaxConfig;
     mSparkMaxConfigFollower = new rev::spark::SparkMaxConfig;
 
-    mSparkMaxConfigLeader->softLimit.ForwardSoftLimit(ClimbConstants::kLimitForward);
-    mSparkMaxConfigLeader->softLimit.ReverseSoftLimit(ClimbConstants::kLimitReverse);
-
     mSparkMaxConfigLeader->Inverted(ClimbConstants::kInverted);
     mSparkMaxConfigLeader->SetIdleMode(ClimbConstants::kIdleMode);
 

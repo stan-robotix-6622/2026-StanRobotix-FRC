@@ -10,7 +10,7 @@ Climb::Climb(SubClimb * iSubClimb, SubClimb::Direction iDirection) {
   // Use addRequirements() here to declare subsystem dependencies.
   mSubClimb = iSubClimb;
   AddRequirements(mSubClimb);
-  mPIDController = new frc::PIDController(ClimbConstants::kP, ClimbConstants::kI, ClimbConstants::kD);
+  mPIDController = new frc::PIDController(0, 0, 0);
 
   frc::SmartDashboard::PutData("climb/PID Controller", mPIDController);
   mDirection = iDirection;
@@ -20,9 +20,11 @@ Climb::Climb(SubClimb * iSubClimb, SubClimb::Direction iDirection) {
 void Climb::Initialize() {
   switch (mDirection) {
     case SubClimb::Up:
+      mPIDController->SetPID(ClimbConstants::kUpP, ClimbConstants::kUpI, ClimbConstants::kUpD);
       mPIDController->SetSetpoint(ClimbConstants::kSetpointUp);
       break;
     case SubClimb::Down:
+    mPIDController->SetPID(ClimbConstants::kDownP, ClimbConstants::kDownI, ClimbConstants::kDownD);
       mPIDController->SetSetpoint(ClimbConstants::kSetpointDown);
       break;
     case SubClimb::Lift:
