@@ -57,7 +57,7 @@ SubDrivetrain::SubDrivetrain()
 void SubDrivetrain::Periodic()
 {
     refreshSwerveModules();
-
+    frc::SmartDashboard::PutBoolean("isTowardsHub", isTowardsHub());
     mCurrentRotation2d = mIMU->getRotation2d();
     mPoseEstimator->Update(mCurrentRotation2d, getSwerveModulePositions());
     mField2d->SetRobotPose(getPose());
@@ -326,12 +326,10 @@ frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHu
 bool SubDrivetrain::isTowardsHub()
 {
     frc::Translation2d wOriginToRobotTranslation = standardizePose(getPose()).Translation();
-    units::meter_t wRobotToHubX = FieldConstants::kHubCenterTranslation2d.X() - wOriginToRobotTranslation.X();
-    units::meter_t wRobotToHubY = FieldConstants::kHubCenterTranslation2d.Y() - wOriginToRobotTranslation.Y();
-    frc::Translation2d wRobotToHubTranslation = frc::Translation2d{wRobotToHubX, wRobotToHubY};
+    frc::Translation2d wRobotToHubTranslation = FieldConstants::kHubCenterTranslation2d - wOriginToRobotTranslation;
     frc::Rotation2d wRobotAngle = standardizePose(getPose()).Rotation();
 
-    return (wRobotAngle - wRobotToHubTranslation.Angle()).Degrees() <  1_deg; //(wRobotToHubTranslation.Norm());
+    return units::math::abs((wRobotAngle - wRobotToHubTranslation.Angle()).Degrees()) <  5_deg / (wRobotToHubTranslation.Norm()).value();
 };
 
 void SubDrivetrain::InitSendable(wpi::SendableBuilder& builder)
