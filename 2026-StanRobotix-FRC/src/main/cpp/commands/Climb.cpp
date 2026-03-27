@@ -43,7 +43,7 @@ void Climb::Execute() {
 
 // Called once the command ends or is interrupted.
 void Climb::End(bool interrupted) {
-  mSubClimb->StopMotors();
+  mSubClimb->StopMotor();
 }
 
 // Returns true when the command should end.

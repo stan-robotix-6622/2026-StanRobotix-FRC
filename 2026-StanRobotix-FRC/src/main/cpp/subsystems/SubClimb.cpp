@@ -8,6 +8,7 @@
 #include <frc/StateSpaceUtil.h>
 #include <frc2/command/RunCommand.h>
 #include "commands/Climb.h"
+#include <iostream>
 
 SubClimb::SubClimb() {
     mSparkMaxLeader = new rev::spark::SparkMax(CANid::kMotorClimbLeaderID, ClimbConstants::kMotorTypeLeader);
@@ -29,13 +30,15 @@ SubClimb::SubClimb() {
 }
 
 // This method will be called once per scheduler run;
-void SubClimb::Periodic() {}
+void SubClimb::Periodic() {
+    std::cout << mSparkMaxLeader->GetPeriodicStatus0().current << std::endl;
+}
 
 void SubClimb::SetSpeed(double iSpeed) {
     mSparkMaxLeader->Set(iSpeed);
 }
 
-void SubClimb::StopMotors() {
+void SubClimb::StopMotor() {
     mSparkMaxLeader->StopMotor();
 }
 

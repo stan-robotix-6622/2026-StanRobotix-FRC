@@ -22,7 +22,7 @@ class SubClimb : public frc2::SubsystemBase {
 
   SubClimb();
   void SetSpeed(double iSpeed);
-  void StopMotors();
+  void StopMotor();
   double GetPosition();
   frc2::CommandPtr GetClimbCommand(Direction iDirection);
   
