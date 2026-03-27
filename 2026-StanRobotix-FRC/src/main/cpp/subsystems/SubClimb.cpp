@@ -10,17 +10,22 @@
 #include "commands/Climb.h"
 
 SubClimb::SubClimb() {
-    mSparkMax1 = new rev::spark::SparkMax(CANid::kMotorClimb1ID, ClimbConstants::kMotorTypeSparkMax1);
-    mSparkMax2 = new rev::spark::SparkMax(CANid::kMotorClimb2ID, ClimbConstants::kMotorTypeSparkMax2);
+    mSparkMax1 = new rev::spark::SparkMax(CANid::kMotorClimbLeaderID, ClimbConstants::kMotorTypeSparkMax1);
+    mSparkMax2 = new rev::spark::SparkMax(CANid::kMotorClimbFollowerID, ClimbConstants::kMotorTypeSparkMax2);
 
     mSparkMaxConfig1 = new rev::spark::SparkMaxConfig;
     mSparkMaxConfig2 = new rev::spark::SparkMaxConfig;
 
-    mSparkMaxConfig1->Inverted(false);
-    mSparkMaxConfig2->Inverted(false);
+    mSparkMaxConfig1->softLimit.ForwardSoftLimit(0);
+    mSparkMaxConfig1->softLimit.ReverseSoftLimit(ClimbConstants::kSetpointDown );
 
-    mSparkMax1->Configure(*mSparkMaxConfig1, rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kPersistParameters);
-    mSparkMax2->Configure(*mSparkMaxConfig2, rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kPersistParameters);
+    mSparkMaxConfig1->Inverted(ClimbConstants::kInverted);
+
+    mSparkMaxConfig2->Apply(*mSparkMaxConfig1);
+    mSparkMaxConfig2->Follow(CANid::kMotorClimbLeaderID, ClimbConstants::kInverseFollowerMotor);
+
+    mSparkMax1->Configure(*mSparkMaxConfig1, rev::ResetMode::kResetSafeParameters, rev::PersistMode::kPersistParameters);
+    mSparkMax2->Configure(*mSparkMaxConfig2, rev::ResetMode::kResetSafeParameters, rev::PersistMode::kPersistParameters);
 
     mSparkRelativeEncoder1 = new rev::spark::SparkRelativeEncoder{mSparkMax1->GetEncoder()};
     mSparkRelativeEncoder2 = new rev::spark::SparkRelativeEncoder{mSparkMax2->GetEncoder()};

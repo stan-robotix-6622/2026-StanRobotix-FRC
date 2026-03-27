@@ -33,6 +33,8 @@ namespace ClimbConstants {
     constexpr double kLiftD = 0;
     constexpr double kSetpointUp = 1;
     constexpr double kSetpointDown = 15;
+    constexpr bool kInverted = false;
+    constexpr bool kInverseFollowerMotor = false;
 }
 
 namespace XboxControllerConstants {
@@ -41,6 +43,6 @@ namespace XboxControllerConstants {
 
 namespace CANid 
 {
-    constexpr int kMotorClimb1ID = 14;
-    constexpr int kMotorClimb2ID = 15;
+    constexpr int kMotorClimbLeaderID = 14;
+    constexpr int kMotorClimbFollowerID = 15;
 }
