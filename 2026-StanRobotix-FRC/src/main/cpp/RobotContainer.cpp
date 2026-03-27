@@ -108,10 +108,13 @@ void RobotContainer::ConfigureBindings()
 
 void RobotContainer::ConfigureBindingsCopilot()
 {
-  mCommandXboxControllerCopilot->Button(OperatorConstants::kShootButton).WhileTrue(Shoot(mSubShooter).ToPtr());
+  mCommandXboxControllerCopilot->Button(OperatorConstants::kShootButton).WhileTrue(frc2::cmd::Run([this] {return mSubShooter->setVoltage(10_V);}));
   mCommandXboxControllerCopilot->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
   mCommandXboxControllerCopilot->Button(OperatorConstants::kUnstuckFuelButton).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
-  mCommandXboxControllerCopilot->Button(OperatorConstants::kPivotDownButton).WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
+  mCommandXboxControllerCopilot->Button(OperatorConstants::kPivotDownButton).WhileTrue(frc2::cmd::Run([this] {return mSubPivotIntake->SetVoltage(10_V);}));
+  //mCommandXboxControllerCopilot->Button(OperatorConstants::Button::LeftBumper).WhileTrue(mSubClimb->SetSpeed(10));
+  //mCommandXboxControllerCopilot->Button(OperatorConstants::Button::RightBumper).WhileTrue(mSubClimb->SetSpeed(-10));
+ 
  
   mCommandXboxControllerCopilot->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
       { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
@@ -120,7 +123,6 @@ void RobotContainer::ConfigureBindingsCopilot()
 
   mCommandXboxControllerCopilot->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
       { mDrivetrain->resetPose(SubDrivetrain::standardizePose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()))); }));
-
 }
 void RobotContainer::ConfigureTeleopAutomatisation()
 {
