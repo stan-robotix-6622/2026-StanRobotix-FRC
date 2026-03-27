@@ -28,6 +28,9 @@ namespace ClimbConstants {
     constexpr double kP = 0.008;
     constexpr double kI = 0;
     constexpr double kD = 0;
+    constexpr double kLiftP = 0.008;
+    constexpr double kLiftI = 0;
+    constexpr double kLiftD = 0;
     constexpr double kSetpointUp = 1;
     constexpr double kSetpointDown = 15;
 }

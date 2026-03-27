@@ -44,6 +44,6 @@ double SubClimb::GetPosition() {
    return (abs(mSparkRelativeEncoder1->GetPosition()) + abs(mSparkRelativeEncoder2->GetPosition())) / 2;
 }
 
-frc2::CommandPtr SubClimb::GetClimbCommand(ClimbDirection iDirection) {
+frc2::CommandPtr SubClimb::GetClimbCommand(Direction iDirection) {
     return Climb(this, iDirection).ToPtr();
 }

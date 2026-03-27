@@ -27,13 +27,17 @@ void RobotContainer::ConfigureBindings() {
 
    frc2::Trigger([this] {
     return mXboxController->GetYButtonPressed();
-  }).OnTrue(mClimb->GetClimbCommand(Up));
+  }).OnTrue(mClimb->GetClimbCommand(SubClimb::Up));
 
   frc2::Trigger([this] {
     return mXboxController->GetAButtonPressed();
-  }).OnTrue(mClimb->GetClimbCommand(Down));
+  }).OnTrue(mClimb->GetClimbCommand(SubClimb::Down));
 
-  mClimb->SetDefaultCommand(mClimb->GetClimbCommand(Down));
+  frc2::Trigger([this] {
+    return mXboxController->GetBButtonPressed();
+  }).OnTrue(mClimb->GetClimbCommand(SubClimb::Lift));
+
+  mClimb->SetDefaultCommand(mClimb->GetClimbCommand(SubClimb::Down));
 
   // Schedule `ExampleMethodCommand` when the Xbox controller's B button is
   // pressed, cancelling on release.

@@ -24,7 +24,7 @@ class Climb
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  Climb(SubClimb * iSubClimb, ClimbDirection iDirection);
+  Climb(SubClimb * iSubClimb, SubClimb::Direction iDirection);
 
   void Initialize() override;
 
@@ -38,5 +38,5 @@ class Climb
 
   SubClimb * mSubClimb;
   frc::PIDController * mPIDController;
-  ClimbDirection mDirection;
+  SubClimb::Direction mDirection;
 };

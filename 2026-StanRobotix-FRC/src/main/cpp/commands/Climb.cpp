@@ -6,7 +6,7 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
-Climb::Climb(SubClimb * iSubClimb, ClimbDirection iDirection) {
+Climb::Climb(SubClimb * iSubClimb, SubClimb::Direction iDirection) {
   // Use addRequirements() here to declare subsystem dependencies.
   mSubClimb = iSubClimb;
   AddRequirements(mSubClimb);
@@ -19,10 +19,14 @@ Climb::Climb(SubClimb * iSubClimb, ClimbDirection iDirection) {
 // Called when the command is initially scheduled.
 void Climb::Initialize() {
   switch (mDirection) {
-    case Up:
+    case SubClimb::Up:
       mPIDController->SetSetpoint(ClimbConstants::kSetpointUp);
       break;
-    case Down:
+    case SubClimb::Down:
+      mPIDController->SetSetpoint(ClimbConstants::kSetpointDown);
+      break;
+    case SubClimb::Lift:
+      mPIDController->SetPID(ClimbConstants::kLiftP, ClimbConstants::kLiftI, ClimbConstants::kLiftD);
       mPIDController->SetSetpoint(ClimbConstants::kSetpointDown);
       break;
     default:
