@@ -43,6 +43,7 @@ public:
   bool isHubActive();
 private:
   frc2::CommandXboxController* mCommandXboxController;
+  frc2::CommandXboxController* mCommandXboxControllerCopilot;
 
   SubShooter* mSubShooter = nullptr;
   SubFeeder* mSubFeeder = nullptr;
@@ -56,6 +57,7 @@ private:
   DriveCommands* mDriveCommands;
 
   void ConfigureBindings();
+  void ConfigureBindingsCopilot();
   void RegisterCommandsPathPlanner();
   void SetSubsystemDefaultCommands();
 

@@ -320,6 +320,15 @@ bool SubDrivetrain::isTowardsHub()
     return units::math::abs((wRobotAngle - wRobotToHubTranslation.Angle()).Degrees()) <  5_deg / (wRobotToHubTranslation.Norm()).value();
 };
 
+
+bool SubDrivetrain::isTowardsHubShooter()
+{
+    frc::Translation2d wRobotToHubTranslation = getTranslationToHub();
+    frc::Rotation2d wRobotAngle = standardizePose(getPose()).Rotation();
+
+    return units::math::abs((wRobotAngle - wRobotToHubTranslation.Angle()).Degrees()) <  15_deg / (wRobotToHubTranslation.Norm()).value();
+};
+
 void SubDrivetrain::InitSendable(wpi::SendableBuilder& builder)
 {
     builder.SetSmartDashboardType("SwerveDrive");

@@ -106,17 +106,38 @@ void RobotContainer::ConfigureBindings()
   // mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
 }
 
+void RobotContainer::ConfigureBindingsCopilot()
+{
+  mCommandXboxControllerCopilot->Button(OperatorConstants::kShootButton).WhileTrue(Shoot(mSubShooter).ToPtr());
+  mCommandXboxControllerCopilot->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
+  mCommandXboxControllerCopilot->Button(OperatorConstants::kUnstuckFuelButton).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
+  mCommandXboxControllerCopilot->Button(OperatorConstants::kPivotDownButton).WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
+ 
+  mCommandXboxControllerCopilot->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
+      { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
+        {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
+        else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
+
+  mCommandXboxControllerCopilot->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
+      { mDrivetrain->resetPose(SubDrivetrain::standardizePose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()))); }));
+
+}
 void RobotContainer::ConfigureTeleopAutomatisation()
 {
+  // frc2::Trigger{[this]
+  //               { return SubDrivetrain::standardizePose(mDrivetrain->getPose()).X() < FieldConstants::kHubCenterTranslation2d.X(); }}
+  //     .WhileTrue(Shoot(mSubShooter).ToPtr());
+
   frc2::Trigger{[this]
-                { return SubDrivetrain::standardizePose(mDrivetrain->getPose()).X() < FieldConstants::kHubCenterTranslation2d.X(); }}
+                { return mDrivetrain->isTowardsHubShooter(); }}
       .WhileTrue(Shoot(mSubShooter).ToPtr());
 
   frc2::Trigger{[this]
                 { return mDrivetrain->isTowardsHub()
                   && units::math::abs(mSubShooter->getVelocity() - ShooterConstants::PIDConstants::setpoint) < 0.5_tps; }}
-      .WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
+      .Debounce(0.3_s).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 }
+
 
 void RobotContainer::ConfigureWhenConnectedToDS()
 {
