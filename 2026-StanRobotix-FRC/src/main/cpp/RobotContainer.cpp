@@ -67,15 +67,15 @@ void RobotContainer::SetSubsystemDefaultCommands()
 
 void RobotContainer::RegisterCommandsPathPlanner()
 {
-  pathplanner::NamedCommands::registerCommand("Pivot Up", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
-  pathplanner::NamedCommands::registerCommand("Pivot Down", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
-  pathplanner::NamedCommands::registerCommand("Full Intake", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
+  pathplanner::NamedCommands::registerCommand("Pivot-Up", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
+  pathplanner::NamedCommands::registerCommand("Pivot-Down", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
+  pathplanner::NamedCommands::registerCommand("Full-Intake", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
   pathplanner::NamedCommands::registerCommand("GoTo3mFromHub", mDrivetrain->Defer([this]
                                                                                   { return mDrivetrain->getGoToDistanceFromHubCommand(3_m); }));
   pathplanner::NamedCommands::registerCommand("Intake", mSubIntake->getIntakeCommand());
   pathplanner::NamedCommands::registerCommand("Shoot", Shoot(mSubShooter).ToPtr());
-  pathplanner::NamedCommands::registerCommand("Feed Shooter", mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
-  pathplanner::NamedCommands::registerCommand("Unstuck Feeder", mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
+  pathplanner::NamedCommands::registerCommand("Feed-Shooter", mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
+  pathplanner::NamedCommands::registerCommand("Unstuck-Feeder", mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
   // pathplanner::NamedCommands::registerCommand("Index Fuel", mSubIntake->getIntakeCommand());
 
   pathplanner::EventTrigger("Intake").WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
@@ -104,11 +104,6 @@ void RobotContainer::ConfigureBindings()
   frc2::Trigger{[this]
                 { return SubDrivetrain::standardizePose(mDrivetrain->getPose()).X() < FieldConstants::kHubCenterTranslation2d.X(); }}
       .WhileTrue(Shoot(mSubShooter).ToPtr());
-
-  // frc2::Trigger{[this]
-  //   {return units::math::abs(FieldConstants::kOptimalShootingPositionTranslation2d.X() - SubDrivetrain::standardizePose(mDrivetrain->getPose()).X()) < 0.03_m
-  //     && units::math::abs(FieldConstants::kOptimalShootingPositionTranslation2d.Y() - SubDrivetrain::standardizePose(mDrivetrain->getPose()).Y()) < 0.03_m && mSubShooter->getVelocity() <= ShooterConstants::kVitesseVoulue;}}
-  //   .WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
   frc2::Trigger{[this]
                 { return mDrivetrain->isTowardsHub()
