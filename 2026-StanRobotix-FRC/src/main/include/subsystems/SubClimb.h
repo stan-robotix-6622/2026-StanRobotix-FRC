@@ -35,10 +35,9 @@ class SubClimb : public frc2::SubsystemBase {
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  rev::spark::SparkMax * mSparkMax1;
-  rev::spark::SparkMax * mSparkMax2;
-  rev::spark::SparkMaxConfig * mSparkMaxConfig1;
-  rev::spark::SparkMaxConfig * mSparkMaxConfig2;
-  rev::spark::SparkRelativeEncoder * mSparkRelativeEncoder1;
-  rev::spark::SparkRelativeEncoder * mSparkRelativeEncoder2;
+  rev::spark::SparkMax * mSparkMaxLeader;
+  rev::spark::SparkMax * mSparkMaxFollower;
+  rev::spark::SparkMaxConfig * mSparkMaxConfigLeader;
+  rev::spark::SparkMaxConfig * mSparkMaxConfigFollower;
+  rev::spark::SparkRelativeEncoder * mSparkRelativeEncoder;
 };

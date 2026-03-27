@@ -10,43 +10,40 @@
 #include "commands/Climb.h"
 
 SubClimb::SubClimb() {
-    mSparkMax1 = new rev::spark::SparkMax(CANid::kMotorClimbLeaderID, ClimbConstants::kMotorTypeSparkMax1);
-    mSparkMax2 = new rev::spark::SparkMax(CANid::kMotorClimbFollowerID, ClimbConstants::kMotorTypeSparkMax2);
+    mSparkMaxLeader = new rev::spark::SparkMax(CANid::kMotorClimbLeaderID, ClimbConstants::kMotorTypeLeader);
+    mSparkMaxFollower = new rev::spark::SparkMax(CANid::kMotorClimbFollowerID, ClimbConstants::kMotorTypeFollower);
 
-    mSparkMaxConfig1 = new rev::spark::SparkMaxConfig;
-    mSparkMaxConfig2 = new rev::spark::SparkMaxConfig;
+    mSparkMaxConfigLeader = new rev::spark::SparkMaxConfig;
+    mSparkMaxConfigFollower = new rev::spark::SparkMaxConfig;
 
-    mSparkMaxConfig1->softLimit.ForwardSoftLimit(0);
-    mSparkMaxConfig1->softLimit.ReverseSoftLimit(ClimbConstants::kSetpointDown );
+    mSparkMaxConfigLeader->softLimit.ForwardSoftLimit(ClimbConstants::kLimitForward);
+    mSparkMaxConfigLeader->softLimit.ReverseSoftLimit(ClimbConstants::kLimitReverse);
 
-    mSparkMaxConfig1->Inverted(ClimbConstants::kInverted);
+    mSparkMaxConfigLeader->Inverted(ClimbConstants::kInverted);
+    mSparkMaxConfigLeader->SetIdleMode(ClimbConstants::kIdleMode);
 
-    mSparkMaxConfig2->Apply(*mSparkMaxConfig1);
-    mSparkMaxConfig2->Follow(CANid::kMotorClimbLeaderID, ClimbConstants::kInverseFollowerMotor);
+    mSparkMaxConfigFollower->Apply(*mSparkMaxConfigLeader);
+    mSparkMaxConfigFollower->Follow(CANid::kMotorClimbLeaderID, ClimbConstants::kInverseFollowerMotor);
 
-    mSparkMax1->Configure(*mSparkMaxConfig1, rev::ResetMode::kResetSafeParameters, rev::PersistMode::kPersistParameters);
-    mSparkMax2->Configure(*mSparkMaxConfig2, rev::ResetMode::kResetSafeParameters, rev::PersistMode::kPersistParameters);
+    mSparkMaxLeader->Configure(*mSparkMaxConfigLeader, rev::ResetMode::kResetSafeParameters, rev::PersistMode::kPersistParameters);
+    mSparkMaxFollower->Configure(*mSparkMaxConfigFollower, rev::ResetMode::kResetSafeParameters, rev::PersistMode::kPersistParameters);
 
-    mSparkRelativeEncoder1 = new rev::spark::SparkRelativeEncoder{mSparkMax1->GetEncoder()};
-    mSparkRelativeEncoder2 = new rev::spark::SparkRelativeEncoder{mSparkMax2->GetEncoder()};
+    mSparkRelativeEncoder = new rev::spark::SparkRelativeEncoder{mSparkMaxLeader->GetEncoder()};
 }
 
 // This method will be called once per scheduler run;
 void SubClimb::Periodic() {}
 
 void SubClimb::SetSpeed(double iSpeed) {
-    mSparkMax1->Set(iSpeed);
-    mSparkMax2->Set(iSpeed);
+    mSparkMaxLeader->Set(iSpeed);
 }
 
 void SubClimb::StopMotors() {
-    mSparkMax1->StopMotor();
-    mSparkMax2->StopMotor();
+    mSparkMaxLeader->StopMotor();
 }
 
 double SubClimb::GetPosition() {
-   // return mSparkRelativeEncoder1->GetPosition();
-   return (abs(mSparkRelativeEncoder1->GetPosition()) + abs(mSparkRelativeEncoder2->GetPosition())) / 2;
+   return mSparkRelativeEncoder->GetPosition();
 }
 
 frc2::CommandPtr SubClimb::GetClimbCommand(Direction iDirection) {
