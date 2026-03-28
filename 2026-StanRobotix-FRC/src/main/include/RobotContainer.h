@@ -6,12 +6,14 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
+
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/DriverStation.h>
 #include <frc/DataLogManager.h>
 
 #include "commands/DriveCommands.h"
 
+#include "subsystems/SubClimb.h"
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubPivotIntake.h"
 #include "subsystems/SubShooter.h"
@@ -44,6 +46,8 @@ public:
 private:
   frc2::CommandXboxController* mCommandXboxController;
   frc2::CommandXboxController* mCommandXboxControllerCopilot;
+
+  SubClimb * mClimb;
 
   SubShooter* mSubShooter = nullptr;
   SubFeeder* mSubFeeder = nullptr;

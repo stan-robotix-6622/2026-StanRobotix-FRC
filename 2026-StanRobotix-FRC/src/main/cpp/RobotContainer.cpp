@@ -30,6 +30,8 @@ RobotContainer::RobotContainer()
   frc::SmartDashboard::PutNumber("Shooter Setpoint", ShooterConstants::PIDConstants::setpoint.value());
   frc::SmartDashboard::PutNumber("Drivetrain Distance Setpoint", 3);
   // Initialize all of your commands and subsystems here
+  mClimb = new SubClimb;
+  
   mSubShooter = new SubShooter{};
   frc::SmartDashboard::PutData("shooter", mSubShooter);
   mSubFeeder = new SubFeeder{};
