@@ -90,7 +90,7 @@ namespace ShooterConstants
     inline constexpr double kI = 0;
     inline constexpr double kD = 0;
 
-    inline constexpr units::turns_per_second_t setpoint = 55_tps; // its a placeholder :)
+    inline constexpr units::turns_per_second_t setpoint = 52_tps; // its a placeholder :)
   }
   namespace Config
   {
@@ -100,7 +100,7 @@ namespace ShooterConstants
 
 namespace FeederConstants
 {
-  inline constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
+  inline constexpr units::volt_t kDesiredVoltage = 9_V; // placeholder :)
 
   inline constexpr bool kInverted = true;
   inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
@@ -282,7 +282,10 @@ namespace IntakeConstants
   inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 
-  inline constexpr double kSpeed = 0.8; // a modifier (valeur temporaire)
+  inline constexpr double kSpeed = 1; // a modifier (valeur temporaire)
+
+  inline constexpr double kGearRatio = 4;
+  inline constexpr units::meter_t kWheelRadius = 1.5_in;
 }
 
 namespace PivotConstants

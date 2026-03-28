@@ -30,19 +30,15 @@ void ShootDynamically::Execute()
   mTargetMovement = {0_m, 0_m};
   mShooterStatus = {0_m, 0_tps, 0_s};
   mLastCalculatedShooterVelocity = 0_tps;
+  mTranslationToHub = mDrivetrain->getTranslationToHub();
   for (int i = 0; i < 5; i++)
   {
     mLastCalculatedShooterVelocity = mShooterStatus.shooterVelocity;
-    mDistanceToTarget = (mDrivetrain->getTranslationToHub() + mTargetMovement).Norm();
+    mDistanceToTarget = (mTranslationToHub + mTargetMovement).Norm();
     mShooterStatus = ShooterLookupTable::interpolate(mDistanceToTarget);
     mTargetMovement = {-mRobotMovement.vx * mShooterStatus.timeOfFlight,
                        -mRobotMovement.vy * mShooterStatus.timeOfFlight};
   }
-  // frc::SmartDashboard::PutNumber("shooter/command/Distance hub", mDistanceToTarget.value());
-  // frc::SmartDashboard::PutNumber("shooter/command/Time of Flight", mShooterStatus.timeOfFlight.value());
-  // frc::SmartDashboard::PutNumber("shooter/command/calculated velocity", mShooterStatus.shooterVelocity.value());
-  // frc::SmartDashboard::PutNumber("shooter/command/mTargetMovement X", mTargetMovement.X().value());
-  // frc::SmartDashboard::PutNumber("shooter/command/mTargetMovement Y", mTargetMovement.Y().value());
   mShooterPIDController->SetSetpoint(mShooterStatus.shooterVelocity.value());
 
   mPIDAdjustment = units::turns_per_second_t(mShooterPIDController->Calculate(mShooter->getVelocity().value()));

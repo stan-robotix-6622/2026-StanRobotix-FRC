@@ -27,6 +27,8 @@ SubDrivetrain::SubDrivetrain()
     mRotation2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Rotation2d>("Current Rotation2d").Publish();
     mCurrentPose2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
     mTargetPose2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Target Pose2d").Publish();
+    mTranslationToHubPublisher = mNTDrivetrainTable->GetStructTopic<frc::Translation2d>("Translation to Hub").Publish();
+    mRotationToHubPublisher = mNTDrivetrainTable->GetStructTopic<frc::Rotation2d>("Rotation to Hub").Publish();
 
     mLimelight = new Limelight{LimelightConstants::kName};
     mLimelight->setCameraPosition(
@@ -57,7 +59,7 @@ SubDrivetrain::SubDrivetrain()
 void SubDrivetrain::Periodic()
 {
     refreshSwerveModules();
-    frc::SmartDashboard::PutBoolean("isTowardsHub", isTowardsHub());
+    frc::SmartDashboard::PutBoolean("drivetrain/isTowardsHub", isTowardsHub());
     mCurrentRotation2d = mIMU->getRotation2d();
     mPoseEstimator->Update(mCurrentRotation2d, getSwerveModulePositions());
     mField2d->SetRobotPose(getPose());
@@ -73,9 +75,8 @@ void SubDrivetrain::Periodic()
     mCurrentModuleStatesPublisher.Set(getSwerveModuleStates());
     mRotation2dPublisher.Set(mCurrentRotation2d.Degrees());
     mCurrentPose2dPublisher.Set(mPoseEstimator->GetEstimatedPosition());
-
-  frc::SmartDashboard::PutNumber("Translation to hub X", getTranslationToHub().X().value());
-  frc::SmartDashboard::PutNumber("Translation to hub Y", getTranslationToHub().Y().value());
+    mTranslationToHubPublisher.Set(getPose().Translation() + getTranslationToHub());
+    mRotationToHubPublisher.Set(getTranslationToHub().Angle());
 }
 
 void SubDrivetrain::setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4> iStates)
@@ -262,7 +263,13 @@ frc::Pose2d SubDrivetrain::standardizePose(frc::Pose2d iPose)
 
 frc::Translation2d SubDrivetrain::getTranslationToHub()
 {
-  return FieldConstants::kHubCenterTranslation2d - standardizePose(getPose()).Translation();
+    // mAlliance is of type std::optional<frc::DriverStation::Alliance>
+    auto mAlliance = frc::DriverStation::GetAlliance();
+    if (mAlliance && mAlliance.value() == frc::DriverStation::kRed)
+    {
+        return standardizePose(getPose()).Translation() - FieldConstants::kHubCenterTranslation2d;
+    }
+    return FieldConstants::kHubCenterTranslation2d - standardizePose(getPose()).Translation();
 }
 
 frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubtoRobotDistance)

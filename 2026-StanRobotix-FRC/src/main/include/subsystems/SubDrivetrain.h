@@ -85,6 +85,8 @@ class SubDrivetrain : public frc2::SubsystemBase {
   nt::StructPublisher<frc::Rotation2d> mRotation2dPublisher;
   nt::StructPublisher<frc::Pose2d> mCurrentPose2dPublisher;
   nt::StructPublisher<frc::Pose2d> mTargetPose2dPublisher;
+  nt::StructPublisher<frc::Translation2d> mTranslationToHubPublisher;
+  nt::StructPublisher<frc::Rotation2d> mRotationToHubPublisher;
 
   SwerveModule* mFrontLeftModule;
   SwerveModule* mFrontRightModule;

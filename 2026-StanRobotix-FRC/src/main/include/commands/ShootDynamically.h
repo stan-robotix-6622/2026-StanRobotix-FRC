@@ -50,6 +50,7 @@ class ShootDynamically
   units::turns_per_second_t mPIDAdjustment;
 
   units::meter_t mDistanceToTarget = 0_m;
+  frc::Translation2d mTranslationToHub = {0_m, 0_m};
   frc::ChassisSpeeds mRobotMovement = {0_mps, 0_mps, 0_rad_per_s};
   frc::Translation2d mTargetMovement = {0_m, 0_m};
   ShooterLookupTable::Status mShooterStatus = {0_m, 0_tps, 0_s};
