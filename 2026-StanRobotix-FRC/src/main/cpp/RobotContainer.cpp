@@ -57,7 +57,7 @@ void RobotContainer::SetSubsystemDefaultCommands()
         mDrivetrain->driveFieldRelative(Deadband(-mCommandXboxController->GetLeftY(), 0.05),
                                         Deadband(-mCommandXboxController->GetLeftX(), 0.05),
                                         Deadband(-mCommandXboxController->GetRightX(), 0.05),
-                                        (1 - mCommandXboxController->GetRightTriggerAxis()));
+                                        (0.5 + (mCommandXboxController->GetRightTriggerAxis() / 2)));
       },
       {mDrivetrain}));
 
@@ -94,8 +94,8 @@ void RobotContainer::ConfigureBindings()
   mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
     {
       if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
-      {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_rad));}
-      else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_rad));}
+      {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
+      else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));}
     }));
 
   mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
