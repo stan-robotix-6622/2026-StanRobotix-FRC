@@ -73,6 +73,9 @@ void SubDrivetrain::Periodic()
     mCurrentModuleStatesPublisher.Set(getSwerveModuleStates());
     mRotation2dPublisher.Set(mCurrentRotation2d.Degrees());
     mCurrentPose2dPublisher.Set(mPoseEstimator->GetEstimatedPosition());
+
+  frc::SmartDashboard::PutNumber("Translation to hub X", getTranslationToHub().X().value());
+  frc::SmartDashboard::PutNumber("Translation to hub Y", getTranslationToHub().Y().value());
 }
 
 void SubDrivetrain::setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4> iStates)

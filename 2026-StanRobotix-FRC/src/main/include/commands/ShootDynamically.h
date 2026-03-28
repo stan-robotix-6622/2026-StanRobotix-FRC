@@ -44,6 +44,7 @@ class ShootDynamically
   frc2::CommandXboxController* mJoystick;
 
   frc::PIDController* mShooterPIDController;
+  frc::PIDController* mRotationPIDController;
   units::turns_per_second_t mCurrentVelocity;
   units::turns_per_second_t mAdjustedVelocity;
   units::turns_per_second_t mPIDAdjustment;

@@ -100,7 +100,7 @@ namespace ShooterConstants
 
 namespace FeederConstants
 {
-  inline constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
+  inline constexpr units::volt_t kDesiredVoltage = 1_V; // placeholder :)
 
   inline constexpr bool kInverted = true;
   inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
@@ -214,6 +214,13 @@ namespace DrivetrainConstants
     inline constexpr units::second_t kWheelRadiusMeasurementStartDelay = 1.0_s;
     inline constexpr units::radians_per_second_t kWheelRadiusMaxVelocity = 0.25_rad_per_s;
     inline constexpr units::radians_per_second_squared_t kWheelRadiusRampRate = 0.05_rad_per_s_sq;
+  }
+
+  namespace PIDs
+  {
+    inline constexpr double kRotationP = 1.0;
+    inline constexpr double kRotationI = 0.0;
+    inline constexpr double kRotationD = 0.0;
   }
 }
 
