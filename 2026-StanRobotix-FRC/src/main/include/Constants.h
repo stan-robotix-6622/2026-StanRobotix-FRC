@@ -100,7 +100,7 @@ namespace ShooterConstants
 
 namespace FeederConstants
 {
-  inline constexpr units::volt_t kDesiredVoltage = 1_V; // placeholder :)
+  inline constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
 
   inline constexpr bool kInverted = true;
   inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
@@ -228,7 +228,7 @@ namespace LimelightConstants
 {
   inline constexpr bool kUseMegaTag2 = true;
 
-  inline constexpr std::string_view kName = "";
+  inline constexpr std::string_view kName = "limelight";
 
   inline constexpr units::meter_t kForward = 13.6875_in;
   inline constexpr units::meter_t kRight = -11.875_in;
