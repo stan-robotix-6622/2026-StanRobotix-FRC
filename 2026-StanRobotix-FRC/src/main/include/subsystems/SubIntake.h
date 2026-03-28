@@ -6,7 +6,9 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <frc2/command/CommandPtr.h>
+#include <wpi/sendable/SendableBuilder.h>
 #include <rev/SparkMax.h>
+#include <rev/SparkRelativeEncoder.h>
 #include <rev/config/SparkMaxConfig.h>
 
 class SubIntake : public frc2::SubsystemBase
@@ -23,9 +25,13 @@ public:
    */
   void Periodic() override;
 
+  void InitSendable(wpi::SendableBuilder &builder) override;
+
 private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
   rev::spark::SparkMax* mIntakeMotor = nullptr;
   rev::spark::SparkMaxConfig* mIntakeMotorConfig;
+
+  rev::spark::SparkRelativeEncoder* mEncoder;
 };

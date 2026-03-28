@@ -10,10 +10,14 @@
 
 SubIntake::SubIntake() {
     mIntakeMotor = new rev::spark::SparkMax(CANid::kMotorIntakeID, rev::spark::SparkLowLevel::MotorType::kBrushless);
+
+    mEncoder = new rev::spark::SparkRelativeEncoder{mIntakeMotor->GetEncoder()};
  
     mIntakeMotorConfig = new rev::spark::SparkMaxConfig{};
     mIntakeMotorConfig->Inverted(IntakeConstants::kInverted);
     mIntakeMotorConfig->SetIdleMode(IntakeConstants::kIdleMode);
+    mIntakeMotorConfig->encoder.PositionConversionFactor(1 / IntakeConstants::kGearRatio);
+    mIntakeMotorConfig->encoder.VelocityConversionFactor(1 / IntakeConstants::kGearRatio);
     mIntakeMotor->Configure(*mIntakeMotorConfig, IntakeConstants::kReset, IntakeConstants::kPersist);
 }
 
@@ -47,4 +51,11 @@ frc2::CommandPtr SubIntake::getIntakeCommand() {
         },
         {}
     );
+}
+
+void SubIntake::InitSendable(wpi::SendableBuilder &builder)
+{
+    builder.SetSmartDashboardType("intake");
+    builder.AddDoubleProperty("velocity rpm", [this] {return mEncoder->GetVelocity();}, nullptr);
+    builder.AddDoubleProperty("wheel perimeter speed", [this] {return mEncoder->GetVelocity() * IntakeConstants::kWheelRadius.value() * 2 * std::numbers::pi / 60;}, nullptr);
 }

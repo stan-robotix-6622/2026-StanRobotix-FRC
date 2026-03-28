@@ -37,6 +37,7 @@ RobotContainer::RobotContainer()
   mDrivetrain = new SubDrivetrain{};
   frc::SmartDashboard::PutData("swerve", mDrivetrain);
   mSubIntake = new SubIntake{};
+  frc::SmartDashboard::PutData("intake", mSubIntake);
   mSubPivotIntake = new SubPivotIntake{};
   frc::SmartDashboard::PutData("pivot", mSubPivotIntake);
   
@@ -62,7 +63,7 @@ void RobotContainer::SetSubsystemDefaultCommands()
       },
       {mDrivetrain}));
 
- // mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
+ mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
 }
 
 void RobotContainer::RegisterCommandsPathPlanner()
