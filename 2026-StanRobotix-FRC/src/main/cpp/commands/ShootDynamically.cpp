@@ -6,10 +6,12 @@
 
 #include "Constants.h"
 
-ShootDynamically::ShootDynamically(SubShooter* iShooter, SubDrivetrain* iDrivetrain) {
+ShootDynamically::ShootDynamically(SubShooter* iShooter, SubDrivetrain* iDrivetrain, frc2::CommandXboxController* iJoystick) {
   mShooter = iShooter;
   mDrivetrain = iDrivetrain;
   AddRequirements({mShooter, mDrivetrain});
+
+  mJoystick = iJoystick;
   // Use addRequirements() here to declare subsystem dependencies.
   mShooterPIDController = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
   frc::SmartDashboard::PutData("shooter/command/PID Controller", mShooterPIDController);
@@ -25,7 +27,7 @@ void ShootDynamically::Execute()
   mTargetMovement = {0_m, 0_m};
   mShooterStatus = {0_m, 0_tps, 0_s};
   mLastCalculatedShooterVelocity = 0_tps;
-  while (units::math::abs(mLastCalculatedShooterVelocity - mShooterStatus.shooterVelocity) > 0.5_tps)
+  for (int i = 0; i < 5; i++)
   {
     mLastCalculatedShooterVelocity = mShooterStatus.shooterVelocity;
     mDistanceToTarget = (mDrivetrain->getTranslationToHub() + mTargetMovement).Norm();
@@ -33,7 +35,11 @@ void ShootDynamically::Execute()
     mTargetMovement = {-mRobotMovement.vx * mShooterStatus.timeOfFlight,
                        -mRobotMovement.vy * mShooterStatus.timeOfFlight};
   }
+  frc::SmartDashboard::PutNumber("shooter/command/Distance hub", mDistanceToTarget.value());
+  frc::SmartDashboard::PutNumber("shooter/command/Time of Flight", mShooterStatus.timeOfFlight.value());
   frc::SmartDashboard::PutNumber("shooter/command/calculated velocity", mShooterStatus.shooterVelocity.value());
+  frc::SmartDashboard::PutNumber("shooter/command/mTargetMovement X", mTargetMovement.X().value());
+  frc::SmartDashboard::PutNumber("shooter/command/mTargetMovement Y", mTargetMovement.Y().value());
   mShooterPIDController->SetSetpoint(mShooterStatus.shooterVelocity.value());
 
   mPIDAdjustment = units::turns_per_second_t(mShooterPIDController->Calculate(mShooter->getVelocity().value()));
@@ -45,6 +51,10 @@ void ShootDynamically::Execute()
   frc::SmartDashboard::PutNumber("shooter/command/adjusted velocity", mAdjustedVelocity.value());
   mShooter->setVelocity(mAdjustedVelocity);
   // frc2::CommandScheduler::GetInstance().Schedule(mDrivetrain->Idle());
+  mDrivetrain->driveFieldRelative(-mJoystick->GetLeftY(),
+                                  -mJoystick->GetLeftX(),
+                                  0,
+                                  (0.5 + (mJoystick->GetRightTriggerAxis() / 2)));
 }
 
 // Called once the command ends or is interrupted.

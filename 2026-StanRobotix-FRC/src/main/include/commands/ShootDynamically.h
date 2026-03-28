@@ -6,6 +6,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include <frc2/command/button/CommandXboxController.h>
 
 #include <frc/geometry/Translation2d.h>
 #include <frc/kinematics/ChassisSpeeds.h>
@@ -27,7 +28,7 @@ class ShootDynamically
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  ShootDynamically(SubShooter* iShooter, SubDrivetrain* iDrivetrain);
+  ShootDynamically(SubShooter* iShooter, SubDrivetrain* iDrivetrain, frc2::CommandXboxController* iJoystick);
 
   void Initialize() override;
 
@@ -39,6 +40,8 @@ class ShootDynamically
  private:
   SubDrivetrain* mDrivetrain;
   SubShooter* mShooter;
+
+  frc2::CommandXboxController* mJoystick;
 
   frc::PIDController* mShooterPIDController;
   units::turns_per_second_t mCurrentVelocity;
