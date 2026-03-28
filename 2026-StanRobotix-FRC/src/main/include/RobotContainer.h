@@ -6,11 +6,20 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
-#include <frc/XboxController.h>
+
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/DriverStation.h>
+#include <frc/DataLogManager.h>
+
+#include "commands/DriveCommands.h"
 
 #include "subsystems/SubClimb.h"
-#include "Constants.h"
-#include "subsystems/ExampleSubsystem.h"
+#include "subsystems/SubIntake.h"
+#include "subsystems/SubPivotIntake.h"
+#include "subsystems/SubShooter.h"
+#include "subsystems/subFeeder.h"
+#include "subsystems/subIndexer.h"
+#include "subsystems/SubDrivetrain.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -19,22 +28,42 @@
  * scheduler calls).  Instead, the structure of the robot (including subsystems,
  * commands, and trigger mappings) should be declared here.
  */
-class RobotContainer {
- public:
+class RobotContainer
+{
+public:
   RobotContainer();
 
-  frc2::CommandPtr GetAutonomousCommand();
+  void ConfigureWhenConnectedToDS();
+  void ConfigureTeleopAutomatisation();
 
- private:
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  frc2::CommandXboxController m_driverController{
-      OperatorConstants::kDriverControllerPort};
+  frc2::Command* GetAutonomousCommand();
 
-  // The robot's subsystems are defined here...
-  ExampleSubsystem m_subsystem;
+
+  // Made from the example code at https://www.chiefdelphi.com/uploads/default/original/3X/b/a/ba7ccfd90bac0934e374dd4459d813cee2903942.pdf
+  double Deadband(double iInput, double iThreshold, bool iSquared = false);
+
+  bool isHubActive();
+private:
+  frc2::CommandXboxController* mCommandXboxController;
+  frc2::CommandXboxController* mCommandXboxControllerCopilot;
+
   SubClimb * mClimb;
 
-  frc::XboxController * mXboxController;
+  SubShooter* mSubShooter = nullptr;
+  SubFeeder* mSubFeeder = nullptr;
+  // SubIndexer* mSubIndexer = nullptr;
+
+  SubDrivetrain* mDrivetrain = nullptr;
+
+  SubIntake* mSubIntake = nullptr;
+  SubPivotIntake* mSubPivotIntake = nullptr;
+
+  DriveCommands* mDriveCommands;
 
   void ConfigureBindings();
+  void ConfigureBindingsCopilot();
+  void RegisterCommandsPathPlanner();
+  void SetSubsystemDefaultCommands();
+
+  frc::SendableChooser<frc2::Command*> mAutoChooser;
 };
