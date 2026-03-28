@@ -108,10 +108,10 @@ void RobotContainer::ConfigureBindings()
 
 void RobotContainer::ConfigureBindingsCopilot()
 {
-  mCommandXboxControllerCopilot->Button(OperatorConstants::kShootButton).WhileTrue(frc2::cmd::Run([this] {return mSubShooter->setVoltage(10_V);}));
+  mCommandXboxControllerCopilot->Button(OperatorConstants::kShootButton).WhileTrue(frc2::cmd::Run([this] {return mSubShooter->setVoltage(10_V);}));//valeur a determiner
   mCommandXboxControllerCopilot->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
   mCommandXboxControllerCopilot->Button(OperatorConstants::kUnstuckFuelButton).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
-  mCommandXboxControllerCopilot->Button(OperatorConstants::kPivotDownButton).WhileTrue(frc2::cmd::Run([this] {return mSubPivotIntake->SetVoltage(10_V);}));
+  mCommandXboxControllerCopilot->Button(OperatorConstants::kPivotDownButton).WhileTrue(frc2::cmd::Run([this] {return mSubPivotIntake->SetVoltage(10_V);}));//valeur a determiner
   //mCommandXboxControllerCopilot->Button(OperatorConstants::Button::LeftBumper).WhileTrue(mSubClimb->SetSpeed(10));
   //mCommandXboxControllerCopilot->Button(OperatorConstants::Button::RightBumper).WhileTrue(mSubClimb->SetSpeed(-10));
  
