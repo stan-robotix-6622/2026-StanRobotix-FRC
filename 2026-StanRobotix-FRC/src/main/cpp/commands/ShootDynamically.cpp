@@ -55,7 +55,7 @@ void ShootDynamically::Execute()
   mRotationPIDController->SetSetpoint(mDrivetrain->getTranslationToHub().Angle().Radians().value());
   mDrivetrain->driveFieldRelative(-mJoystick->GetLeftY(),
                                   -mJoystick->GetLeftX(),
-                                  mRotationPIDController->Calculate(mDrivetrain->getPose().Rotation().Radians().value()) / (std::numbers::pi * 2),
+                                  mRotationPIDController->Calculate(mDrivetrain->getPose().Rotation().Radians().value()),
                                   (0.5 + (mJoystick->GetRightTriggerAxis() / 2)));
 }
 

@@ -218,9 +218,9 @@ namespace DrivetrainConstants
 
   namespace PIDs
   {
-    inline constexpr double kRotationP = 18.0;
+    inline constexpr double kRotationP = 3.0;
     inline constexpr double kRotationI = 0.0;
-    inline constexpr double kRotationD = 2.0;
+    inline constexpr double kRotationD = 0.3;
   }
 }
 
