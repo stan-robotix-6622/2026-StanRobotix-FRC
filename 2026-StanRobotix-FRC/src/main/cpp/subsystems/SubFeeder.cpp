@@ -15,7 +15,6 @@ SubFeeder::SubFeeder()
     Configure();
 }
 
-// This method will be called once per scheduler run
 void SubFeeder::Periodic() {}
 
 void SubFeeder::setVoltage(units::volt_t iOutput)

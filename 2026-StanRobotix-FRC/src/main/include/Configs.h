@@ -4,10 +4,9 @@
 
 #include "Constants.h"
 
-using namespace rev::spark;
-
 namespace Configs
 {
+  using namespace rev::spark;
   class SwerveModule
   {
   public:

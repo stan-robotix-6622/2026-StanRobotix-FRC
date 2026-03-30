@@ -14,9 +14,6 @@ class SubIndexer : public frc2::SubsystemBase
 public:
   SubIndexer();
 
-  /**
-   * Will be called periodically whenever the CommandScheduler runs.
-   */
   void Periodic() override;
 
   void setVoltage(units::volt_t iOutput);
@@ -24,9 +21,6 @@ public:
   frc2::CommandPtr getIndexCommand();
 
 private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
-
   rev::spark::SparkMax* mIndexerController;
-  rev::spark::SparkBaseConfig* mSparkConfigIndexer;
+  rev::spark::SparkMaxConfig* mSparkConfigIndexer;
 };

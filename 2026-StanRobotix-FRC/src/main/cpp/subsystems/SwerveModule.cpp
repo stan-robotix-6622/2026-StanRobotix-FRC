@@ -4,6 +4,8 @@
 
 #include "subsystems/SwerveModule.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include "Configs.h"
 
 SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInverted, bool iTurningInverted)
@@ -19,7 +21,6 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
                                          ModuleConstants::kTurningD};
     mTurningPID->EnableContinuousInput(ModuleConstants::Config::kTurningClosedLoopMinInput,
                                        ModuleConstants::Config::kTurningClosedLoopMaxInput);
-    frc::SmartDashboard::PutData(mTurningPID);
 
     // Configure the motors from Configs.h
     mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),

@@ -4,6 +4,8 @@
 
 #include "commands/ShootDynamically.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include "Constants.h"
 
 ShootDynamically::ShootDynamically(SubShooter* iShooter, SubDrivetrain* iDrivetrain, frc2::CommandXboxController* iJoystick) {
@@ -12,7 +14,7 @@ ShootDynamically::ShootDynamically(SubShooter* iShooter, SubDrivetrain* iDrivetr
   AddRequirements({mShooter, mDrivetrain});
 
   mJoystick = iJoystick;
-  // Use addRequirements() here to declare subsystem dependencies.
+
   mShooterPIDController = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
   mRotationPIDController = new frc::PIDController{DrivetrainConstants::PIDs::kRotationP, DrivetrainConstants::PIDs::kRotationI, DrivetrainConstants::PIDs::kRotationD};
   mRotationPIDController->EnableContinuousInput(0, std::numbers::pi * 2);
@@ -45,13 +47,8 @@ void ShootDynamically::Execute()
   mCurrentVelocity = mShooter->getVelocity();
   mAdjustedVelocity = mCurrentVelocity + mPIDAdjustment;
 
-  // frc::SmartDashboard::PutNumber("shooter/command/PID adjustment", mPIDAdjustment.value());
-  // frc::SmartDashboard::PutNumber("shooter/command/current velocity", mCurrentVelocity.value());
-  // frc::SmartDashboard::PutNumber("shooter/command/adjusted velocity", mAdjustedVelocity.value());
   mShooter->setVelocity(mAdjustedVelocity);
 
-  frc::SmartDashboard::PutNumber("shooter/command/rotation setpoint", mDrivetrain->getTranslationToHub().Angle().Radians().value());
-  frc::SmartDashboard::PutNumber("shooter/command/rotation current", mDrivetrain->getPose().Rotation().Radians().value());
   mRotationPIDController->SetSetpoint(mDrivetrain->getTranslationToHub().Angle().Radians().value());
   mDrivetrain->driveFieldRelative(-mJoystick->GetLeftY(),
                                   -mJoystick->GetLeftX(),

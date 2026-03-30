@@ -6,6 +6,13 @@
 
 #include <numbers>
 
+#include <frc/DriverStation.h>
+#include <frc/DataLogManager.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/util/PathPlannerLogging.h>
+#include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
+
 #include "Constants.h"
 
 SubDrivetrain::SubDrivetrain()

@@ -5,8 +5,8 @@
 #pragma once
 
 #include <rev/SparkMax.h>
-#include <rev/AbsoluteEncoder.h>
-#include <rev/RelativeEncoder.h>
+#include <rev/SparkAbsoluteEncoder.h>
+#include <rev/SparkRelativeEncoder.h>
 #include <rev/SparkClosedLoopController.h>
 #include <wpi/sendable/Sendable.h>
 #include <wpi/sendable/SendableBuilder.h>
@@ -14,7 +14,6 @@
 #include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
-#include <frc/smartdashboard/SmartDashboard.h>
 
 #include <units/voltage.h>
 #include <units/velocity.h>
@@ -24,32 +23,24 @@
 class SwerveModule : public wpi::Sendable
 {
 public:
-  // Constructeur de la classe avec un motorID pour le Driving et un pour le Turning
   SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInveryed = false, bool iTurningInverted = true);
 
-  // Méthode qui retourne le SwerveModulePosition du module
   frc::SwerveModulePosition getModulePosition();
-  // Méthode qui retourne le SwerveModuleState du module
   frc::SwerveModuleState getModuleState();
 
   units::radians_per_second_t getTurningVelocity();
 
   void InitSendable(wpi::SendableBuilder &builder) override;
 
-  // Méthode qui fait rouler le module à partir du SwerveModuleState désiré
   void setDesiredState(frc::SwerveModuleState iDesiredState);
   void setDesiredHeading(frc::Rotation2d iDesiredHeading);
 
   void setTurningVoltage(units::volt_t iVoltage);
   void setDrivingVoltage(units::volt_t iVoltage);
 
-  // Méthode qui met à jour le SwerveModulePosition et le SwerveModuleState du module
   void refreshModule();
 
 private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
-
   rev::spark::SparkMax* mDrivingMotor;
   rev::spark::SparkMax* mTurningMotor;
 

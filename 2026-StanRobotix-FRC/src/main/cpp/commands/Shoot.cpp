@@ -5,12 +5,12 @@
 
 #include "commands/Shoot.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include "Constants.h"
 
 Shoot::Shoot(SubShooter* iSubShooter) {
   mSubShooter = iSubShooter;
-  
-  // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements(iSubShooter);
   
   mPIDController = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};

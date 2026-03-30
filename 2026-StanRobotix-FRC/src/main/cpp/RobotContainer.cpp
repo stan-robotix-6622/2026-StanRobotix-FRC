@@ -4,15 +4,15 @@
 
 #include "RobotContainer.h"
 
-#include <math.h>
-
 #include <frc2/command/button/Trigger.h>
 #include <frc2/command/Command.h>
-#include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include <pathplanner/lib/events/EventTrigger.h>
 #include <pathplanner/lib/events/PointTowardsZoneTrigger.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/DriverStation.h>
+
 #include "commands/DriveCommands.h"
 #include "commands/PivotIntake.h"
 #include "commands/FullIntake.h"
@@ -29,7 +29,7 @@ RobotContainer::RobotContainer()
   frc::SmartDashboard::PutNumber("tunable/Shooter Setpoint", ShooterConstants::PIDConstants::setpoint.value());
   frc::SmartDashboard::PutNumber("tunable/Drivetrain Distance Setpoint", 3);
   frc::SmartDashboard::PutNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value());
-  // Initialize all of your commands and subsystems here
+
   mSubShooter = new SubShooter{};
   frc::SmartDashboard::PutData("shooter", mSubShooter);
   mSubFeeder = new SubFeeder{};
@@ -43,11 +43,8 @@ RobotContainer::RobotContainer()
   
   mDriveCommands = new DriveCommands{mDrivetrain};
   
-  // Set the default commands for all subsystems
   SetSubsystemDefaultCommands();
-  // Register all relevant commands to pathplanner
   RegisterCommandsPathPlanner();
-  // Configure the button bindings
   ConfigureBindings();
 }
 
@@ -110,8 +107,9 @@ void RobotContainer::ConfigureBindings()
 
 void RobotContainer::ConfigureWhenConnectedToDS()
 {
+  // Configure pathplanner's AutoBuilder
   mDrivetrain->ConfigurePathplanner();
-  // Bindings that need the AutoBuilder to be configures
+  // Everything that need the AutoBuilder to be configured
   mCommandXboxController->Button(OperatorConstants::Button::Start).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
   (units::meter_t)frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", 3)); }));
 

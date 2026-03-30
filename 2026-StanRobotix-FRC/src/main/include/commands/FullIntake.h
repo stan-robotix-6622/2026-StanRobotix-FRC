@@ -5,22 +5,11 @@
 #pragma once
 
 #include <frc2/command/CommandPtr.h>
-#include <frc2/command/Commands.h>
 
 #include "commands/PivotIntake.h"
+#include "subsystems/SubIntake.h"
 
-
-/**
- * An example command.
- *
- * <p>Note that this extends CommandHelper, rather extending Command
- * directly; this is crucially important, or else the decorator functions in
- * Command will *not* work!
- */
 class FullIntake {
  public:
-  /* You should consider using the more terse Command factories API instead
-   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
-   */
   static frc2::CommandPtr FullIntakeCommand(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake iTargetState);
 };

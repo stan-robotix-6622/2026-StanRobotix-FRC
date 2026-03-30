@@ -7,9 +7,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 #include <frc/controller/PIDController.h>
-#include <frc/smartdashboard/SmartDashboard.h>
 
-#include "subsystems/SubIntake.h"
 #include "subsystems/SubPivotIntake.h"
 
 
@@ -44,7 +42,6 @@ class PivotIntake
 
   private:
 
-  
   SubPivotIntake* mPivotIntake;
   frc::PIDController* mPIDController;
  

@@ -11,11 +11,10 @@
 SubIndexer::SubIndexer() 
 {
     mIndexerController = new rev::spark::SparkMax{CANid::kMotorIndexerID, rev::spark::SparkLowLevel::MotorType::kBrushless};
-    mSparkConfigIndexer = new rev::spark::SparkBaseConfig;
+    mSparkConfigIndexer = new rev::spark::SparkMaxConfig{};
     Configure();
 }
 
-// This method will be called once per scheduler run
 void SubIndexer::Periodic() {}
 
 void SubIndexer::setVoltage(units::volt_t iOutput)

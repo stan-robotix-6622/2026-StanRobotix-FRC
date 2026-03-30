@@ -6,9 +6,7 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/DriverStation.h>
-#include <frc/DataLogManager.h>
+#include <frc/smartdashboard/SendableChooser.h>
 
 #include "commands/DriveCommands.h"
 

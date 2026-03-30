@@ -4,6 +4,8 @@
 
 #include "subsystems/SubPivotIntake.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include <numbers>
 
 #include "Constants.h"
@@ -19,7 +21,6 @@ SubPivotIntake::SubPivotIntake() {
     mPivotMotor->Configure(*mPivotMotorConfig, PivotConstants::kReset, PivotConstants::kPersist);
 }
 
-// This method will be called once per scheduler run
 void SubPivotIntake::Periodic() {}
 
 void SubPivotIntake::Stop() {
@@ -37,9 +38,6 @@ void SubPivotIntake::SetVelocity(units::radians_per_second_t iVelocity)
 
 void SubPivotIntake::KeepPosition()
 {
-    // units::volt_t wVoltage = PivotConstants::kG * cos(GetAngle());
-    // units::volt_t wVoltage = units::volt_t(frc::SmartDashboard::GetNumber("pivot/Arm kG", PivotConstants::kG.value()) * cos(GetAngle().value()));
-    // frc::SmartDashboard::PutNumber("pivot/kG voltage", wVoltage.value());
     mPivotMotor->SetVoltage(mFeedForward->Calculate(GetAngle(), 0_rad_per_s));
 }
 

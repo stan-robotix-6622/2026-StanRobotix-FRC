@@ -21,7 +21,6 @@ SubIntake::SubIntake() {
     mIntakeMotor->Configure(*mIntakeMotorConfig, IntakeConstants::kReset, IntakeConstants::kPersist);
 }
 
-// This method will be called once per scheduler run
 void SubIntake::Periodic() {}
 
 void SubIntake::Stop() {
