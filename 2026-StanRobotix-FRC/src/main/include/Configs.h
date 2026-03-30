@@ -28,6 +28,8 @@ namespace Configs
       drivingConfig.closedLoop.Pid(ModuleConstants::kDrivingP, ModuleConstants::kDrivingI, ModuleConstants::kDrivingD);
       drivingConfig.closedLoop.OutputRange(-1, 1);
 
+      drivingConfig.SmartCurrentLimit(ModuleConstants::kDrivingCurrentLimit.value());
+
       drivingConfig.closedLoop.feedForward.kV(drivingVelocityFeedForward.value());
 
       return drivingConfig;
@@ -60,6 +62,8 @@ namespace Configs
       turningConfig.closedLoop.maxMotion.CruiseVelocity(ModuleConstants::Config::kTurningCruiseVelocity.value());
       turningConfig.closedLoop.maxMotion.MaxAcceleration(ModuleConstants::Config::kTurningMaxAcceleration.value());
 
+      turningConfig.SmartCurrentLimit(ModuleConstants::kTurningCurrentLimit.value());
+
       return turningConfig;
     }
   };
@@ -86,9 +90,12 @@ namespace Configs
       leaderConfig.closedLoop.feedForward.kA(ShooterConstants::kA.value());
 
       // Configs added according to https://www.chiefdelphi.com/t/psa-rev-spark-default-velocity-filtering-is-still-really-bad-for-flywheels/514567
-      leaderConfig.encoder.UvwMeasurementPeriod(8);
-      leaderConfig.encoder.QuadratureAverageDepth(2);
-      leaderConfig.encoder.QuadratureMeasurementPeriod(8);
+      leaderConfig.encoder.UvwAverageDepth(4);
+      leaderConfig.encoder.UvwMeasurementPeriod(16);
+      leaderConfig.encoder.QuadratureAverageDepth(4);
+      leaderConfig.encoder.QuadratureMeasurementPeriod(16);
+
+      leaderConfig.SmartCurrentLimit(ShooterConstants::kCurrentLimit.value());
 
       return leaderConfig;
     }

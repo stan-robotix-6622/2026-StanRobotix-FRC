@@ -11,6 +11,7 @@
 #include <units/angle.h>
 #include <units/angular_velocity.h>
 #include <units/angular_acceleration.h>
+#include <units/current.h>
 
 #include <numbers>
 
@@ -84,6 +85,8 @@ namespace ShooterConstants
 
   inline constexpr rev::spark::SparkLowLevel::ControlType kShooterClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kVelocity;
 
+  inline constexpr units::ampere_t kCurrentLimit = 80_A;
+
   namespace PIDConstants
   {
     inline constexpr double kP = 2; // T'is be a placeholder :)
@@ -151,6 +154,9 @@ namespace ModuleConstants
 
   inline constexpr rev::spark::SparkLowLevel::MotorType kDrivingMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
   inline constexpr rev::spark::SparkLowLevel::MotorType kTurningMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
+
+  inline constexpr units::ampere_t kDrivingCurrentLimit = 80_A;
+  inline constexpr units::ampere_t kTurningCurrentLimit = 40_A;
 
   inline constexpr rev::ResetMode kDrivingResetMode = rev::ResetMode::kResetSafeParameters;
   inline constexpr rev::ResetMode kTurningResetMode = rev::ResetMode::kResetSafeParameters;
