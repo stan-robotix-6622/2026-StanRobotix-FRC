@@ -34,5 +34,4 @@ private:
   rev::spark::SparkMax* mPivotMotor;
   rev::spark::SparkRelativeEncoder* mEncoder;
   frc::ArmFeedforward* mFeedForward;
-  rev::spark::SparkMaxConfig* mPivotMotorConfig;
 };

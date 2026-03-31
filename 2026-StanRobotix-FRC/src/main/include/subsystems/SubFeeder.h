@@ -23,5 +23,4 @@ class SubFeeder : public frc2::SubsystemBase {
 
  private:
   rev::spark::SparkMax* mFeederController;
-  rev::spark::SparkMaxConfig* mSparkConfigFeeder;
 };

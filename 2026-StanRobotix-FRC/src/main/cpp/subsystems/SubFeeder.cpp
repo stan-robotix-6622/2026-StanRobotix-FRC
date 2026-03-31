@@ -11,7 +11,6 @@
 SubFeeder::SubFeeder() 
 {
     mFeederController = new rev::spark::SparkMax{CANid::kMotorFeederID, rev::spark::SparkLowLevel::MotorType::kBrushless};
-    mSparkConfigFeeder = new rev::spark::SparkMaxConfig;
     Configure();
 }
 

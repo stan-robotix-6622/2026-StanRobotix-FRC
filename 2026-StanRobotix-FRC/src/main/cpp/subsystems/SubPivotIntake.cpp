@@ -8,14 +8,14 @@
 
 #include <numbers>
 
-#include "Constants.h"
+#include "Configs.h"
 
 SubPivotIntake::SubPivotIntake() {
     mPivotMotor = new rev::spark::SparkMax{CANid::kMotorPivotID, rev::spark::SparkLowLevel::MotorType::kBrushless};
     mEncoder = new rev::spark::SparkRelativeEncoder{mPivotMotor->GetEncoder()};
     mFeedForward = new frc::ArmFeedforward{PivotConstants::kS, PivotConstants::kG, PivotConstants::kV};
 
-    mPivotMotor->Configure(*mPivotMotorConfig, PivotConstants::kReset, PivotConstants::kPersist);
+    mPivotMotor->Configure(Configs::Pivot::Config(), PivotConstants::kReset, PivotConstants::kPersist);
 }
 
 void SubPivotIntake::Periodic() {}

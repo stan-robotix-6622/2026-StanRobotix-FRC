@@ -26,8 +26,7 @@ public:
   void InitSendable(wpi::SendableBuilder &builder) override;
 
 private:
-  rev::spark::SparkMax* mIntakeMotor = nullptr;
-  rev::spark::SparkMaxConfig* mIntakeMotorConfig;
+  rev::spark::SparkMax* mIntakeMotor;
 
   rev::spark::SparkRelativeEncoder* mEncoder;
 };
