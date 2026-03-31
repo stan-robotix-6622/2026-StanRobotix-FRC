@@ -6,7 +6,7 @@
 
 #include <frc2/command/Commands.h>
 
-#include "Constants.h"
+#include "Configs.h"
 
 SubFeeder::SubFeeder() 
 {
@@ -24,10 +24,7 @@ void SubFeeder::setVoltage(units::volt_t iOutput)
 
 rev::REVLibError SubFeeder::Configure()
 {
-    mSparkConfigFeeder->Inverted(FeederConstants::kInverted);
-    mSparkConfigFeeder->SetIdleMode(FeederConstants::kIdleMode);
-
-    return mFeederController->Configure(*mSparkConfigFeeder, FeederConstants::kReset, FeederConstants::kPersist);
+    return mFeederController->Configure(Configs::Feeder::Config(), FeederConstants::kReset, FeederConstants::kPersist);
 };
 
 frc2::CommandPtr SubFeeder::getFeedShooterCommand(units::volt_t iVoltage)

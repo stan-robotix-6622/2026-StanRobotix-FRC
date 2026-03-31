@@ -107,4 +107,55 @@ namespace Configs
       return followerConfig;
     }
   };
+  class Feeder
+  {
+  public:
+    static SparkMaxConfig &Config()
+    {
+      static SparkMaxConfig feederConfig{};
+      feederConfig.Inverted(FeederConstants::kInverted);
+      feederConfig.SetIdleMode(FeederConstants::kIdleMode);
+
+      feederConfig.SmartCurrentLimit(FeederConstants::kCurrentLimit.value());
+      return feederConfig;
+    }
+  };
+  class Intake
+  {
+  public:
+    static SparkMaxConfig &Config()
+    {
+      static SparkMaxConfig intakeConfig{};
+      double intakeFactor = 1 / IntakeConstants::kGearRatio;
+
+      intakeConfig.Inverted(IntakeConstants::kInverted);
+      intakeConfig.SetIdleMode(IntakeConstants::kIdleMode);
+
+      intakeConfig.encoder.PositionConversionFactor(intakeFactor);
+      intakeConfig.encoder.VelocityConversionFactor(intakeFactor);
+
+      intakeConfig.SmartCurrentLimit(IntakeConstants::kCurrentLimit.value());
+
+      return intakeConfig;
+    }
+  };
+  class Pivot
+  {
+  public:
+    static SparkMaxConfig &Config()
+    {
+      static SparkMaxConfig pivotConfig{};
+      double pivotFactor = (2 * std::numbers::pi) / PivotConstants::kGearRatio;
+
+      pivotConfig.Inverted(PivotConstants::kInverted);
+      pivotConfig.SetIdleMode(PivotConstants::kIdleMode);
+
+      pivotConfig.encoder.PositionConversionFactor(pivotFactor);
+      pivotConfig.encoder.VelocityConversionFactor(pivotFactor);
+
+      pivotConfig.SmartCurrentLimit(PivotConstants::kCurrentLimit.value());
+
+      return pivotConfig;
+    }
+  };
 } // namespace Configs

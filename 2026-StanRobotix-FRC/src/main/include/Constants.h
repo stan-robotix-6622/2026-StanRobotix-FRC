@@ -109,7 +109,7 @@ namespace FeederConstants
   inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
   inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
-
+  inline constexpr units::ampere_t kCurrentLimit = 80_A;
 }
 
 namespace IndexerConstants
@@ -287,17 +287,18 @@ namespace IntakeConstants
   inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
   inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
+  inline constexpr units::ampere_t kCurrentLimit = 80_A;
 
   inline constexpr double kSpeed = 1; // a modifier (valeur temporaire)
 
-  inline constexpr double kGearRatio = 4;
+  inline constexpr double kGearRatio = 3;
   inline constexpr units::meter_t kWheelRadius = 1.5_in;
 }
 
 namespace PivotConstants
 {
   inline constexpr double kGearRatio = 16;
-  inline constexpr double kOffset = 7.071438312530518;
+  inline constexpr double kOffset = 7.071438312530518 * (2 * std::numbers::pi / kGearRatio);
   inline constexpr double kP = 1.3;  // en attendant
   inline constexpr double kI = 0.4;  // en attendant
   inline constexpr double kD = 0.15; // en attendant
@@ -306,6 +307,7 @@ namespace PivotConstants
   inline constexpr TemplateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
   inline constexpr double setpointUp = std::numbers::pi * 7 / 16; // 90 deg up
   inline constexpr double setpointDown = std::numbers::pi / 18;   // 10 deg up
+  inline constexpr units::ampere_t kCurrentLimit = 60_A;
 
   inline constexpr bool kInverted = false;
   inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;

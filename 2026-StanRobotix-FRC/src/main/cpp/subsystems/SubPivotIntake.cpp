@@ -15,9 +15,6 @@ SubPivotIntake::SubPivotIntake() {
     mEncoder = new rev::spark::SparkRelativeEncoder{mPivotMotor->GetEncoder()};
     mFeedForward = new frc::ArmFeedforward{PivotConstants::kS, PivotConstants::kG, PivotConstants::kV};
 
-    mPivotMotorConfig = new rev::spark::SparkMaxConfig{};
-    mPivotMotorConfig->Inverted(PivotConstants::kInverted);
-    mPivotMotorConfig->SetIdleMode(PivotConstants::kIdleMode);
     mPivotMotor->Configure(*mPivotMotorConfig, PivotConstants::kReset, PivotConstants::kPersist);
 }
 
@@ -42,7 +39,7 @@ void SubPivotIntake::KeepPosition()
 }
 
 units::radian_t SubPivotIntake::GetAngle(){
-    return (PivotConstants::kOffset + mEncoder->GetPosition()) * 2_rad * std::numbers::pi / PivotConstants::kGearRatio;
+    return units::radian_t(PivotConstants::kOffset + mEncoder->GetPosition());
 }
 
 void SubPivotIntake::InitSendable(wpi::SendableBuilder& builder)

@@ -6,19 +6,14 @@
 
 #include <frc2/command/Commands.h>
 
-#include "Constants.h"
+#include "Configs.h"
 
 SubIntake::SubIntake() {
     mIntakeMotor = new rev::spark::SparkMax(CANid::kMotorIntakeID, rev::spark::SparkLowLevel::MotorType::kBrushless);
 
     mEncoder = new rev::spark::SparkRelativeEncoder{mIntakeMotor->GetEncoder()};
  
-    mIntakeMotorConfig = new rev::spark::SparkMaxConfig{};
-    mIntakeMotorConfig->Inverted(IntakeConstants::kInverted);
-    mIntakeMotorConfig->SetIdleMode(IntakeConstants::kIdleMode);
-    mIntakeMotorConfig->encoder.PositionConversionFactor(1 / IntakeConstants::kGearRatio);
-    mIntakeMotorConfig->encoder.VelocityConversionFactor(1 / IntakeConstants::kGearRatio);
-    mIntakeMotor->Configure(*mIntakeMotorConfig, IntakeConstants::kReset, IntakeConstants::kPersist);
+    mIntakeMotor->Configure(Configs::Intake::Config(), IntakeConstants::kReset, IntakeConstants::kPersist);
 }
 
 void SubIntake::Periodic() {}
