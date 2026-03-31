@@ -33,7 +33,6 @@ RobotContainer::RobotContainer()
   mSubShooter = new SubShooter{};
   frc::SmartDashboard::PutData("shooter", mSubShooter);
   mSubFeeder = new SubFeeder{};
-  // mSubIndexer = new SubIndexer{};
   mDrivetrain = new SubDrivetrain{};
   frc::SmartDashboard::PutData("swerve", mDrivetrain);
   mSubIntake = new SubIntake{};
@@ -73,7 +72,6 @@ void RobotContainer::RegisterCommandsPathPlanner()
   pathplanner::NamedCommands::registerCommand("Shoot", Shoot(mSubShooter).ToPtr());
   pathplanner::NamedCommands::registerCommand("Feed Shooter", mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
   pathplanner::NamedCommands::registerCommand("Unstuck Feeder", mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
-  // pathplanner::NamedCommands::registerCommand("Index Fuel", mSubIntake->getIntakeCommand());
 
   pathplanner::EventTrigger("Intake").WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
   pathplanner::EventTrigger("Shoot").WhileTrue(Shoot(mSubShooter).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter"));
@@ -90,7 +88,6 @@ void RobotContainer::ConfigureBindings()
       units::volt_t(frc::SmartDashboard::GetNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value()))));
   mCommandXboxController->Button(OperatorConstants::kUnstuckFuelButton).WhileTrue(mSubFeeder->getFeedShooterCommand(
       units::volt_t(-frc::SmartDashboard::GetNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value()))));
-  // mCommandXboxController->Button(OperatorConstants::kIndexButton).WhileTrue(mSubIntake->getIntakeCommand());
 
   mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
     {

@@ -14,7 +14,6 @@
 #include "subsystems/SubPivotIntake.h"
 #include "subsystems/SubShooter.h"
 #include "subsystems/subFeeder.h"
-#include "subsystems/subIndexer.h"
 #include "subsystems/SubDrivetrain.h"
 
 /**
@@ -43,7 +42,6 @@ private:
 
   SubShooter* mSubShooter = nullptr;
   SubFeeder* mSubFeeder = nullptr;
-  // SubIndexer* mSubIndexer = nullptr;
 
   SubDrivetrain* mDrivetrain = nullptr;
 

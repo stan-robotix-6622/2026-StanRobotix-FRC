@@ -112,16 +112,6 @@ namespace FeederConstants
   inline constexpr units::ampere_t kCurrentLimit = 80_A;
 }
 
-namespace IndexerConstants
-{
-  inline constexpr units::volt_t kDesiredVoltage = 2_V; // placeholder :)
-
-  inline constexpr bool kInverted = true;
-  inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
-  inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
-  inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
-}
-
 namespace PathPlannerConstants
 {
   inline constexpr double kPTranslation = 5.0;
@@ -261,7 +251,6 @@ namespace FieldConstants
 
 namespace CANid
 {
-  inline constexpr int kMotorIndexerID = 12;
   inline constexpr int kMotorFeederID = 13;
 
   inline constexpr int kLeaderMotorShooterID = 16;
