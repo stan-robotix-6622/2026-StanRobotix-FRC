@@ -19,7 +19,6 @@ namespace Configs
 
       drivingConfig.Inverted(iDrivingInverted);
       drivingConfig.SetIdleMode(ModuleConstants::Config::kDrivingIdleMode);
-      drivingConfig.Apply(SparkBaseConfig::Presets::REV_NEO());
 
       drivingConfig.encoder.VelocityConversionFactor(drivingFactor / ModuleConstants::Config::kRPMtoRPSFactor);
       drivingConfig.encoder.PositionConversionFactor(drivingFactor);
@@ -43,7 +42,6 @@ namespace Configs
 
       turningConfig.Inverted(ModuleConstants::Config::kTurningMotorInverted);
       turningConfig.SetIdleMode(ModuleConstants::Config::kTurningIdleMode);
-      turningConfig.Apply(SparkBaseConfig::Presets::REV_NEO_550());
 
       turningConfig.absoluteEncoder.VelocityConversionFactor(turningFactor / ModuleConstants::Config::kRPMtoRPSFactor);
       turningConfig.absoluteEncoder.PositionConversionFactor(turningFactor);
