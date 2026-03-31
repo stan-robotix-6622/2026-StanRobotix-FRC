@@ -47,9 +47,7 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
 
 void SwerveModule::setDesiredHeading(frc::Rotation2d iDesiredHeading)
 {
-    mTurningCurrentAngle = frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()));
-    mTurningPID->SetSetpoint(iDesiredHeading.Radians().value());
-    mTurningMotor->Set(mTurningPID->Calculate(mTurningCurrentAngle.Radians().value()));
+    mTurningClosedLoopController->SetSetpoint(iDesiredHeading.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
 }
 
 void SwerveModule::setTurningVoltage(units::volt_t iVoltage)
