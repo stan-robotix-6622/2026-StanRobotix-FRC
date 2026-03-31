@@ -168,21 +168,21 @@ void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
 {
     if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue)
     {
-        mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kSpeedConstant * iX,
-                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant * iY,
-                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant0 * i0,
+        mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iX,
+                                                                            iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iY,
+                                                                            iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
                                                                             getPose().Rotation());
     }
     else
     {
-        mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kSpeedConstant * -iX,
-                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant * -iY,
-                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant0 * i0,
+        mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * -iX,
+                                                                            iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * -iY,
+                                                                            iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
                                                                             getPose().Rotation());
     }
 
     mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
-    mKinematics->DesaturateWheelSpeeds(&mDesiredSwerveStates, DrivetrainConstants::kSpeedConstant);
+    mKinematics->DesaturateWheelSpeeds(&mDesiredSwerveStates, DrivetrainConstants::kAttainableSpeed);
 
     mDesiredChassisSpeedsPublisher.Set(mDesiredChassisSpeeds);
     mDesiredModuleStatesPublisher.Set(mDesiredSwerveStates);

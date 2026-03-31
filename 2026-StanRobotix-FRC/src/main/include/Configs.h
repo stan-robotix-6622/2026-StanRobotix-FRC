@@ -73,13 +73,13 @@ namespace Configs
     static SparkMaxConfig &ShooterLeaderConfig()
     {
       static SparkMaxConfig leaderConfig{};
-      double shootingFactor = 1;
+      constexpr double shootingFactor = 1 / ShooterConstants::kGearRatio;
 
       leaderConfig.Inverted(ShooterConstants::kInverted);
       leaderConfig.SetIdleMode(ShooterConstants::kIdleMode);
 
       leaderConfig.encoder.PositionConversionFactor(shootingFactor);
-      leaderConfig.encoder.VelocityConversionFactor(shootingFactor / 60);
+      leaderConfig.encoder.VelocityConversionFactor(shootingFactor / 60); // for rpm to tps
 
       leaderConfig.closedLoop.SetFeedbackSensor(ShooterConstants::Config::kShooterClosedLoopFeedbackSensor);
       // leaderConfig.closedLoop.Pid(ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD);
@@ -90,10 +90,10 @@ namespace Configs
       leaderConfig.closedLoop.feedForward.kA(ShooterConstants::kA.value());
 
       // Configs added according to https://www.chiefdelphi.com/t/psa-rev-spark-default-velocity-filtering-is-still-really-bad-for-flywheels/514567
-      leaderConfig.encoder.UvwAverageDepth(4);
-      leaderConfig.encoder.UvwMeasurementPeriod(16);
-      leaderConfig.encoder.QuadratureAverageDepth(4);
-      leaderConfig.encoder.QuadratureMeasurementPeriod(16);
+      // leaderConfig.encoder.UvwAverageDepth(4);
+      // leaderConfig.encoder.UvwMeasurementPeriod(16);
+      // leaderConfig.encoder.QuadratureAverageDepth(4);
+      // leaderConfig.encoder.QuadratureMeasurementPeriod(16);
 
       leaderConfig.SmartCurrentLimit(ShooterConstants::kCurrentLimit.value());
 
@@ -126,7 +126,7 @@ namespace Configs
     static SparkMaxConfig &Config()
     {
       static SparkMaxConfig intakeConfig{};
-      double intakeFactor = 1 / IntakeConstants::kGearRatio;
+      constexpr double intakeFactor = 1 / IntakeConstants::kGearRatio;
 
       intakeConfig.Inverted(IntakeConstants::kInverted);
       intakeConfig.SetIdleMode(IntakeConstants::kIdleMode);
@@ -145,7 +145,7 @@ namespace Configs
     static SparkMaxConfig &Config()
     {
       static SparkMaxConfig pivotConfig{};
-      double pivotFactor = (2 * std::numbers::pi) / PivotConstants::kGearRatio;
+      constexpr double pivotFactor = (2 * std::numbers::pi) / PivotConstants::kGearRatio;
 
       pivotConfig.Inverted(PivotConstants::kInverted);
       pivotConfig.SetIdleMode(PivotConstants::kIdleMode);
