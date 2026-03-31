@@ -37,7 +37,7 @@ void ShootDynamically::Execute()
   {
     mLastCalculatedShooterVelocity = mShooterStatus.shooterVelocity;
     mDistanceToTarget = (mTranslationToHub + mTargetMovement).Norm();
-    mShooterStatus = ShooterLookupTable::interpolate(mDistanceToTarget);
+    mShooterStatus = LookupTable::interpolate(mDistanceToTarget);
     mTargetMovement = {-mRobotMovement.vx * mShooterStatus.timeOfFlight,
                        -mRobotMovement.vy * mShooterStatus.timeOfFlight};
   }

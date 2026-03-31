@@ -53,6 +53,6 @@ class ShootDynamically
   frc::Translation2d mTranslationToHub = {0_m, 0_m};
   frc::ChassisSpeeds mRobotMovement = {0_mps, 0_mps, 0_rad_per_s};
   frc::Translation2d mTargetMovement = {0_m, 0_m};
-  ShooterLookupTable::Status mShooterStatus = {0_m, 0_tps, 0_s};
+  LookupTable::ShooterStatus mShooterStatus = {0_m, 0_tps, 0_s};
   units::turns_per_second_t mLastCalculatedShooterVelocity;
 };

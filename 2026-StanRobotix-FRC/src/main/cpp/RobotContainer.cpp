@@ -21,14 +21,19 @@
 
 #include "Constants.h"
 
+namespace {
+  const units::meter_t DrivetrainDefaultSetpoint = 3_m;
+}
+
 RobotContainer::RobotContainer()
 {
   mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
   frc::SmartDashboard::PutData("Xbox Controller", &mCommandXboxController->GetHID());
 
   frc::SmartDashboard::PutNumber("tunable/Shooter Setpoint", ShooterConstants::PIDConstants::setpoint.value());
-  frc::SmartDashboard::PutNumber("tunable/Drivetrain Distance Setpoint", 3);
+  frc::SmartDashboard::PutNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value());
   frc::SmartDashboard::PutNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value());
+  frc::SmartDashboard::PutNumber("tunable/Time of Flight", 0);
 
   mSubShooter = new SubShooter{};
   frc::SmartDashboard::PutData("shooter", mSubShooter);
@@ -45,6 +50,9 @@ RobotContainer::RobotContainer()
   SetSubsystemDefaultCommands();
   RegisterCommandsPathPlanner();
   ConfigureBindings();
+
+  mShooterStatusPublisher = mNTShooterStatusTable->GetStructArrayTopic<LookupTable::ShooterStatus>("status").Publish();
+  mShooterStatusSubscriber = mNTShooterStatusTable->GetStructArrayTopic<LookupTable::ShooterStatus>("status").Subscribe(std::span<const LookupTable::ShooterStatus>());
 }
 
 void RobotContainer::SetSubsystemDefaultCommands()
@@ -100,6 +108,14 @@ void RobotContainer::ConfigureBindings()
     { mDrivetrain->resetPose(SubDrivetrain::standardizePose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()))); }));
 
   mCommandXboxController->Button(OperatorConstants::Button::Back).ToggleOnTrue(ShootDynamically(mSubShooter, mDrivetrain, mCommandXboxController).ToPtr());
+
+  mCommandXboxController->Button(OperatorConstants::Button::LeftJoystick).OnTrue(frc2::cmd::RunOnce([this] {
+    std::vector<LookupTable::ShooterStatus> vector = mShooterStatusSubscriber.Get();
+    units::meter_t distance = units::meter_t(frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", 0));
+    units::turns_per_second_t velocity = units::turns_per_second_t(frc::SmartDashboard::GetNumber("tunable/Shooter Setpoint", 0));
+    units::second_t TOF = units::second_t(frc::SmartDashboard::GetNumber("tunable/Time of Flight", 0));
+    vector.emplace_back(LookupTable::ShooterStatus{distance, velocity, TOF});
+    mShooterStatusPublisher.Set(vector);}));
 }
 
 void RobotContainer::ConfigureWhenConnectedToDS()
@@ -108,7 +124,7 @@ void RobotContainer::ConfigureWhenConnectedToDS()
   mDrivetrain->ConfigurePathplanner();
   // Everything that need the AutoBuilder to be configured
   mCommandXboxController->Button(OperatorConstants::Button::Start).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
-  (units::meter_t)frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", 3)); }));
+  (units::meter_t)frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value())); }));
 
   mAutoChooser = pathplanner::AutoBuilder::buildAutoChooser();
   frc::SmartDashboard::PutData("Auto Chooser", &mAutoChooser);

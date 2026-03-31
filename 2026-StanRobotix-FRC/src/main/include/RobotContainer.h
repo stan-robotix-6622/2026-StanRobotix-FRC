@@ -16,6 +16,11 @@
 #include "subsystems/subFeeder.h"
 #include "subsystems/SubDrivetrain.h"
 
+#include <ShooterLookupTable.h>
+#include <networktables/NetworkTable.h>
+#include <networktables/NetworkTableInstance.h>
+#include <networktables/StructArrayTopic.h>
+
 /**
  * This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -55,4 +60,9 @@ private:
   void SetSubsystemDefaultCommands();
 
   frc::SendableChooser<frc2::Command*> mAutoChooser;
+
+  nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
+  std::shared_ptr<nt::NetworkTable> mNTShooterStatusTable = inst.GetTable("SmartDashboard/Shooter Status");
+  nt::StructArrayPublisher<LookupTable::ShooterStatus> mShooterStatusPublisher;
+  nt::StructArraySubscriber<LookupTable::ShooterStatus> mShooterStatusSubscriber;
 };
