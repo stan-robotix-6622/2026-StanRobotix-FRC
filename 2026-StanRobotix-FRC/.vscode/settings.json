@@ -93,9 +93,7 @@
     "typeinfo": "cpp",
     "valarray": "cpp",
     "variant": "cpp",
-    "*.inc": "cpp"
-  },
-  "wpilib.autoStartRioLog": false
+    "*.inc": "cpp",
     "xtr1common": "cpp",
     "ios": "cpp",
     "xfacet": "cpp",
@@ -108,7 +106,6 @@
     "xstring": "cpp",
     "xtree": "cpp",
     "xutility": "cpp",
-    "*.inc": "cpp"
   },
   "wpilib.autoStartRioLog": false,
   "wpilib.skipSelectSimulateExtension": true
