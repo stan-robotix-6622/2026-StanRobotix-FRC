@@ -134,8 +134,8 @@ namespace ModuleConstants
   inline constexpr units::volt_t kNominalVoltage = 12_V;                                       // The voltage at which the max speeds are mesured
   inline constexpr units::meter_t kWheelRadius = 0.035609_m;                                   // The radius of REV's plastic wheels, masured with the wheelCaracterizationCommand
   inline constexpr units::meter_t kWheelPerimeter = kWheelRadius * 2 * std::numbers::pi;       // in meters (diametre in inches * convertion to meters * pi)
-  inline constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260_rad_per_s; // TODO: Verify?
-  inline constexpr units::meters_per_second_t kDriveWheelMaxFreeSpeed = 4.9180_mps;                // TODO: Verify?
+  inline constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260_rad_per_s;
+  inline constexpr units::meters_per_second_t kDriveWheelMaxFreeSpeed = 4.9180_mps;
 
   inline constexpr double kDrivingFactor = ModuleConstants::kWheelPerimeter.value() / kDrivingMotorGearRatio;
   inline constexpr double kTurningFactor = 2 * std::numbers::pi;
