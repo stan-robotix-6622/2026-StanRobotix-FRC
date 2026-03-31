@@ -166,8 +166,8 @@ namespace ModuleConstants
   {
     inline constexpr double kRPMtoRPSFactor = 60;
 
-    inline constexpr units::radians_per_second_t kTurningCruiseVelocity = 2_rad_per_s * std::numbers::pi;
-    inline constexpr units::radians_per_second_squared_t kTurningMaxAcceleration = 4_rad_per_s_sq * std::numbers::pi;
+    inline constexpr units::revolutions_per_minute_t kTurningCruiseVelocity = 2_rad_per_s * std::numbers::pi;
+    inline constexpr units::revolutions_per_minute_per_second_t kTurningMaxAcceleration = 4_rad_per_s_sq * std::numbers::pi;
 
     inline constexpr rev::spark::SparkBaseConfig::IdleMode kDrivingIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
     inline constexpr rev::spark::SparkBaseConfig::IdleMode kTurningIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
@@ -176,11 +176,11 @@ namespace ModuleConstants
     inline constexpr rev::spark::FeedbackSensor kTurningClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kAbsoluteEncoder;
 
     inline constexpr bool kTurningMotorInverted = false;
-    inline constexpr bool kTurningEncoderZeroCentered = false;
+    inline constexpr bool kTurningEncoderZeroCentered = true;
     inline constexpr bool kTurningClosedLoopPositionWrapping = true;
-    inline constexpr double kTurningClosedLoopMinInput = -ModuleConstants::kTurningFactor / 2;
-    inline constexpr double kTurningClosedLoopMaxInput = ModuleConstants::kTurningFactor / 2;
-    inline constexpr double kTurningClosedLoopTolerance = 0.01 * ModuleConstants::kTurningFactor;
+    inline constexpr double kTurningClosedLoopMinInput = -std::numbers::pi;
+    inline constexpr double kTurningClosedLoopMaxInput = std::numbers::pi;
+    inline constexpr double kTurningClosedLoopTolerance = std::numbers::pi / 360;
   }
 }
 

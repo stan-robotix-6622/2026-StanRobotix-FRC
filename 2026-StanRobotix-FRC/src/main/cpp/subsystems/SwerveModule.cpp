@@ -14,14 +14,6 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
     mDrivingMotor = new rev::spark::SparkMax{iDrivingMotorID, ModuleConstants::kDrivingMotorType};
     mTurningMotor = new rev::spark::SparkMax{iTurningMotorID, ModuleConstants::kTurningMotorType};
 
-    // Initialization of the PIDController with the P,I and D constants and
-    // a continuous input from 0 to 2pi
-    mTurningPID = new frc::PIDController{ModuleConstants::kTurningP,
-                                         ModuleConstants::kTurningI,
-                                         ModuleConstants::kTurningD};
-    mTurningPID->EnableContinuousInput(ModuleConstants::Config::kTurningClosedLoopMinInput,
-                                       ModuleConstants::Config::kTurningClosedLoopMaxInput);
-
     // Configure the motors from Configs.h
     mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
                              ModuleConstants::kDrivingResetMode,
@@ -49,9 +41,7 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
     mOptimizedState.Optimize(mTurningCurrentAngle);
     mOptimizedState.CosineScale(mTurningCurrentAngle);
 
-    mTurningPID->SetSetpoint(mOptimizedState.angle.Radians().value());
-    mTurningMotor->Set(mTurningPID->Calculate(mTurningCurrentAngle.Radians().value()));
-    // mTurningClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
+    mTurningClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
     mDrivingClosedLoopController->SetSetpoint(mOptimizedState.speed.value(), ModuleConstants::kDrivingClosedLoopControlType);
 }
 

@@ -10,7 +10,6 @@
 #include <rev/SparkClosedLoopController.h>
 #include <wpi/sendable/Sendable.h>
 #include <wpi/sendable/SendableBuilder.h>
-#include <frc/controller/PIDController.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
@@ -46,7 +45,6 @@ private:
 
   rev::spark::SparkClosedLoopController* mDrivingClosedLoopController;
   rev::spark::SparkClosedLoopController* mTurningClosedLoopController;
-  frc::PIDController* mTurningPID; // TODO: Remove if ClosedLoop working
 
   rev::spark::SparkRelativeEncoder* mDrivingEncoder;
   rev::spark::SparkAbsoluteEncoder* mTurningAbsoluteEncoder;
