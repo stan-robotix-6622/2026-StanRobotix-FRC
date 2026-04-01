@@ -147,7 +147,7 @@ namespace ModuleConstants
   inline constexpr rev::spark::SparkLowLevel::MotorType kTurningMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
 
   inline constexpr units::ampere_t kDrivingCurrentLimit = 80_A;
-  inline constexpr units::ampere_t kTurningCurrentLimit = 40_A;
+  inline constexpr units::ampere_t kTurningCurrentLimit = 20_A;
 
   inline constexpr rev::ResetMode kDrivingResetMode = rev::ResetMode::kResetSafeParameters;
   inline constexpr rev::ResetMode kTurningResetMode = rev::ResetMode::kResetSafeParameters;
