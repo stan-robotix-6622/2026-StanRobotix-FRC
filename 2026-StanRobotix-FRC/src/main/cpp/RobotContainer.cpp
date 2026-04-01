@@ -138,7 +138,7 @@ void RobotContainer::ConfigureTeleopAutomatisation()
 
   frc2::Trigger{[this]
                 { return mDrivetrain->isTowardsHub()
-                  && units::math::abs(mSubShooter->getVelocity() - ShooterConstants::PIDConstants::setpoint) < 0.5_tps; }}
+                  && units::math::abs(mSubShooter->getVelocity() - mSubShooter->getAdjustedVelocity()) < 0.5_tps; }}
       .Debounce(0.3_s).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 }
 

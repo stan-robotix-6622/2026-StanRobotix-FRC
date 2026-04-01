@@ -43,6 +43,7 @@ public:
   double Deadband(double iInput, double iThreshold, bool iSquared = false);
 
   bool isHubActive();
+  units::turns_per_second_t setVelocityDependingOnDistanceToHub();
 private:
   frc2::CommandXboxController* mCommandXboxController;
   frc2::CommandXboxController* mCommandXboxControllerCopilot;
@@ -64,6 +65,6 @@ private:
   void ConfigureBindingsCopilot();
   void RegisterCommandsPathPlanner();
   void SetSubsystemDefaultCommands();
-
+  
   frc::SendableChooser<frc2::Command*> mAutoChooser;
 };

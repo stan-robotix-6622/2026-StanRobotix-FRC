@@ -51,3 +51,15 @@ void SubShooter::InitSendable(wpi::SendableBuilder& builder)
     builder.AddDoubleProperty("kV", [this] {return mFeedforward->GetKv().value();}, [this] (double iKv) {return mFeedforward->SetKv(TemplateUnits::VoltageInverse<units::turns_per_second>(iKv));});
     builder.AddDoubleProperty("kS", [this] {return mFeedforward->GetKs().value();}, [this] (double iKs) {return mFeedforward->SetKs(units::volt_t(iKs));});
 }
+
+units::turns_per_second_t SubShooter::getAdjustedVelocity()
+{
+    ShooterLookupTable::Status mShooterStatus = {0_m, 0_tps, 0_s};
+    mPIDcontroller->SetSetpoint(mShooterStatus.shooterVelocity.value());
+
+    mPIDAdjustment = units::turns_per_second_t(mPIDcontroller->Calculate(SubShooter::getVelocity().value()));
+    mCurrentVelocity = SubShooter::getVelocity();
+    mAdjustedVelocity = mCurrentVelocity + mPIDAdjustment;
+
+    return mAdjustedVelocity;
+}

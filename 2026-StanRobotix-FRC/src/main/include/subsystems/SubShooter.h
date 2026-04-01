@@ -18,6 +18,8 @@
 #include <units/angular_velocity.h>
 #include <units/voltage.h>
 
+#include "ShooterLookupTable.h"
+
 class SubShooter : public frc2::SubsystemBase
 {
 public:
@@ -37,6 +39,8 @@ public:
 
   void InitSendable(wpi::SendableBuilder &builder) override;
 
+  units::turns_per_second_t getAdjustedVelocity();
+
 private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
@@ -48,4 +52,8 @@ private:
   frc::PIDController* mPIDcontroller;
   rev::spark::SparkRelativeEncoder* mRelativeEncoder;
   rev::spark::SparkClosedLoopController* mClossedLoopController;
+
+  units::turns_per_second_t mCurrentVelocity;
+  units::turns_per_second_t mAdjustedVelocity;
+  units::turns_per_second_t mPIDAdjustment;
 };
