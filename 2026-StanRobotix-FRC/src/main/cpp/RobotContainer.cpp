@@ -19,6 +19,8 @@
 #include "commands/Shoot.h"
 #include "commands/ShootDynamically.h"
 
+#include <iostream>
+
 #include "Constants.h"
 
 namespace {
@@ -115,6 +117,13 @@ void RobotContainer::ConfigureBindings()
     units::turns_per_second_t velocity = units::turns_per_second_t(frc::SmartDashboard::GetNumber("tunable/Shooter Setpoint", 0));
     units::second_t TOF = units::second_t(frc::SmartDashboard::GetNumber("tunable/Time of Flight", 0));
     vector.emplace_back(LookupTable::ShooterStatus{distance, velocity, TOF});
+    std::cout << "ShooterStatus vector:\n";
+    for (unsigned int i = 0; i < vector.size(); i++)
+    {
+      std::cout << vector[i].distanceToTarget.value() << "_m, "
+                << vector[i].shooterVelocity.value() << "_tps, "
+                << vector[i].timeOfFlight.value() << "_s" << std::endl;
+    }
     mShooterStatusPublisher.Set(vector);}));
 }
 
