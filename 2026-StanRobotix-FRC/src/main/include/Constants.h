@@ -305,7 +305,7 @@ namespace ClimbConstants
 {
   inline constexpr rev::spark::SparkLowLevel::MotorType kMotorTypeLeader = rev::spark::SparkLowLevel::MotorType::kBrushless;
   inline constexpr rev::spark::SparkLowLevel::MotorType kMotorTypeFollower = rev::spark::SparkLowLevel::MotorType::kBrushless;
-  inline constexpr rev::spark::SparkMaxConfig::IdleMode kIdleMode = rev::spark::SparkMaxConfig::IdleMode::kBrake;
+  inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
   inline constexpr double kDownP = 0.02;
   inline constexpr double kDownI = 0.001;
   inline constexpr double kDownD = 0;
@@ -321,4 +321,5 @@ namespace ClimbConstants
   inline constexpr double kLimitForward = 16.5;
   inline constexpr bool kInverted = false;
   inline constexpr bool kInverseFollowerMotor = false;
+  inline constexpr double kMaxCurrentVariation = 30;
 }

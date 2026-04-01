@@ -9,7 +9,9 @@
 #include <rev/config/SparkMaxConfig.h>
 #include <rev/SparkRelativeEncoder.h>
 #include <frc2/command/CommandPtr.h>
+#include <frc/filter/LinearFilter.h>
 
+#include <units/current.h>
 
 class SubClimb : public frc2::SubsystemBase {
   public:
@@ -25,6 +27,8 @@ class SubClimb : public frc2::SubsystemBase {
   void StopMotor();
   double GetPosition();
   frc2::CommandPtr GetClimbCommand(Direction iDirection);
+  units::ampere_t GetCurrent();
+  double GetCurrentVariation();
   
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -40,4 +44,7 @@ class SubClimb : public frc2::SubsystemBase {
   rev::spark::SparkMaxConfig * mSparkMaxConfigLeader;
   rev::spark::SparkMaxConfig * mSparkMaxConfigFollower;
   rev::spark::SparkRelativeEncoder * mSparkRelativeEncoder;
+
+  frc::LinearFilter<units::ampere_t>* mHighPassFilter;
+  units::ampere_t mCurrent;
 };

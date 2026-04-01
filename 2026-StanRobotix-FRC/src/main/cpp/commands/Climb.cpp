@@ -48,5 +48,5 @@ void Climb::End(bool interrupted) {
 
 // Returns true when the command should end.
 bool Climb::IsFinished() {
-  return false;
+  return mSubClimb->GetCurrentVariation() > ClimbConstants::kMaxCurrentVariation;
 }

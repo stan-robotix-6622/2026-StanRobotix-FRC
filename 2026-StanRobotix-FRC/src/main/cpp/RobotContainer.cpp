@@ -54,17 +54,17 @@ RobotContainer::RobotContainer()
 
 void RobotContainer::SetSubsystemDefaultCommands()
 {
-  mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
-      [this]
-      {
-        mDrivetrain->driveFieldRelative(Deadband(-mCommandXboxController->GetLeftY(), 0.05),
-                                        Deadband(-mCommandXboxController->GetLeftX(), 0.05),
-                                        Deadband(-mCommandXboxController->GetRightX(), 0.05),
-                                        (1 - mCommandXboxController->GetRightTriggerAxis()));
-      },
-      {mDrivetrain}));
+  // mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
+  //     [this]
+  //     {
+  //       mDrivetrain->driveFieldRelative(Deadband(-mCommandXboxController->GetLeftY(), 0.05),
+  //                                       Deadband(-mCommandXboxController->GetLeftX(), 0.05),
+  //                                       Deadband(-mCommandXboxController->GetRightX(), 0.05),
+  //                                       (1 - mCommandXboxController->GetRightTriggerAxis()));
+  //     },
+  //     {mDrivetrain}));
 
-  mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
+  // mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
 }
 
 void RobotContainer::RegisterCommandsPathPlanner()
@@ -88,22 +88,24 @@ void RobotContainer::RegisterCommandsPathPlanner()
 
 void RobotContainer::ConfigureBindings()
 {
-  mCommandXboxController->Button(OperatorConstants::kPivotDownButton).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
+  mCommandXboxController->Button(OperatorConstants::Button::A).WhileTrue(frc2::cmd::RunEnd([this] {mClimb->SetSpeed(0.2);}, [this] {mClimb->StopMotor();}));
+  mCommandXboxController->Button(OperatorConstants::Button::Y).WhileTrue(frc2::cmd::RunEnd([this] {mClimb->SetSpeed(-0.2);}, [this] {mClimb->StopMotor();}));
+  // mCommandXboxController->Button(OperatorConstants::kPivotDownButton).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
 
-  mCommandXboxController->Button(OperatorConstants::kShootButton).ToggleOnTrue(Shoot(mSubShooter).ToPtr());
-  mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
-  mCommandXboxController->Button(OperatorConstants::kUnstuckFuelButton).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
-  // mCommandXboxController->Button(OperatorConstants::kIndexButton).WhileTrue(mSubIntake->getIntakeCommand());
+  // mCommandXboxController->Button(OperatorConstants::kShootButton).ToggleOnTrue(Shoot(mSubShooter).ToPtr());
+  // mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
+  // mCommandXboxController->Button(OperatorConstants::kUnstuckFuelButton).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
+  // // mCommandXboxController->Button(OperatorConstants::kIndexButton).WhileTrue(mSubIntake->getIntakeCommand());
 
-  mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
-      { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
-        {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
-        else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
+  // mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
+  //     { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
+  //       {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
+  //       else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
 
-  mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
-      { mDrivetrain->resetPose(SubDrivetrain::standardizePose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()))); }));
+  // mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
+  //     { mDrivetrain->resetPose(SubDrivetrain::standardizePose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()))); }));
 
-  mCommandXboxController->Button(OperatorConstants::Button::Back).ToggleOnTrue(ShootDynamically(mSubShooter, mDrivetrain).ToPtr());
+  // mCommandXboxController->Button(OperatorConstants::Button::Back).ToggleOnTrue(ShootDynamically(mSubShooter, mDrivetrain).ToPtr());
   // mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
   // mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
 }
