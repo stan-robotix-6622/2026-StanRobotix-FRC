@@ -113,7 +113,7 @@ void RobotContainer::ConfigureBindings()
 
   mCommandXboxController->Button(OperatorConstants::Button::LeftJoystick).OnTrue(frc2::cmd::RunOnce([this] {
     std::vector<LookupTable::ShooterStatus> vector = mShooterStatusSubscriber.Get();
-    units::meter_t distance = units::meter_t(frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", 0));
+    units::meter_t distance = mDrivetrain->getTranslationToHub().Norm();
     units::turns_per_second_t velocity = units::turns_per_second_t(frc::SmartDashboard::GetNumber("tunable/Shooter Setpoint", 0));
     units::second_t TOF = units::second_t(frc::SmartDashboard::GetNumber("tunable/Time of Flight", 0));
     vector.emplace_back(LookupTable::ShooterStatus{distance, velocity, TOF});
