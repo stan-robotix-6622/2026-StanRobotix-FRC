@@ -109,5 +109,5 @@
   },
   "wpilib.selectDefaultSimulateExtension": true,
   "wpilib.autoStartRioLog": false,
-  "wpilib.skipSelectSimulateExtension": true
+  "wpilib.skipSelectSimulateExtension": false
 }

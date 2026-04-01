@@ -65,34 +65,6 @@ void SwerveModuleSim::setDesiredState(frc::SwerveModuleState iDesiredState)
     mTurningAbsoluteEncoderSim->SetPosition(mOptimizedState.angle.Radians().value());
 }
 
-void SwerveModuleSim::setPIDValues(double iP, double iI, double iD)
-{
-    mTurningPID->SetPID(iP, iI, iD);
-    // bool wUpdateConfig = false;
-    // if (iP != kP)
-    // {
-    //     mTurningConfig->closedLoop.P(iP);
-    //     wUpdateConfig = true;
-    //     kP = iP;
-    // }
-    // if (iI != kI)
-    // {
-    //     mTurningConfig->closedLoop.I(iI);
-    //     wUpdateConfig = true;
-    //     kI = iI;
-    // }
-    // if (iD != kD)
-    // {
-    //     mTurningConfig->closedLoop.D(iD);
-    //     wUpdateConfig = true;
-    //     kD = iD;
-    // }
-    // if (wUpdateConfig)
-    // {
-    //     mTurningMotor->Configure(*mTurningConfig, rev::ResetMode::kNoResetSafeParameters, rev::PersistMode::kNoPersistParameters);
-    // }
-}
-
 frc::SwerveModuleState SwerveModuleSim::getModuleState()
 {
     return mModuleState;

@@ -4,6 +4,18 @@
 
 #include "subsystems/SubDrivetrain.h"
 
+#include <numbers>
+
+#include <frc/RobotBase.h>
+#include <frc/DriverStation.h>
+#include <frc/DataLogManager.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <pathplanner/lib/auto/AutoBuilder.h>
+#include <pathplanner/lib/util/PathPlannerLogging.h>
+#include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
+
+#include "Constants.h"
+
 SubDrivetrain::SubDrivetrain()
 {
     mFrontLeftLocation  = new frc::Translation2d{DrivetrainConstants::kFrontLeftTranslation};
@@ -405,17 +417,17 @@ void SubDrivetrain::InitSendable(wpi::SendableBuilder& builder)
 {
     builder.SetSmartDashboardType("SwerveDrive");
 
-    builder.AddDoubleProperty("Front Left Angle", [this] {return mFrontLeftModule->getModuleState().angle.Radians().value();}, nullptr);
-    builder.AddDoubleProperty("Front Left Velocity", [this] {return mFrontLeftModule->getModuleState().speed.value();}, nullptr);
+    // builder.AddDoubleProperty("Front Left Angle", [this] {return mFrontLeftModule->getModuleState().angle.Radians().value();}, nullptr);
+    // builder.AddDoubleProperty("Front Left Velocity", [this] {return mFrontLeftModule->getModuleState().speed.value();}, nullptr);
 
-    builder.AddDoubleProperty("Front Right Angle", [this] {return mFrontRightModule->getModuleState().angle.Radians().value();}, nullptr);
-    builder.AddDoubleProperty("Front Right Velocity", [this] {return mFrontRightModule->getModuleState().speed.value();}, nullptr);
+    // builder.AddDoubleProperty("Front Right Angle", [this] {return mFrontRightModule->getModuleState().angle.Radians().value();}, nullptr);
+    // builder.AddDoubleProperty("Front Right Velocity", [this] {return mFrontRightModule->getModuleState().speed.value();}, nullptr);
 
-    builder.AddDoubleProperty("Back Left Angle", [this] {return mBackLeftModule->getModuleState().angle.Radians().value();}, nullptr);
-    builder.AddDoubleProperty("Back Left Velocity", [this] {return mBackLeftModule->getModuleState().speed.value();}, nullptr);
+    // builder.AddDoubleProperty("Back Left Angle", [this] {return mBackLeftModule->getModuleState().angle.Radians().value();}, nullptr);
+    // builder.AddDoubleProperty("Back Left Velocity", [this] {return mBackLeftModule->getModuleState().speed.value();}, nullptr);
 
-    builder.AddDoubleProperty("Back Right Angle", [this] {return mBackRightModule->getModuleState().angle.Radians().value();}, nullptr);
-    builder.AddDoubleProperty("Back Right Velocity", [this] {return mBackRightModule->getModuleState().speed.value();}, nullptr);
+    // builder.AddDoubleProperty("Back Right Angle", [this] {return mBackRightModule->getModuleState().angle.Radians().value();}, nullptr);
+    // builder.AddDoubleProperty("Back Right Velocity", [this] {return mBackRightModule->getModuleState().speed.value();}, nullptr);
 
     builder.AddDoubleProperty("Robot Angle", [this] {return mIMU->getRotation2d().Radians().value();}, nullptr);
 }

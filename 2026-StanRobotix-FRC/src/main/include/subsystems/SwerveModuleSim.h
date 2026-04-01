@@ -56,8 +56,8 @@ class SwerveModuleSim{
   double kI = ModuleConstants::kTurningI;
   double kD = ModuleConstants::kTurningD;
 
-  double kDrivingVelocityFactor = ModuleConstants::kDrivingFactor / ModuleConstants::kRPMtoRPSFactor;
-  double kTurningVelocityFactor = ModuleConstants::kTurningFactor / ModuleConstants::kRPMtoRPSFactor;
+  double kDrivingVelocityFactor = ModuleConstants::kDrivingFactor / 60;
+  double kTurningVelocityFactor = ModuleConstants::kTurningFactor / 60;
 
   frc::DCMotor * mDrivingGearBox;
   frc::DCMotor * mTurningGearBox;
