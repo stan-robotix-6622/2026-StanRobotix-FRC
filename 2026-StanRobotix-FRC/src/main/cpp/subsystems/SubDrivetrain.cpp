@@ -283,7 +283,8 @@ frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubto
 {
     frc::Translation2d wRobotToHubTranslation = getTranslationToHub();
     // If the Robot is not in the alliance zone
-    if (wRobotToHubTranslation.X() < 0_m)
+    if ((frc::DriverStation::GetAlliance().value() == frc::DriverStation::kBlue && wRobotToHubTranslation.X() < 0_m)
+     || (frc::DriverStation::GetAlliance().value() == frc::DriverStation::kRed && wRobotToHubTranslation.X() > 0_m))
     {
         return mPoseEstimator->GetEstimatedPosition();
     }
@@ -292,8 +293,8 @@ frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubto
         wRobotToHubTranslation.Norm() - iHubtoRobotDistance,
         wRobotToHubTranslation.Angle()};
 
-    frc::Translation2d wOriginToTargetTranslation = standardizePose(getPose()).Translation() + wRobotToTargetTranslation;
-    frc::Pose2d oOriginToTargetPose = standardizePose(frc::Pose2d{wOriginToTargetTranslation, wRobotToHubTranslation.Angle()});
+    frc::Translation2d wOriginToTargetTranslation = getPose().Translation() + wRobotToTargetTranslation;
+    frc::Pose2d oOriginToTargetPose = frc::Pose2d{wOriginToTargetTranslation, wRobotToHubTranslation.Angle()};
     mTargetPose2dPublisher.Set(oOriginToTargetPose);
     return oOriginToTargetPose;
 }
