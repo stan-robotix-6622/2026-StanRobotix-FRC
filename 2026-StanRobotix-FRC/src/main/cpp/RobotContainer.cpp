@@ -120,9 +120,9 @@ void RobotContainer::ConfigureBindings()
     std::cout << "ShooterStatus vector:\n";
     for (unsigned int i = 0; i < vector.size(); i++)
     {
-      std::cout << vector[i].distanceToTarget.value() << "_m, "
+      std::cout << "    ShooterStatus{" << vector[i].distanceToTarget.value() << "_m, "
                 << vector[i].shooterVelocity.value() << "_tps, "
-                << vector[i].timeOfFlight.value() << "_s" << std::endl;
+                << vector[i].timeOfFlight.value() << "_s},\n";
     }
     mShooterStatusPublisher.Set(vector);}));
 }
