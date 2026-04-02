@@ -332,7 +332,7 @@ frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHu
 bool SubDrivetrain::isTowardsHub()
 {
     frc::Translation2d wRobotToHubTranslation = getTranslationToHub();
-    frc::Rotation2d wRobotAngle = standardizePose(getPose()).Rotation();
+    frc::Rotation2d wRobotAngle = getPose().Rotation();
 
     return units::math::abs((wRobotAngle - wRobotToHubTranslation.Angle()).Degrees()) <  5_deg / (wRobotToHubTranslation.Norm()).value();
 };
@@ -341,7 +341,7 @@ bool SubDrivetrain::isTowardsHub()
 bool SubDrivetrain::isTowardsHubShooter()
 {
     frc::Translation2d wRobotToHubTranslation = getTranslationToHub();
-    frc::Rotation2d wRobotAngle = standardizePose(getPose()).Rotation();
+    frc::Rotation2d wRobotAngle = getPose().Rotation();
 
     return units::math::abs((wRobotAngle - wRobotToHubTranslation.Angle()).Degrees()) <  15_deg / (wRobotToHubTranslation.Norm()).value();
 };
