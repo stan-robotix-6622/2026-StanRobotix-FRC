@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.558763816383321,
-        "y": 4.021
+        "x": 7.613689205219455,
+        "y": 5.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7531295955735224,
-        "y": 3.3971771847708414
+        "x": 7.613689205219455,
+        "y": 6.6
       },
       "isLocked": false,
-      "linkedName": "FrontHub"
+      "linkedName": "Comp/Left Trench/Center"
     },
     {
       "anchor": {
-        "x": 1.866336775385891,
-        "y": 2.6433382299572408
+        "x": 5.58020166073547,
+        "y": 7.5
       },
       "prevControl": {
-        "x": 2.2846434465153385,
-        "y": 2.971214678323096
+        "x": 6.08020166073547,
+        "y": 7.5
+      },
+      "nextControl": {
+        "x": 5.08020166073547,
+        "y": 7.5
+      },
+      "isLocked": false,
+      "linkedName": "Comp/Left Trench/Pass Corner"
+    },
+    {
+      "anchor": {
+        "x": 4.159988137603797,
+        "y": 7.5
+      },
+      "prevControl": {
+        "x": 5.159988137603797,
+        "y": 7.5
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Shooting Position"
+      "linkedName": "Comp/Left Trench/Shooting Position"
     }
   ],
   "rotationTargets": [],
@@ -34,8 +50,8 @@
   "eventMarkers": [
     {
       "name": "Shoot",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": 1.0,
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": 2.0,
       "command": null
     }
   ],
@@ -49,13 +65,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 29.999999999999996
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Comp",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

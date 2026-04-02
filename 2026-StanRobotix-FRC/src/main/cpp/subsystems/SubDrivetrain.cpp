@@ -47,17 +47,17 @@ SubDrivetrain::SubDrivetrain()
     mRotation2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Rotation2d>("Current Rotation2d").Publish();
     mCurrentPose2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Current Pose2d").Publish();
     mTargetPose2dPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Target Pose2d").Publish();
-    mLimelightPoseEstimatorPublisher = mNTDrivetrainTable->GetStructTopic<frc::Pose2d>("Limelight Pose Estimator").Publish();
+    mTranslationToHubPublisher = mNTDrivetrainTable->GetStructTopic<frc::Translation2d>("Translation to Hub").Publish();
+    mRotationToHubPublisher = mNTDrivetrainTable->GetStructTopic<frc::Rotation2d>("Rotation to Hub").Publish();
 
-    mLimelightName = std::string(LimelightConstants::kName);
-    LimelightHelpers::setCameraPose_RobotSpace(
-        mLimelightName,
-        LimelightConstants::kForward.value(),
-        LimelightConstants::kRight.value(),
-        LimelightConstants::kUp.value(),
-        LimelightConstants::kRoll.value(),
-        LimelightConstants::kPitch.value(),
-        LimelightConstants::kYaw.value()
+    mLimelight = new Limelight{LimelightConstants::kName};
+    mLimelight->setCameraPosition(
+        LimelightConstants::kForward,
+        LimelightConstants::kRight,
+        LimelightConstants::kUp,
+        LimelightConstants::kRoll,
+        LimelightConstants::kPitch,
+        LimelightConstants::kYaw
     );
 
     mIMU = new IMU{};
@@ -79,41 +79,15 @@ SubDrivetrain::SubDrivetrain()
 void SubDrivetrain::Periodic()
 {
     refreshSwerveModules();
-
+    frc::SmartDashboard::PutBoolean("drivetrain/isTowardsHub", isTowardsHub());
     mCurrentRotation2d = mIMU->getRotation2d();
     mPoseEstimator->Update(mCurrentRotation2d, getSwerveModulePositions());
     mField2d->SetRobotPose(getPose());
 
-    LimelightHelpers::SetRobotOrientation(mLimelightName, mIMU->getAngleYaw().value(), mIMU->getYawRate().value(), 0, 0, 0, 0);
-
-    if (LimelightConstants::kUseMegaTag2)
+    mLimelightEstimatedPose = mLimelight->getPoseEstimation(getPose(), mIMU->getYawRate());
+    if (mLimelightEstimatedPose)
     {
-        mLimelightPoseEstimate = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2(mLimelightName);
-    }
-    else
-    {
-        mLimelightPoseEstimate = LimelightHelpers::getBotPoseEstimate_wpiBlue(mLimelightName);
-    }
-
-    // reject the camera update if the PoseEstimate is not valid
-    bool rejectCameraUpdate = !LimelightHelpers::validPoseEstimate(mLimelightPoseEstimate);
-
-    if (units::math::abs(mIMU->getYawRate()) > 360_deg_per_s)
-    {
-        rejectCameraUpdate = true;
-    }
-    else if (mLimelightPoseEstimate.tagCount == 0)
-    {
-        rejectCameraUpdate = true;
-    }
-    else if (mLimelightPoseEstimate.pose == frc::Pose2d(0_m, 0_m, 0_rad))
-    {
-        rejectCameraUpdate = true;
-    }
-
-    if (!rejectCameraUpdate)
-    {
-        mPoseEstimator->AddVisionMeasurement(mLimelightPoseEstimate.pose, frc::Timer::GetFPGATimestamp());
+        mPoseEstimator->AddVisionMeasurement(mLimelightEstimatedPose.value(), frc::Timer::GetFPGATimestamp());
     }
 
     // Publication de valeurs sur le NetworkTables
@@ -121,7 +95,8 @@ void SubDrivetrain::Periodic()
     mCurrentModuleStatesPublisher.Set(getSwerveModuleStates());
     mRotation2dPublisher.Set(mCurrentRotation2d.Degrees());
     mCurrentPose2dPublisher.Set(mPoseEstimator->GetEstimatedPosition());
-    mLimelightPoseEstimatorPublisher.Set(mLimelightPoseEstimate.pose);
+    mTranslationToHubPublisher.Set(getPose().Translation() + getTranslationToHub());
+    mRotationToHubPublisher.Set(getTranslationToHub().Angle());
 }
 
 void SubDrivetrain::setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4> iStates)
@@ -246,22 +221,22 @@ void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
 {
     if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue)
     {
-        mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kSpeedConstant * iX,
-                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant * iY,
-                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant0 * i0,
-                                                                            mIMU->getRotation2d());
+        mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iX,
+                                                                            iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iY,
+                                                                            iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
+                                                                            getPose().Rotation());
     }
     else
     {
-        mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kSpeedConstant * -iX,
-                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant * -iY,
-                                                                            iSpeedModulation * DrivetrainConstants::kSpeedConstant0 * i0,
-                                                                            mIMU->getRotation2d());
+        mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * -iX,
+                                                                            iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * -iY,
+                                                                            iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
+                                                                            getPose().Rotation());
     }
     // Transforming the ChassisSpeeds into four SwerveModuleState for each SwerveModule
     mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
-    
-    frc::SmartDashboard::PutNumber("Drivetrain/SetPoint", mDesiredSwerveStates[0].angle.Radians().value());
+    mKinematics->DesaturateWheelSpeeds(&mDesiredSwerveStates, DrivetrainConstants::kAttainableSpeed);
+
     mDesiredChassisSpeedsPublisher.Set(mDesiredChassisSpeeds);
     mDesiredModuleStatesPublisher.Set(mDesiredSwerveStates);
 
@@ -318,7 +293,7 @@ frc::ChassisSpeeds SubDrivetrain::getFieldRelativeSpeeds()
     return frc::ChassisSpeeds::FromRobotRelativeSpeeds(mCurrentChassisSpeeds.vx,
                                                        mCurrentChassisSpeeds.vy,
                                                        mCurrentChassisSpeeds.omega,
-                                                       mIMU->getRotation2d());
+                                                       getPose().Rotation());
 }
 
 void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds)
@@ -342,25 +317,20 @@ frc::Pose2d SubDrivetrain::standardizePose(frc::Pose2d iPose)
     auto mAlliance = frc::DriverStation::GetAlliance();
     if (mAlliance && mAlliance.value() == frc::DriverStation::kRed)
     {
-        return iPose.RotateAround(FieldConstants::kFieldCenterTranslation2d, 180_deg);
+      return iPose.RotateAround(FieldConstants::kFieldCenterTranslation2d, 180_deg);
     }
     return iPose;
 }
 
-frc::Translation2d SubDrivetrain::standardizeTranslation(frc::Translation2d iTranslation)
+frc::Translation2d SubDrivetrain::getTranslationToHub()
 {
     // mAlliance is of type std::optional<frc::DriverStation::Alliance>
     auto mAlliance = frc::DriverStation::GetAlliance();
     if (mAlliance && mAlliance.value() == frc::DriverStation::kRed)
     {
-        return iTranslation.RotateAround(FieldConstants::kFieldCenterTranslation2d, 180_deg);
+        return standardizePose(getPose()).Translation() - FieldConstants::kHubCenterTranslation2d;
     }
-    return iTranslation;
-}
-
-frc::Translation2d SubDrivetrain::getTranslationToHub()
-{
-  return standardizeTranslation(FieldConstants::kHubCenterTranslation2d - standardizeTranslation(getPose().Translation()));
+    return FieldConstants::kHubCenterTranslation2d - standardizePose(getPose()).Translation();
 }
 
 frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubtoRobotDistance)
@@ -376,8 +346,8 @@ frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubto
         wRobotToHubTranslation.Norm() - iHubtoRobotDistance,
         wRobotToHubTranslation.Angle()};
 
-    frc::Translation2d wOriginToTargetTranslation = getPose().Translation() + wRobotToTargetTranslation;
-    frc::Pose2d oOriginToTargetPose = frc::Pose2d{wOriginToTargetTranslation, wRobotToHubTranslation.Angle()};
+    frc::Translation2d wOriginToTargetTranslation = standardizePose(getPose()).Translation() + wRobotToTargetTranslation;
+    frc::Pose2d oOriginToTargetPose = standardizePose(frc::Pose2d{wOriginToTargetTranslation, wRobotToHubTranslation.Angle()});
     mTargetPose2dPublisher.Set(oOriginToTargetPose);
     return oOriginToTargetPose;
 }
@@ -413,6 +383,23 @@ frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHu
     return wGoToPoseCommand;
 }
 
+bool SubDrivetrain::isTowardsHub()
+{
+    frc::Translation2d wRobotToHubTranslation = getTranslationToHub();
+    frc::Rotation2d wRobotAngle = getPose().Rotation();
+
+    return units::math::abs((wRobotAngle - wRobotToHubTranslation.Angle()).Degrees()) <  5_deg / (wRobotToHubTranslation.Norm()).value();
+};
+
+
+bool SubDrivetrain::isTowardsHubShooter()
+{
+    frc::Translation2d wRobotToHubTranslation = getTranslationToHub();
+    frc::Rotation2d wRobotAngle = getPose().Rotation();
+
+    return units::math::abs((wRobotAngle - wRobotToHubTranslation.Angle()).Degrees()) <  15_deg / (wRobotToHubTranslation.Norm()).value();
+};
+
 void SubDrivetrain::InitSendable(wpi::SendableBuilder& builder)
 {
     builder.SetSmartDashboardType("SwerveDrive");
@@ -429,5 +416,5 @@ void SubDrivetrain::InitSendable(wpi::SendableBuilder& builder)
     // builder.AddDoubleProperty("Back Right Angle", [this] {return mBackRightModule->getModuleState().angle.Radians().value();}, nullptr);
     // builder.AddDoubleProperty("Back Right Velocity", [this] {return mBackRightModule->getModuleState().speed.value();}, nullptr);
 
-    builder.AddDoubleProperty("Robot Angle", [this] {return mIMU->getRotation2d().Radians().value();}, nullptr);
+    builder.AddDoubleProperty("Robot Angle", [this] {return getPose().Rotation().Radians().value();}, nullptr);
 }

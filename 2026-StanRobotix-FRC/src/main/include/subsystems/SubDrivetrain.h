@@ -4,31 +4,25 @@
 
 #pragma once
 
-#include <frc/RobotBase.h>
-#include <frc/DriverStation.h>
-#include <frc/DataLogManager.h>
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Translation2d.h>
 #include <frc/kinematics/ChassisSpeeds.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
-#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/smartdashboard/Field2d.h>
 #include <frc2/command/SubsystemBase.h>
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
-#include <pathplanner/lib/auto/AutoBuilder.h>
-#include <pathplanner/lib/util/PathPlannerLogging.h>
-#include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
 
 #include <units/voltage.h>
 #include <units/angle.h>
 #include <units/time.h>
 #include <units/angular_velocity.h>
-#include "LimelightHelpers.h"
+
+#include "subsystems/Limelight.h"
 #include "subsystems/IMU.h"
 #include "subsystems/SwerveModule.h"
 #include "subsystems/SwerveModuleSim.h"
@@ -64,9 +58,10 @@ class SubDrivetrain : public frc2::SubsystemBase {
   IMU* getIMU();
 
   static frc::Pose2d standardizePose(frc::Pose2d iPose);
-  static frc::Translation2d standardizeTranslation(frc::Translation2d iTranslation);
   frc::Pose2d getClosestPoseAtDistanceFromHub(units::meter_t iDesiredDistance);
   frc2::CommandPtr getGoToDistanceFromHubCommand(units::meter_t iDesiredDistance);
+  bool isTowardsHub();
+  bool isTowardsHubShooter();
 
  private:
   frc::Translation2d* mFrontLeftLocation;
@@ -85,7 +80,8 @@ class SubDrivetrain : public frc2::SubsystemBase {
   nt::StructPublisher<frc::Rotation2d> mRotation2dPublisher;
   nt::StructPublisher<frc::Pose2d> mCurrentPose2dPublisher;
   nt::StructPublisher<frc::Pose2d> mTargetPose2dPublisher;
-  nt::StructPublisher<frc::Pose2d> mLimelightPoseEstimatorPublisher;
+  nt::StructPublisher<frc::Translation2d> mTranslationToHubPublisher;
+  nt::StructPublisher<frc::Rotation2d> mRotationToHubPublisher;
 
   SwerveModule* mFrontLeftModule;
   SwerveModule* mFrontRightModule;
@@ -107,12 +103,13 @@ class SubDrivetrain : public frc2::SubsystemBase {
   wpi::array<double, 3>* visionMeasurementStdDevs;
   wpi::array<double, 3>* stateStdDevs;
 
+  Limelight* mLimelight;
+
+  // Declaring the IMU object
   IMU* mIMU;
 
   // These attributes are used to not create new variables every time a function is called
-  std::string mLimelightName;
-  LimelightHelpers::PoseEstimate mLimelightPoseEstimate;
-  bool rejectCameraUpdate;
+  std::optional<frc::Pose2d> mLimelightEstimatedPose;
   frc::ChassisSpeeds mDesiredChassisSpeeds;
   frc::ChassisSpeeds mCurrentChassisSpeeds;
   frc::Rotation2d mCurrentRotation2d;

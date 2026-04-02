@@ -5,6 +5,11 @@
 #include "Robot.h"
 
 #include <frc2/command/CommandScheduler.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <ctre/phoenix6/SignalLogger.hpp>
+#include <rev/util/StatusLogger.h>
+#include <frc/DriverStation.h>
+#include <frc/DataLogManager.h>
 
 Robot::Robot() {
   frc::DataLogManager::Start();
@@ -32,10 +37,12 @@ void Robot::RobotPeriodic() {
     }
   }
   else {
-    frc::SmartDashboard::PutNumber("Dashboard/MatchTime", frc::DriverStation::GetMatchTime().value());
-    frc::SmartDashboard::PutNumber("Dashboard/Alliance", frc::DriverStation::GetAlliance().value());
+    mMatchStatus = m_container.getMatchStatus();
+    frc::SmartDashboard::PutNumber("Dashboard/timeLeftInMatch", mMatchStatus.timeLeftInMatch.value());
+    frc::SmartDashboard::PutNumber("Dashboard/timeLeftInPeriod", mMatchStatus.timeLeftInPeriod.value());
+    frc::SmartDashboard::PutString("Dashboard/matchPeriod", mMatchStatus.matchPeriodName);
+    frc::SmartDashboard::PutBoolean("Dashboard/hubActive", mMatchStatus.hubActive);
   }
-  frc::SmartDashboard::PutBoolean("Dashboard/Hub Active", m_container.isHubActive());
   frc2::CommandScheduler::GetInstance().Run();
 }
 

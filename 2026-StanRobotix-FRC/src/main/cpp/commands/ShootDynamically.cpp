@@ -4,15 +4,22 @@
 
 #include "commands/ShootDynamically.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include "Constants.h"
 
-ShootDynamically::ShootDynamically(SubShooter* iShooter, SubDrivetrain* iDrivetrain) {
+ShootDynamically::ShootDynamically(SubShooter* iShooter, SubDrivetrain* iDrivetrain, frc2::CommandXboxController* iJoystick) {
   mShooter = iShooter;
   mDrivetrain = iDrivetrain;
   AddRequirements({mShooter, mDrivetrain});
-  // Use addRequirements() here to declare subsystem dependencies.
+
+  mJoystick = iJoystick;
+
   mShooterPIDController = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
-  frc::SmartDashboard::PutData("shooter/command/PID Controller", mShooterPIDController);
+  mRotationPIDController = new frc::PIDController{DrivetrainConstants::PIDs::kRotationP, DrivetrainConstants::PIDs::kRotationI, DrivetrainConstants::PIDs::kRotationD};
+  mRotationPIDController->EnableContinuousInput(0, std::numbers::pi * 2);
+  frc::SmartDashboard::PutData("shooter/command/shooter PID 2", mShooterPIDController);
+  frc::SmartDashboard::PutData("shooter/command/rotation PID", mRotationPIDController);
 }
 
 // Called when the command is initially scheduled.
@@ -25,11 +32,12 @@ void ShootDynamically::Execute()
   mTargetMovement = {0_m, 0_m};
   mShooterStatus = {0_m, 0_tps, 0_s};
   mLastCalculatedShooterVelocity = 0_tps;
-  while (units::math::abs(mLastCalculatedShooterVelocity - mShooterStatus.shooterVelocity) > 0.5_tps)
+  mTranslationToHub = mDrivetrain->getTranslationToHub();
+  for (int i = 0; i < 5; i++)
   {
     mLastCalculatedShooterVelocity = mShooterStatus.shooterVelocity;
-    mDistanceToTarget = (mDrivetrain->getTranslationToHub() + mTargetMovement).Norm();
-    mShooterStatus = ShooterLookupTable::interpolate(mDistanceToTarget);
+    mDistanceToTarget = (mTranslationToHub + mTargetMovement).Norm();
+    mShooterStatus = LookupTable::interpolate(mDistanceToTarget);
     mTargetMovement = {-mRobotMovement.vx * mShooterStatus.timeOfFlight,
                        -mRobotMovement.vy * mShooterStatus.timeOfFlight};
   }
@@ -40,11 +48,13 @@ void ShootDynamically::Execute()
   mCurrentVelocity = mShooter->getVelocity();
   mAdjustedVelocity = mCurrentVelocity + mPIDAdjustment;
 
-  frc::SmartDashboard::PutNumber("shooter/command/PID adjustment", mPIDAdjustment.value());
-  frc::SmartDashboard::PutNumber("shooter/command/current velocity", mCurrentVelocity.value());
-  frc::SmartDashboard::PutNumber("shooter/command/adjusted velocity", mAdjustedVelocity.value());
   mShooter->setVelocity(mAdjustedVelocity);
-  // frc2::CommandScheduler::GetInstance().Schedule(mDrivetrain->Idle());
+
+  mRotationPIDController->SetSetpoint(mDrivetrain->getTranslationToHub().Angle().Radians().value());
+  mDrivetrain->driveFieldRelative(-mJoystick->GetLeftY(),
+                                  -mJoystick->GetLeftX(),
+                                  mRotationPIDController->Calculate(mDrivetrain->getPose().Rotation().Radians().value()),
+                                  (0.5 + (mJoystick->GetRightTriggerAxis() / 2)));
 }
 
 // Called once the command ends or is interrupted.

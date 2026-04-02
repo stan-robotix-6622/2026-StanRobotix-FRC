@@ -3,59 +3,54 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.847740740740742,
-        "y": 3.222680901542111
+        "x": 4.159988137603797,
+        "y": 7.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.07495916162819,
-        "y": 3.0022641524258544
+        "x": 4.659988137603797,
+        "y": 7.5
       },
       "isLocked": false,
-      "linkedName": "Picked Up Fuel"
+      "linkedName": "Comp/Left Trench/Shooting Position"
     },
     {
       "anchor": {
-        "x": 5.8814590747330975,
-        "y": 2.6433382299572408
+        "x": 5.58020166073547,
+        "y": 7.5
       },
       "prevControl": {
-        "x": 6.8914057787456375,
-        "y": 2.702414201302354
+        "x": 5.08020166073547,
+        "y": 7.5
       },
       "nextControl": {
-        "x": 3.6509661771767266,
-        "y": 2.5128674496893324
+        "x": 7.58020166073547,
+        "y": 7.5
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Comp/Left Trench/Pass Corner"
     },
     {
       "anchor": {
-        "x": 1.866336775385891,
-        "y": 2.6433382299572408
+        "x": 7.613689205219455,
+        "y": 5.600462633451957
       },
       "prevControl": {
-        "x": 1.618323815601567,
-        "y": 2.6747956897882443
+        "x": 7.613689205219455,
+        "y": 7.100462633451957
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Shooting Position"
+      "linkedName": "Comp/Left Trench/Center"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.01,
-      "rotationDegrees": 45.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Shoot",
-      "waypointRelativePos": 1.3782929399367685,
+      "name": "Intake",
+      "waypointRelativePos": 1.0,
       "endWaypointRelativePos": 2.0,
       "command": null
     }
@@ -70,13 +65,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 29.999999999999996
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Comp",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 90.0
+    "velocity": 0.0,
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }

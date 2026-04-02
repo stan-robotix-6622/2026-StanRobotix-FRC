@@ -6,6 +6,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+#include <frc2/command/button/CommandXboxController.h>
 
 #include <frc/geometry/Translation2d.h>
 #include <frc/kinematics/ChassisSpeeds.h>
@@ -27,7 +28,7 @@ class ShootDynamically
   /* You should consider using the more terse Command factories API instead
    * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
    */
-  ShootDynamically(SubShooter* iShooter, SubDrivetrain* iDrivetrain);
+  ShootDynamically(SubShooter* iShooter, SubDrivetrain* iDrivetrain, frc2::CommandXboxController* iJoystick);
 
   void Initialize() override;
 
@@ -40,14 +41,18 @@ class ShootDynamically
   SubDrivetrain* mDrivetrain;
   SubShooter* mShooter;
 
+  frc2::CommandXboxController* mJoystick;
+
   frc::PIDController* mShooterPIDController;
+  frc::PIDController* mRotationPIDController;
   units::turns_per_second_t mCurrentVelocity;
   units::turns_per_second_t mAdjustedVelocity;
   units::turns_per_second_t mPIDAdjustment;
 
   units::meter_t mDistanceToTarget = 0_m;
+  frc::Translation2d mTranslationToHub = {0_m, 0_m};
   frc::ChassisSpeeds mRobotMovement = {0_mps, 0_mps, 0_rad_per_s};
   frc::Translation2d mTargetMovement = {0_m, 0_m};
-  ShooterLookupTable::Status mShooterStatus = {0_m, 0_tps, 0_s};
+  LookupTable::ShooterStatus mShooterStatus = {0_m, 0_tps, 0_s};
   units::turns_per_second_t mLastCalculatedShooterVelocity;
 };

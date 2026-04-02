@@ -107,7 +107,7 @@
     "xtree": "cpp",
     "xutility": "cpp"
   },
-  "wpilib.selectDefaultSimulateExtension": true,
   "wpilib.autoStartRioLog": false,
-  "wpilib.skipSelectSimulateExtension": false
+  "wpilib.skipSelectSimulateExtension": false,
+  "wpilib.selectDefaultSimulateExtension": true
 }
