@@ -92,7 +92,6 @@ void Robot::SimulationPeriodic() {}
 
 void Robot::DriverStationConnected() {
   frc::DataLogManager::Log("Robot is connected to DriverStation");
-  m_container.ConfigureWhenConnectedToDS();
   mConnectedToDriveStation = true;
 }
 

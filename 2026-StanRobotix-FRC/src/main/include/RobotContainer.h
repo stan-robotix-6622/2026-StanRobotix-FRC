@@ -54,8 +54,6 @@ class RobotContainer
 public:
   RobotContainer();
 
-  void ConfigureWhenConnectedToDS();
-
   frc2::Command* GetAutonomousCommand();
   frc2::CommandPtr GetShooterWhenInZone();
 

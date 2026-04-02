@@ -61,6 +61,8 @@ SubDrivetrain::SubDrivetrain()
 
     mField2d = new frc::Field2d{};
     frc::SmartDashboard::PutData("drivetrain/Field2d", mField2d);
+
+    ConfigurePathplanner();
 }
 
 void SubDrivetrain::Periodic()
