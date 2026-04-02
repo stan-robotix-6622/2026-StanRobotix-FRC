@@ -37,10 +37,12 @@ void Robot::RobotPeriodic() {
     }
   }
   else {
-    frc::SmartDashboard::PutNumber("Dashboard/MatchTime", frc::DriverStation::GetMatchTime().value());
-    frc::SmartDashboard::PutNumber("Dashboard/Alliance", frc::DriverStation::GetAlliance().value());
+    mMatchStatus = m_container.getMatchStatus();
+    frc::SmartDashboard::PutNumber("Dashboard/timeLeftInMatch", mMatchStatus.timeLeftInMatch.value());
+    frc::SmartDashboard::PutNumber("Dashboard/timeLeftInPeriod", mMatchStatus.timeLeftInPeriod.value());
+    frc::SmartDashboard::PutString("Dashboard/matchPeriod", mMatchStatus.matchPeriodName);
+    frc::SmartDashboard::PutBoolean("Dashboard/hubActive", mMatchStatus.hubActive);
   }
-  frc::SmartDashboard::PutBoolean("Dashboard/Hub Active", m_container.isHubActive());
   frc2::CommandScheduler::GetInstance().Run();
 }
 

@@ -32,5 +32,7 @@ private:
   // doesn't have undefined behavior and potentially crash.
   std::optional<frc2::Command*> m_autonomousCommand;
 
+  Rebuilt::MatchStatus mMatchStatus;
+
   RobotContainer m_container;
 };
