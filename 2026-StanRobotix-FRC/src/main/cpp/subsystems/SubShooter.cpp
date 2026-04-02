@@ -62,4 +62,6 @@ units::turns_per_second_t SubShooter::getAdjustedVelocity()
     mAdjustedVelocity = mCurrentVelocity + mPIDAdjustment;
 
     return mAdjustedVelocity;
+
+  
 }

@@ -89,6 +89,7 @@ void RobotContainer::RegisterCommandsPathPlanner()
 void RobotContainer::ConfigureBindings()
 {
   mCommandXboxController->Button(OperatorConstants::kPivotDownButton).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
+  frc::SmartDashboard::PutBoolean("isIntakeOn", );
 
   mCommandXboxController->Button(OperatorConstants::kShootButton).ToggleOnTrue(Shoot(mSubShooter).ToPtr());
   mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
@@ -114,8 +115,8 @@ void RobotContainer::ConfigureBindingsCopilot()
   mCommandXboxControllerCopilot->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
   mCommandXboxControllerCopilot->Button(OperatorConstants::kUnstuckFuelButton).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
   mCommandXboxControllerCopilot->Button(OperatorConstants::kPivotDownButton).WhileTrue(frc2::cmd::Run([this] {return mSubPivotIntake->SetVoltage(10_V);}));//valeur a determiner
-  //mCommandXboxControllerCopilot->Button(OperatorConstants::Button::LeftBumper).WhileTrue(mSubClimb->SetSpeed(10));
-  //mCommandXboxControllerCopilot->Button(OperatorConstants::Button::RightBumper).WhileTrue(mSubClimb->SetSpeed(-10));
+  mCommandXboxControllerCopilot->Button(OperatorConstants::Button::LeftBumper).WhileTrue(frc2::cmd::Run([this] {return mClimb->SetSpeed(10);}));//valeur a determiner
+  mCommandXboxControllerCopilot->Button(OperatorConstants::Button::RightBumper).WhileTrue(frc2::cmd::Run([this] {return mClimb->SetSpeed(-10);}));//valeur a determiner
  
  
   mCommandXboxControllerCopilot->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
@@ -135,11 +136,14 @@ void RobotContainer::ConfigureTeleopAutomatisation()
   frc2::Trigger{[this]
                 { return mDrivetrain->isTowardsHubShooter(); }}
       .WhileTrue(Shoot(mSubShooter).ToPtr());
+  frc::SmartDashboard::PutBoolean("isShooterAutoOn", mDrivetrain->isTowardsHubShooter());
 
   frc2::Trigger{[this]
                 { return mDrivetrain->isTowardsHub()
                   && units::math::abs(mSubShooter->getVelocity() - mSubShooter->getAdjustedVelocity()) < 0.5_tps; }}
       .Debounce(0.3_s).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
+  frc::SmartDashboard::PutBoolean("isFeederAutoOn", (mDrivetrain->isTowardsHub()
+                  && units::math::abs(mSubShooter->getVelocity() - mSubShooter->getAdjustedVelocity()) < 0.5_tps));
 }
 
 

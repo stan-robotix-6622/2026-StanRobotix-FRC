@@ -18,6 +18,7 @@ public:
   void SetVoltage(double);
   frc2::CommandPtr getIntakeCommand();
   void SetSpeed(double);
+  bool isIntakeOn();
   /**
    * Will be called periodically whenever the CommandScheduler runs.
    */

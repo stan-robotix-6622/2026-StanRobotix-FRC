@@ -15,6 +15,8 @@ SubIntake::SubIntake() {
     mIntakeMotorConfig->Inverted(IntakeConstants::kInverted);
     mIntakeMotorConfig->SetIdleMode(IntakeConstants::kIdleMode);
     mIntakeMotor->Configure(*mIntakeMotorConfig, IntakeConstants::kReset, IntakeConstants::kPersist);
+
+    
 }
 
 // This method will be called once per scheduler run
@@ -47,4 +49,9 @@ frc2::CommandPtr SubIntake::getIntakeCommand() {
         },
         {}
     );
+}
+
+bool SubIntake::isIntakeOn()
+{
+  return mIntakeMotor->GetAppliedOutput() > 0;
 }

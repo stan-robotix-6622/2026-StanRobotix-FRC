@@ -43,7 +43,7 @@ void ShootDynamically::Execute()
   frc::SmartDashboard::PutNumber("shooter/command/PID adjustment", mPIDAdjustment.value());
   frc::SmartDashboard::PutNumber("shooter/command/current velocity", mCurrentVelocity.value());
   frc::SmartDashboard::PutNumber("shooter/command/adjusted velocity", mAdjustedVelocity.value());
-  mShooter->setVelocity(mAdjustedVelocity);
+  mShooter->setVelocity(mShooter->getAdjustedVelocity());
   // frc2::CommandScheduler::GetInstance().Schedule(mDrivetrain->Idle());
 }
 
@@ -54,6 +54,7 @@ void ShootDynamically::End(bool interrupted)
 }
 
 // Returns true when the command should end.
-bool ShootDynamically::IsFinished() {
+bool ShootDynamically::IsFinished()
+{
   return false;
 }

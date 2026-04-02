@@ -44,4 +44,10 @@ frc2::CommandPtr SubIndexer::getIndexCommand()
         },
         {}
     );
+
+
+    bool SubIntake::isIntakeOn()
+{
+  return mIntakeMotor->GetAppliedOutput() > 0;
+}
 }

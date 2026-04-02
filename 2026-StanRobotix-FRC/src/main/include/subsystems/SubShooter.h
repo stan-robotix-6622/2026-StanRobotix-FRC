@@ -41,6 +41,8 @@ public:
 
   units::turns_per_second_t getAdjustedVelocity();
 
+  bool isEqualDesiredVelocity(units::turns_per_second_t iDesiredVelocity, units::turns_per_second_t tolerance);
+
 private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
@@ -56,4 +58,5 @@ private:
   units::turns_per_second_t mCurrentVelocity;
   units::turns_per_second_t mAdjustedVelocity;
   units::turns_per_second_t mPIDAdjustment;
+  units::turns_per_second_t mDesiredVelocity;
 };
