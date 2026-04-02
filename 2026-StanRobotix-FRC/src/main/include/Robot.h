@@ -25,6 +25,7 @@ public:
   void TestPeriodic() override;
   void SimulationInit() override;
   void SimulationPeriodic() override;
+  void DriverStationConnected() override;
 
 private:
   bool mConnectedToDriveStation = false;

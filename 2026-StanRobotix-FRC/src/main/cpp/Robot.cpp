@@ -27,16 +27,7 @@ Robot::Robot() {
  * LiveWindow and SmartDashboard integrated updating.
  */
 void Robot::RobotPeriodic() {
-  if (!mConnectedToDriveStation)
-  {
-    if (frc::DriverStation::IsDSAttached())
-    {
-      frc::DataLogManager::Log("Robot is connected to DriverStation");
-      m_container.ConfigureWhenConnectedToDS();
-      mConnectedToDriveStation = true;
-    }
-  }
-  else {
+  if (mConnectedToDriveStation) {
     mMatchStatus = m_container.getMatchStatus();
     frc::SmartDashboard::PutNumber("Dashboard/timeLeftInMatch", mMatchStatus.timeLeftInMatch.value());
     frc::SmartDashboard::PutNumber("Dashboard/timeLeftInPeriod", mMatchStatus.timeLeftInPeriod.value());
@@ -98,6 +89,12 @@ void Robot::SimulationInit() {}
  * This function is called periodically whilst in simulation.
  */
 void Robot::SimulationPeriodic() {}
+
+void Robot::DriverStationConnected() {
+  frc::DataLogManager::Log("Robot is connected to DriverStation");
+  m_container.ConfigureWhenConnectedToDS();
+  mConnectedToDriveStation = true;
+}
 
 #ifndef RUNNING_FRC_TESTS
 int main() {
