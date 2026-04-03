@@ -27,7 +27,8 @@ RobotContainer::RobotContainer()
 {
   mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
   mCommandXboxControllerCopilot = new frc2::CommandXboxController{OperatorConstants::kCopilotControllerPort};
-  frc::SmartDashboard::PutData("Xbox Controller", &mCommandXboxController->GetHID());
+  frc::SmartDashboard::PutData("Pilot Controller", &mCommandXboxController->GetHID());
+  frc::SmartDashboard::PutData("Copilot Controller", &mCommandXboxControllerCopilot->GetHID());
 
   frc::SmartDashboard::PutNumber("Shooter Setpoint", ShooterConstants::PIDConstants::setpoint.value());
   frc::SmartDashboard::PutNumber("Drivetrain Distance Setpoint", 3);
@@ -46,12 +47,10 @@ RobotContainer::RobotContainer()
 
   mDriveCommands = new DriveCommands{mDrivetrain};
 
-  // Set the default commands for all subsystems
   SetSubsystemDefaultCommands();
-  // Register all relevant commands to pathplanner
   RegisterCommandsPathPlanner();
-  // Configure the button bindings
   ConfigureBindings();
+  ConfigureBindingsCopilot();
 }
 
 void RobotContainer::SetSubsystemDefaultCommands()
@@ -66,7 +65,7 @@ void RobotContainer::SetSubsystemDefaultCommands()
       },
       {mDrivetrain}));
 
-  mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
+  mSubPivotIntake->SetDefaultCommand(PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
 
   mSubClimb->SetDefaultCommand(ClimbUntilDown(mSubClimb).ToPtr());
 }
