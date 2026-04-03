@@ -23,12 +23,13 @@ void SubShooter::Periodic() {}
 
 void SubShooter::setVoltage(units::volt_t iVoltage)
 {
-    mLeaderShooterController->SetVoltage(iVoltage);
+  mLeaderShooterController->SetVoltage(iVoltage);
 };
 
-void SubShooter::setVelocity(units::turns_per_second_t iNextVelocity)
+void SubShooter::setDesiredVelocity(units::turns_per_second_t iNextVelocity)
 {
-    mClossedLoopController->SetSetpoint(iNextVelocity.value(), ShooterConstants::kShooterClosedLoopControlType);
+  mDesiredVelocity = iNextVelocity;
+  mClossedLoopController->SetSetpoint(iNextVelocity.value(), ShooterConstants::kShooterClosedLoopControlType);
 };
 
 units::turns_per_second_t SubShooter::getVelocity()
@@ -52,16 +53,7 @@ void SubShooter::InitSendable(wpi::SendableBuilder& builder)
     builder.AddDoubleProperty("kS", [this] {return mFeedforward->GetKs().value();}, [this] (double iKs) {return mFeedforward->SetKs(units::volt_t(iKs));});
 }
 
-units::turns_per_second_t SubShooter::getAdjustedVelocity()
+bool SubShooter::atDesiredVelocity()
 {
-    ShooterLookupTable::Status mShooterStatus = {0_m, 0_tps, 0_s};
-    mPIDcontroller->SetSetpoint(mShooterStatus.shooterVelocity.value());
-
-    mPIDAdjustment = units::turns_per_second_t(mPIDcontroller->Calculate(SubShooter::getVelocity().value()));
-    mCurrentVelocity = SubShooter::getVelocity();
-    mAdjustedVelocity = mCurrentVelocity + mPIDAdjustment;
-
-    return mAdjustedVelocity;
-
-  
+  return units::math::abs(getVelocity() - mDesiredVelocity) < 0.5_tps;
 }

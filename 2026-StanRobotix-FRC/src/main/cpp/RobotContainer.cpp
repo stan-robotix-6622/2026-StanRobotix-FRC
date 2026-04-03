@@ -89,7 +89,6 @@ void RobotContainer::RegisterCommandsPathPlanner()
 void RobotContainer::ConfigureBindings()
 {
   mCommandXboxController->Button(OperatorConstants::kPivotDownButton).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
-  frc::SmartDashboard::PutBoolean("isIntakeOn", );
 
   mCommandXboxController->Button(OperatorConstants::kShootButton).ToggleOnTrue(Shoot(mSubShooter).ToPtr());
   mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
@@ -136,13 +135,12 @@ void RobotContainer::ConfigureTeleopAutomatisation()
   frc2::Trigger{[this]
                 { return mDrivetrain->isTowardsHubShooter(); }}
       .WhileTrue(Shoot(mSubShooter).ToPtr());
-  frc::SmartDashboard::PutBoolean("isShooterAutoOn", mDrivetrain->isTowardsHubShooter());
+  frc::SmartDashboard::PutBoolean("status/isShooterAutoOn", mDrivetrain->isTowardsHubShooter());
 
   frc2::Trigger{[this]
-                { return mDrivetrain->isTowardsHub()
-                  && units::math::abs(mSubShooter->getVelocity() - mSubShooter->getAdjustedVelocity()) < 0.5_tps; }}
-      .Debounce(0.3_s).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
-  frc::SmartDashboard::PutBoolean("isFeederAutoOn", (mDrivetrain->isTowardsHub()
+                { return mDrivetrain->isTowardsHub() && mSubShooter->atDesiredVelocity(); }}
+      .Debounce(0.1_s).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
+  frc::SmartDashboard::PutBoolean("status/isFeederAutoOn", (mDrivetrain->isTowardsHub()
                   && units::math::abs(mSubShooter->getVelocity() - mSubShooter->getAdjustedVelocity()) < 0.5_tps));
 }
 

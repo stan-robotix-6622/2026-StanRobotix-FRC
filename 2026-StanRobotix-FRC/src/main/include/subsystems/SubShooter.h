@@ -25,7 +25,7 @@ class SubShooter : public frc2::SubsystemBase
 public:
   SubShooter();
 
-  void setVelocity(units::turns_per_second_t iNextVelocity);
+  void setDesiredVelocity(units::turns_per_second_t iNextVelocity);
   void setVoltage(units::volt_t iVoltage);
   units::turns_per_second_t getVelocity();
 
@@ -41,7 +41,7 @@ public:
 
   units::turns_per_second_t getAdjustedVelocity();
 
-  bool isEqualDesiredVelocity(units::turns_per_second_t iDesiredVelocity, units::turns_per_second_t tolerance);
+  bool atDesiredVelocity();
 
 private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -55,8 +55,5 @@ private:
   rev::spark::SparkRelativeEncoder* mRelativeEncoder;
   rev::spark::SparkClosedLoopController* mClossedLoopController;
 
-  units::turns_per_second_t mCurrentVelocity;
-  units::turns_per_second_t mAdjustedVelocity;
-  units::turns_per_second_t mPIDAdjustment;
   units::turns_per_second_t mDesiredVelocity;
 };
