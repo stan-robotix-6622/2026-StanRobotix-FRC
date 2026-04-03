@@ -47,7 +47,7 @@ private:
   frc2::CommandXboxController* mCommandXboxController;
   frc2::CommandXboxController* mCommandXboxControllerCopilot;
 
-  SubClimb * mClimb;
+  SubClimb * mSubClimb;
 
   SubShooter* mSubShooter = nullptr;
   SubFeeder* mSubFeeder = nullptr;

@@ -28,7 +28,9 @@ class SubClimb : public frc2::SubsystemBase {
   double GetPosition();
   frc2::CommandPtr GetClimbCommand(Direction iDirection);
   units::ampere_t GetCurrent();
-  double GetCurrentVariation();
+  double GetCurrentFiltered();
+  void SetDownPosition(double iDownPosition);
+  double GetDownPosition();
   
   /**
    * Will be called periodically whenever the CommandScheduler runs.
@@ -47,4 +49,6 @@ class SubClimb : public frc2::SubsystemBase {
 
   frc::LinearFilter<units::ampere_t>* mHighPassFilter;
   units::ampere_t mCurrent;
+  double mCurrentFiltered;
+  double mDownPosition;
 };

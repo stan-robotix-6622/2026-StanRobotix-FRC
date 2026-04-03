@@ -35,9 +35,10 @@ SubClimb::SubClimb() {
 // This method will be called once per scheduler run;
 void SubClimb::Periodic() {
     mCurrent = GetCurrent();
+    mCurrentFiltered = mHighPassFilter->Calculate(mCurrent).value();
 
     frc::SmartDashboard::PutNumber("climb/current", mCurrent.value());
-    frc::SmartDashboard::PutNumber("climb/current filter", GetCurrentVariation());
+    frc::SmartDashboard::PutNumber("climb/current filter", mCurrentFiltered);
 }
 
 void SubClimb::SetSpeed(double iSpeed) {
@@ -60,6 +61,14 @@ units::ampere_t SubClimb::GetCurrent() {
   return units::ampere_t(mSparkMaxLeader->GetPeriodicStatus0().current);
 }
 
-double SubClimb::GetCurrentVariation() {
-  return mHighPassFilter->Calculate(mCurrent).value();
+double SubClimb::GetCurrentFiltered() {
+  return mCurrentFiltered;
+}
+
+void SubClimb::SetDownPosition(double iDownPosition) {
+    mDownPosition = iDownPosition;
+}
+
+double SubClimb::GetDownPosition() {
+    return mDownPosition;
 }

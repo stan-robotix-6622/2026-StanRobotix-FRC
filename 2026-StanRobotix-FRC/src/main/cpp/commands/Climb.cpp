@@ -21,15 +21,15 @@ void Climb::Initialize() {
   switch (mDirection) {
     case SubClimb::Up:
       mPIDController->SetPID(ClimbConstants::kUpP, ClimbConstants::kUpI, ClimbConstants::kUpD);
-      mPIDController->SetSetpoint(ClimbConstants::kSetpointUp);
+      mPIDController->SetSetpoint(mSubClimb->GetDownPosition() + ClimbConstants::kSetpointUpOffset);
       break;
     case SubClimb::Down:
     mPIDController->SetPID(ClimbConstants::kDownP, ClimbConstants::kDownI, ClimbConstants::kDownD);
-      mPIDController->SetSetpoint(ClimbConstants::kSetpointDown);
+      mPIDController->SetSetpoint(mSubClimb->GetDownPosition());
       break;
     case SubClimb::Lift:
       mPIDController->SetPID(ClimbConstants::kLiftP, ClimbConstants::kLiftI, ClimbConstants::kLiftD);
-      mPIDController->SetSetpoint(ClimbConstants::kSetpointDown);
+      mPIDController->SetSetpoint(mSubClimb->GetDownPosition());
       break;
     default:
       break;
@@ -48,5 +48,5 @@ void Climb::End(bool interrupted) {
 
 // Returns true when the command should end.
 bool Climb::IsFinished() {
-  return mSubClimb->GetCurrentVariation() > ClimbConstants::kMaxCurrentVariation;
+  return false;
 }

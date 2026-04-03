@@ -36,6 +36,7 @@ using VoltageInverse = units::unit_t<units::detail::unit_multiply<units::voltage
 namespace OperatorConstants
 {
   inline constexpr int kDriverControllerPort = 0;
+  inline constexpr int kCopilotControllerPort = 1;
 
   namespace Button {
     inline constexpr int A = 1;
@@ -243,8 +244,6 @@ namespace FieldConstants
   inline constexpr frc::Pose2d kHubCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};              // From the right corner of blue alliance wall
   inline constexpr frc::Translation2d kFieldCenterTranslation2d = frc::Translation2d{325.61_in, 158.32_in}; // From the right corner of blue alliance wall
   inline constexpr frc::Pose2d kFieldCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};            // From the right corner of blue alliance wall
-  inline constexpr frc::Translation2d kOptimalShootingPositionTranslation2d = frc::Translation2d{0_m, 0_m}; // placeholder
-  inline constexpr frc::Pose2d kOptimalShootingPositionPose2d = frc::Pose2d{kOptimalShootingPositionTranslation2d, 0_rad}; //placeholder
 }
 
 namespace CANid
@@ -292,7 +291,7 @@ namespace PivotConstants
   inline constexpr units::volt_t kG = 0.80_V;
   inline constexpr units::volt_t kS = 0.0_V;
   inline constexpr TemplateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
-  inline constexpr double setpointUp = std::numbers::pi * 7 / 16; // 90 deg up
+  inline constexpr double setpointUp = std::numbers::pi / 2; // 90 deg up
   inline constexpr double setpointDown = std::numbers::pi / 18;   // 10 deg up
   inline constexpr bool kInverted = false;
   inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
@@ -315,11 +314,11 @@ namespace ClimbConstants
   inline constexpr double kLiftP = 0.02;
   inline constexpr double kLiftI = 0.001;
   inline constexpr double kLiftD = 0;
-  inline constexpr double kSetpointUp = 0;
-  inline constexpr double kSetpointDown = 16.5;
+  inline constexpr double kSetpointUpOffset = 16.7;
   inline constexpr double kLimitReverse = 0;
   inline constexpr double kLimitForward = 16.5;
   inline constexpr bool kInverted = false;
   inline constexpr bool kInverseFollowerMotor = false;
-  inline constexpr double kMaxCurrentVariation = 30;
+  inline constexpr double kMaxCurrentFiltered = 15.0;
+  inline constexpr double kConstantSpeed = 0.2;
 }
