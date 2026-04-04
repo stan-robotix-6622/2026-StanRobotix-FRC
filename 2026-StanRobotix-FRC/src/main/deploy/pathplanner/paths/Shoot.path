@@ -3,42 +3,79 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.17,
-        "y": 5.107
+        "x": 3.6112692763938323,
+        "y": 6.063107947805458
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.2022775800711747,
-        "y": 3.3102147093712935
+        "x": 2.503072360616845,
+        "y": 5.546666666666668
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.17,
-        "y": 2.4587781731909844
+        "x": 2.01890865954923,
+        "y": 4.782763938315539
       },
       "prevControl": {
-        "x": 3.17,
-        "y": 3.297995255041518
+        "x": 2.1594949618267125,
+        "y": 5.438833348943792
+      },
+      "nextControl": {
+        "x": 1.8252431791221837,
+        "y": 3.8789916963226565
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.729620403321471,
+        "y": 0.5974377224199281
+      },
+      "prevControl": {
+        "x": 1.4163938315539735,
+        "y": 0.6189561091340453
+      },
+      "nextControl": {
+        "x": 4.877632627548412,
+        "y": 0.5867585389387467
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.52761565836299,
+        "y": 1.748671411625148
+      },
+      "prevControl": {
+        "x": 7.538374851720048,
+        "y": 0.306939501779359
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Tests/FinishedShooting"
+      "linkedName": "Tests/Center"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 2.205733558178744,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [
     {
       "fieldPosition": {
-        "x": 4.625594,
+        "x": 4.626,
         "y": 4.021328
       },
       "rotationOffset": 0.0,
-      "minWaypointRelativePos": 0.15153906866613875,
-      "maxWaypointRelativePos": 0.75,
+      "minWaypointRelativePos": 0.3,
+      "maxWaypointRelativePos": 1.5,
       "name": "Hub"
     }
   ],
@@ -46,7 +83,7 @@
     {
       "name": "Shoot",
       "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 1.0,
+      "endWaypointRelativePos": 1.5,
       "command": null
     }
   ],
@@ -59,8 +96,8 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 0.5,
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "Tests",

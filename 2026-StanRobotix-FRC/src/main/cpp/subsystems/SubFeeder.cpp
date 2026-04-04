@@ -6,16 +6,14 @@
 
 #include <frc2/command/Commands.h>
 
-#include "Constants.h"
+#include "Configs.h"
 
 SubFeeder::SubFeeder() 
 {
     mFeederController = new rev::spark::SparkMax{CANid::kMotorFeederID, rev::spark::SparkLowLevel::MotorType::kBrushless};
-    mSparkConfigFeeder = new rev::spark::SparkMaxConfig;
     Configure();
 }
 
-// This method will be called once per scheduler run
 void SubFeeder::Periodic() {}
 
 void SubFeeder::setVoltage(units::volt_t iOutput)
@@ -25,10 +23,7 @@ void SubFeeder::setVoltage(units::volt_t iOutput)
 
 rev::REVLibError SubFeeder::Configure()
 {
-    mSparkConfigFeeder->Inverted(FeederConstants::kInverted);
-    mSparkConfigFeeder->SetIdleMode(FeederConstants::kIdleMode);
-
-    return mFeederController->Configure(*mSparkConfigFeeder, FeederConstants::kReset, FeederConstants::kPersist);
+    return mFeederController->Configure(Configs::Feeder::Config(), FeederConstants::kReset, FeederConstants::kPersist);
 };
 
 frc2::CommandPtr SubFeeder::getFeedShooterCommand(units::volt_t iVoltage)

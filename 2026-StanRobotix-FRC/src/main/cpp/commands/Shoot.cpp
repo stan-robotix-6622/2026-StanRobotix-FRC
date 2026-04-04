@@ -5,22 +5,22 @@
 
 #include "commands/Shoot.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include "Constants.h"
 
 Shoot::Shoot(SubShooter* iSubShooter) {
   mSubShooter = iSubShooter;
-  
-  // Use addRequirements() here to declare subsystem dependencies.
   AddRequirements(iSubShooter);
   
   mPIDController = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
-  frc::SmartDashboard::PutData("shooter/shooter PID", mPIDController);
+  frc::SmartDashboard::PutData("shooter/command/shooter PID", mPIDController);
 }
 
 // Called when the command is initially scheduled.
 void Shoot::Initialize() 
 {
-  mSetpointVelocity = ShooterConstants::PIDConstants::setpoint;
+  mSetpointVelocity = (units::turns_per_second_t)frc::SmartDashboard::GetNumber("tunable/Shooter Setpoint", ShooterConstants::PIDConstants::setpoint.value());
   mPIDController->SetSetpoint(mSetpointVelocity.value());
 }
 
@@ -31,9 +31,9 @@ void Shoot::Execute()
   mCurrentVelocity = mSubShooter->getVelocity();
   mAdjustedVelocity = mCurrentVelocity + mPIDAdjustment;
 
-  frc::SmartDashboard::PutNumber("shooter/PID adjustment", mPIDAdjustment.value());
-  frc::SmartDashboard::PutNumber("shooter/current velocity", mCurrentVelocity.value());
-  frc::SmartDashboard::PutNumber("shooter/adjusted velocity", mAdjustedVelocity.value());
+  frc::SmartDashboard::PutNumber("shooter/command/PID adjustment", mPIDAdjustment.value());
+  frc::SmartDashboard::PutNumber("shooter/command/current velocity", mCurrentVelocity.value());
+  frc::SmartDashboard::PutNumber("shooter/command/adjusted velocity", mAdjustedVelocity.value());
   mSubShooter->setVelocity(mAdjustedVelocity);
 }
 

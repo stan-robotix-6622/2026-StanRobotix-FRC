@@ -6,39 +6,58 @@
 
 #include <frc2/command/button/Trigger.h>
 #include <frc2/command/Command.h>
-#include <pathplanner/lib/commands/PathPlannerAuto.h>
 #include <pathplanner/lib/auto/NamedCommands.h>
 #include <pathplanner/lib/events/EventTrigger.h>
 #include <pathplanner/lib/events/PointTowardsZoneTrigger.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/DriverStation.h>
+
 #include "commands/DriveCommands.h"
 #include "commands/PivotIntake.h"
 #include "commands/FullIntake.h"
 #include "commands/Shoot.h"
+#include "commands/ShootDynamically.h"
+
+#include <iostream>
 
 #include "Constants.h"
+
+namespace {
+  const units::meter_t DrivetrainDefaultSetpoint = 3_m;
+}
 
 RobotContainer::RobotContainer()
 {
   mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
   frc::SmartDashboard::PutData("Xbox Controller", &mCommandXboxController->GetHID());
 
-  // Initialize all of your commands and subsystems here
+  frc::SmartDashboard::PutNumber("tunable/Shooter Setpoint", ShooterConstants::PIDConstants::setpoint.value());
+  frc::SmartDashboard::PutNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value());
+  frc::SmartDashboard::PutNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value());
+  frc::SmartDashboard::PutNumber("tunable/Time of Flight", 0);
+
   mSubShooter = new SubShooter{};
+  frc::SmartDashboard::PutData("shooter", mSubShooter);
   mSubFeeder = new SubFeeder{};
-  // mSubIndexer = new SubIndexer{};
   mDrivetrain = new SubDrivetrain{};
+  frc::SmartDashboard::PutData("swerve", mDrivetrain);
   mSubIntake = new SubIntake{};
+  frc::SmartDashboard::PutData("intake", mSubIntake);
   mSubPivotIntake = new SubPivotIntake{};
-
+  frc::SmartDashboard::PutData("pivot", mSubPivotIntake);
+  
   mDriveCommands = new DriveCommands{mDrivetrain};
-
-  // Set the default commands for all subsystems
+  
   SetSubsystemDefaultCommands();
-  // Register all relevant commands to pathplanner
   RegisterCommandsPathPlanner();
-  // Configure the button bindings
   ConfigureBindings();
+
+  mAutoChooser = pathplanner::AutoBuilder::buildAutoChooser();
+  frc::SmartDashboard::PutData("Auto Chooser", &mAutoChooser);
+
+  mShooterStatusPublisher = mNTShooterStatusTable->GetStructArrayTopic<LookupTable::ShooterStatus>("status").Publish();
+  mShooterStatusSubscriber = mNTShooterStatusTable->GetStructArrayTopic<LookupTable::ShooterStatus>("status").Subscribe(std::span<const LookupTable::ShooterStatus>());
 }
 
 void RobotContainer::SetSubsystemDefaultCommands()
@@ -46,14 +65,14 @@ void RobotContainer::SetSubsystemDefaultCommands()
   mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
       [this]
       {
-        mDrivetrain->driveFieldRelative(-mCommandXboxController->GetLeftY(),
-                                        -mCommandXboxController->GetLeftX(),
-                                        -mCommandXboxController->GetRightX(),
-                                        (1 - mCommandXboxController->GetRightTriggerAxis()));
+        mDrivetrain->driveFieldRelative(Deadband(-mCommandXboxController->GetLeftY(), 0.05),
+                                        Deadband(-mCommandXboxController->GetLeftX(), 0.05),
+                                        Deadband(-mCommandXboxController->GetRightX(), 0.05),
+                                        (0.5 + (mCommandXboxController->GetRightTriggerAxis() / 2)));
       },
       {mDrivetrain}));
 
-  mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
+ mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
 }
 
 void RobotContainer::RegisterCommandsPathPlanner()
@@ -66,7 +85,6 @@ void RobotContainer::RegisterCommandsPathPlanner()
   pathplanner::NamedCommands::registerCommand("Shoot", Shoot(mSubShooter).ToPtr());
   pathplanner::NamedCommands::registerCommand("Feed Shooter", mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
   pathplanner::NamedCommands::registerCommand("Unstuck Feeder", mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
-  // pathplanner::NamedCommands::registerCommand("Index Fuel", mSubIntake->getIntakeCommand());
 
   pathplanner::EventTrigger("Intake").WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
   pathplanner::EventTrigger("Shoot").WhileTrue(Shoot(mSubShooter).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter"));
@@ -79,72 +97,135 @@ void RobotContainer::ConfigureBindings()
   mCommandXboxController->Button(OperatorConstants::kPivotDownButton).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
 
   mCommandXboxController->Button(OperatorConstants::kShootButton).ToggleOnTrue(Shoot(mSubShooter).ToPtr());
-  mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
-  mCommandXboxController->Button(OperatorConstants::kUnstuckFuelButton).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
-  // mCommandXboxController->Button(OperatorConstants::kIndexButton).WhileTrue(mSubIntake->getIntakeCommand());
+  mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(
+      units::volt_t(frc::SmartDashboard::GetNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value()))));
+  mCommandXboxController->Button(OperatorConstants::kUnstuckFuelButton).WhileTrue(mSubFeeder->getFeedShooterCommand(
+      units::volt_t(-frc::SmartDashboard::GetNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value()))));
 
   mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
     {
       if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
-      {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_rad));}
-      else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_rad));}
+      {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
+      else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));}
     }));
 
   mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
-    { mDrivetrain->resetPose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation())); }));
+    { mDrivetrain->resetPose(SubDrivetrain::standardizePose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()))); }));
 
-  // mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
-  // mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
-}
+  mCommandXboxController->Button(OperatorConstants::Button::Back).ToggleOnTrue(ShootDynamically(mSubShooter, mDrivetrain, mCommandXboxController).ToPtr());
 
-void RobotContainer::ConfigureWhenConnectedToDS()
-{
-  mDrivetrain->ConfigurePathplanner();
-  // Bindings that need the AutoBuilder to be configures
-  mCommandXboxController->Button(7).WhileTrue(mDrivetrain->getFollowPathCommand("EightPath").Repeatedly());
-  mCommandXboxController->Button(8).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(2.3_m); }));
-
-  mAutoChooser = pathplanner::AutoBuilder::buildAutoChooser();
-  frc::SmartDashboard::PutData("Auto Chooser", &mAutoChooser);
+  mCommandXboxController->Button(OperatorConstants::Button::LeftJoystick).OnTrue(frc2::cmd::RunOnce([this] {
+    std::vector<LookupTable::ShooterStatus> vector = mShooterStatusSubscriber.Get();
+    units::meter_t distance = mDrivetrain->getTranslationToHub().Norm();
+    units::turns_per_second_t velocity = units::turns_per_second_t(frc::SmartDashboard::GetNumber("tunable/Shooter Setpoint", 0));
+    units::second_t TOF = units::second_t(frc::SmartDashboard::GetNumber("tunable/Time of Flight", 0));
+    vector.emplace_back(LookupTable::ShooterStatus{distance, velocity, TOF});
+    std::cout << "ShooterStatus vector:\n";
+    for (unsigned int i = 0; i < vector.size(); i++)
+    {
+      std::cout << "    ShooterStatus{" << vector[i].distanceToTarget.value() << "_m, "
+                << vector[i].shooterVelocity.value() << "_tps, "
+                << vector[i].timeOfFlight.value() << "_s},\n";
+    }
+    mShooterStatusPublisher.Set(vector);}));
+    
+  mCommandXboxController->Button(OperatorConstants::Button::Start).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
+  (units::meter_t)frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value())); }));
 }
 
 frc2::Command *RobotContainer::GetAutonomousCommand() {
   return mAutoChooser.GetSelected();
 }
 
-bool RobotContainer::isHubActive()
+double RobotContainer::Deadband(double iInput, double iThreshold, bool iSquared)
+{
+  if (abs(iInput) < iThreshold)
+  {
+    return 0.0;
+  }
+  if (!iSquared)
+  {
+    // ((iInput > 0) - (iInput < 0)) gives us the sign of iInput
+    // Then we scale the value of iInput over the range [-1; iThreshold] or [iTheshold; 1]
+    return (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold));
+  }
+  // Same as above but we square the value and keep the sign of the initial iInput
+  return ((iInput > 0) - (iInput < 0)) *
+    (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold)) * // Squared
+    (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold));
+}
+
+Rebuilt::MatchStatus RobotContainer::getMatchStatus()
 {
   std::string gameData = frc::DriverStation::GetGameSpecificMessage();
   units::second_t matchTime = frc::DriverStation::GetMatchTime();
+  // mAlliance is of type std::optional<frc::DriverStation::Alliance>
   auto mAlliance = frc::DriverStation::GetAlliance();
+  Rebuilt::MatchStatus status;
+  status.timeLeftInMatch = matchTime;
 
-  if (matchTime <= 30_s || /* Autonomous and End Game */
-      matchTime >= 130_s)  /* Transition Shift */ {
-    return true;
-  }
-  if (mAlliance) {
-    switch (gameData[0]) {
-      case 'B': // Blue starts inactive
-        if ((30_s <= matchTime && matchTime <= 55_s) || /* Shift 4 */
-            (80_s <= matchTime && matchTime <= 105_s))  /* Shift 2 */ {
-          return mAlliance.value() == frc::DriverStation::kBlue;
-        }
-        else {
-          return mAlliance.value() == frc::DriverStation::kRed;
-        }
-      case 'R': // Red starts inactive
-        if ((30_s <= matchTime && matchTime <= 55_s) || /* Shift 4 */
-            (80_s <= matchTime && matchTime <= 105_s))  /* Shift 2 */ {
-          return mAlliance.value() == frc::DriverStation::kRed;
-        }
-        else {
-          return mAlliance.value() == frc::DriverStation::kBlue;
-        }
-      default: // If unexpected value
-        return false;
+  if (matchTime <= 30_s) {
+    if (gameData[0] != 'B' && gameData[0] != 'R') {
+      status.timeLeftInPeriod = matchTime + 140_s;
+      status.matchPeriod = Rebuilt::MatchPeriod::Autonomous;
+      status.matchPeriodName = "Autonomous";
+    }
+    else {
+      status.timeLeftInPeriod = matchTime;
+      status.matchPeriod = Rebuilt::MatchPeriod::Endgame;
+      status.matchPeriodName = "Endgame";
     }
   }
-  else { // If Alliance color not accessible
-    return false;
+  else {
+    status.timeLeftInPeriod = units::math::fmod(matchTime - 30_s, 25_s);
   }
+  if (matchTime >= 130_s) {
+    status.matchPeriod = Rebuilt::MatchPeriod::TransitionShift;
+    status.matchPeriodName = "Transition Shift";
+  }
+  else if (matchTime >= 105_s) {
+    status.matchPeriod = Rebuilt::MatchPeriod::Shift1;
+    status.matchPeriodName = "Shift 1";
+  }
+  else if (matchTime >= 80_s) {
+    status.matchPeriod = Rebuilt::MatchPeriod::Shift2;
+    status.matchPeriodName = "Shift 2";
+  }
+  else if (matchTime >= 55_s) {
+    status.matchPeriod = Rebuilt::MatchPeriod::Shift3;
+    status.matchPeriodName = "Shift 3";
+  }
+  else if (matchTime >= 30_s) {
+    status.matchPeriod = Rebuilt::MatchPeriod::Shift4;
+    status.matchPeriodName = "Shift 4";
+  }
+  if (status.matchPeriod == Rebuilt::MatchPeriod::Autonomous
+      || status.matchPeriod == Rebuilt::MatchPeriod::TransitionShift
+      || status.matchPeriod == Rebuilt::MatchPeriod::Endgame) {
+    status.hubActive = true;
+  }
+  else {
+    if (gameData[0] == 'B') { // Blue starts inactive
+      if (status.matchPeriod == Rebuilt::MatchPeriod::Shift2
+          || status.matchPeriod == Rebuilt::MatchPeriod::Shift4) {
+        status.hubActive = mAlliance.value() == frc::DriverStation::kBlue;
+      }
+      else {
+        status.hubActive = mAlliance.value() == frc::DriverStation::kRed;
+      }
+    }
+    else if (gameData[0] == 'R') { // Red starts inactive
+      if (status.matchPeriod == Rebuilt::MatchPeriod::Shift2
+          || status.matchPeriod == Rebuilt::MatchPeriod::Shift4) {
+        status.hubActive = mAlliance.value() == frc::DriverStation::kRed;
+      }
+      else {
+        status.hubActive = mAlliance.value() == frc::DriverStation::kBlue;
+      }
+    }
+    else {
+      status.hubActive = false;
+    }
+  }
+  return status;
 }

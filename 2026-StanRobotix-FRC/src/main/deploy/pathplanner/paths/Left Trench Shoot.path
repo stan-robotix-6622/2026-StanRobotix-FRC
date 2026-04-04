@@ -3,59 +3,54 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.8144839857651252,
-        "y": 3.782158956109134
+        "x": 7.613689205219455,
+        "y": 5.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4917081850586897,
-        "y": 6.708659549236723
+        "x": 7.613689205219455,
+        "y": 6.6
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Comp/Left Trench/Center"
     },
     {
       "anchor": {
-        "x": 3.2131791221879897,
-        "y": 7.278896797160803
+        "x": 5.58020166073547,
+        "y": 7.5
       },
       "prevControl": {
-        "x": 2.1646574286059135,
-        "y": 7.007815578820071
+        "x": 6.08020166073547,
+        "y": 7.5
       },
       "nextControl": {
-        "x": 5.418813760384907,
-        "y": 7.849134045084882
+        "x": 5.08020166073547,
+        "y": 7.5
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Comp/Left Trench/Pass Corner"
     },
     {
       "anchor": {
-        "x": 6.9095,
-        "y": 6.272266666666667
+        "x": 4.159988137603797,
+        "y": 7.5
       },
       "prevControl": {
-        "x": 6.677711111111111,
-        "y": 6.987788888888889
+        "x": 5.159988137603797,
+        "y": 7.5
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Comp/Left Trench/Shooting Position"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 180.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "Intake",
-      "waypointRelativePos": 1.7145833333333294,
+      "name": "Shoot",
+      "waypointRelativePos": 1.0,
       "endWaypointRelativePos": 2.0,
       "command": null
     }
@@ -70,13 +65,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "Blue",
+  "folder": "Comp",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }
