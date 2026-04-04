@@ -18,6 +18,7 @@ class SubFeeder : public frc2::SubsystemBase {
   void setVoltage(units::volt_t iOutput);
   rev::REVLibError Configure();
   frc2::CommandPtr getFeedShooterCommand(units::volt_t iVoltage);
+  bool isFeederOn();
 
   void Periodic() override;
 

@@ -47,7 +47,7 @@ void ShootDynamically::Execute()
   mCurrentVelocity = mShooter->getVelocity();
   mAdjustedVelocity = mCurrentVelocity + mPIDAdjustment;
 
-  mShooter->setVelocity(mAdjustedVelocity);
+  mShooter->setDesiredVelocity(mAdjustedVelocity);
 
   mRotationPIDController->SetSetpoint(mDrivetrain->getTranslationToHub().Angle().Radians().value());
   mDrivetrain->driveFieldRelative(-mJoystick->GetLeftY(),
@@ -59,7 +59,7 @@ void ShootDynamically::Execute()
 // Called once the command ends or is interrupted.
 void ShootDynamically::End(bool interrupted)
 {
-  mShooter->setVelocity(0_tps);
+  mShooter->setDesiredVelocity(0_tps);
 }
 
 // Returns true when the command should end.

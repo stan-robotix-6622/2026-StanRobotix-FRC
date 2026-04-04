@@ -36,8 +36,6 @@ public:
 
   void InitSendable(wpi::SendableBuilder &builder) override;
 
-  units::turns_per_second_t getAdjustedVelocity();
-
   bool atDesiredVelocity();
 
 private:

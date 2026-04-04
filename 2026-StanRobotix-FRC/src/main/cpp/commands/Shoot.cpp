@@ -27,15 +27,20 @@ void Shoot::Initialize()
 // Called repeatedly when this Command is scheduled to run
 void Shoot::Execute() 
 {
+  mPIDAdjustment = units::turns_per_second_t(mPIDController->Calculate(mSubShooter->getVelocity().value()));
+  mCurrentVelocity = mSubShooter->getVelocity();
+  mAdjustedVelocity = mCurrentVelocity + mPIDAdjustment;
+
   frc::SmartDashboard::PutNumber("shooter/command/PID adjustment", mPIDAdjustment.value());
   frc::SmartDashboard::PutNumber("shooter/command/current velocity", mCurrentVelocity.value());
   frc::SmartDashboard::PutNumber("shooter/command/adjusted velocity", mAdjustedVelocity.value());
-  mSubShooter->setVelocity(mSubShooter->getAdjustedVelocity());
+
+  mSubShooter->setDesiredVelocity(mAdjustedVelocity);
 }
 
 // Called once the command ends or is interrupted.
 void Shoot::End(bool interrupted) {
-  mSubShooter->setVelocity(0_tps);
+  mSubShooter->setDesiredVelocity(0_tps);
 }
 
 // Returns true when the command should end.
