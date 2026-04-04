@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 7.613689205219455,
-        "y": 5.600462633451957
+        "y": 5.6
       },
       "prevControl": null,
       "nextControl": {
         "x": 7.613689205219455,
-        "y": 6.600462633451957
+        "y": 6.6
       },
       "isLocked": false,
       "linkedName": "Comp/Left Trench/Center"
@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 5.58020166073547,
-        "y": 7.257378410438909
+        "y": 7.5
       },
       "prevControl": {
         "x": 6.08020166073547,
-        "y": 7.257378410438909
+        "y": 7.5
       },
       "nextControl": {
         "x": 5.08020166073547,
-        "y": 7.257378410438909
+        "y": 7.5
       },
       "isLocked": false,
       "linkedName": "Comp/Left Trench/Pass Corner"
@@ -33,11 +33,11 @@
     {
       "anchor": {
         "x": 4.159988137603797,
-        "y": 7.257378410438909
+        "y": 7.5
       },
       "prevControl": {
         "x": 5.159988137603797,
-        "y": 7.257378410438909
+        "y": 7.5
       },
       "nextControl": null,
       "isLocked": false,

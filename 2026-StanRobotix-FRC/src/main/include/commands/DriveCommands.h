@@ -5,7 +5,6 @@
 #pragma once
 
 #include <frc2/command/CommandPtr.h>
-#include <frc2/command/Commands.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/filter/SlewRateLimiter.h>
 
@@ -18,8 +17,6 @@
 #include <units/voltage.h>
 
 #include "subsystems/SubDrivetrain.h"
-
-using volts_per_second = units::unit_t<units::detail::unit_multiply<units::voltage::volts, units::inverse<units::time::seconds>>, double, units::linear_scale>;
 
 // Made based on the drive commands found at
 // https://github.com/Mechanical-Advantage/AdvantageKit/blob/main/template_projects/sources/spark_swerve/src/main/java/frc/robot/commands/DriveCommands.java

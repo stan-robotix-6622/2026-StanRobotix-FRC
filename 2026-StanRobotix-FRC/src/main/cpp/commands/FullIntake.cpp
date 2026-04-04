@@ -4,9 +4,10 @@
 
 #include "commands/FullIntake.h"
 
+#include <frc2/command/Commands.h>
+
 frc2::CommandPtr FullIntake::FullIntakeCommand(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake itargetState)
 {
-  // Use addRequirements() here to declare subsystem dependencies.
   if (itargetState == PivotIntake::StatePivotIntake::kDown)
   {
     return PivotIntake(iPivot, PivotIntake::StatePivotIntake::kDown).AlongWith(iIntake->getIntakeCommand());

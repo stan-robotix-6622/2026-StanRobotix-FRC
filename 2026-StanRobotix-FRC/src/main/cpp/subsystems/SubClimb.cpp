@@ -7,8 +7,9 @@
 
 #include <frc/StateSpaceUtil.h>
 #include <frc2/command/RunCommand.h>
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include "commands/Climb.h"
-#include <iostream>
 
 SubClimb::SubClimb() {
     mSparkMaxLeader = new rev::spark::SparkMax(CANid::kMotorClimbLeaderID, ClimbConstants::kMotorTypeLeader);
@@ -27,11 +28,17 @@ SubClimb::SubClimb() {
     mSparkMaxFollower->Configure(*mSparkMaxConfigFollower, rev::ResetMode::kResetSafeParameters, rev::PersistMode::kPersistParameters);
 
     mSparkRelativeEncoder = new rev::spark::SparkRelativeEncoder{mSparkMaxLeader->GetEncoder()};
+
+    mHighPassFilter = new frc::LinearFilter<units::ampere_t>{frc::LinearFilter<units::ampere_t>::HighPass(0.1, 0.02_s)};
 }
 
 // This method will be called once per scheduler run;
 void SubClimb::Periodic() {
-    std::cout << mSparkMaxLeader->GetPeriodicStatus0().current << std::endl;
+    mCurrent = GetCurrent();
+    mCurrentFiltered = mHighPassFilter->Calculate(mCurrent).value();
+
+    frc::SmartDashboard::PutNumber("climb/current", mCurrent.value());
+    frc::SmartDashboard::PutNumber("climb/current filter", mCurrentFiltered);
 }
 
 void SubClimb::SetSpeed(double iSpeed) {
@@ -48,4 +55,20 @@ double SubClimb::GetPosition() {
 
 frc2::CommandPtr SubClimb::GetClimbCommand(Direction iDirection) {
     return Climb(this, iDirection).ToPtr();
+}
+
+units::ampere_t SubClimb::GetCurrent() {
+  return units::ampere_t(mSparkMaxLeader->GetPeriodicStatus0().current);
+}
+
+double SubClimb::GetCurrentFiltered() {
+  return mCurrentFiltered;
+}
+
+void SubClimb::SetDownPosition(double iDownPosition) {
+    mDownPosition = iDownPosition;
+}
+
+double SubClimb::GetDownPosition() {
+    return mDownPosition;
 }

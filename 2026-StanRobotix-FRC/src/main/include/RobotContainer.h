@@ -6,10 +6,7 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/button/CommandXboxController.h>
-
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/DriverStation.h>
-#include <frc/DataLogManager.h>
+#include <frc/smartdashboard/SendableChooser.h>
 
 #include "commands/DriveCommands.h"
 
@@ -18,9 +15,34 @@
 #include "subsystems/SubPivotIntake.h"
 #include "subsystems/SubShooter.h"
 #include "subsystems/subFeeder.h"
-#include "subsystems/subIndexer.h"
 #include "subsystems/SubDrivetrain.h"
 
+#include <ShooterLookupTable.h>
+#include <networktables/NetworkTable.h>
+#include <networktables/NetworkTableInstance.h>
+#include <networktables/StructArrayTopic.h>
+
+#include <units/time.h>
+
+namespace Rebuilt {
+  enum MatchPeriod {
+    Autonomous,
+    TransitionShift,
+    Shift1,
+    Shift2,
+    Shift3,
+    Shift4,
+    Endgame
+  };
+
+  struct MatchStatus {
+    bool hubActive;
+    MatchPeriod matchPeriod;
+    std::string_view matchPeriodName;
+    units::second_t timeLeftInPeriod;
+    units::second_t timeLeftInMatch;
+  };
+}
 /**
  * This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -33,26 +55,21 @@ class RobotContainer
 public:
   RobotContainer();
 
-  void ConfigureWhenConnectedToDS();
-  void ConfigureTeleopAutomatisation();
-
   frc2::Command* GetAutonomousCommand();
 
 
   // Made from the example code at https://www.chiefdelphi.com/uploads/default/original/3X/b/a/ba7ccfd90bac0934e374dd4459d813cee2903942.pdf
   double Deadband(double iInput, double iThreshold, bool iSquared = false);
 
-  bool isHubActive();
-  units::turns_per_second_t setVelocityDependingOnDistanceToHub();
+  Rebuilt::MatchStatus getMatchStatus();
 private:
   frc2::CommandXboxController* mCommandXboxController;
   frc2::CommandXboxController* mCommandXboxControllerCopilot;
 
-  SubClimb * mClimb;
+  SubClimb * mSubClimb;
 
   SubShooter* mSubShooter = nullptr;
   SubFeeder* mSubFeeder = nullptr;
-  // SubIndexer* mSubIndexer = nullptr;
 
   SubDrivetrain* mDrivetrain = nullptr;
 
@@ -67,4 +84,9 @@ private:
   void SetSubsystemDefaultCommands();
   
   frc::SendableChooser<frc2::Command*> mAutoChooser;
+
+  nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
+  std::shared_ptr<nt::NetworkTable> mNTShooterStatusTable = inst.GetTable("SmartDashboard/Shooter Status");
+  nt::StructArrayPublisher<LookupTable::ShooterStatus> mShooterStatusPublisher;
+  nt::StructArraySubscriber<LookupTable::ShooterStatus> mShooterStatusSubscriber;
 };

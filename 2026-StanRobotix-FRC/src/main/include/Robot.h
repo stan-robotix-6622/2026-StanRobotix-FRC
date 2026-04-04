@@ -7,11 +7,7 @@
 #include <optional>
 
 #include <frc/TimedRobot.h>
-#include <frc/DriverStation.h>
-#include <frc/DataLogManager.h>
 #include <frc2/command/CommandPtr.h>
-#include <ctre/phoenix6/SignalLogger.hpp>
-#include <rev/util/StatusLogger.h>
 
 #include "RobotContainer.h"
 
@@ -29,12 +25,15 @@ public:
   void TestPeriodic() override;
   void SimulationInit() override;
   void SimulationPeriodic() override;
+  void DriverStationConnected() override;
 
 private:
   bool mConnectedToDriveStation = false;
   // Have it empty by default so that if testing teleop it
   // doesn't have undefined behavior and potentially crash.
   std::optional<frc2::Command*> m_autonomousCommand;
+
+  Rebuilt::MatchStatus mMatchStatus;
 
   RobotContainer m_container;
 };
