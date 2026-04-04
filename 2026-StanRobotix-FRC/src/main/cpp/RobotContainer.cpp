@@ -18,6 +18,7 @@
 #include "commands/FullIntake.h"
 #include "commands/Shoot.h"
 #include "commands/ShootDynamically.h"
+#include "commands/ClimbUntilDown.h"
 
 #include <iostream>
 
@@ -30,13 +31,16 @@ namespace {
 RobotContainer::RobotContainer()
 {
   mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
-  frc::SmartDashboard::PutData("Xbox Controller", &mCommandXboxController->GetHID());
+  mCommandXboxControllerCopilot = new frc2::CommandXboxController{OperatorConstants::kCopilotControllerPort};
+  frc::SmartDashboard::PutData("Pilot Controller", &mCommandXboxController->GetHID());
+  frc::SmartDashboard::PutData("Copilot Controller", &mCommandXboxControllerCopilot->GetHID());
 
   frc::SmartDashboard::PutNumber("tunable/Shooter Setpoint", ShooterConstants::PIDConstants::setpoint.value());
   frc::SmartDashboard::PutNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value());
   frc::SmartDashboard::PutNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value());
   frc::SmartDashboard::PutNumber("tunable/Time of Flight", 0);
 
+  mSubClimb = new SubClimb;
   mSubShooter = new SubShooter{};
   frc::SmartDashboard::PutData("shooter", mSubShooter);
   mSubFeeder = new SubFeeder{};
@@ -46,12 +50,13 @@ RobotContainer::RobotContainer()
   frc::SmartDashboard::PutData("intake", mSubIntake);
   mSubPivotIntake = new SubPivotIntake{};
   frc::SmartDashboard::PutData("pivot", mSubPivotIntake);
-  
+
   mDriveCommands = new DriveCommands{mDrivetrain};
   
   SetSubsystemDefaultCommands();
   RegisterCommandsPathPlanner();
   ConfigureBindings();
+  ConfigureBindingsCopilot();
 
   mAutoChooser = pathplanner::AutoBuilder::buildAutoChooser();
   frc::SmartDashboard::PutData("Auto Chooser", &mAutoChooser);
@@ -72,19 +77,21 @@ void RobotContainer::SetSubsystemDefaultCommands()
       },
       {mDrivetrain}));
 
- mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
+  mSubClimb->SetDefaultCommand(ClimbUntilDown(mSubClimb).ToPtr());
+  mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
 }
 
 void RobotContainer::RegisterCommandsPathPlanner()
 {
-  pathplanner::NamedCommands::registerCommand("Pivot Up", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
-  pathplanner::NamedCommands::registerCommand("Pivot Down", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
-  pathplanner::NamedCommands::registerCommand("Full Intake", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
-  pathplanner::NamedCommands::registerCommand("GoTo3mFromHub", mDrivetrain->Defer([this] {return mDrivetrain->getGoToDistanceFromHubCommand(3_m);}));
+  pathplanner::NamedCommands::registerCommand("Pivot-Up", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
+  pathplanner::NamedCommands::registerCommand("Pivot-Down", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
+  pathplanner::NamedCommands::registerCommand("Full-Intake", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
+  pathplanner::NamedCommands::registerCommand("GoTo3mFromHub", mDrivetrain->Defer([this]
+                                                                                  { return mDrivetrain->getGoToDistanceFromHubCommand(3_m); }));
   pathplanner::NamedCommands::registerCommand("Intake", mSubIntake->getIntakeCommand());
   pathplanner::NamedCommands::registerCommand("Shoot", Shoot(mSubShooter).ToPtr());
-  pathplanner::NamedCommands::registerCommand("Feed Shooter", mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
-  pathplanner::NamedCommands::registerCommand("Unstuck Feeder", mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
+  pathplanner::NamedCommands::registerCommand("Feed-Shooter", mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
+  pathplanner::NamedCommands::registerCommand("Unstuck-Feeder", mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
 
   pathplanner::EventTrigger("Intake").WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
   pathplanner::EventTrigger("Shoot").WhileTrue(Shoot(mSubShooter).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter"));
@@ -94,23 +101,22 @@ void RobotContainer::RegisterCommandsPathPlanner()
 
 void RobotContainer::ConfigureBindings()
 {
+  mCommandXboxController->Button(OperatorConstants::Button::X).ToggleOnTrue(mSubClimb->GetClimbCommand(SubClimb::Direction::Lift));
   mCommandXboxController->Button(OperatorConstants::kPivotDownButton).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
-
+  
   mCommandXboxController->Button(OperatorConstants::kShootButton).ToggleOnTrue(Shoot(mSubShooter).ToPtr());
-  mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(
-      units::volt_t(frc::SmartDashboard::GetNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value()))));
-  mCommandXboxController->Button(OperatorConstants::kUnstuckFuelButton).WhileTrue(mSubFeeder->getFeedShooterCommand(
-      units::volt_t(-frc::SmartDashboard::GetNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value()))));
+  mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
   mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
-    {
-      if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
+    { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
       {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
-      else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));}
-    }));
+      else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
 
   mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
-    { mDrivetrain->resetPose(SubDrivetrain::standardizePose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()))); }));
+      { mDrivetrain->resetPose(SubDrivetrain::standardizePose(FieldConstants::kHubCenterPose2d)); }));
+
+  // mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
+  // mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
 
   mCommandXboxController->Button(OperatorConstants::Button::Back).ToggleOnTrue(ShootDynamically(mSubShooter, mDrivetrain, mCommandXboxController).ToPtr());
 
@@ -133,7 +139,24 @@ void RobotContainer::ConfigureBindings()
   (units::meter_t)frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value())); }));
 }
 
-frc2::Command *RobotContainer::GetAutonomousCommand() {
+void RobotContainer::ConfigureBindingsCopilot()
+{
+  mCommandXboxControllerCopilot->Button(OperatorConstants::Button::A).ToggleOnTrue(mSubClimb->GetClimbCommand(SubClimb::Direction::Up)).OnTrue(frc2::cmd::Print("Climb Up"));
+  mCommandXboxControllerCopilot->Button(OperatorConstants::Button::B).WhileTrue(frc2::cmd::RunEnd([this] {mSubClimb->SetSpeed(0.2);}, [this] {mSubClimb->StopMotor();})).OnTrue(frc2::cmd::Print("Climb Down Manuel"));
+  mCommandXboxControllerCopilot->Button(OperatorConstants::Button::X).WhileTrue(frc2::cmd::RunEnd([this] {mSubClimb->SetSpeed(-0.2);}, [this] {mSubClimb->StopMotor();})).OnTrue(frc2::cmd::Print("Climb Up Manuel"));
+  mCommandXboxControllerCopilot->Button(OperatorConstants::Button::Y).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("Outfeed"));
+
+  mCommandXboxControllerCopilot->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this]
+      { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
+        {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
+        else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
+
+  mCommandXboxControllerCopilot->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this]
+      { mDrivetrain->resetPose(SubDrivetrain::standardizePose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()))); }));
+}
+
+frc2::Command *RobotContainer::GetAutonomousCommand()
+{
   return mAutoChooser.GetSelected();
 }
 
@@ -151,8 +174,8 @@ double RobotContainer::Deadband(double iInput, double iThreshold, bool iSquared)
   }
   // Same as above but we square the value and keep the sign of the initial iInput
   return ((iInput > 0) - (iInput < 0)) *
-    (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold)) * // Squared
-    (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold));
+         (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold)) * // Squared
+         (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold));
 }
 
 Rebuilt::MatchStatus RobotContainer::getMatchStatus()

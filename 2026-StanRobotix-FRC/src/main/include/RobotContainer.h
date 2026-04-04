@@ -10,6 +10,7 @@
 
 #include "commands/DriveCommands.h"
 
+#include "subsystems/SubClimb.h"
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubPivotIntake.h"
 #include "subsystems/SubShooter.h"
@@ -55,7 +56,7 @@ public:
   RobotContainer();
 
   frc2::Command* GetAutonomousCommand();
-  frc2::CommandPtr GetShooterWhenInZone();
+
 
   // Made from the example code at https://www.chiefdelphi.com/uploads/default/original/3X/b/a/ba7ccfd90bac0934e374dd4459d813cee2903942.pdf
   double Deadband(double iInput, double iThreshold, bool iSquared = false);
@@ -63,6 +64,9 @@ public:
   Rebuilt::MatchStatus getMatchStatus();
 private:
   frc2::CommandXboxController* mCommandXboxController;
+  frc2::CommandXboxController* mCommandXboxControllerCopilot;
+
+  SubClimb * mSubClimb;
 
   SubShooter* mSubShooter = nullptr;
   SubFeeder* mSubFeeder = nullptr;
@@ -75,6 +79,7 @@ private:
   DriveCommands* mDriveCommands;
 
   void ConfigureBindings();
+  void ConfigureBindingsCopilot();
   void RegisterCommandsPathPlanner();
   void SetSubsystemDefaultCommands();
 

@@ -37,6 +37,7 @@ using VoltageInverse = units::unit_t<units::detail::unit_multiply<units::voltage
 namespace OperatorConstants
 {
   inline constexpr int kDriverControllerPort = 0;
+  inline constexpr int kCopilotControllerPort = 1;
 
   namespace Button {
     inline constexpr int A = 1;
@@ -270,6 +271,9 @@ namespace CANid
   inline constexpr int kMotorPivotID = 9;
   inline constexpr int kMotorIntakeID = 10;
   inline constexpr int kIMUPigeonID = 0;
+  
+  inline constexpr int kMotorClimbLeaderID = 14;
+  inline constexpr int kMotorClimbFollowerID = 15;
 }
 
 namespace IntakeConstants
@@ -296,7 +300,7 @@ namespace PivotConstants
   inline constexpr units::volt_t kG = 0.80_V;
   inline constexpr units::volt_t kS = 0.0_V;
   inline constexpr TemplateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
-  inline constexpr double setpointUp = std::numbers::pi * 7 / 16; // 90 deg up
+  inline constexpr double setpointUp = std::numbers::pi / 2; // 90 deg up
   inline constexpr double setpointDown = std::numbers::pi / 18;   // 10 deg up
   inline constexpr units::ampere_t kCurrentLimit = 60_A;
 
@@ -304,4 +308,28 @@ namespace PivotConstants
   inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
   inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
   inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
+
+}
+
+namespace ClimbConstants
+{
+  inline constexpr rev::spark::SparkLowLevel::MotorType kMotorTypeLeader = rev::spark::SparkLowLevel::MotorType::kBrushless;
+  inline constexpr rev::spark::SparkLowLevel::MotorType kMotorTypeFollower = rev::spark::SparkLowLevel::MotorType::kBrushless;
+  inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
+  inline constexpr double kDownP = 0.02;
+  inline constexpr double kDownI = 0.001;
+  inline constexpr double kDownD = 0;
+  inline constexpr double kUpP = 0.015;
+  inline constexpr double kUpI = 0.001;
+  inline constexpr double kUpD = 0;
+  inline constexpr double kLiftP = 0.02;
+  inline constexpr double kLiftI = 0.001;
+  inline constexpr double kLiftD = 0;
+  inline constexpr double kSetpointUpOffset = 16.7;
+  inline constexpr double kLimitReverse = 0;
+  inline constexpr double kLimitForward = 16.5;
+  inline constexpr bool kInverted = false;
+  inline constexpr bool kInverseFollowerMotor = false;
+  inline constexpr double kMaxCurrentFiltered = 15.0;
+  inline constexpr double kConstantSpeed = 0.2;
 }

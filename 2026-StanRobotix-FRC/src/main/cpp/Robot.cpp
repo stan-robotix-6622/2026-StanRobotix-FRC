@@ -68,6 +68,7 @@ void Robot::TeleopInit() {
   if (m_autonomousCommand) {
     frc2::CommandScheduler::GetInstance().Cancel(m_autonomousCommand.value());
   }
+  m_container.ConfigureTeleopAutomatisation();
 }
 
 /**
