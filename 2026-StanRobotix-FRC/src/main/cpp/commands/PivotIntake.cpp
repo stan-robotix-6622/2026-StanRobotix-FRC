@@ -4,15 +4,18 @@
 
 #include "commands/PivotIntake.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include "Constants.h"
 
 PivotIntake::PivotIntake(SubPivotIntake* iPivotIntake, StatePivotIntake iTarget) {
   mPivotIntake = iPivotIntake;
-  mPIDController = new frc::PIDController {PivotConstants::kP, PivotConstants::kI, PivotConstants::kD};
-  mState = iTarget;
-  frc::SmartDashboard::PutData("pivot/Arm PID", mPIDController);
   AddRequirements(mPivotIntake);
-  // Use addRequirements() here to declare subsystem dependencies.
+
+  mState = iTarget;
+
+  mPIDController = new frc::PIDController {PivotConstants::kP, PivotConstants::kI, PivotConstants::kD};
+  frc::SmartDashboard::PutData("pivot/Arm PID", mPIDController);
 }
 
 // Called when the command is initially scheduled.

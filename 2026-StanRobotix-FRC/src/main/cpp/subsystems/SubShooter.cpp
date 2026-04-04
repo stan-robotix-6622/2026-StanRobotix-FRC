@@ -4,6 +4,8 @@
 
 #include "subsystems/SubShooter.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include "Configs.h"
 
 SubShooter::SubShooter()
@@ -18,7 +20,6 @@ SubShooter::SubShooter()
     Configure();
 }
 
-// This method will be called once per scheduler run
 void SubShooter::Periodic() {}
 
 void SubShooter::setVoltage(units::volt_t iVoltage)
@@ -36,10 +37,12 @@ units::turns_per_second_t SubShooter::getVelocity()
     return units::turns_per_second_t(mRelativeEncoder->GetVelocity());
 };
 
-void SubShooter::Configure()
+std::array<rev::REVLibError, 2> SubShooter::Configure()
 {
-    mLeaderShooterController->Configure(Configs::Shooter::ShooterLeaderConfig(), ShooterConstants::kReset, ShooterConstants::kPersist);
-    mFollowerShooterController->Configure(Configs::Shooter::ShooterFollowerConfig(), ShooterConstants::kReset, ShooterConstants::kPersist);
+    return {
+        mLeaderShooterController->Configure(Configs::Shooter::ShooterLeaderConfig(), ShooterConstants::kReset, ShooterConstants::kPersist),
+        mFollowerShooterController->Configure(Configs::Shooter::ShooterFollowerConfig(), ShooterConstants::kReset, ShooterConstants::kPersist)
+    };
 };
 
 void SubShooter::InitSendable(wpi::SendableBuilder& builder)

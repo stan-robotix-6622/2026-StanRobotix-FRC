@@ -4,24 +4,18 @@
 
 #pragma once
 
-#include <frc/DriverStation.h>
-#include <frc/DataLogManager.h>
 #include <frc/estimator/SwerveDrivePoseEstimator.h>
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Translation2d.h>
 #include <frc/kinematics/ChassisSpeeds.h>
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
-#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/smartdashboard/Field2d.h>
 #include <frc2/command/SubsystemBase.h>
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
-#include <pathplanner/lib/auto/AutoBuilder.h>
-#include <pathplanner/lib/util/PathPlannerLogging.h>
-#include <pathplanner/lib/controllers/PPHolonomicDriveController.h>
 
 #include <units/voltage.h>
 #include <units/angle.h>
@@ -85,6 +79,8 @@ class SubDrivetrain : public frc2::SubsystemBase {
   nt::StructPublisher<frc::Rotation2d> mRotation2dPublisher;
   nt::StructPublisher<frc::Pose2d> mCurrentPose2dPublisher;
   nt::StructPublisher<frc::Pose2d> mTargetPose2dPublisher;
+  nt::StructPublisher<frc::Translation2d> mTranslationToHubPublisher;
+  nt::StructPublisher<frc::Rotation2d> mRotationToHubPublisher;
 
   SwerveModule* mFrontLeftModule;
   SwerveModule* mFrontRightModule;

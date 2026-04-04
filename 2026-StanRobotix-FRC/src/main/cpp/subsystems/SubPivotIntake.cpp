@@ -4,22 +4,20 @@
 
 #include "subsystems/SubPivotIntake.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include <numbers>
 
-#include "Constants.h"
+#include "Configs.h"
 
 SubPivotIntake::SubPivotIntake() {
     mPivotMotor = new rev::spark::SparkMax{CANid::kMotorPivotID, rev::spark::SparkLowLevel::MotorType::kBrushless};
     mEncoder = new rev::spark::SparkRelativeEncoder{mPivotMotor->GetEncoder()};
     mFeedForward = new frc::ArmFeedforward{PivotConstants::kS, PivotConstants::kG, PivotConstants::kV};
 
-    mPivotMotorConfig = new rev::spark::SparkMaxConfig{};
-    mPivotMotorConfig->Inverted(PivotConstants::kInverted);
-    mPivotMotorConfig->SetIdleMode(PivotConstants::kIdleMode);
-    mPivotMotor->Configure(*mPivotMotorConfig, PivotConstants::kReset, PivotConstants::kPersist);
+    mPivotMotor->Configure(Configs::Pivot::Config(), PivotConstants::kReset, PivotConstants::kPersist);
 }
 
-// This method will be called once per scheduler run
 void SubPivotIntake::Periodic() {}
 
 void SubPivotIntake::Stop() {
@@ -37,14 +35,11 @@ void SubPivotIntake::SetVelocity(units::radians_per_second_t iVelocity)
 
 void SubPivotIntake::KeepPosition()
 {
-    // units::volt_t wVoltage = PivotConstants::kG * cos(GetAngle());
-    // units::volt_t wVoltage = units::volt_t(frc::SmartDashboard::GetNumber("pivot/Arm kG", PivotConstants::kG.value()) * cos(GetAngle().value()));
-    // frc::SmartDashboard::PutNumber("pivot/kG voltage", wVoltage.value());
     mPivotMotor->SetVoltage(mFeedForward->Calculate(GetAngle(), 0_rad_per_s));
 }
 
 units::radian_t SubPivotIntake::GetAngle(){
-    return (PivotConstants::kOffset + mEncoder->GetPosition()) * 2_rad * std::numbers::pi / PivotConstants::kGearRatio;
+    return units::radian_t(PivotConstants::kOffset + mEncoder->GetPosition());
 }
 
 void SubPivotIntake::InitSendable(wpi::SendableBuilder& builder)

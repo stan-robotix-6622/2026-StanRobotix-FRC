@@ -35,6 +35,7 @@
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
   "robotFeatures": [
-    "{\"name\":\"Limelight\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":-0.028575,\"y\":0.248},\"size\":{\"width\":0.02946,\"length\":0.08061},\"borderRadius\":0.0,\"strokeWidth\":0.005,\"filled\":false}}"
+    "{\"name\":\"Limelight\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.3476625,\"y\":0.302},\"size\":{\"width\":0.081,\"length\":0.029},\"borderRadius\":0.0,\"strokeWidth\":0.005,\"filled\":false}}",
+    "{\"name\":\"Intake\",\"type\":\"rounded_rect\",\"data\":{\"center\":{\"x\":0.52,\"y\":0.0},\"size\":{\"width\":0.4572,\"length\":0.1778},\"borderRadius\":0.03,\"strokeWidth\":0.015,\"filled\":false}}"
   ]
 }

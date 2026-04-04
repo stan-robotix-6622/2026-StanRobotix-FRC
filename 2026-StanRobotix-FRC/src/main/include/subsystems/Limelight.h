@@ -20,7 +20,7 @@ class Limelight {
 
   std::optional<frc::Pose2d> getPoseEstimation(frc::Pose2d iCurrentRobotPose, units::radians_per_second_t iRobotRotationalVelocity);
 
-  void setCameraPosition(units::meter_t forward ,units::meter_t right ,units::meter_t up ,units::degree_t roll ,units::degree_t pitch ,units::degree_t yaw);
+  void setCameraPosition(units::meter_t forward, units::meter_t right, units::meter_t up, units::degree_t roll, units::degree_t pitch, units::degree_t yaw);
  private:
   LimelightHelpers::PoseEstimate mLimelightPoseEstimate;
   bool mRejectCameraUpdate;
