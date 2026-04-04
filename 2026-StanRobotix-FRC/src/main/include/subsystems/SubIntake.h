@@ -20,6 +20,7 @@ public:
   void SetVoltage(double);
   frc2::CommandPtr getIntakeCommand();
   void SetSpeed(double);
+  bool isIntakeOn();
 
   void Periodic() override;
 

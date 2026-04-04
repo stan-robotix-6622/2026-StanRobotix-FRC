@@ -17,12 +17,14 @@
 #include <units/angular_velocity.h>
 #include <units/voltage.h>
 
+#include "ShooterLookupTable.h"
+
 class SubShooter : public frc2::SubsystemBase
 {
 public:
   SubShooter();
 
-  void setVelocity(units::turns_per_second_t iNextVelocity);
+  void setDesiredVelocity(units::turns_per_second_t iNextVelocity);
   void setVoltage(units::volt_t iVoltage);
   units::turns_per_second_t getVelocity();
 
@@ -34,6 +36,10 @@ public:
 
   void InitSendable(wpi::SendableBuilder &builder) override;
 
+  units::turns_per_second_t getAdjustedVelocity();
+
+  bool atDesiredVelocity();
+
 private:
   frc::SimpleMotorFeedforward<units::turns>* mFeedforward;
 
@@ -42,4 +48,6 @@ private:
   frc::PIDController* mPIDcontroller;
   rev::spark::SparkRelativeEncoder* mRelativeEncoder;
   rev::spark::SparkClosedLoopController* mClossedLoopController;
+
+  units::turns_per_second_t mDesiredVelocity;
 };

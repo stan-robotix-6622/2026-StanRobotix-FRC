@@ -24,12 +24,13 @@ void SubShooter::Periodic() {}
 
 void SubShooter::setVoltage(units::volt_t iVoltage)
 {
-    mLeaderShooterController->SetVoltage(iVoltage);
+  mLeaderShooterController->SetVoltage(iVoltage);
 };
 
-void SubShooter::setVelocity(units::turns_per_second_t iNextVelocity)
+void SubShooter::setDesiredVelocity(units::turns_per_second_t iNextVelocity)
 {
-    mClossedLoopController->SetSetpoint(iNextVelocity.value(), ShooterConstants::kShooterClosedLoopControlType);
+  mDesiredVelocity = iNextVelocity;
+  mClossedLoopController->SetSetpoint(iNextVelocity.value(), ShooterConstants::kShooterClosedLoopControlType);
 };
 
 units::turns_per_second_t SubShooter::getVelocity()
@@ -53,4 +54,9 @@ void SubShooter::InitSendable(wpi::SendableBuilder& builder)
     builder.AddDoubleProperty("kA", [this] {return mFeedforward->GetKa().value();}, [this] (double iKa) {return mFeedforward->SetKa(TemplateUnits::VoltageInverse<units::turns_per_second_squared>(iKa));});
     builder.AddDoubleProperty("kV", [this] {return mFeedforward->GetKv().value();}, [this] (double iKv) {return mFeedforward->SetKv(TemplateUnits::VoltageInverse<units::turns_per_second>(iKv));});
     builder.AddDoubleProperty("kS", [this] {return mFeedforward->GetKs().value();}, [this] (double iKs) {return mFeedforward->SetKs(units::volt_t(iKs));});
+}
+
+bool SubShooter::atDesiredVelocity()
+{
+  return units::math::abs(getVelocity() - mDesiredVelocity) < 0.5_tps;
 }

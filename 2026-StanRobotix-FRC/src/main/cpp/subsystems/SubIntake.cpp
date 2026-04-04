@@ -33,18 +33,23 @@ void SubIntake::SetSpeed(double iSpeed)
 }
 
 frc2::CommandPtr SubIntake::getIntakeCommand() {
-    return frc2::cmd::RunEnd(
-        [this]
-        {
-            SetSpeed(IntakeConstants::kSpeed);
-        },
+  return frc2::cmd::RunEnd(
+    [this]
+    {
+      SetSpeed(IntakeConstants::kSpeed);
+    },
 
-        [this]
-        {
-            Stop();
-        },
-        {}
-    );
+    [this]
+    {
+      Stop();
+    },
+    {}
+  );
+}
+
+bool SubIntake::isIntakeOn()
+{
+  return mIntakeMotor->GetAppliedOutput() > 0;
 }
 
 void SubIntake::InitSendable(wpi::SendableBuilder &builder)

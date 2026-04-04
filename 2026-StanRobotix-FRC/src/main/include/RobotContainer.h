@@ -82,7 +82,7 @@ private:
   void ConfigureBindingsCopilot();
   void RegisterCommandsPathPlanner();
   void SetSubsystemDefaultCommands();
-
+  
   frc::SendableChooser<frc2::Command*> mAutoChooser;
 
   nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();

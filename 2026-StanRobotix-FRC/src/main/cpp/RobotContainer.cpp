@@ -101,6 +101,12 @@ void RobotContainer::RegisterCommandsPathPlanner()
 
 void RobotContainer::ConfigureBindings()
 {
+  frc2::Trigger{[this]
+                { return mDrivetrain->isTowardsHub() && mSubShooter->atDesiredVelocity(); }}
+      .Debounce(0.1_s).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
+  frc::SmartDashboard::PutBoolean("status/isFeederAutoOn", (mDrivetrain->isTowardsHub()
+                  && units::math::abs(mSubShooter->getVelocity() - mSubShooter->getAdjustedVelocity()) < 0.5_tps));
+
   mCommandXboxController->Button(OperatorConstants::Button::X).ToggleOnTrue(mSubClimb->GetClimbCommand(SubClimb::Direction::Lift));
   mCommandXboxController->Button(OperatorConstants::kPivotDownButton).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
   
