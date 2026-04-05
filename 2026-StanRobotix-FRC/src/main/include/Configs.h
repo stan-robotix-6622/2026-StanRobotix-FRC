@@ -71,7 +71,7 @@ namespace Configs
 
 	class Shooter {
 	 public:
-		static SparkMaxConfig& ShooterLeaderConfig()
+		static SparkMaxConfig& LeaderConfig()
 		{
 			static SparkMaxConfig leaderConfig{};
 			constexpr double shootingFactor = 1 / ShooterConstants::kGearRatio;
@@ -100,11 +100,13 @@ namespace Configs
 
 			return leaderConfig;
 		}
-		static SparkMaxConfig& ShooterFollowerConfig()
+		static SparkMaxConfig& FollowerConfig()
 		{
 			static SparkMaxConfig followerConfig{};
-			followerConfig.Apply(Configs::Shooter::ShooterLeaderConfig());
+
+			followerConfig.Apply(Configs::Shooter::LeaderConfig());
 			followerConfig.Follow(CANid::kLeaderMotorShooterID, ShooterConstants::kFollowerinverted);
+
 			return followerConfig;
 		}
 	};
@@ -157,6 +159,30 @@ namespace Configs
 			pivotConfig.SmartCurrentLimit(PivotConstants::kCurrentLimit.value());
 
 			return pivotConfig;
+		}
+	};
+
+	class Climb {
+	 public:
+		static SparkMaxConfig& LeaderConfig()
+		{
+			static SparkMaxConfig leaderConfig;
+
+			leaderConfig.Inverted(ClimbConstants::kInverted);
+			leaderConfig.SetIdleMode(ClimbConstants::kIdleMode);
+
+			leaderConfig.SmartCurrentLimit(ClimbConstants::kCurrentLimit.value());
+
+			return leaderConfig;
+		}
+		static SparkMaxConfig& FollowerConfig()
+		{
+			static SparkMaxConfig followerConfig;
+
+			followerConfig.Apply(Climb::LeaderConfig());
+			followerConfig.Follow(CANid::kMotorClimbLeaderID, ClimbConstants::kInverseFollowerMotor);
+
+			return followerConfig;
 		}
 	};
 }	 // namespace Configs

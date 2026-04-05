@@ -337,4 +337,6 @@ namespace ClimbConstants
 	inline constexpr bool kInverseFollowerMotor = false;
 	inline constexpr double kMaxCurrentFiltered = 15.0;
 	inline constexpr double kConstantSpeed = 0.2;
+
+	inline constexpr units::ampere_t kCurrentLimit = 60_A;
 }	 // namespace ClimbConstants

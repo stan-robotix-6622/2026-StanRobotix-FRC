@@ -7,7 +7,6 @@
 #include <frc/filter/LinearFilter.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
-#include <rev/config/SparkMaxConfig.h>
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 
@@ -42,8 +41,6 @@ class SubClimb : public frc2::SubsystemBase {
 
 	rev::spark::SparkMax* mSparkMaxLeader;
 	rev::spark::SparkMax* mSparkMaxFollower;
-	rev::spark::SparkMaxConfig* mSparkMaxConfigLeader;
-	rev::spark::SparkMaxConfig* mSparkMaxConfigFollower;
 	rev::spark::SparkRelativeEncoder* mSparkRelativeEncoder;
 
 	frc::LinearFilter<units::ampere_t>* mHighPassFilter;

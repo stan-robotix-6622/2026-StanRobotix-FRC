@@ -41,8 +41,8 @@ units::turns_per_second_t SubShooter::getVelocity()
 std::array<rev::REVLibError, 2> SubShooter::Configure()
 {
 	return {
-		mLeaderShooterController->Configure(Configs::Shooter::ShooterLeaderConfig(), ShooterConstants::kReset, ShooterConstants::kPersist),
-		mFollowerShooterController->Configure(Configs::Shooter::ShooterFollowerConfig(), ShooterConstants::kReset, ShooterConstants::kPersist)};
+		mLeaderShooterController->Configure(Configs::Shooter::LeaderConfig(), ShooterConstants::kReset, ShooterConstants::kPersist),
+		mFollowerShooterController->Configure(Configs::Shooter::FollowerConfig(), ShooterConstants::kReset, ShooterConstants::kPersist)};
 };
 
 void SubShooter::InitSendable(wpi::SendableBuilder& builder)

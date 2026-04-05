@@ -6,7 +6,7 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
-#include "Constants.h"
+#include "Configs.h"
 
 #include "commands/Climb.h"
 
@@ -15,17 +15,8 @@ SubClimb::SubClimb()
 	mSparkMaxLeader = new rev::spark::SparkMax(CANid::kMotorClimbLeaderID, ClimbConstants::kMotorTypeLeader);
 	mSparkMaxFollower = new rev::spark::SparkMax(CANid::kMotorClimbFollowerID, ClimbConstants::kMotorTypeFollower);
 
-	mSparkMaxConfigLeader = new rev::spark::SparkMaxConfig;
-	mSparkMaxConfigFollower = new rev::spark::SparkMaxConfig;
-
-	mSparkMaxConfigLeader->Inverted(ClimbConstants::kInverted);
-	mSparkMaxConfigLeader->SetIdleMode(ClimbConstants::kIdleMode);
-
-	mSparkMaxConfigFollower->Apply(*mSparkMaxConfigLeader);
-	mSparkMaxConfigFollower->Follow(CANid::kMotorClimbLeaderID, ClimbConstants::kInverseFollowerMotor);
-
-	mSparkMaxLeader->Configure(*mSparkMaxConfigLeader, rev::ResetMode::kResetSafeParameters, rev::PersistMode::kPersistParameters);
-	mSparkMaxFollower->Configure(*mSparkMaxConfigFollower, rev::ResetMode::kResetSafeParameters, rev::PersistMode::kPersistParameters);
+	mSparkMaxLeader->Configure(Configs::Climb::LeaderConfig(), rev::ResetMode::kResetSafeParameters, rev::PersistMode::kPersistParameters);
+	mSparkMaxFollower->Configure(Configs::Climb::FollowerConfig(), rev::ResetMode::kResetSafeParameters, rev::PersistMode::kPersistParameters);
 
 	mSparkRelativeEncoder = new rev::spark::SparkRelativeEncoder{mSparkMaxLeader->GetEncoder()};
 
