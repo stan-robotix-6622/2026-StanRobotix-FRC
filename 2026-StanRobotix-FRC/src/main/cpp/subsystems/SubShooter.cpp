@@ -10,47 +10,55 @@
 
 SubShooter::SubShooter()
 {
-    mLeaderShooterController =  new rev::spark::SparkMax{CANid::kLeaderMotorShooterID, rev::spark::SparkLowLevel::MotorType::kBrushless};
-    mFollowerShooterController =  new rev::spark::SparkMax{CANid::kFollowerMotorShooterID, rev::spark::SparkLowLevel::MotorType::kBrushless};
-    mRelativeEncoder = new rev::spark::SparkRelativeEncoder{mLeaderShooterController->GetEncoder()};
-    mFeedforward = new frc::SimpleMotorFeedforward<units::turns>{ShooterConstants::kS, ShooterConstants::kV};
+	mLeaderShooterController = new rev::spark::SparkMax{CANid::kLeaderMotorShooterID, rev::spark::SparkLowLevel::MotorType::kBrushless};
+	mFollowerShooterController = new rev::spark::SparkMax{CANid::kFollowerMotorShooterID, rev::spark::SparkLowLevel::MotorType::kBrushless};
+	mRelativeEncoder = new rev::spark::SparkRelativeEncoder{mLeaderShooterController->GetEncoder()};
+	mFeedforward = new frc::SimpleMotorFeedforward<units::turns>{ShooterConstants::kS, ShooterConstants::kV};
 
-    mClossedLoopController = new rev::spark::SparkClosedLoopController{mLeaderShooterController->GetClosedLoopController()};
+	mClossedLoopController = new rev::spark::SparkClosedLoopController{mLeaderShooterController->GetClosedLoopController()};
 
-    Configure();
+	Configure();
 }
 
-void SubShooter::Periodic() {}
+void SubShooter::Periodic()
+{
+	frc::SmartDashboard::PutBoolean("Dashboard/atDesiredVelocity", atDesiredVelocity());
+}
 
 void SubShooter::setVoltage(units::volt_t iVoltage)
 {
-    mLeaderShooterController->SetVoltage(iVoltage);
+	mLeaderShooterController->SetVoltage(iVoltage);
 };
 
-void SubShooter::setVelocity(units::turns_per_second_t iNextVelocity)
+void SubShooter::setDesiredVelocity(units::turns_per_second_t iNextVelocity)
 {
-    mClossedLoopController->SetSetpoint(iNextVelocity.value(), ShooterConstants::kShooterClosedLoopControlType);
+	mDesiredVelocity = iNextVelocity;
+	mClossedLoopController->SetSetpoint(iNextVelocity.value(), ShooterConstants::kShooterClosedLoopControlType);
 };
 
 units::turns_per_second_t SubShooter::getVelocity()
 {
-    return units::turns_per_second_t(mRelativeEncoder->GetVelocity());
+	return units::turns_per_second_t(mRelativeEncoder->GetVelocity());
 };
 
 std::array<rev::REVLibError, 2> SubShooter::Configure()
 {
-    return {
-        mLeaderShooterController->Configure(Configs::Shooter::ShooterLeaderConfig(), ShooterConstants::kReset, ShooterConstants::kPersist),
-        mFollowerShooterController->Configure(Configs::Shooter::ShooterFollowerConfig(), ShooterConstants::kReset, ShooterConstants::kPersist)
-    };
+	return {
+		mLeaderShooterController->Configure(Configs::Shooter::LeaderConfig(), ShooterConstants::kReset, ShooterConstants::kPersist),
+		mFollowerShooterController->Configure(Configs::Shooter::FollowerConfig(), ShooterConstants::kReset, ShooterConstants::kPersist)};
 };
 
 void SubShooter::InitSendable(wpi::SendableBuilder& builder)
 {
-    builder.SetSmartDashboardType("shooter");
-    builder.AddDoubleProperty("velocity (tps)", [this] {return getVelocity().value();}, nullptr);
-    builder.AddDoubleProperty("velocity (rpm)", [this] {return units::revolutions_per_minute_t(getVelocity()).value();}, nullptr);
-    builder.AddDoubleProperty("kA", [this] {return mFeedforward->GetKa().value();}, [this] (double iKa) {return mFeedforward->SetKa(TemplateUnits::VoltageInverse<units::turns_per_second_squared>(iKa));});
-    builder.AddDoubleProperty("kV", [this] {return mFeedforward->GetKv().value();}, [this] (double iKv) {return mFeedforward->SetKv(TemplateUnits::VoltageInverse<units::turns_per_second>(iKv));});
-    builder.AddDoubleProperty("kS", [this] {return mFeedforward->GetKs().value();}, [this] (double iKs) {return mFeedforward->SetKs(units::volt_t(iKs));});
+	builder.SetSmartDashboardType("shooter");
+	builder.AddDoubleProperty("velocity (tps)", [this] { return getVelocity().value(); }, nullptr);
+	builder.AddDoubleProperty("velocity (rpm)", [this] { return units::revolutions_per_minute_t(getVelocity()).value(); }, nullptr);
+	builder.AddDoubleProperty("kA", [this] { return mFeedforward->GetKa().value(); }, [this](double iKa) { return mFeedforward->SetKa(TemplateUnits::VoltageInverse<units::turns_per_second_squared>(iKa)); });
+	builder.AddDoubleProperty("kV", [this] { return mFeedforward->GetKv().value(); }, [this](double iKv) { return mFeedforward->SetKv(TemplateUnits::VoltageInverse<units::turns_per_second>(iKv)); });
+	builder.AddDoubleProperty("kS", [this] { return mFeedforward->GetKs().value(); }, [this](double iKs) { return mFeedforward->SetKs(units::volt_t(iKs)); });
+}
+
+bool SubShooter::atDesiredVelocity()
+{
+	return units::math::abs(getVelocity() - mDesiredVelocity) < 0.5_tps;
 }

@@ -1,3 +1,7 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 #pragma once
 
 #include <rev/config/SparkMaxConfig.h>
@@ -6,154 +10,179 @@
 
 namespace Configs
 {
-  using namespace rev::spark;
-  class SwerveModule
-  {
-  public:
-    static SparkMaxConfig &DrivingConfig(bool iDrivingInverted)
-    {
-      static SparkMaxConfig drivingConfig{};
+	using namespace rev::spark;
+	class SwerveModule {
+	 public:
+		static SparkMaxConfig& DrivingConfig(bool iDrivingInverted)
+		{
+			static SparkMaxConfig drivingConfig{};
 
-      constexpr double drivingFactor = ModuleConstants::kDrivingFactor;
-      constexpr TemplateUnits::VoltageInverse<units::meters_per_second> drivingVelocityFeedForward = ModuleConstants::kNominalVoltage / ModuleConstants::kDriveWheelMaxFreeSpeed;
+			constexpr double drivingFactor = ModuleConstants::kDrivingFactor;
+			constexpr TemplateUnits::VoltageInverse<units::meters_per_second> drivingVelocityFeedForward = ModuleConstants::kNominalVoltage / ModuleConstants::kDriveWheelMaxFreeSpeed;
 
-      drivingConfig.Inverted(iDrivingInverted);
-      drivingConfig.SetIdleMode(ModuleConstants::Config::kDrivingIdleMode);
+			drivingConfig.Inverted(iDrivingInverted);
+			drivingConfig.SetIdleMode(ModuleConstants::Config::kDrivingIdleMode);
 
-      drivingConfig.encoder.VelocityConversionFactor(drivingFactor / ModuleConstants::Config::kRPMtoRPSFactor);
-      drivingConfig.encoder.PositionConversionFactor(drivingFactor);
+			drivingConfig.encoder.VelocityConversionFactor(drivingFactor / ModuleConstants::Config::kRPMtoRPSFactor);
+			drivingConfig.encoder.PositionConversionFactor(drivingFactor);
 
-      drivingConfig.closedLoop.SetFeedbackSensor(ModuleConstants::Config::kDrivingClosedLoopFeedbackSensor);
-      drivingConfig.closedLoop.Pid(ModuleConstants::kDrivingP, ModuleConstants::kDrivingI, ModuleConstants::kDrivingD);
-      drivingConfig.closedLoop.OutputRange(-1, 1);
+			drivingConfig.closedLoop.SetFeedbackSensor(ModuleConstants::Config::kDrivingClosedLoopFeedbackSensor);
+			drivingConfig.closedLoop.Pid(ModuleConstants::kDrivingP, ModuleConstants::kDrivingI, ModuleConstants::kDrivingD);
+			drivingConfig.closedLoop.OutputRange(-1, 1);
 
-      drivingConfig.SmartCurrentLimit(ModuleConstants::kDrivingCurrentLimit.value());
+			drivingConfig.closedLoop.feedForward.kV(drivingVelocityFeedForward.value());
 
-      drivingConfig.closedLoop.feedForward.kV(drivingVelocityFeedForward.value());
+			drivingConfig.SmartCurrentLimit(ModuleConstants::kDrivingCurrentLimit.value());
 
-      return drivingConfig;
-    }
+			return drivingConfig;
+		}
 
-    static SparkMaxConfig &TurningConfig(bool iEncoderInverted)
-    {
-      static SparkMaxConfig turningConfig{};
+		static SparkMaxConfig& TurningConfig(bool iEncoderInverted)
+		{
+			static SparkMaxConfig turningConfig{};
 
-      constexpr double turningFactor = ModuleConstants::kTurningFactor;
+			constexpr double turningFactor = ModuleConstants::kTurningFactor;
 
-      turningConfig.Inverted(ModuleConstants::Config::kTurningMotorInverted);
-      turningConfig.SetIdleMode(ModuleConstants::Config::kTurningIdleMode);
+			turningConfig.Inverted(ModuleConstants::Config::kTurningMotorInverted);
+			turningConfig.SetIdleMode(ModuleConstants::Config::kTurningIdleMode);
 
-      turningConfig.absoluteEncoder.VelocityConversionFactor(turningFactor / ModuleConstants::Config::kRPMtoRPSFactor);
-      turningConfig.absoluteEncoder.PositionConversionFactor(turningFactor);
-      turningConfig.absoluteEncoder.Inverted(iEncoderInverted);
-      turningConfig.absoluteEncoder.ZeroCentered(ModuleConstants::Config::kTurningEncoderZeroCentered);
-      turningConfig.absoluteEncoder.Apply(AbsoluteEncoderConfig::Presets::REV_ThroughBoreEncoder());
+			turningConfig.absoluteEncoder.VelocityConversionFactor(turningFactor / ModuleConstants::Config::kRPMtoRPSFactor);
+			turningConfig.absoluteEncoder.PositionConversionFactor(turningFactor);
+			turningConfig.absoluteEncoder.Inverted(iEncoderInverted);
+			turningConfig.absoluteEncoder.ZeroCentered(ModuleConstants::Config::kTurningEncoderZeroCentered);
+			turningConfig.absoluteEncoder.Apply(AbsoluteEncoderConfig::Presets::REV_ThroughBoreEncoder());
 
-      turningConfig.closedLoop.SetFeedbackSensor(ModuleConstants::Config::kTurningClosedLoopFeedbackSensor);
-      turningConfig.closedLoop.Pid(ModuleConstants::kTurningP, ModuleConstants::kTurningI, ModuleConstants::kTurningD);
-      turningConfig.closedLoop.OutputRange(-1, 1);
-      turningConfig.closedLoop.PositionWrappingEnabled(ModuleConstants::Config::kTurningClosedLoopPositionWrapping);
-      turningConfig.closedLoop.PositionWrappingMinInput(ModuleConstants::Config::kTurningClosedLoopMinInput);
-      turningConfig.closedLoop.PositionWrappingMaxInput(ModuleConstants::Config::kTurningClosedLoopMaxInput);
+			turningConfig.closedLoop.SetFeedbackSensor(ModuleConstants::Config::kTurningClosedLoopFeedbackSensor);
+			turningConfig.closedLoop.Pid(ModuleConstants::kTurningP, ModuleConstants::kTurningI, ModuleConstants::kTurningD);
+			turningConfig.closedLoop.OutputRange(-1, 1);
+			turningConfig.closedLoop.PositionWrappingEnabled(ModuleConstants::Config::kTurningClosedLoopPositionWrapping);
+			turningConfig.closedLoop.PositionWrappingMinInput(ModuleConstants::Config::kTurningClosedLoopMinInput);
+			turningConfig.closedLoop.PositionWrappingMaxInput(ModuleConstants::Config::kTurningClosedLoopMaxInput);
 
-      turningConfig.closedLoop.maxMotion.AllowedProfileError(ModuleConstants::Config::kTurningClosedLoopTolerance);
-      turningConfig.closedLoop.maxMotion.CruiseVelocity(9999999);
-      turningConfig.closedLoop.maxMotion.MaxAcceleration(9999999);
+			turningConfig.closedLoop.maxMotion.AllowedProfileError(ModuleConstants::Config::kTurningClosedLoopTolerance);
+			turningConfig.closedLoop.maxMotion.CruiseVelocity(9999999);
+			turningConfig.closedLoop.maxMotion.MaxAcceleration(9999999);
 
-      turningConfig.SmartCurrentLimit(ModuleConstants::kTurningCurrentLimit.value());
+			turningConfig.SmartCurrentLimit(ModuleConstants::kTurningCurrentLimit.value());
 
-      return turningConfig;
-    }
-  };
-  class Shooter
-  {
-  public:
-    static SparkMaxConfig &ShooterLeaderConfig()
-    {
-      static SparkMaxConfig leaderConfig{};
-      constexpr double shootingFactor = 1 / ShooterConstants::kGearRatio;
+			return turningConfig;
+		}
+	};
 
-      leaderConfig.Inverted(ShooterConstants::kInverted);
-      leaderConfig.SetIdleMode(ShooterConstants::kIdleMode);
+	class Shooter {
+	 public:
+		static SparkMaxConfig& LeaderConfig()
+		{
+			static SparkMaxConfig leaderConfig{};
+			constexpr double shootingFactor = 1 / ShooterConstants::kGearRatio;
 
-      leaderConfig.encoder.PositionConversionFactor(shootingFactor);
-      leaderConfig.encoder.VelocityConversionFactor(shootingFactor / 60); // for rpm to tps
+			leaderConfig.Inverted(ShooterConstants::kInverted);
+			leaderConfig.SetIdleMode(ShooterConstants::kIdleMode);
 
-      leaderConfig.closedLoop.SetFeedbackSensor(ShooterConstants::Config::kShooterClosedLoopFeedbackSensor);
-      // leaderConfig.closedLoop.Pid(ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD);
-      // leaderConfig.closedLoop.OutputRange(-1, 1);
+			leaderConfig.encoder.PositionConversionFactor(shootingFactor);
+			leaderConfig.encoder.VelocityConversionFactor(shootingFactor / 60);	 // for rpm to tps
 
-      leaderConfig.closedLoop.feedForward.kV(ShooterConstants::kV.value());
-      leaderConfig.closedLoop.feedForward.kS(ShooterConstants::kS.value());
-      leaderConfig.closedLoop.feedForward.kA(ShooterConstants::kA.value());
+			leaderConfig.closedLoop.SetFeedbackSensor(ShooterConstants::Config::kShooterClosedLoopFeedbackSensor);
+			// leaderConfig.closedLoop.Pid(ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD);
+			// leaderConfig.closedLoop.OutputRange(-1, 1);
 
-      // Configs added according to https://www.chiefdelphi.com/t/psa-rev-spark-default-velocity-filtering-is-still-really-bad-for-flywheels/514567
-      // leaderConfig.encoder.UvwAverageDepth(4);
-      // leaderConfig.encoder.UvwMeasurementPeriod(16);
-      // leaderConfig.encoder.QuadratureAverageDepth(4);
-      // leaderConfig.encoder.QuadratureMeasurementPeriod(16);
+			leaderConfig.closedLoop.feedForward.kV(ShooterConstants::kV.value());
+			leaderConfig.closedLoop.feedForward.kS(ShooterConstants::kS.value());
+			leaderConfig.closedLoop.feedForward.kA(ShooterConstants::kA.value());
 
-      leaderConfig.SmartCurrentLimit(ShooterConstants::kCurrentLimit.value());
+			// Configs added according to https://www.chiefdelphi.com/t/psa-rev-spark-default-velocity-filtering-is-still-really-bad-for-flywheels/514567
+			// leaderConfig.encoder.UvwAverageDepth(4);
+			// leaderConfig.encoder.UvwMeasurementPeriod(16);
+			// leaderConfig.encoder.QuadratureAverageDepth(4);
+			// leaderConfig.encoder.QuadratureMeasurementPeriod(16);
 
-      return leaderConfig;
-    }
-    static SparkMaxConfig &ShooterFollowerConfig()
-    {
-      static SparkMaxConfig followerConfig{};
-      followerConfig.Apply(Configs::Shooter::ShooterLeaderConfig());
-      followerConfig.Follow(CANid::kLeaderMotorShooterID, ShooterConstants::kFollowerinverted);
-      return followerConfig;
-    }
-  };
-  class Feeder
-  {
-  public:
-    static SparkMaxConfig &Config()
-    {
-      static SparkMaxConfig feederConfig{};
-      feederConfig.Inverted(FeederConstants::kInverted);
-      feederConfig.SetIdleMode(FeederConstants::kIdleMode);
+			leaderConfig.SmartCurrentLimit(ShooterConstants::kCurrentLimit.value());
 
-      feederConfig.SmartCurrentLimit(FeederConstants::kCurrentLimit.value());
-      return feederConfig;
-    }
-  };
-  class Intake
-  {
-  public:
-    static SparkMaxConfig &Config()
-    {
-      static SparkMaxConfig intakeConfig{};
-      constexpr double intakeFactor = 1 / IntakeConstants::kGearRatio;
+			return leaderConfig;
+		}
+		static SparkMaxConfig& FollowerConfig()
+		{
+			static SparkMaxConfig followerConfig{};
 
-      intakeConfig.Inverted(IntakeConstants::kInverted);
-      intakeConfig.SetIdleMode(IntakeConstants::kIdleMode);
+			followerConfig.Apply(Configs::Shooter::LeaderConfig());
+			followerConfig.Follow(CANid::kLeaderMotorShooterID, ShooterConstants::kFollowerinverted);
 
-      intakeConfig.encoder.PositionConversionFactor(intakeFactor);
-      intakeConfig.encoder.VelocityConversionFactor(intakeFactor);
+			return followerConfig;
+		}
+	};
 
-      intakeConfig.SmartCurrentLimit(IntakeConstants::kCurrentLimit.value());
+	class Feeder {
+	 public:
+		static SparkMaxConfig& Config()
+		{
+			static SparkMaxConfig feederConfig{};
+			feederConfig.Inverted(FeederConstants::kInverted);
+			feederConfig.SetIdleMode(FeederConstants::kIdleMode);
 
-      return intakeConfig;
-    }
-  };
-  class Pivot
-  {
-  public:
-    static SparkMaxConfig &Config()
-    {
-      static SparkMaxConfig pivotConfig{};
-      constexpr double pivotFactor = (2 * std::numbers::pi) / PivotConstants::kGearRatio;
+			feederConfig.SmartCurrentLimit(FeederConstants::kCurrentLimit.value());
+			return feederConfig;
+		}
+	};
 
-      pivotConfig.Inverted(PivotConstants::kInverted);
-      pivotConfig.SetIdleMode(PivotConstants::kIdleMode);
+	class Intake {
+	 public:
+		static SparkMaxConfig& Config()
+		{
+			static SparkMaxConfig intakeConfig{};
+			constexpr double intakeFactor = 1 / IntakeConstants::kGearRatio;
 
-      pivotConfig.encoder.PositionConversionFactor(pivotFactor);
-      pivotConfig.encoder.VelocityConversionFactor(pivotFactor);
+			intakeConfig.Inverted(IntakeConstants::kInverted);
+			intakeConfig.SetIdleMode(IntakeConstants::kIdleMode);
 
-      pivotConfig.SmartCurrentLimit(PivotConstants::kCurrentLimit.value());
+			intakeConfig.encoder.PositionConversionFactor(intakeFactor);
+			intakeConfig.encoder.VelocityConversionFactor(intakeFactor);
 
-      return pivotConfig;
-    }
-  };
-} // namespace Configs
+			intakeConfig.SmartCurrentLimit(IntakeConstants::kCurrentLimit.value());
+
+			return intakeConfig;
+		}
+	};
+
+	class Pivot {
+	 public:
+		static SparkMaxConfig& Config()
+		{
+			static SparkMaxConfig pivotConfig{};
+			constexpr double pivotFactor = (2 * std::numbers::pi) / PivotConstants::kGearRatio;
+
+			pivotConfig.Inverted(PivotConstants::kInverted);
+			pivotConfig.SetIdleMode(PivotConstants::kIdleMode);
+
+			pivotConfig.encoder.PositionConversionFactor(pivotFactor);
+			pivotConfig.encoder.VelocityConversionFactor(pivotFactor);
+
+			pivotConfig.SmartCurrentLimit(PivotConstants::kCurrentLimit.value());
+
+			return pivotConfig;
+		}
+	};
+
+	class Climb {
+	 public:
+		static SparkMaxConfig& LeaderConfig()
+		{
+			static SparkMaxConfig leaderConfig;
+
+			leaderConfig.Inverted(ClimbConstants::kInverted);
+			leaderConfig.SetIdleMode(ClimbConstants::kIdleMode);
+
+			leaderConfig.SmartCurrentLimit(ClimbConstants::kCurrentLimit.value());
+
+			return leaderConfig;
+		}
+		static SparkMaxConfig& FollowerConfig()
+		{
+			static SparkMaxConfig followerConfig;
+
+			followerConfig.Apply(Climb::LeaderConfig());
+			followerConfig.Follow(CANid::kMotorClimbLeaderID, ClimbConstants::kInverseFollowerMotor);
+
+			return followerConfig;
+		}
+	};
+}	 // namespace Configs

@@ -8,13 +8,11 @@
 
 frc2::CommandPtr FullIntake::FullIntakeCommand(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake itargetState)
 {
-  if (itargetState == PivotIntake::StatePivotIntake::kDown)
-  {
-    return PivotIntake(iPivot, PivotIntake::StatePivotIntake::kDown).AlongWith(iIntake->getIntakeCommand());
-  }
-  else if (itargetState == PivotIntake::StatePivotIntake::kUp)
-  {
-    return PivotIntake(iPivot, PivotIntake::StatePivotIntake::kUp).AlongWith(iIntake->Idle());
-  };
-  return frc2::cmd::None();
+	if (itargetState == PivotIntake::StatePivotIntake::kDown) {
+		return PivotIntake(iPivot, PivotIntake::StatePivotIntake::kDown).AlongWith(iIntake->getIntakeCommand());
+	}
+	else if (itargetState == PivotIntake::StatePivotIntake::kUp) {
+		return PivotIntake(iPivot, PivotIntake::StatePivotIntake::kUp).AlongWith(iIntake->Idle());
+	};
+	return frc2::cmd::None();
 }
