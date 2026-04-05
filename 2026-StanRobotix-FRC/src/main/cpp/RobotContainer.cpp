@@ -5,6 +5,7 @@
 #include "RobotContainer.h"
 
 #include <frc/DriverStation.h>
+#include <frc/MathUtil.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/button/Trigger.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
@@ -173,9 +174,7 @@ double RobotContainer::Deadband(double iInput, double iThreshold, bool iSquared)
 		return (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold));
 	}
 	// Same as above but we square the value and keep the sign of the initial iInput
-	return ((iInput > 0) - (iInput < 0)) *
-				 (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold)) *	 // Squared
-				 (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold));
+	return frc::CopyDirectionPow((1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold)), 2);
 }
 
 Rebuilt::MatchStatus RobotContainer::getMatchStatus()
