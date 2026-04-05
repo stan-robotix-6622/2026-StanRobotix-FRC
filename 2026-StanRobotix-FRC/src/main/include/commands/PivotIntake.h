@@ -26,7 +26,8 @@ class PivotIntake
 
 	enum StatePivotIntake {
 		kUp,
-		kDown
+		kDown,
+		kIn
 	};
 
 	PivotIntake(SubPivotIntake*, StatePivotIntake iTarget);

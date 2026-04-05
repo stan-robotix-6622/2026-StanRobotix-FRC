@@ -31,6 +31,9 @@ void PivotIntake::Initialize()
 		case kDown:
 			mPIDController->SetSetpoint(PivotConstants::setpointDown);
 			break;
+		case kIn:
+			mPIDController->SetSetpoint(PivotConstants::setpointIn);
+			break;
 	}
 }
 
@@ -38,7 +41,7 @@ void PivotIntake::Initialize()
 void PivotIntake::Execute()
 {
 	units::volt_t wVoltage = (units::volt_t)mPIDController->Calculate(mPivotIntake->GetAngle().value());
-	frc::SmartDashboard::PutNumber("pivot/Arm PID adjust", wVoltage.value());
+	// frc::SmartDashboard::PutNumber("pivot/Arm PID adjust", wVoltage.value());
 	mPivotIntake->SetVoltage(wVoltage + (PivotConstants::kG * cos(mPivotIntake->GetAngle().value())));
 }
 

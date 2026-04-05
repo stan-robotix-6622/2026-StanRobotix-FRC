@@ -305,8 +305,9 @@ namespace PivotConstants
 	inline constexpr units::volt_t kG = 0.80_V;
 	inline constexpr units::volt_t kS = 0.0_V;
 	inline constexpr TemplateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
-	inline constexpr double setpointUp = std::numbers::pi / 2;		 // 90 deg up
-	inline constexpr double setpointDown = std::numbers::pi / 18;	 // 10 deg up
+	inline constexpr double setpointUp = std::numbers::pi / 4;		  // 45 deg up
+	inline constexpr double setpointIn = std::numbers::pi * 2 / 3;  // 120 deg up
+	inline constexpr double setpointDown = std::numbers::pi / 18;	  // 10 deg up
 	inline constexpr units::ampere_t kCurrentLimit = 60_A;
 
 	inline constexpr bool kInverted = false;
