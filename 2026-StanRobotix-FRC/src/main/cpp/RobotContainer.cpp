@@ -189,7 +189,8 @@ Rebuilt::MatchStatus RobotContainer::getMatchStatus()
 
 	if (matchTime <= 30_s) {
 		if (gameData[0] != 'B' && gameData[0] != 'R') {
-			status.timeLeftInPeriod = matchTime + 140_s;
+			status.timeLeftInMatch = matchTime + 140_s;
+			status.timeLeftInPeriod = matchTime;
 			status.matchPeriod = Rebuilt::MatchPeriod::Autonomous;
 			status.matchPeriodName = "Autonomous";
 		}
