@@ -21,7 +21,7 @@ SubShooter::SubShooter()
 }
 
 void SubShooter::Periodic() {
-	frc::SmartDashboard::PutBoolean("Dashboard/isIntakeOn", atDesiredVelocity());
+	frc::SmartDashboard::PutBoolean("Dashboard/atDesiredVelocity", atDesiredVelocity());
 }
 
 void SubShooter::setVoltage(units::volt_t iVoltage)
