@@ -1748,6 +1748,7 @@ namespace LimelightHelpers {
     try {
       return jsonData.at(key).template get<T>();
     } catch (wpi::json::exception& e) {
+      std::cout << e.what() << std::endl;
       return defaultValue;
     } catch (...) {
       return defaultValue;
@@ -1755,7 +1756,7 @@ namespace LimelightHelpers {
   }
 
   inline void from_json(const wpi::json& j, HardwareReport& t) {
-    t.cameraId = SafeJSONAccess<std::string>(j, "cid", "");
+    t.cameraId = SafeJSONAccess<std::string, char [4]>(j, "cid", "");
     t.cpuUsage = SafeJSONAccess<double>(j, "cpu", 0.0);
     t.diskFree = SafeJSONAccess<double>(j, "dfree", 0.0);
     t.diskTotal = SafeJSONAccess<double>(j, "dtot", 0.0);
@@ -1981,6 +1982,7 @@ namespace LimelightHelpers {
     try {
       data = wpi::json::parse(jsonString);
     } catch (const std::exception& e) {
+      std::cout << e.what() << std::endl;
       return LimelightResultsClass();
     } catch (...) {
       return LimelightResultsClass();

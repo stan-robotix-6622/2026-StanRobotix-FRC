@@ -4,30 +4,31 @@
 
 #pragma once
 
-#include <frc/DataLogManager.h>
-#include <frc/DriverStation.h>
+#include <optional>
+
 #include <frc/TimedRobot.h>
 #include <frc2/command/CommandPtr.h>
-#include <rev/util/StatusLogger.h>
 
 #include <ctre/phoenix6/SignalLogger.hpp>
 #include <optional>
 
 #include "RobotContainer.h"
 
-class Robot : public frc::TimedRobot {
- public:
-	Robot();
-	void RobotPeriodic() override;
-	void DisabledInit() override;
-	void DisabledPeriodic() override;
-	void AutonomousInit() override;
-	void AutonomousPeriodic() override;
-	void TeleopInit() override;
-	void TeleopPeriodic() override;
-	void TestPeriodic() override;
-	void SimulationInit() override;
-	void SimulationPeriodic() override;
+class Robot : public frc::TimedRobot
+{
+public:
+  Robot();
+  void RobotPeriodic() override;
+  void DisabledInit() override;
+  void DisabledPeriodic() override;
+  void AutonomousInit() override;
+  void AutonomousPeriodic() override;
+  void TeleopInit() override;
+  void TeleopPeriodic() override;
+  void TestPeriodic() override;
+  void SimulationInit() override;
+  void SimulationPeriodic() override;
+  void DriverStationConnected() override;
 
  private:
 	bool mConnectedToDriveStation = false;
@@ -35,5 +36,7 @@ class Robot : public frc::TimedRobot {
 	// doesn't have undefined behavior and potentially crash.
 	std::optional<frc2::Command*> m_autonomousCommand;
 
-	RobotContainer m_container;
+  Rebuilt::MatchStatus mMatchStatus;
+
+  RobotContainer m_container;
 };

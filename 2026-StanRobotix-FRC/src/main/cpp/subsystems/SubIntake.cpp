@@ -6,19 +6,16 @@
 
 #include <frc2/command/Commands.h>
 
-#include "Constants.h"
+#include "Configs.h"
 
-SubIntake::SubIntake()
-{
-	mIntakeMotor = new rev::spark::SparkMax(CANid::kMotorIntakeID, rev::spark::SparkLowLevel::MotorType::kBrushless);
+SubIntake::SubIntake() {
+    mIntakeMotor = new rev::spark::SparkMax(CANid::kMotorIntakeID, rev::spark::SparkLowLevel::MotorType::kBrushless);
 
-	mIntakeMotorConfig = new rev::spark::SparkMaxConfig{};
-	mIntakeMotorConfig->Inverted(IntakeConstants::kInverted);
-	mIntakeMotorConfig->SetIdleMode(IntakeConstants::kIdleMode);
-	mIntakeMotor->Configure(*mIntakeMotorConfig, IntakeConstants::kReset, IntakeConstants::kPersist);
+    mEncoder = new rev::spark::SparkRelativeEncoder{mIntakeMotor->GetEncoder()};
+ 
+    mIntakeMotor->Configure(Configs::Intake::Config(), IntakeConstants::kReset, IntakeConstants::kPersist);
 }
 
-// This method will be called once per scheduler run
 void SubIntake::Periodic() {}
 
 void SubIntake::Stop()
@@ -36,15 +33,29 @@ void SubIntake::SetSpeed(double iSpeed)
 	mIntakeMotor->Set(iSpeed);
 }
 
-frc2::CommandPtr SubIntake::getIntakeCommand()
-{
-	return frc2::cmd::RunEnd(
-			[this] {
-				SetSpeed(IntakeConstants::kSpeed);
-			},
+frc2::CommandPtr SubIntake::getIntakeCommand() {
+  return frc2::cmd::RunEnd(
+    [this]
+    {
+      SetSpeed(IntakeConstants::kSpeed);
+    },
 
-			[this] {
-				Stop();
-			},
-			{});
+    [this]
+    {
+      Stop();
+    },
+    {}
+  );
+}
+
+bool SubIntake::isIntakeOn()
+{
+  return mIntakeMotor->GetAppliedOutput() > 0;
+}
+
+void SubIntake::InitSendable(wpi::SendableBuilder &builder)
+{
+    builder.SetSmartDashboardType("intake");
+    builder.AddDoubleProperty("velocity rpm", [this] {return mEncoder->GetVelocity();}, nullptr);
+    builder.AddDoubleProperty("wheel perimeter speed", [this] {return mEncoder->GetVelocity() * IntakeConstants::kWheelRadius.value() * 2 * std::numbers::pi / 60;}, nullptr);
 }

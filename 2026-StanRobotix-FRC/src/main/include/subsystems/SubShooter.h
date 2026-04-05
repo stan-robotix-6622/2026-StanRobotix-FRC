@@ -6,42 +6,47 @@
 
 #include <frc/controller/PIDController.h>
 #include <frc/controller/SimpleMotorFeedforward.h>
-#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/SubsystemBase.h>
+#include <wpi/sendable/SendableBuilder.h>
+#include <rev/SparkMax.h>
 #include <rev/config/SparkMaxConfig.h>
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
+#include <rev/SparkClosedLoopController.h>
 
 #include <units/angle.h>
 #include <units/angular_velocity.h>
 #include <units/voltage.h>
 
-class SubShooter : public frc2::SubsystemBase {
- public:
-	SubShooter();
+#include "ShooterLookupTable.h"
 
-	void setVelocity(units::turns_per_second_t iNextVelocity);
-	void setVoltage(units::volt_t iVoltage);
-	units::turns_per_second_t getVelocity();
+class SubShooter : public frc2::SubsystemBase
+{
+public:
+  SubShooter();
 
-	// The first index of the array is the result of the Leader's configuration and
-	// the second is the result of the Follower's configuration
-	std::array<rev::REVLibError, 2> Configure();
-	/**
-	 * Will be called periodically whenever the CommandScheduler runs.
-	 */
-	void Periodic() override;
+  void setDesiredVelocity(units::turns_per_second_t iNextVelocity);
+  void setVoltage(units::volt_t iVoltage);
+  units::turns_per_second_t getVelocity();
 
- private:
-	// Components (e.g. motor controllers and sensors) should generally be
-	// declared private and exposed only through public methods.
+  // The first index of the array is the result of the Leader's configuration and
+  // the second is the result of the Follower's configuration
+  std::array<rev::REVLibError, 2> Configure();
 
-	frc::SimpleMotorFeedforward<units::turns>* mFeedforward;
+  void Periodic() override;
 
-	rev::spark::SparkMax* mLeaderShooterController;
-	rev::spark::SparkMax* mFollowerShooterController;
-	frc::PIDController* mPIDcontroller;
-	rev::spark::SparkRelativeEncoder* mRelativeEncoder;
-	rev::spark::SparkMaxConfig* mSparkConfigLeaderShooter;
-	rev::spark::SparkMaxConfig* mSparkConfigFollowerShooter;
+  void InitSendable(wpi::SendableBuilder &builder) override;
+
+  bool atDesiredVelocity();
+
+private:
+  frc::SimpleMotorFeedforward<units::turns>* mFeedforward;
+
+  rev::spark::SparkMax* mLeaderShooterController;
+  rev::spark::SparkMax* mFollowerShooterController;
+  frc::PIDController* mPIDcontroller;
+  rev::spark::SparkRelativeEncoder* mRelativeEncoder;
+  rev::spark::SparkClosedLoopController* mClossedLoopController;
+
+  units::turns_per_second_t mDesiredVelocity;
 };

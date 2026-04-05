@@ -5,7 +5,6 @@
 #pragma once
 
 #include <frc/controller/PIDController.h>
-#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 

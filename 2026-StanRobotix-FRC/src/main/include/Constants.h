@@ -4,21 +4,21 @@
 
 #pragma once
 
-#include <frc/geometry/Pose2d.h>
-#include <frc/geometry/Translation2d.h>
-#include <pathplanner/lib/config/RobotConfig.h>
-#include <rev/config/SparkBaseConfig.h>	 // For the spark IdleMode
-#include <rev/SparkBase.h>							 // Include Spark variable types
+#include <units/voltage.h>
+#include <units/length.h>
+#include <units/velocity.h>
+#include <units/acceleration.h>
+#include <units/angle.h>
+#include <units/angular_velocity.h>
+#include <units/angular_acceleration.h>
+#include <units/current.h>
 
 #include <numbers>
 
-#include <units/acceleration.h>
-#include <units/angle.h>
-#include <units/angular_acceleration.h>
-#include <units/angular_velocity.h>
-#include <units/length.h>
-#include <units/velocity.h>
-#include <units/voltage.h>
+#include <frc/geometry/Translation2d.h>
+#include <frc/geometry/Pose2d.h>
+#include <rev/SparkBase.h>              // Include Spark variable types
+#include <rev/config/SparkBaseConfig.h> // For the spark IdleMode
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -36,66 +36,83 @@ namespace TemplateUnits
 }	 // namespace TemplateUnits
 namespace OperatorConstants
 {
-	inline constexpr int kDriverControllerPort = 0;
+  inline constexpr int kDriverControllerPort = 0;
+  inline constexpr int kCopilotControllerPort = 1;
 
-	// Button mappings
-	// For XboxController:
-	// A = 1; B = 2; X = 3; Y = 4; RightBumper = 5; LeftBumper = 6
-	inline constexpr int kPivotDownButton = 2;	// B
+  namespace Button {
+    inline constexpr int A = 1;
+    inline constexpr int B = 2;
+    inline constexpr int X = 3;
+    inline constexpr int Y = 4;
+    inline constexpr int LeftBumper = 5;
+    inline constexpr int RightBumper = 6;
+    inline constexpr int Back = 7;
+    inline constexpr int Start = 8;
+    inline constexpr int LeftJoystick = 9;
+    inline constexpr int RightJoystick = 10;
+  }
 
-	inline constexpr int kResetIMUButton = 5;		// RightBumper
-	inline constexpr int kResetPoseButton = 6;	// LeftBumper
+  namespace Axis {
+    inline constexpr int LeftX = 0;
+    inline constexpr int LeftY = 1;
+    inline constexpr int LeftTrigger = 2;
+    inline constexpr int RightTrigger = 3;
+    inline constexpr int RightX = 4;
+    inline constexpr int RightY = 5;
+  }
 
-	inline constexpr int kShootButton = 4;				// Y
-	inline constexpr int kUnstuckFuelButton = 3;	// X
-	inline constexpr int kFeedButton = 1;					// A
-																								// inline constexpr int kIndexButton = 6;       // LeftBumper
-}	 // namespace OperatorConstants
+  inline constexpr int kPivotDownButton = Button::B;
+
+  inline constexpr int kResetIMUButton = Button::RightBumper;
+  inline constexpr int kResetPoseButton = Button::LeftBumper;
+
+  inline constexpr int kShootButton = Button::Y;
+  inline constexpr int kUnstuckFuelButton = Button::X;
+  inline constexpr int kFeedButton = Button::A;
+}
 
 namespace ShooterConstants
 {
-	inline constexpr units::volt_t kS = 0_V;
-	inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.523844_tps;
-	inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second_squared> kA = 0_V / 1_tr_per_s_sq;
+  inline constexpr units::volt_t kS = 0_V;
+  inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.904761_tps;
+  inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second_squared> kA = 0_V / 1_tr_per_s_sq;
 
 	inline constexpr bool kInverted = false;
 	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
 	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
 	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 
-	inline constexpr units::turns_per_second_t kVitesseVoulue = 55_tps;
+  inline constexpr bool kFollowerinverted = false;
+  inline constexpr double kGearRatio = 1;
 
-	inline constexpr bool kFollowerinverted = false;
+  inline constexpr rev::spark::SparkLowLevel::ControlType kShooterClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kVelocity;
 
-	namespace PIDConstants
-	{
-		inline constexpr double kP = 2;	 // T'is be a placeholder :)
-		inline constexpr double kI = 0;
-		inline constexpr double kD = 0;
+  inline constexpr units::ampere_t kCurrentLimit = 80_A;
 
-		inline constexpr units::turns_per_second_t setpoint = 55_tps;	 // its NOT(it actually is) a placeholder :)
-	}	 // namespace PIDConstants
-}	 // namespace ShooterConstants
+  namespace PIDConstants
+  {
+    inline constexpr double kP = 4;
+    inline constexpr double kI = 0;
+    inline constexpr double kD = 0.5;
+
+    inline constexpr units::turns_per_second_t setpoint = 52_tps; // at 3.6m
+  }
+  namespace Config
+  {
+    inline constexpr rev::spark::FeedbackSensor kShooterClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kPrimaryEncoder;
+  }
+}
 
 namespace FeederConstants
 {
-	inline constexpr units::volt_t kDesiredVoltage = 2_V;	 // placeholder :)
+  inline constexpr units::volt_t kDesiredVoltage = 9_V;
 
-	inline constexpr bool kInverted = true;
-	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
-	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
-	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
-}	 // namespace FeederConstants
-
-namespace IndexerConstants
-{
-	inline constexpr units::volt_t kDesiredVoltage = 2_V;	 // placeholder :)
-
-	inline constexpr bool kInverted = true;
-	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
-	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
-	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
-}	 // namespace IndexerConstants
+  inline constexpr bool kInverted = true;
+  inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
+  inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+  inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
+  inline constexpr units::ampere_t kCurrentLimit = 80_A;
+}
 
 namespace PathPlannerConstants
 {
@@ -112,41 +129,14 @@ namespace PathPlannerConstants
 	inline constexpr units::degrees_per_second_squared_t kMaxAngularAcceleration = 72.0_deg_per_s_sq;
 }	 // namespace PathPlannerConstants
 
-namespace DrivetrainConstants
-{
-	// Left-Right
-	inline constexpr units::meter_t kRobotWidth = 28_in;
-	// Front-Back
-	inline constexpr units::meter_t kRobotLength = 26.875_in;
-	// In both directions
-	inline constexpr units::meter_t kModuleCornerOffset = 1.75_in;
-
-	// We take for granted a rectangular frame
-	inline constexpr frc::Translation2d kFrontLeftTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
-	inline constexpr frc::Translation2d kFrontRightTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
-	inline constexpr frc::Translation2d kBackLeftTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
-	inline constexpr frc::Translation2d kBackRightTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
-
-	inline constexpr units::meters_per_second_t kSpeedConstant = 2_mps;															// Temporary value
-	inline constexpr units::radians_per_second_t kSpeedConstant0 = std::numbers::pi * 1_rad_per_s;	// Temporary value
-	namespace Commands
-	{
-		inline constexpr units::second_t kFeedforwartStartDelay = 2.0_s;
-		inline constexpr TemplateUnits::VoltageInverse<units::seconds> kFeedforwardRampRate = 1_V / 1_s;
-		inline constexpr units::second_t kWheelRadiusMeasurementStartDelay = 1.0_s;
-		inline constexpr units::radians_per_second_t kWheelRadiusMaxVelocity = 0.25_rad_per_s;
-		inline constexpr units::radians_per_second_squared_t kWheelRadiusRampRate = 0.05_rad_per_s_sq;
-	}	 // namespace Commands
-}	 // namespace DrivetrainConstants
-
 namespace ModuleConstants
 {
-	inline constexpr double kDrivingMotorGearRatio = 4.71;																				// 5.08 rotations of the motor for 1 rotation of the ouput
-	inline constexpr units::volt_t kNominalVoltage = 12_V;																				// The voltage at which the max speeds are mesured
-	inline constexpr units::meter_t kWheelRadius = 0.035609_m;																		// The radius of REV's plastic wheels, masured with the wheelCaracterizationCommand
-	inline constexpr units::meter_t kWheelPerimeter = kWheelRadius * 2 * std::numbers::pi;				// in meters (diametre in inches * convertion to meters * pi)
-	inline constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260_rad_per_s;	// TODO: Verify?
-	inline constexpr units::meters_per_second_t kDriveWheelMaxSpeed = 4.9180_mps;									// TODO: Verify?
+  inline constexpr double kDrivingMotorGearRatio = 4.71;                                       // 5.08 rotations of the motor for 1 rotation of the ouput
+  inline constexpr units::volt_t kNominalVoltage = 12_V;                                       // The voltage at which the max speeds are mesured
+  inline constexpr units::meter_t kWheelRadius = 0.035609_m;                                   // The radius of REV's plastic wheels, masured with the wheelCaracterizationCommand
+  inline constexpr units::meter_t kWheelPerimeter = kWheelRadius * 2 * std::numbers::pi;       // in meters (diametre in inches * convertion to meters * pi)
+  inline constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260_rad_per_s;
+  inline constexpr units::meters_per_second_t kDriveWheelMaxFreeSpeed = 4.9180_mps;
 
 	inline constexpr double kDrivingFactor = ModuleConstants::kWheelPerimeter.value() / kDrivingMotorGearRatio;
 	inline constexpr double kTurningFactor = 2 * std::numbers::pi;
@@ -157,8 +147,11 @@ namespace ModuleConstants
 	inline constexpr rev::spark::SparkLowLevel::MotorType kDrivingMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
 	inline constexpr rev::spark::SparkLowLevel::MotorType kTurningMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
 
-	inline constexpr rev::ResetMode kDrivingResetMode = rev::ResetMode::kResetSafeParameters;
-	inline constexpr rev::ResetMode kTurningResetMode = rev::ResetMode::kResetSafeParameters;
+  inline constexpr units::ampere_t kDrivingCurrentLimit = 80_A;
+  inline constexpr units::ampere_t kTurningCurrentLimit = 20_A;
+
+  inline constexpr rev::ResetMode kDrivingResetMode = rev::ResetMode::kResetSafeParameters;
+  inline constexpr rev::ResetMode kTurningResetMode = rev::ResetMode::kResetSafeParameters;
 
 	inline constexpr rev::PersistMode kDrivingPersistMode = rev::PersistMode::kPersistParameters;
 	inline constexpr rev::PersistMode kTurningPersistMode = rev::PersistMode::kPersistParameters;
@@ -174,8 +167,8 @@ namespace ModuleConstants
 	{
 		inline constexpr double kRPMtoRPSFactor = 60;
 
-		inline constexpr units::radians_per_second_t kTurningCruiseVelocity = 2_rad_per_s * std::numbers::pi;
-		inline constexpr units::radians_per_second_squared_t kTurningMaxAcceleration = 4_rad_per_s_sq * std::numbers::pi;
+    inline constexpr units::revolutions_per_minute_t kTurningCruiseVelocity = 2_rad_per_s * std::numbers::pi;
+    inline constexpr units::revolutions_per_minute_per_second_t kTurningMaxAcceleration = 4_rad_per_s_sq * std::numbers::pi;
 
 		inline constexpr rev::spark::SparkBaseConfig::IdleMode kDrivingIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
 		inline constexpr rev::spark::SparkBaseConfig::IdleMode kTurningIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
@@ -183,20 +176,58 @@ namespace ModuleConstants
 		inline constexpr rev::spark::FeedbackSensor kDrivingClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kPrimaryEncoder;
 		inline constexpr rev::spark::FeedbackSensor kTurningClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kAbsoluteEncoder;
 
-		inline constexpr bool kTurningMotorInverted = false;
-		inline constexpr bool kTurningEncoderZeroCentered = false;
-		inline constexpr bool kTurningClosedLoopPositionWrapping = true;
-		inline constexpr double kTurningClosedLoopMinInput = -ModuleConstants::kTurningFactor / 2;
-		inline constexpr double kTurningClosedLoopMaxInput = ModuleConstants::kTurningFactor / 2;
-		inline constexpr double kTurningClosedLoopTolerance = 0.01 * ModuleConstants::kTurningFactor;
-	}	 // namespace Config
-}	 // namespace ModuleConstants
+    inline constexpr bool kTurningMotorInverted = false;
+    inline constexpr bool kTurningEncoderZeroCentered = true;
+    inline constexpr bool kTurningClosedLoopPositionWrapping = true;
+    inline constexpr double kTurningClosedLoopMinInput = -std::numbers::pi;
+    inline constexpr double kTurningClosedLoopMaxInput = std::numbers::pi;
+    inline constexpr double kTurningClosedLoopTolerance = std::numbers::pi / 360;
+  }
+}
+
+namespace DrivetrainConstants
+{
+  // Left-Right
+  inline constexpr units::meter_t kRobotWidth = 28_in;
+  // Front-Back
+  inline constexpr units::meter_t kRobotLength = 26.875_in;
+  // In both directions
+  inline constexpr units::meter_t kModuleCornerOffset = 1.75_in;
+
+  // We take for granted a rectangular frame
+  inline constexpr frc::Translation2d kFrontLeftTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
+  inline constexpr frc::Translation2d kFrontRightTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
+  inline constexpr frc::Translation2d kBackLeftTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
+  inline constexpr frc::Translation2d kBackRightTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
+
+  inline constexpr units::meters_per_second_t kAttainableSpeed = 4.50_mps;
+  inline constexpr units::meters_per_second_t kMaxDesiredSpeed = 4.50_mps;
+  inline constexpr units::radians_per_second_t kMaxDesiredAngularSpeed = std::numbers::pi * 2_rad_per_s;
+  namespace Commands
+  {
+    inline constexpr units::second_t kMaxSpeedStartDelay = 2.0_s;
+    inline constexpr units::meters_per_second_squared_t kMaxSpeedRampRate = 0.5_mps_sq;
+    inline constexpr units::meters_per_second_t kMaxSpeedMaxVelocity = 5_mps;
+    inline constexpr units::second_t kFeedforwartStartDelay = 2.0_s;
+    inline constexpr TemplateUnits::VoltageInverse<units::seconds> kFeedforwardRampRate = 1_V / 1_s;
+    inline constexpr units::second_t kWheelRadiusMeasurementStartDelay = 1.0_s;
+    inline constexpr units::radians_per_second_t kWheelRadiusMaxVelocity = 0.25_rad_per_s;
+    inline constexpr units::radians_per_second_squared_t kWheelRadiusRampRate = 0.05_rad_per_s_sq;
+  }
+
+  namespace PIDs
+  {
+    inline constexpr double kRotationP = 3.0;
+    inline constexpr double kRotationI = 0.0;
+    inline constexpr double kRotationD = 0.3;
+  }
+}
 
 namespace LimelightConstants
 {
 	inline constexpr bool kUseMegaTag2 = true;
 
-	inline constexpr std::string_view kName = "";
+  inline constexpr std::string_view kName = "limelight";
 
 	inline constexpr units::meter_t kForward = 13.6875_in;
 	inline constexpr units::meter_t kRight = -11.875_in;
@@ -223,8 +254,7 @@ namespace FieldConstants
 
 namespace CANid
 {
-	inline constexpr int kMotorIndexerID = 12;
-	inline constexpr int kMotorFeederID = 13;
+  inline constexpr int kMotorFeederID = 13;
 
 	inline constexpr int kLeaderMotorShooterID = 16;
 	inline constexpr int kFollowerMotorShooterID = 17;
@@ -238,34 +268,68 @@ namespace CANid
 	inline constexpr int kBackLeftMotorID = 2;
 	inline constexpr int kBackLeftMotor550ID = 1;
 
-	inline constexpr int kMotorPivotID = 9;
-	inline constexpr int kMotorIntakeID = 10;
-	inline constexpr int kIMUPigeonID = 0;
-}	 // namespace CANid
+  inline constexpr int kMotorPivotID = 9;
+  inline constexpr int kMotorIntakeID = 10;
+  inline constexpr int kIMUPigeonID = 0;
+  
+  inline constexpr int kMotorClimbLeaderID = 14;
+  inline constexpr int kMotorClimbFollowerID = 15;
+}
 
 namespace IntakeConstants
 {
-	inline constexpr bool kInverted = false;
-	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
-	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
-	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
+  inline constexpr bool kInverted = false;
+  inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
+  inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+  inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
+  inline constexpr units::ampere_t kCurrentLimit = 80_A;
 
-	inline constexpr double kSpeed = 0.8;	 // a modifier (valeur temporaire)
-}	 // namespace IntakeConstants
+  inline constexpr double kSpeed = 1;
+
+  inline constexpr double kGearRatio = 3;
+  inline constexpr units::meter_t kWheelRadius = 1.5_in;
+}
 
 namespace PivotConstants
 {
-	inline constexpr double kGearRatio = 16;
-	inline constexpr double kOffset = 6.2;
-	inline constexpr double kP = 1.3;		// en attendant
-	inline constexpr double kI = 0.4;		// en attendant
-	inline constexpr double kD = 0.15;	// en attendant
-	inline constexpr units::volt_t kG = 0.80_V;
-	inline constexpr double setpointUp = std::numbers::pi * 7 / 16;	 // 90 deg up
-	inline constexpr double setpointDown = std::numbers::pi / 18;		 // 10 deg up
+  inline constexpr double kGearRatio = 16;
+  inline constexpr double kOffset = 2.5564447021484375;
+  inline constexpr double kP = 2.0;
+  inline constexpr double kI = 0.0;
+  inline constexpr double kD = 0.2;
+  inline constexpr units::volt_t kG = 0.80_V;
+  inline constexpr units::volt_t kS = 0.0_V;
+  inline constexpr TemplateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
+  inline constexpr double setpointUp = std::numbers::pi / 2; // 90 deg up
+  inline constexpr double setpointDown = std::numbers::pi / 18;   // 10 deg up
+  inline constexpr units::ampere_t kCurrentLimit = 60_A;
 
-	inline constexpr bool kInverted = false;
-	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
-	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
-	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
-}	 // namespace PivotConstants
+  inline constexpr bool kInverted = false;
+  inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
+  inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+  inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
+
+}
+
+namespace ClimbConstants
+{
+  inline constexpr rev::spark::SparkLowLevel::MotorType kMotorTypeLeader = rev::spark::SparkLowLevel::MotorType::kBrushless;
+  inline constexpr rev::spark::SparkLowLevel::MotorType kMotorTypeFollower = rev::spark::SparkLowLevel::MotorType::kBrushless;
+  inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
+  inline constexpr double kDownP = 0.02;
+  inline constexpr double kDownI = 0.001;
+  inline constexpr double kDownD = 0;
+  inline constexpr double kUpP = 0.015;
+  inline constexpr double kUpI = 0.001;
+  inline constexpr double kUpD = 0;
+  inline constexpr double kLiftP = 0.02;
+  inline constexpr double kLiftI = 0.001;
+  inline constexpr double kLiftD = 0;
+  inline constexpr double kSetpointUpOffset = 16.7;
+  inline constexpr double kLimitReverse = 0;
+  inline constexpr double kLimitForward = 16.5;
+  inline constexpr bool kInverted = false;
+  inline constexpr bool kInverseFollowerMotor = false;
+  inline constexpr double kMaxCurrentFiltered = 15.0;
+  inline constexpr double kConstantSpeed = 0.2;
+}

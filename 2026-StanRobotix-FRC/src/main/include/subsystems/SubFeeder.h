@@ -13,21 +13,15 @@
 
 class SubFeeder : public frc2::SubsystemBase {
  public:
-	SubFeeder();
+  SubFeeder();
+  
+  void setVoltage(units::volt_t iOutput);
+  rev::REVLibError Configure();
+  frc2::CommandPtr getFeedShooterCommand(units::volt_t iVoltage);
+  bool isFeederOn();
 
-	void setVoltage(units::volt_t iOutput);
-	rev::REVLibError Configure();
-	frc2::CommandPtr getFeedShooterCommand(units::volt_t iVoltage);
-
-	/**
-	 * Will be called periodically whenever the CommandScheduler runs.
-	 */
-	void Periodic() override;
+  void Periodic() override;
 
  private:
-	rev::spark::SparkMax* mFeederController;
-	rev::spark::SparkMaxConfig* mSparkConfigFeeder;
-
-	// Components (e.g. motor controllers and sensors) should generally be
-	// declared private and exposed only through public methods.
+  rev::spark::SparkMax* mFeederController;
 };

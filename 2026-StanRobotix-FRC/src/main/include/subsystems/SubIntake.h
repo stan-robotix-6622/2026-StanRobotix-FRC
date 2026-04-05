@@ -6,6 +6,9 @@
 
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
+#include <wpi/sendable/SendableBuilder.h>
+#include <rev/SparkMax.h>
+#include <rev/SparkRelativeEncoder.h>
 #include <rev/config/SparkMaxConfig.h>
 #include <rev/SparkMax.h>
 
@@ -14,17 +17,17 @@ class SubIntake : public frc2::SubsystemBase {
 	SubIntake();
 	void Stop();
 
-	void SetVoltage(double);
-	frc2::CommandPtr getIntakeCommand();
-	void SetSpeed(double);
-	/**
-	 * Will be called periodically whenever the CommandScheduler runs.
-	 */
-	void Periodic() override;
+  void SetVoltage(double);
+  frc2::CommandPtr getIntakeCommand();
+  void SetSpeed(double);
+  bool isIntakeOn();
 
- private:
-	// Components (e.g. motor controllers and sensors) should generally be
-	// declared private and exposed only through public methods.
-	rev::spark::SparkMax* mIntakeMotor = nullptr;
-	rev::spark::SparkMaxConfig* mIntakeMotorConfig;
+  void Periodic() override;
+
+  void InitSendable(wpi::SendableBuilder &builder) override;
+
+private:
+  rev::spark::SparkMax* mIntakeMotor;
+
+  rev::spark::SparkRelativeEncoder* mEncoder;
 };

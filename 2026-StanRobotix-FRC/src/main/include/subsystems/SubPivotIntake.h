@@ -4,9 +4,10 @@
 
 #pragma once
 
-#include <frc/controller/ArmFeedforward.h>
-#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc/controller/ArmFeedforward.h>
+#include <wpi/sendable/SendableBuilder.h>
+#include <rev/SparkMax.h>
 #include <rev/config/SparkMaxConfig.h>
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
@@ -19,20 +20,18 @@ class SubPivotIntake : public frc2::SubsystemBase {
 
 	void KeepPosition();
 
-	void SetVoltage(double iVoltage);
+  void SetVoltage(units::volt_t iVoltage);
 
-	double GetAngle();
+  void SetVelocity(units::radians_per_second_t iVelocity);
 
-	/**
-	 * Will be called periodically whenever the CommandScheduler runs.
-	 */
-	void Periodic() override;
+  units::radian_t GetAngle();
 
- private:
-	// Components (e.g. motor controllers and sensors) should generally be
-	// declared private and exposed only through public methods.
-	rev::spark::SparkMax* mPivotMotor;
-	rev::spark::SparkRelativeEncoder* mEncoder;
-	frc::ArmFeedforward* mFeedForward;
-	rev::spark::SparkMaxConfig* mPivotMotorConfig;
+  void Periodic() override;
+
+  void InitSendable(wpi::SendableBuilder &builder) override;
+
+private:
+  rev::spark::SparkMax* mPivotMotor;
+  rev::spark::SparkRelativeEncoder* mEncoder;
+  frc::ArmFeedforward* mFeedForward;
 };
