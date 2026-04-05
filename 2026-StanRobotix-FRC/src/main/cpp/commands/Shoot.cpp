@@ -31,9 +31,9 @@ void Shoot::Execute()
 	mCurrentVelocity = mSubShooter->getVelocity();
 	mAdjustedVelocity = mCurrentVelocity + mPIDAdjustment;
 
-	frc::SmartDashboard::PutNumber("shooter/command/PID adjustment", mPIDAdjustment.value());
-	frc::SmartDashboard::PutNumber("shooter/command/current velocity", mCurrentVelocity.value());
-	frc::SmartDashboard::PutNumber("shooter/command/adjusted velocity", mAdjustedVelocity.value());
+	// frc::SmartDashboard::PutNumber("shooter/command/PID adjustment", mPIDAdjustment.value());
+	// frc::SmartDashboard::PutNumber("shooter/command/current velocity", mCurrentVelocity.value());
+	// frc::SmartDashboard::PutNumber("shooter/command/adjusted velocity", mAdjustedVelocity.value());
 
 	mSubShooter->setDesiredVelocity(mAdjustedVelocity);
 }

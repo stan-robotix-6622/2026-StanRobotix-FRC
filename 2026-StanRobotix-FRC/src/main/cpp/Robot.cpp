@@ -18,7 +18,7 @@ Robot::Robot()
 	ctre::phoenix6::SignalLogger::Start();
 	StatusLogger::Start();
 
-	frc::SmartDashboard::PutData("CommandScheduler", &frc2::CommandScheduler::GetInstance());
+	// frc::SmartDashboard::PutData("CommandScheduler", &frc2::CommandScheduler::GetInstance());
 }
 
 /**

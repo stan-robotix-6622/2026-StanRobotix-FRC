@@ -89,7 +89,7 @@ class RobotContainer {
 	frc::SendableChooser<frc2::Command*> mAutoChooser;
 
 	nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
-	std::shared_ptr<nt::NetworkTable> mNTShooterStatusTable = inst.GetTable("SmartDashboard/Shooter Status");
+	std::shared_ptr<nt::NetworkTable> mNTShooterStatusTable = inst.GetTable("SmartDashboard/shooter");
 	nt::StructArrayPublisher<LookupTable::ShooterStatus> mShooterStatusPublisher;
 	nt::StructArraySubscriber<LookupTable::ShooterStatus> mShooterStatusSubscriber;
 };

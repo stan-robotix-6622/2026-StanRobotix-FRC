@@ -45,13 +45,14 @@ RobotContainer::RobotContainer()
 
 	mSubClimb = new SubClimb;
 	mSubShooter = new SubShooter{};
-	frc::SmartDashboard::PutData("shooter", mSubShooter);
 	mSubFeeder = new SubFeeder{};
 	mDrivetrain = new SubDrivetrain{};
-	frc::SmartDashboard::PutData("swerve", mDrivetrain);
 	mSubIntake = new SubIntake{};
-	frc::SmartDashboard::PutData("intake", mSubIntake);
 	mSubPivotIntake = new SubPivotIntake{};
+
+	frc::SmartDashboard::PutData("swerve", mDrivetrain);
+	frc::SmartDashboard::PutData("shooter", mSubShooter);
+	frc::SmartDashboard::PutData("intake", mSubIntake);
 	frc::SmartDashboard::PutData("pivot", mSubPivotIntake);
 
 	mDriveCommands = new DriveCommands{mDrivetrain};
@@ -64,8 +65,8 @@ RobotContainer::RobotContainer()
 	mAutoChooser = pathplanner::AutoBuilder::buildAutoChooser();
 	frc::SmartDashboard::PutData("Auto Chooser", &mAutoChooser);
 
-	mShooterStatusPublisher = mNTShooterStatusTable->GetStructArrayTopic<LookupTable::ShooterStatus>("status").Publish();
-	mShooterStatusSubscriber = mNTShooterStatusTable->GetStructArrayTopic<LookupTable::ShooterStatus>("status").Subscribe(std::span<const LookupTable::ShooterStatus>());
+	mShooterStatusPublisher = mNTShooterStatusTable->GetStructArrayTopic<LookupTable::ShooterStatus>("status array").Publish();
+	mShooterStatusSubscriber = mNTShooterStatusTable->GetStructArrayTopic<LookupTable::ShooterStatus>("status array").Subscribe(std::span<const LookupTable::ShooterStatus>());
 }
 
 void RobotContainer::SetSubsystemDefaultCommands()
