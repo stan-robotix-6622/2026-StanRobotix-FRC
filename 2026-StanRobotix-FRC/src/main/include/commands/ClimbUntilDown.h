@@ -4,11 +4,10 @@
 
 #pragma once
 
-#include <frc/controller/PIDController.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 
-#include "subsystems/SubPivotIntake.h"
+#include "subsystems/SubClimb.h"
 
 /**
  * An example command.
@@ -17,20 +16,13 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class PivotIntake
-		: public frc2::CommandHelper<frc2::Command, PivotIntake> {
+class ClimbUntilDown
+		: public frc2::CommandHelper<frc2::Command, ClimbUntilDown> {
  public:
 	/* You should consider using the more terse Command factories API instead
 	 * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
 	 */
-
-	enum StatePivotIntake {
-		kUp,
-		kDown,
-		kIn
-	};
-
-	PivotIntake(SubPivotIntake*, StatePivotIntake iTarget);
+	explicit ClimbUntilDown(SubClimb* iSubClimb);
 
 	void Initialize() override;
 
@@ -41,8 +33,6 @@ class PivotIntake
 	bool IsFinished() override;
 
  private:
-	SubPivotIntake* mPivotIntake;
-	frc::PIDController* mPIDController;
-
-	StatePivotIntake mState;
+	SubClimb* mSubClimb;
+	int mCounter = 0;
 };

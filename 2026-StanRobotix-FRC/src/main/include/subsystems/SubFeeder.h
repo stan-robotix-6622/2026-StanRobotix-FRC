@@ -4,23 +4,23 @@
 
 #pragma once
 
-#include <frc2/command/SubsystemBase.h>
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/SubsystemBase.h>
 #include <rev/SparkMax.h>
-#include <rev/config/SparkMaxConfig.h>
 
 #include <units/voltage.h>
 
 class SubFeeder : public frc2::SubsystemBase {
  public:
-  SubFeeder();
-  
-  void setVoltage(units::volt_t iOutput);
-  rev::REVLibError Configure();
-  frc2::CommandPtr getFeedShooterCommand(units::volt_t iVoltage);
+	SubFeeder();
 
-  void Periodic() override;
+	void setVoltage(units::volt_t iOutput);
+	rev::REVLibError Configure();
+	frc2::CommandPtr getFeedShooterCommand(units::volt_t iVoltage);
+	bool isFeederOn();
+
+	void Periodic() override;
 
  private:
-  rev::spark::SparkMax* mFeederController;
+	rev::spark::SparkMax* mFeederController;
 };

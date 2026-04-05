@@ -8,41 +8,48 @@
 
 #include "Constants.h"
 
-PivotIntake::PivotIntake(SubPivotIntake* iPivotIntake, StatePivotIntake iTarget) {
-  mPivotIntake = iPivotIntake;
-  AddRequirements(mPivotIntake);
+PivotIntake::PivotIntake(SubPivotIntake* iPivotIntake, StatePivotIntake iTarget)
+{
+	mPivotIntake = iPivotIntake;
+	AddRequirements(mPivotIntake);
 
-  mState = iTarget;
+	mState = iTarget;
 
-  mPIDController = new frc::PIDController {PivotConstants::kP, PivotConstants::kI, PivotConstants::kD};
-  frc::SmartDashboard::PutData("pivot/Arm PID", mPIDController);
+	mPIDController = new frc::PIDController{PivotConstants::kP, PivotConstants::kI, PivotConstants::kD};
+	frc::SmartDashboard::PutData("pivot/Arm PID", mPIDController);
 }
 
 // Called when the command is initially scheduled.
-void PivotIntake::Initialize() {
-  mPIDController->Reset();
-  switch (mState){
-    case kUp:
-      mPIDController->SetSetpoint(PivotConstants::setpointUp);
-      break;
+void PivotIntake::Initialize()
+{
+	mPIDController->Reset();
+	switch (mState) {
+		case kUp:
+			mPIDController->SetSetpoint(PivotConstants::setpointUp);
+			break;
 
-    case kDown:
-      mPIDController->SetSetpoint(PivotConstants::setpointDown);
-      break;
-  }
+		case kDown:
+			mPIDController->SetSetpoint(PivotConstants::setpointDown);
+			break;
+		case kIn:
+			mPIDController->SetSetpoint(PivotConstants::setpointIn);
+			break;
+	}
 }
 
 // Called repeatedly when this Command is scheduled to run
-void PivotIntake::Execute() {
-  units::volt_t wVoltage = (units::volt_t)mPIDController->Calculate(mPivotIntake->GetAngle().value());
-  frc::SmartDashboard::PutNumber("pivot/Arm PID adjust", wVoltage.value());
-  mPivotIntake->SetVoltage(wVoltage + (PivotConstants::kG * cos(mPivotIntake->GetAngle().value())));
+void PivotIntake::Execute()
+{
+	units::volt_t wVoltage = (units::volt_t)mPIDController->Calculate(mPivotIntake->GetAngle().value());
+	// frc::SmartDashboard::PutNumber("pivot/Arm PID adjust", wVoltage.value());
+	mPivotIntake->SetVoltage(wVoltage + (PivotConstants::kG * cos(mPivotIntake->GetAngle().value())));
 }
 
 // Called once the command ends or is interrupted.
 void PivotIntake::End(bool interrupted) {}
 
 // Returns true when the command should end.
-bool PivotIntake::IsFinished() {
-  return false;
+bool PivotIntake::IsFinished()
+{
+	return false;
 }

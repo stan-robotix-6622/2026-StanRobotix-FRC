@@ -10,83 +10,83 @@
 
 SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInverted, bool iTurningInverted)
 {
-    // Initialization of the motor controllers with the motorID constructor input
-    mDrivingMotor = new rev::spark::SparkMax{iDrivingMotorID, ModuleConstants::kDrivingMotorType};
-    mTurningMotor = new rev::spark::SparkMax{iTurningMotorID, ModuleConstants::kTurningMotorType};
+	// Initialization of the motor controllers with the motorID constructor input
+	mDrivingMotor = new rev::spark::SparkMax{iDrivingMotorID, ModuleConstants::kDrivingMotorType};
+	mTurningMotor = new rev::spark::SparkMax{iTurningMotorID, ModuleConstants::kTurningMotorType};
 
-    // Configure the motors from Configs.h
-    mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
-                             ModuleConstants::kDrivingResetMode,
-                             ModuleConstants::kDrivingPersistMode);
-    mTurningMotor->Configure(Configs::SwerveModule::TurningConfig(iTurningInverted),
-                             ModuleConstants::kTurningResetMode,
-                             ModuleConstants::kTurningPersistMode);
+	// Configure the motors from Configs.h
+	mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
+													 ModuleConstants::kDrivingResetMode,
+													 ModuleConstants::kDrivingPersistMode);
+	mTurningMotor->Configure(Configs::SwerveModule::TurningConfig(iTurningInverted),
+													 ModuleConstants::kTurningResetMode,
+													 ModuleConstants::kTurningPersistMode);
 
-    // Initialization of the motors' ClosedLoopController
-    mTurningClosedLoopController = new rev::spark::SparkClosedLoopController{mTurningMotor->GetClosedLoopController()};
-    mDrivingClosedLoopController = new rev::spark::SparkClosedLoopController{mDrivingMotor->GetClosedLoopController()};
+	// Initialization of the motors' ClosedLoopController
+	mTurningClosedLoopController = new rev::spark::SparkClosedLoopController{mTurningMotor->GetClosedLoopController()};
+	mDrivingClosedLoopController = new rev::spark::SparkClosedLoopController{mDrivingMotor->GetClosedLoopController()};
 
-    // Initialization of the motor's encoders and absolute encoder
-    mDrivingEncoder = new rev::spark::SparkRelativeEncoder{mDrivingMotor->GetEncoder()};
-    mTurningAbsoluteEncoder = new rev::spark::SparkAbsoluteEncoder{mTurningMotor->GetAbsoluteEncoder()};
+	// Initialization of the motor's encoders and absolute encoder
+	mDrivingEncoder = new rev::spark::SparkRelativeEncoder{mDrivingMotor->GetEncoder()};
+	mTurningAbsoluteEncoder = new rev::spark::SparkAbsoluteEncoder{mTurningMotor->GetAbsoluteEncoder()};
 
-    // Initialization of the molule's SwerveModulePosition and SwerveModuleState from the encoder's velocity and position
-    refreshModule();
+	// Initialization of the molule's SwerveModulePosition and SwerveModuleState from the encoder's velocity and position
+	refreshModule();
 }
 
 void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
 {
-    mTurningCurrentAngle = frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()));
-    mOptimizedState = iDesiredState;
-    mOptimizedState.Optimize(mTurningCurrentAngle);
-    mOptimizedState.CosineScale(mTurningCurrentAngle);
+	mTurningCurrentAngle = frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()));
+	mOptimizedState = iDesiredState;
+	mOptimizedState.Optimize(mTurningCurrentAngle);
+	mOptimizedState.CosineScale(mTurningCurrentAngle);
 
-    mTurningClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
-    mDrivingClosedLoopController->SetSetpoint(mOptimizedState.speed.value(), ModuleConstants::kDrivingClosedLoopControlType);
+	mTurningClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
+	mDrivingClosedLoopController->SetSetpoint(mOptimizedState.speed.value(), ModuleConstants::kDrivingClosedLoopControlType);
 }
 
 void SwerveModule::setDesiredHeading(frc::Rotation2d iDesiredHeading)
 {
-    mTurningClosedLoopController->SetSetpoint(iDesiredHeading.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
+	mTurningClosedLoopController->SetSetpoint(iDesiredHeading.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
 }
 
 void SwerveModule::setTurningVoltage(units::volt_t iVoltage)
 {
-    mTurningMotor->SetVoltage(iVoltage);
+	mTurningMotor->SetVoltage(iVoltage);
 }
 
 void SwerveModule::setDrivingVoltage(units::volt_t iVoltage)
 {
-    mDrivingMotor->SetVoltage(iVoltage);
+	mDrivingMotor->SetVoltage(iVoltage);
 }
 
 frc::SwerveModuleState SwerveModule::getModuleState()
 {
-    return mModuleState;
+	return mModuleState;
 }
 
 frc::SwerveModulePosition SwerveModule::getModulePosition()
 {
-    return mModulePosition;
+	return mModulePosition;
 }
 
 units::radians_per_second_t SwerveModule::getTurningVelocity()
 {
-    return units::radians_per_second_t(mTurningAbsoluteEncoder->GetVelocity());
+	return units::radians_per_second_t(mTurningAbsoluteEncoder->GetVelocity());
 }
 
 void SwerveModule::refreshModule()
 {
-    mModuleState = frc::SwerveModuleState{units::meters_per_second_t(mDrivingEncoder->GetVelocity()),
-                                          frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
-    mModulePosition = frc::SwerveModulePosition{units::meter_t(mDrivingEncoder->GetPosition()),
-                                                frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
+	mModuleState = frc::SwerveModuleState{units::meters_per_second_t(mDrivingEncoder->GetVelocity()),
+																				frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
+	mModulePosition = frc::SwerveModulePosition{units::meter_t(mDrivingEncoder->GetPosition()),
+																							frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
 }
 
 void SwerveModule::InitSendable(wpi::SendableBuilder& builder)
 {
-    builder.SetSmartDashboardType("swerve/module");
-    builder.AddDoubleProperty("turning velocity", [this] {return mTurningAbsoluteEncoder->GetVelocity();}, nullptr);
-    builder.AddDoubleProperty("turning position", [this] {return mTurningAbsoluteEncoder->GetPosition();}, nullptr);
-    builder.AddDoubleProperty("driving velocity", [this] {return mDrivingEncoder->GetVelocity();}, nullptr);
+	builder.SetSmartDashboardType("swerve/module");
+	builder.AddDoubleProperty("turning velocity", [this] { return mTurningAbsoluteEncoder->GetVelocity(); }, nullptr);
+	builder.AddDoubleProperty("turning position", [this] { return mTurningAbsoluteEncoder->GetPosition(); }, nullptr);
+	builder.AddDoubleProperty("driving velocity", [this] { return mDrivingEncoder->GetVelocity(); }, nullptr);
 }

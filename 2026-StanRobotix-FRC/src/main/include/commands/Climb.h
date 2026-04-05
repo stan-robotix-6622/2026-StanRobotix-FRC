@@ -8,7 +8,7 @@
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
 
-#include "subsystems/SubPivotIntake.h"
+#include "subsystems/SubClimb.h"
 
 /**
  * An example command.
@@ -17,20 +17,14 @@
  * directly; this is crucially important, or else the decorator functions in
  * Command will *not* work!
  */
-class PivotIntake
-		: public frc2::CommandHelper<frc2::Command, PivotIntake> {
+
+class Climb
+		: public frc2::CommandHelper<frc2::Command, Climb> {
  public:
 	/* You should consider using the more terse Command factories API instead
 	 * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
 	 */
-
-	enum StatePivotIntake {
-		kUp,
-		kDown,
-		kIn
-	};
-
-	PivotIntake(SubPivotIntake*, StatePivotIntake iTarget);
+	Climb(SubClimb* iSubClimb, SubClimb::Direction iDirection);
 
 	void Initialize() override;
 
@@ -41,8 +35,7 @@ class PivotIntake
 	bool IsFinished() override;
 
  private:
-	SubPivotIntake* mPivotIntake;
+	SubClimb* mSubClimb;
 	frc::PIDController* mPIDController;
-
-	StatePivotIntake mState;
+	SubClimb::Direction mDirection;
 };
