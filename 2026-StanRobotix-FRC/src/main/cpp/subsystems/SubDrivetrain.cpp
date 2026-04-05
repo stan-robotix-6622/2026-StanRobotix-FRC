@@ -26,20 +26,10 @@ SubDrivetrain::SubDrivetrain()
 	mBackLeftLocation = new frc::Translation2d{DrivetrainConstants::kBackLeftTranslation};
 	mBackRightLocation = new frc::Translation2d{DrivetrainConstants::kBackRightTranslation};
 
-	if (frc::RobotBase::IsReal()) {
-		frc::DataLogManager::Log("The robot is real");
-		mFrontLeftModule = new SwerveModule{CANid::kFrontLeftMotorID, CANid::kFrontLeftMotor550ID, true};
-		mFrontRightModule = new SwerveModule{CANid::kFrontRightMotorID, CANid::kFrontRightMotor550ID, true};
-		mBackLeftModule = new SwerveModule{CANid::kBackLeftMotorID, CANid::kBackLeftMotor550ID, false};
-		mBackRightModule = new SwerveModule{CANid::kBackRightMotorID, CANid::kBackRightMotor550ID, false};
-	}
-	else {
-		frc::DataLogManager::Log("The robot is simulated");
-		mFrontLeftModuleSim = new SwerveModuleSim{CANid::kFrontLeftMotorID, CANid::kFrontLeftMotor550ID, false, true};
-		mFrontRightModuleSim = new SwerveModuleSim{CANid::kFrontRightMotorID, CANid::kFrontRightMotor550ID, false, true};
-		mBackLeftModuleSim = new SwerveModuleSim{CANid::kBackLeftMotorID, CANid::kBackLeftMotor550ID, false, true};
-		mBackRightModuleSim = new SwerveModuleSim{CANid::kBackRightMotorID, CANid::kBackRightMotor550ID, false, true};
-	}
+	mFrontLeftModule = new SwerveModule{CANid::kFrontLeftMotorID, CANid::kFrontLeftMotor550ID, true};
+	mFrontRightModule = new SwerveModule{CANid::kFrontRightMotorID, CANid::kFrontRightMotor550ID, true};
+	mBackLeftModule = new SwerveModule{CANid::kBackLeftMotorID, CANid::kBackLeftMotor550ID, false};
+	mBackRightModule = new SwerveModule{CANid::kBackRightMotorID, CANid::kBackRightMotor550ID, false};
 
 	mCurrentModuleStatesPublisher = mNTDrivetrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
 	mCurrentChassisSpeedsPublisher = mNTDrivetrainTable->GetStructTopic<frc::ChassisSpeeds>("Current ChassisSpeeds").Publish();
@@ -102,18 +92,10 @@ void SubDrivetrain::Periodic()
 
 void SubDrivetrain::setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4> iStates)
 {
-	if (frc::RobotBase::IsReal()) {
-		mFrontLeftModule->setDesiredState(iStates[0]);
-		mFrontRightModule->setDesiredState(iStates[1]);
-		mBackLeftModule->setDesiredState(iStates[2]);
-		mBackRightModule->setDesiredState(iStates[3]);
-	}
-	else {
-		mFrontLeftModuleSim->setDesiredState(iStates[0]);
-		mFrontRightModuleSim->setDesiredState(iStates[1]);
-		mBackLeftModuleSim->setDesiredState(iStates[2]);
-		mBackRightModuleSim->setDesiredState(iStates[3]);
-	}
+	mFrontLeftModule->setDesiredState(iStates[0]);
+	mFrontRightModule->setDesiredState(iStates[1]);
+	mBackLeftModule->setDesiredState(iStates[2]);
+	mBackRightModule->setDesiredState(iStates[3]);
 }
 
 void SubDrivetrain::ConfigurePathplanner()
@@ -159,50 +141,26 @@ void SubDrivetrain::ConfigurePathplanner()
 
 void SubDrivetrain::refreshSwerveModules()
 {
-	if (frc::RobotBase::IsReal()) {
-		mFrontLeftModule->refreshModule();
-		mFrontRightModule->refreshModule();
-		mBackLeftModule->refreshModule();
-		mBackRightModule->refreshModule();
-	}
-	else {
-		mFrontLeftModuleSim->refreshModule();
-		mFrontRightModuleSim->refreshModule();
-		mBackLeftModuleSim->refreshModule();
-		mBackRightModuleSim->refreshModule();
-	}
+	mFrontLeftModule->refreshModule();
+	mFrontRightModule->refreshModule();
+	mBackLeftModule->refreshModule();
+	mBackRightModule->refreshModule();
 }
 
 wpi::array<frc::SwerveModuleState, 4> SubDrivetrain::getSwerveModuleStates()
 {
-	if (frc::RobotBase::IsReal()) {
-		return wpi::array<frc::SwerveModuleState, 4>{mFrontLeftModule->getModuleState(),
-																								 mFrontRightModule->getModuleState(),
-																								 mBackLeftModule->getModuleState(),
-																								 mBackRightModule->getModuleState()};
-	}
-	else {
-		return wpi::array<frc::SwerveModuleState, 4>{mFrontLeftModuleSim->getModuleState(),
-																								 mFrontRightModuleSim->getModuleState(),
-																								 mBackLeftModuleSim->getModuleState(),
-																								 mBackRightModuleSim->getModuleState()};
-	}
+	return wpi::array<frc::SwerveModuleState, 4>{mFrontLeftModule->getModuleState(),
+																								mFrontRightModule->getModuleState(),
+																								mBackLeftModule->getModuleState(),
+																								mBackRightModule->getModuleState()};
 }
 
 wpi::array<frc::SwerveModulePosition, 4> SubDrivetrain::getSwerveModulePositions()
 {
-	if (frc::RobotBase::IsReal()) {
-		return wpi::array<frc::SwerveModulePosition, 4>{mFrontLeftModule->getModulePosition(),
-																										mFrontRightModule->getModulePosition(),
-																										mBackLeftModule->getModulePosition(),
-																										mBackRightModule->getModulePosition()};
-	}
-	else {
-		return wpi::array<frc::SwerveModulePosition, 4>{mFrontLeftModuleSim->getModulePosition(),
-																										mFrontRightModuleSim->getModulePosition(),
-																										mBackLeftModuleSim->getModulePosition(),
-																										mBackRightModuleSim->getModulePosition()};
-	}
+	return wpi::array<frc::SwerveModulePosition, 4>{mFrontLeftModule->getModulePosition(),
+																									mFrontRightModule->getModulePosition(),
+																									mBackLeftModule->getModulePosition(),
+																									mBackRightModule->getModulePosition()};
 }
 
 void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation)
