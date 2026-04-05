@@ -46,5 +46,5 @@ class SubClimb : public frc2::SubsystemBase {
 	frc::LinearFilter<units::ampere_t>* mHighPassFilter;
 	units::ampere_t mCurrent;
 	double mCurrentFiltered;
-	double mDownPosition;
+	double mDownPosition = 0;
 };
