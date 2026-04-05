@@ -7,9 +7,11 @@
 #include <ctre/phoenix6/SignalLogger.hpp>
 #include <frc/DataLogManager.h>
 #include <frc/DriverStation.h>
+#include <frc/Filesystem.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 #include <rev/util/StatusLogger.h>
+#include <wpinet/WebServer.h>
 
 Robot::Robot()
 {
@@ -17,6 +19,8 @@ Robot::Robot()
 	frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog());
 	ctre::phoenix6::SignalLogger::Start();
 	StatusLogger::Start();
+
+	wpi::WebServer::GetInstance().Start(5800, frc::filesystem::GetDeployDirectory());
 
 	// frc::SmartDashboard::PutData("CommandScheduler", &frc2::CommandScheduler::GetInstance());
 }
