@@ -4,6 +4,7 @@
 
 #include "subsystems/SubFeeder.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 
 #include "Configs.h"
@@ -14,7 +15,9 @@ SubFeeder::SubFeeder()
 	Configure();
 }
 
-void SubFeeder::Periodic() {}
+void SubFeeder::Periodic() {
+	frc::SmartDashboard::PutBoolean("Dashboard/isFeederOn", isFeederOn());
+}
 
 void SubFeeder::setVoltage(units::volt_t iOutput)
 {

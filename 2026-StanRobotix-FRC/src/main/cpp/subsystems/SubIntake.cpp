@@ -4,6 +4,7 @@
 
 #include "subsystems/SubIntake.h"
 
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
 
 #include "Configs.h"
@@ -17,7 +18,9 @@ SubIntake::SubIntake()
 	mIntakeMotor->Configure(Configs::Intake::Config(), IntakeConstants::kReset, IntakeConstants::kPersist);
 }
 
-void SubIntake::Periodic() {}
+void SubIntake::Periodic() {
+	frc::SmartDashboard::PutBoolean("Dashboard/isIntakeOn", isIntakeOn());
+}
 
 void SubIntake::Stop()
 {
