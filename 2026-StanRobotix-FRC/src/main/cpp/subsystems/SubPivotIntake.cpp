@@ -20,8 +20,9 @@ SubPivotIntake::SubPivotIntake() {
 
 void SubPivotIntake::Periodic() {}
 
-void SubPivotIntake::Stop() {
-    mPivotMotor->StopMotor();
+void SubPivotIntake::Stop()
+{
+	mPivotMotor->StopMotor();
 }
 
 void SubPivotIntake::SetVoltage(units::volt_t iVoltage) {

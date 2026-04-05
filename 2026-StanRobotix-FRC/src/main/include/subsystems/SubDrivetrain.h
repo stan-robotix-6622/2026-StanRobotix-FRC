@@ -11,15 +11,14 @@
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc/smartdashboard/Field2d.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/SubsystemBase.h>
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
 
-#include <units/voltage.h>
 #include <units/angle.h>
-#include <units/time.h>
 #include <units/angular_velocity.h>
 
 #include "subsystems/Limelight.h"
@@ -28,12 +27,12 @@
 #include "Constants.h"
 class SubDrivetrain : public frc2::SubsystemBase {
  public:
-  SubDrivetrain();
+	SubDrivetrain();
 
   void Periodic() override;
   void InitSendable(wpi::SendableBuilder& builder) override;
 
-  void ConfigurePathplanner();
+	void ConfigurePathplanner();
 
   void mesureSwerveFeedforward(units::volt_t iDrivingVoltage, wpi::array<frc::Rotation2d, 4> iDesiredHeadings);
 
@@ -68,9 +67,9 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::Translation2d* mBackLeftLocation;
   frc::Translation2d* mBackRightLocation;
 
-  nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
-  std::shared_ptr<nt::NetworkTable> mNTDrivetrainTable = inst.GetTable("SmartDashboard/drivetrain");
-  std::shared_ptr<nt::NetworkTable> mNTSwervePIDTable = inst.GetTable("SmartDashboard/swerve");
+	nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
+	std::shared_ptr<nt::NetworkTable> mNTDrivetrainTable = inst.GetTable("SmartDashboard/drivetrain");
+	std::shared_ptr<nt::NetworkTable> mNTSwervePIDTable = inst.GetTable("SmartDashboard/swerve");
 
   nt::StructArrayPublisher<frc::SwerveModuleState> mCurrentModuleStatesPublisher;
   nt::StructPublisher<frc::ChassisSpeeds> mCurrentChassisSpeedsPublisher;
@@ -92,10 +91,10 @@ class SubDrivetrain : public frc2::SubsystemBase {
   frc::SwerveDriveOdometry<4>* mOdometry;
   frc::SwerveDrivePoseEstimator<4>* mPoseEstimator;
 
-  frc::Field2d* mField2d;
+	frc::Field2d* mField2d;
 
-  wpi::array<double, 3>* visionMeasurementStdDevs;
-  wpi::array<double, 3>* stateStdDevs;
+	wpi::array<double, 3>* visionMeasurementStdDevs;
+	wpi::array<double, 3>* stateStdDevs;
 
   Limelight* mLimelight;
 

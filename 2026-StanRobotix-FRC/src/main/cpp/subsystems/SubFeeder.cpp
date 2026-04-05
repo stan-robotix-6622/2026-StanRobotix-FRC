@@ -8,7 +8,7 @@
 
 #include "Configs.h"
 
-SubFeeder::SubFeeder() 
+SubFeeder::SubFeeder()
 {
     mFeederController = new rev::spark::SparkMax{CANid::kMotorFeederID, rev::spark::SparkLowLevel::MotorType::kBrushless};
     Configure();
@@ -18,7 +18,7 @@ void SubFeeder::Periodic() {}
 
 void SubFeeder::setVoltage(units::volt_t iOutput)
 {
-    mFeederController->SetVoltage(iOutput);
+	mFeederController->SetVoltage(iOutput);
 };
 
 rev::REVLibError SubFeeder::Configure()
@@ -28,18 +28,15 @@ rev::REVLibError SubFeeder::Configure()
 
 frc2::CommandPtr SubFeeder::getFeedShooterCommand(units::volt_t iVoltage)
 {
-    return frc2::cmd::RunEnd(
-        [this, iVoltage]
-        {
-            setVoltage(iVoltage);
-        },
+	return frc2::cmd::RunEnd(
+			[this, iVoltage] {
+				setVoltage(iVoltage);
+			},
 
-        [this]
-        {
-            setVoltage(0_V);
-        },
-        {}
-    );
+			[this] {
+				setVoltage(0_V);
+			},
+			{});
 }
 
 bool SubFeeder::isFeederOn()

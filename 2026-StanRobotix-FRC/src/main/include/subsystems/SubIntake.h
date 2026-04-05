@@ -4,18 +4,18 @@
 
 #pragma once
 
-#include <frc2/command/SubsystemBase.h>
 #include <frc2/command/CommandPtr.h>
+#include <frc2/command/SubsystemBase.h>
 #include <wpi/sendable/SendableBuilder.h>
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 #include <rev/config/SparkMaxConfig.h>
+#include <rev/SparkMax.h>
 
-class SubIntake : public frc2::SubsystemBase
-{
-public:
-  SubIntake();
-  void Stop();
+class SubIntake : public frc2::SubsystemBase {
+ public:
+	SubIntake();
+	void Stop();
 
   void SetVoltage(double);
   frc2::CommandPtr getIntakeCommand();

@@ -14,10 +14,10 @@
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
 
-#include <units/voltage.h>
-#include <units/velocity.h>
 #include <units/angle.h>
 #include <units/angular_velocity.h>
+#include <units/velocity.h>
+#include <units/voltage.h>
 
 class SwerveModule : public wpi::Sendable
 {
@@ -27,15 +27,15 @@ public:
   frc::SwerveModulePosition getModulePosition();
   frc::SwerveModuleState getModuleState();
 
-  units::radians_per_second_t getTurningVelocity();
+	units::radians_per_second_t getTurningVelocity();
 
-  void InitSendable(wpi::SendableBuilder &builder) override;
+	void InitSendable(wpi::SendableBuilder& builder) override;
 
-  void setDesiredState(frc::SwerveModuleState iDesiredState);
-  void setDesiredHeading(frc::Rotation2d iDesiredHeading);
+	void setDesiredState(frc::SwerveModuleState iDesiredState);
+	void setDesiredHeading(frc::Rotation2d iDesiredHeading);
 
-  void setTurningVoltage(units::volt_t iVoltage);
-  void setDrivingVoltage(units::volt_t iVoltage);
+	void setTurningVoltage(units::volt_t iVoltage);
+	void setDrivingVoltage(units::volt_t iVoltage);
 
   void refreshModule();
 
@@ -46,13 +46,13 @@ private:
   rev::spark::SparkClosedLoopController* mDrivingClosedLoopController;
   rev::spark::SparkClosedLoopController* mTurningClosedLoopController;
 
-  rev::spark::SparkRelativeEncoder* mDrivingEncoder;
-  rev::spark::SparkAbsoluteEncoder* mTurningAbsoluteEncoder;
+	rev::spark::SparkRelativeEncoder* mDrivingEncoder;
+	rev::spark::SparkAbsoluteEncoder* mTurningAbsoluteEncoder;
 
-  frc::Rotation2d mTurningCurrentAngle;
+	frc::Rotation2d mTurningCurrentAngle;
 
-  frc::SwerveModuleState mOptimizedState;
+	frc::SwerveModuleState mOptimizedState;
 
-  frc::SwerveModuleState mModuleState;
-  frc::SwerveModulePosition mModulePosition;
+	frc::SwerveModuleState mModuleState;
+	frc::SwerveModulePosition mModulePosition;
 };

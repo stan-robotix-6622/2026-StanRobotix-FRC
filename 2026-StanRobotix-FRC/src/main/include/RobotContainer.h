@@ -14,7 +14,7 @@
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubPivotIntake.h"
 #include "subsystems/SubShooter.h"
-#include "subsystems/subFeeder.h"
+#include "subsystems/SubFeeder.h"
 #include "subsystems/SubDrivetrain.h"
 
 #include <ShooterLookupTable.h>
@@ -50,10 +50,9 @@ namespace Rebuilt {
  * scheduler calls).  Instead, the structure of the robot (including subsystems,
  * commands, and trigger mappings) should be declared here.
  */
-class RobotContainer
-{
-public:
-  RobotContainer();
+class RobotContainer {
+ public:
+	RobotContainer();
 
   frc2::Command* GetAutonomousCommand();
 
@@ -71,12 +70,12 @@ private:
   SubShooter* mSubShooter = nullptr;
   SubFeeder* mSubFeeder = nullptr;
 
-  SubDrivetrain* mDrivetrain = nullptr;
+	SubDrivetrain* mDrivetrain = nullptr;
 
-  SubIntake* mSubIntake = nullptr;
-  SubPivotIntake* mSubPivotIntake = nullptr;
+	SubIntake* mSubIntake = nullptr;
+	SubPivotIntake* mSubPivotIntake = nullptr;
 
-  DriveCommands* mDriveCommands;
+	DriveCommands* mDriveCommands;
 
   void ConfigureBindings();
   void ConfigureBindingsCopilot();

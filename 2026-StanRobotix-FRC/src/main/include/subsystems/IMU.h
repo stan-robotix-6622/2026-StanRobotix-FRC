@@ -4,28 +4,28 @@
 
 #pragma once
 
+#include <frc/geometry/Rotation2d.h>
 #include <wpi/sendable/Sendable.h>
 #include <wpi/sendable/SendableBuilder.h>
-#include <frc/geometry/Rotation2d.h>
+
 #include <ctre/phoenix6/Pigeon2.hpp>
 
 #include <units/angle.h>
 #include <units/angular_velocity.h>
 
-class IMU : public wpi::Sendable
-{
+class IMU : public wpi::Sendable {
  public:
-  IMU();
+	IMU();
 
-  frc::Rotation2d getRotation2d();
-  units::degree_t getAngleYaw();
-  units::degrees_per_second_t getYawRate();
+	frc::Rotation2d getRotation2d();
+	units::degree_t getAngleYaw();
+	units::degrees_per_second_t getYawRate();
 
-  void reset();
-  void setAngleYaw(units::degree_t iAngle);
+	void reset();
+	void setAngleYaw(units::degree_t iAngle);
 
-  void InitSendable(wpi::SendableBuilder &builder) override;
+	void InitSendable(wpi::SendableBuilder& builder) override;
 
  private:
-  ctre::phoenix6::hardware::Pigeon2* mIMU;
+	ctre::phoenix6::hardware::Pigeon2* mIMU;
 };

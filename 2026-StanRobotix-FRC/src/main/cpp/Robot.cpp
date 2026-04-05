@@ -11,11 +11,12 @@
 #include <frc/DriverStation.h>
 #include <frc/DataLogManager.h>
 
-Robot::Robot() {
-  frc::DataLogManager::Start();
-  frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog());
+Robot::Robot()
+{
+	frc::DataLogManager::Start();
+	frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog());
 
-  frc::SmartDashboard::PutData("CommandScheduler", &frc2::CommandScheduler::GetInstance());
+	frc::SmartDashboard::PutData("CommandScheduler", &frc2::CommandScheduler::GetInstance());
 }
 
 /**
@@ -50,12 +51,13 @@ void Robot::DisabledPeriodic() {}
  * This autonomous runs the autonomous command selected by your {@link
  * RobotContainer} class.
  */
-void Robot::AutonomousInit() {
-  m_autonomousCommand = m_container.GetAutonomousCommand();
+void Robot::AutonomousInit()
+{
+	m_autonomousCommand = m_container.GetAutonomousCommand();
 
-  if (m_autonomousCommand && m_autonomousCommand.value() != nullptr) {
-    frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand.value());
-  }
+	if (m_autonomousCommand && m_autonomousCommand.value() != nullptr) {
+		frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand.value());
+	}
 }
 
 void Robot::AutonomousPeriodic() {}
@@ -96,7 +98,8 @@ void Robot::DriverStationConnected() {
 }
 
 #ifndef RUNNING_FRC_TESTS
-int main() {
-  return frc::StartRobot<Robot>();
+int main()
+{
+	return frc::StartRobot<Robot>();
 }
 #endif

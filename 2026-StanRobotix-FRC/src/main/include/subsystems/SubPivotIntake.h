@@ -9,16 +9,16 @@
 #include <wpi/sendable/SendableBuilder.h>
 #include <rev/SparkMax.h>
 #include <rev/config/SparkMaxConfig.h>
+#include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 
-class SubPivotIntake : public frc2::SubsystemBase
-{
-public:
-  SubPivotIntake();
+class SubPivotIntake : public frc2::SubsystemBase {
+ public:
+	SubPivotIntake();
 
-  void Stop();
+	void Stop();
 
-  void KeepPosition();
+	void KeepPosition();
 
   void SetVoltage(units::volt_t iVoltage);
 

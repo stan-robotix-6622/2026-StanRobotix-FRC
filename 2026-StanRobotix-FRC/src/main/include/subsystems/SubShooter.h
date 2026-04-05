@@ -4,12 +4,13 @@
 
 #pragma once
 
-#include <frc2/command/SubsystemBase.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/SimpleMotorFeedforward.h>
+#include <frc2/command/SubsystemBase.h>
 #include <wpi/sendable/SendableBuilder.h>
 #include <rev/SparkMax.h>
 #include <rev/config/SparkMaxConfig.h>
+#include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 #include <rev/SparkClosedLoopController.h>
 

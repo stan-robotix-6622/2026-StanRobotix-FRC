@@ -1,3 +1,7 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 #pragma once
 
 #include <rev/config/SparkMaxConfig.h>
@@ -20,41 +24,41 @@ namespace Configs
       drivingConfig.Inverted(iDrivingInverted);
       drivingConfig.SetIdleMode(ModuleConstants::Config::kDrivingIdleMode);
 
-      drivingConfig.encoder.VelocityConversionFactor(drivingFactor / ModuleConstants::Config::kRPMtoRPSFactor);
-      drivingConfig.encoder.PositionConversionFactor(drivingFactor);
+			drivingConfig.encoder.VelocityConversionFactor(drivingFactor / ModuleConstants::Config::kRPMtoRPSFactor);
+			drivingConfig.encoder.PositionConversionFactor(drivingFactor);
 
-      drivingConfig.closedLoop.SetFeedbackSensor(ModuleConstants::Config::kDrivingClosedLoopFeedbackSensor);
-      drivingConfig.closedLoop.Pid(ModuleConstants::kDrivingP, ModuleConstants::kDrivingI, ModuleConstants::kDrivingD);
-      drivingConfig.closedLoop.OutputRange(-1, 1);
-
-      drivingConfig.SmartCurrentLimit(ModuleConstants::kDrivingCurrentLimit.value());
+			drivingConfig.closedLoop.SetFeedbackSensor(ModuleConstants::Config::kDrivingClosedLoopFeedbackSensor);
+			drivingConfig.closedLoop.Pid(ModuleConstants::kDrivingP, ModuleConstants::kDrivingI, ModuleConstants::kDrivingD);
+			drivingConfig.closedLoop.OutputRange(-1, 1);
 
       drivingConfig.closedLoop.feedForward.kV(drivingVelocityFeedForward.value());
 
-      return drivingConfig;
-    }
+      drivingConfig.SmartCurrentLimit(ModuleConstants::kDrivingCurrentLimit.value());
 
-    static SparkMaxConfig &TurningConfig(bool iEncoderInverted)
-    {
-      static SparkMaxConfig turningConfig{};
+			return drivingConfig;
+		}
 
-      constexpr double turningFactor = ModuleConstants::kTurningFactor;
+		static SparkMaxConfig& TurningConfig(bool iEncoderInverted)
+		{
+			static SparkMaxConfig turningConfig{};
+
+			constexpr double turningFactor = ModuleConstants::kTurningFactor;
 
       turningConfig.Inverted(ModuleConstants::Config::kTurningMotorInverted);
       turningConfig.SetIdleMode(ModuleConstants::Config::kTurningIdleMode);
 
-      turningConfig.absoluteEncoder.VelocityConversionFactor(turningFactor / ModuleConstants::Config::kRPMtoRPSFactor);
-      turningConfig.absoluteEncoder.PositionConversionFactor(turningFactor);
-      turningConfig.absoluteEncoder.Inverted(iEncoderInverted);
-      turningConfig.absoluteEncoder.ZeroCentered(ModuleConstants::Config::kTurningEncoderZeroCentered);
-      turningConfig.absoluteEncoder.Apply(AbsoluteEncoderConfig::Presets::REV_ThroughBoreEncoder());
+			turningConfig.absoluteEncoder.VelocityConversionFactor(turningFactor / ModuleConstants::Config::kRPMtoRPSFactor);
+			turningConfig.absoluteEncoder.PositionConversionFactor(turningFactor);
+			turningConfig.absoluteEncoder.Inverted(iEncoderInverted);
+			turningConfig.absoluteEncoder.ZeroCentered(ModuleConstants::Config::kTurningEncoderZeroCentered);
+			turningConfig.absoluteEncoder.Apply(AbsoluteEncoderConfig::Presets::REV_ThroughBoreEncoder());
 
-      turningConfig.closedLoop.SetFeedbackSensor(ModuleConstants::Config::kTurningClosedLoopFeedbackSensor);
-      turningConfig.closedLoop.Pid(ModuleConstants::kTurningP, ModuleConstants::kTurningI, ModuleConstants::kTurningD);
-      turningConfig.closedLoop.OutputRange(-1, 1);
-      turningConfig.closedLoop.PositionWrappingEnabled(ModuleConstants::Config::kTurningClosedLoopPositionWrapping);
-      turningConfig.closedLoop.PositionWrappingMinInput(ModuleConstants::Config::kTurningClosedLoopMinInput);
-      turningConfig.closedLoop.PositionWrappingMaxInput(ModuleConstants::Config::kTurningClosedLoopMaxInput);
+			turningConfig.closedLoop.SetFeedbackSensor(ModuleConstants::Config::kTurningClosedLoopFeedbackSensor);
+			turningConfig.closedLoop.Pid(ModuleConstants::kTurningP, ModuleConstants::kTurningI, ModuleConstants::kTurningD);
+			turningConfig.closedLoop.OutputRange(-1, 1);
+			turningConfig.closedLoop.PositionWrappingEnabled(ModuleConstants::Config::kTurningClosedLoopPositionWrapping);
+			turningConfig.closedLoop.PositionWrappingMinInput(ModuleConstants::Config::kTurningClosedLoopMinInput);
+			turningConfig.closedLoop.PositionWrappingMaxInput(ModuleConstants::Config::kTurningClosedLoopMaxInput);
 
       turningConfig.closedLoop.maxMotion.AllowedProfileError(ModuleConstants::Config::kTurningClosedLoopTolerance);
       turningConfig.closedLoop.maxMotion.CruiseVelocity(9999999);
