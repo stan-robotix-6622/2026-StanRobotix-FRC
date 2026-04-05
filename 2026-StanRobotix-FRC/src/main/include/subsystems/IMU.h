@@ -4,11 +4,10 @@
 
 #pragma once
 
+#include <ctre/phoenix6/Pigeon2.hpp>
 #include <frc/geometry/Rotation2d.h>
 #include <wpi/sendable/Sendable.h>
 #include <wpi/sendable/SendableBuilder.h>
-
-#include <ctre/phoenix6/Pigeon2.hpp>
 
 #include <units/angle.h>
 #include <units/angular_velocity.h>

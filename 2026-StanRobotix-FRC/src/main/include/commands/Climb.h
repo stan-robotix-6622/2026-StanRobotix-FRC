@@ -4,11 +4,11 @@
 
 #pragma once
 
+#include <frc/controller/PIDController.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+
 #include "subsystems/SubClimb.h"
-#include "Constants.h"
-#include <frc/controller/PIDController.h>
 
 /**
  * An example command.
@@ -19,24 +19,23 @@
  */
 
 class Climb
-    : public frc2::CommandHelper<frc2::Command, Climb> {
+		: public frc2::CommandHelper<frc2::Command, Climb> {
  public:
-  /* You should consider using the more terse Command factories API instead
-   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
-   */
-  Climb(SubClimb * iSubClimb, SubClimb::Direction iDirection);
+	/* You should consider using the more terse Command factories API instead
+	 * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
+	 */
+	Climb(SubClimb* iSubClimb, SubClimb::Direction iDirection);
 
-  void Initialize() override;
+	void Initialize() override;
 
-  void Execute() override;
+	void Execute() override;
 
-  void End(bool interrupted) override;
+	void End(bool interrupted) override;
 
-  bool IsFinished() override;
+	bool IsFinished() override;
 
-  private:
-
-  SubClimb * mSubClimb;
-  frc::PIDController * mPIDController;
-  SubClimb::Direction mDirection;
+ private:
+	SubClimb* mSubClimb;
+	frc::PIDController* mPIDController;
+	SubClimb::Direction mDirection;
 };

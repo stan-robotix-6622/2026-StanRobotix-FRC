@@ -4,51 +4,50 @@
 
 #pragma once
 
-#include <rev/SparkMax.h>
+#include <frc/filter/LinearFilter.h>
+#include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 #include <rev/config/SparkMaxConfig.h>
+#include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
-#include <frc2/command/CommandPtr.h>
-#include <frc/filter/LinearFilter.h>
 
 #include <units/current.h>
 
 class SubClimb : public frc2::SubsystemBase {
-  public:
+ public:
+	enum Direction {
+		Up,
+		Down,
+		Lift
+	};
 
-  enum Direction {
-    Up,
-    Down,
-    Lift
-  };
+	SubClimb();
+	void SetSpeed(double iSpeed);
+	void StopMotor();
+	double GetPosition();
+	frc2::CommandPtr GetClimbCommand(Direction iDirection);
+	units::ampere_t GetCurrent();
+	double GetCurrentFiltered();
+	void SetDownPosition(double iDownPosition);
+	double GetDownPosition();
 
-  SubClimb();
-  void SetSpeed(double iSpeed);
-  void StopMotor();
-  double GetPosition();
-  frc2::CommandPtr GetClimbCommand(Direction iDirection);
-  units::ampere_t GetCurrent();
-  double GetCurrentFiltered();
-  void SetDownPosition(double iDownPosition);
-  double GetDownPosition();
-  
-  /**
-   * Will be called periodically whenever the CommandScheduler runs.
-   */
-  void Periodic() override;
+	/**
+	 * Will be called periodically whenever the CommandScheduler runs.
+	 */
+	void Periodic() override;
 
  private:
-  // Components (e.g. motor controllers and sensors) should generally be
-  // declared private and exposed only through public methods.
+	// Components (e.g. motor controllers and sensors) should generally be
+	// declared private and exposed only through public methods.
 
-  rev::spark::SparkMax * mSparkMaxLeader;
-  rev::spark::SparkMax * mSparkMaxFollower;
-  rev::spark::SparkMaxConfig * mSparkMaxConfigLeader;
-  rev::spark::SparkMaxConfig * mSparkMaxConfigFollower;
-  rev::spark::SparkRelativeEncoder * mSparkRelativeEncoder;
+	rev::spark::SparkMax* mSparkMaxLeader;
+	rev::spark::SparkMax* mSparkMaxFollower;
+	rev::spark::SparkMaxConfig* mSparkMaxConfigLeader;
+	rev::spark::SparkMaxConfig* mSparkMaxConfigFollower;
+	rev::spark::SparkRelativeEncoder* mSparkRelativeEncoder;
 
-  frc::LinearFilter<units::ampere_t>* mHighPassFilter;
-  units::ampere_t mCurrent;
-  double mCurrentFiltered;
-  double mDownPosition;
+	frc::LinearFilter<units::ampere_t>* mHighPassFilter;
+	units::ampere_t mCurrent;
+	double mCurrentFiltered;
+	double mDownPosition;
 };

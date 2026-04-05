@@ -4,16 +4,17 @@
 
 #pragma once
 
-#include <frc2/command/Command.h>
-#include <frc2/command/CommandHelper.h>
-#include <frc2/command/button/CommandXboxController.h>
-
+#include <frc/controller/PIDController.h>
 #include <frc/geometry/Translation2d.h>
 #include <frc/kinematics/ChassisSpeeds.h>
+#include <frc2/command/button/CommandXboxController.h>
+#include <frc2/command/Command.h>
+#include <frc2/command/CommandHelper.h>
+
+#include "ShooterLookupTable.h"
 
 #include "subsystems/SubDrivetrain.h"
 #include "subsystems/SubShooter.h"
-#include "ShooterLookupTable.h"
 
 /**
  * An example command.
@@ -23,36 +24,37 @@
  * Command will *not* work!
  */
 class ShootDynamically
-    : public frc2::CommandHelper<frc2::Command, ShootDynamically> {
+		: public frc2::CommandHelper<frc2::Command, ShootDynamically> {
  public:
-  /* You should consider using the more terse Command factories API instead
-   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
-   */
-  ShootDynamically(SubShooter* iShooter, SubDrivetrain* iDrivetrain, frc2::CommandXboxController* iJoystick);
+	/* You should consider using the more terse Command factories API instead
+	 * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
+	 */
+	ShootDynamically(SubShooter* iShooter, SubDrivetrain* iDrivetrain, frc2::CommandXboxController* iJoystick);
 
-  void Initialize() override;
+	void Initialize() override;
 
-  void Execute() override;
+	void Execute() override;
 
-  void End(bool interrupted) override;
+	void End(bool interrupted) override;
 
-  bool IsFinished() override;
+	bool IsFinished() override;
+
  private:
-  SubDrivetrain* mDrivetrain;
-  SubShooter* mShooter;
+	SubDrivetrain* mDrivetrain;
+	SubShooter* mShooter;
 
-  frc2::CommandXboxController* mJoystick;
+	frc2::CommandXboxController* mJoystick;
 
-  frc::PIDController* mShooterPIDController;
-  frc::PIDController* mRotationPIDController;
-  units::turns_per_second_t mCurrentVelocity;
-  units::turns_per_second_t mAdjustedVelocity;
-  units::turns_per_second_t mPIDAdjustment;
+	frc::PIDController* mShooterPIDController;
+	frc::PIDController* mRotationPIDController;
+	units::turns_per_second_t mCurrentVelocity;
+	units::turns_per_second_t mAdjustedVelocity;
+	units::turns_per_second_t mPIDAdjustment;
 
-  units::meter_t mDistanceToTarget = 0_m;
-  frc::Translation2d mTranslationToHub = {0_m, 0_m};
-  frc::ChassisSpeeds mRobotMovement = {0_mps, 0_mps, 0_rad_per_s};
-  frc::Translation2d mTargetMovement = {0_m, 0_m};
-  LookupTable::ShooterStatus mShooterStatus = {0_m, 0_tps, 0_s};
-  units::turns_per_second_t mLastCalculatedShooterVelocity;
+	units::meter_t mDistanceToTarget = 0_m;
+	frc::Translation2d mTranslationToHub = {0_m, 0_m};
+	frc::ChassisSpeeds mRobotMovement = {0_mps, 0_mps, 0_rad_per_s};
+	frc::Translation2d mTargetMovement = {0_m, 0_m};
+	LookupTable::ShooterStatus mShooterStatus = {0_m, 0_tps, 0_s};
+	units::turns_per_second_t mLastCalculatedShooterVelocity;
 };

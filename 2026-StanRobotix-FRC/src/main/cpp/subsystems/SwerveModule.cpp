@@ -14,13 +14,13 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
 	mDrivingMotor = new rev::spark::SparkMax{iDrivingMotorID, ModuleConstants::kDrivingMotorType};
 	mTurningMotor = new rev::spark::SparkMax{iTurningMotorID, ModuleConstants::kTurningMotorType};
 
-    // Configure the motors from Configs.h
-    mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
-                             ModuleConstants::kDrivingResetMode,
-                             ModuleConstants::kDrivingPersistMode);
-    mTurningMotor->Configure(Configs::SwerveModule::TurningConfig(iTurningInverted),
-                             ModuleConstants::kTurningResetMode,
-                             ModuleConstants::kTurningPersistMode);
+	// Configure the motors from Configs.h
+	mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
+													 ModuleConstants::kDrivingResetMode,
+													 ModuleConstants::kDrivingPersistMode);
+	mTurningMotor->Configure(Configs::SwerveModule::TurningConfig(iTurningInverted),
+													 ModuleConstants::kTurningResetMode,
+													 ModuleConstants::kTurningPersistMode);
 
 	// Initialization of the motors' ClosedLoopController
 	mTurningClosedLoopController = new rev::spark::SparkClosedLoopController{mTurningMotor->GetClosedLoopController()};
@@ -41,13 +41,13 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
 	mOptimizedState.Optimize(mTurningCurrentAngle);
 	mOptimizedState.CosineScale(mTurningCurrentAngle);
 
-    mTurningClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
-    mDrivingClosedLoopController->SetSetpoint(mOptimizedState.speed.value(), ModuleConstants::kDrivingClosedLoopControlType);
+	mTurningClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
+	mDrivingClosedLoopController->SetSetpoint(mOptimizedState.speed.value(), ModuleConstants::kDrivingClosedLoopControlType);
 }
 
 void SwerveModule::setDesiredHeading(frc::Rotation2d iDesiredHeading)
 {
-    mTurningClosedLoopController->SetSetpoint(iDesiredHeading.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
+	mTurningClosedLoopController->SetSetpoint(iDesiredHeading.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
 }
 
 void SwerveModule::setTurningVoltage(units::volt_t iVoltage)

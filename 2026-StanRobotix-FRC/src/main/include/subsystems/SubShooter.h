@@ -4,49 +4,42 @@
 
 #pragma once
 
-#include <frc/controller/PIDController.h>
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc2/command/SubsystemBase.h>
-#include <wpi/sendable/SendableBuilder.h>
-#include <rev/SparkMax.h>
-#include <rev/config/SparkMaxConfig.h>
+#include <rev/SparkClosedLoopController.h>
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
-#include <rev/SparkClosedLoopController.h>
+#include <wpi/sendable/SendableBuilder.h>
 
 #include <units/angle.h>
 #include <units/angular_velocity.h>
 #include <units/voltage.h>
 
-#include "ShooterLookupTable.h"
+class SubShooter : public frc2::SubsystemBase {
+ public:
+	SubShooter();
 
-class SubShooter : public frc2::SubsystemBase
-{
-public:
-  SubShooter();
+	void setDesiredVelocity(units::turns_per_second_t iNextVelocity);
+	void setVoltage(units::volt_t iVoltage);
+	units::turns_per_second_t getVelocity();
 
-  void setDesiredVelocity(units::turns_per_second_t iNextVelocity);
-  void setVoltage(units::volt_t iVoltage);
-  units::turns_per_second_t getVelocity();
+	// The first index of the array is the result of the Leader's configuration and
+	// the second is the result of the Follower's configuration
+	std::array<rev::REVLibError, 2> Configure();
 
-  // The first index of the array is the result of the Leader's configuration and
-  // the second is the result of the Follower's configuration
-  std::array<rev::REVLibError, 2> Configure();
+	void Periodic() override;
 
-  void Periodic() override;
+	void InitSendable(wpi::SendableBuilder& builder) override;
 
-  void InitSendable(wpi::SendableBuilder &builder) override;
+	bool atDesiredVelocity();
 
-  bool atDesiredVelocity();
+ private:
+	frc::SimpleMotorFeedforward<units::turns>* mFeedforward;
 
-private:
-  frc::SimpleMotorFeedforward<units::turns>* mFeedforward;
+	rev::spark::SparkMax* mLeaderShooterController;
+	rev::spark::SparkMax* mFollowerShooterController;
+	rev::spark::SparkRelativeEncoder* mRelativeEncoder;
+	rev::spark::SparkClosedLoopController* mClossedLoopController;
 
-  rev::spark::SparkMax* mLeaderShooterController;
-  rev::spark::SparkMax* mFollowerShooterController;
-  frc::PIDController* mPIDcontroller;
-  rev::spark::SparkRelativeEncoder* mRelativeEncoder;
-  rev::spark::SparkClosedLoopController* mClossedLoopController;
-
-  units::turns_per_second_t mDesiredVelocity;
+	units::turns_per_second_t mDesiredVelocity;
 };

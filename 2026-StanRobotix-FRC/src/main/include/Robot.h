@@ -4,39 +4,35 @@
 
 #pragma once
 
-#include <optional>
-
 #include <frc/TimedRobot.h>
-#include <frc2/command/CommandPtr.h>
+#include <frc2/command/Command.h>
 
-#include <ctre/phoenix6/SignalLogger.hpp>
 #include <optional>
 
 #include "RobotContainer.h"
 
-class Robot : public frc::TimedRobot
-{
-public:
-  Robot();
-  void RobotPeriodic() override;
-  void DisabledInit() override;
-  void DisabledPeriodic() override;
-  void AutonomousInit() override;
-  void AutonomousPeriodic() override;
-  void TeleopInit() override;
-  void TeleopPeriodic() override;
-  void TestPeriodic() override;
-  void SimulationInit() override;
-  void SimulationPeriodic() override;
-  void DriverStationConnected() override;
+class Robot : public frc::TimedRobot {
+ public:
+	Robot();
+	void RobotPeriodic() override;
+	void DisabledInit() override;
+	void DisabledPeriodic() override;
+	void AutonomousInit() override;
+	void AutonomousPeriodic() override;
+	void TeleopInit() override;
+	void TeleopPeriodic() override;
+	void TestPeriodic() override;
+	void SimulationInit() override;
+	void SimulationPeriodic() override;
+	void DriverStationConnected() override;
 
  private:
-	bool mConnectedToDriveStation = false;
 	// Have it empty by default so that if testing teleop it
 	// doesn't have undefined behavior and potentially crash.
 	std::optional<frc2::Command*> m_autonomousCommand;
 
-  Rebuilt::MatchStatus mMatchStatus;
+	RobotContainer m_container;
 
-  RobotContainer m_container;
+	Rebuilt::MatchStatus mMatchStatus;
+	bool mConnectedToDriveStation = false;
 };

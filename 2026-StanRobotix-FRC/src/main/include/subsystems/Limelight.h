@@ -4,29 +4,32 @@
 
 #pragma once
 
-#include "LimelightHelpers.h"
-
-#include <units/angular_velocity.h>
-#include <string>
-
 #include <frc/geometry/Pose2d.h>
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/StructTopic.h>
 
+#include <memory>
+#include <string>
+
+#include <units/angular_velocity.h>
+
+#include "LimelightHelpers.h"
+
 class Limelight {
  public:
-  Limelight(std::string_view iName);
+	explicit Limelight(std::string_view iName);
 
-  std::optional<frc::Pose2d> getPoseEstimation(frc::Pose2d iCurrentRobotPose, units::radians_per_second_t iRobotRotationalVelocity);
+	std::optional<frc::Pose2d> getPoseEstimation(frc::Pose2d iCurrentRobotPose, units::radians_per_second_t iRobotRotationalVelocity);
 
-  void setCameraPosition(units::meter_t forward, units::meter_t right, units::meter_t up, units::degree_t roll, units::degree_t pitch, units::degree_t yaw);
+	void setCameraPosition(units::meter_t forward, units::meter_t right, units::meter_t up, units::degree_t roll, units::degree_t pitch, units::degree_t yaw);
+
  private:
-  LimelightHelpers::PoseEstimate mLimelightPoseEstimate;
-  bool mRejectCameraUpdate;
+	LimelightHelpers::PoseEstimate mLimelightPoseEstimate;
+	bool mRejectCameraUpdate;
 
-  std::string mName;
-  nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
-  std::shared_ptr<nt::NetworkTable> mNTLimelightTable;
-  nt::StructPublisher<frc::Pose2d> mPoseEstimatorPublisher;
+	std::string mName;
+	nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
+	std::shared_ptr<nt::NetworkTable> mNTLimelightTable;
+	nt::StructPublisher<frc::Pose2d> mPoseEstimatorPublisher;
 };

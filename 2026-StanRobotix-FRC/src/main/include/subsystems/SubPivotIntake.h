@@ -4,13 +4,11 @@
 
 #pragma once
 
-#include <frc2/command/SubsystemBase.h>
 #include <frc/controller/ArmFeedforward.h>
-#include <wpi/sendable/SendableBuilder.h>
-#include <rev/SparkMax.h>
-#include <rev/config/SparkMaxConfig.h>
+#include <frc2/command/SubsystemBase.h>
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
+#include <wpi/sendable/SendableBuilder.h>
 
 class SubPivotIntake : public frc2::SubsystemBase {
  public:
@@ -20,18 +18,18 @@ class SubPivotIntake : public frc2::SubsystemBase {
 
 	void KeepPosition();
 
-  void SetVoltage(units::volt_t iVoltage);
+	void SetVoltage(units::volt_t iVoltage);
 
-  void SetVelocity(units::radians_per_second_t iVelocity);
+	void SetVelocity(units::radians_per_second_t iVelocity);
 
-  units::radian_t GetAngle();
+	units::radian_t GetAngle();
 
-  void Periodic() override;
+	void Periodic() override;
 
-  void InitSendable(wpi::SendableBuilder &builder) override;
+	void InitSendable(wpi::SendableBuilder& builder) override;
 
-private:
-  rev::spark::SparkMax* mPivotMotor;
-  rev::spark::SparkRelativeEncoder* mEncoder;
-  frc::ArmFeedforward* mFeedForward;
+ private:
+	rev::spark::SparkMax* mPivotMotor;
+	rev::spark::SparkRelativeEncoder* mEncoder;
+	frc::ArmFeedforward* mFeedForward;
 };

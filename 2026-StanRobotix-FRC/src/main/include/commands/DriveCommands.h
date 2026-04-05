@@ -7,8 +7,6 @@
 #include <frc/filter/SlewRateLimiter.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc2/command/CommandPtr.h>
-#include <frc/geometry/Rotation2d.h>
-#include <frc/filter/SlewRateLimiter.h>
 
 #include <array>
 #include <vector>
@@ -27,9 +25,9 @@ class DriveCommands {
  public:
 	explicit DriveCommands(SubDrivetrain* iDrivetrain);
 
-  frc2::CommandPtr getMeasureMaxAttainableSpeedCommand();
-  frc2::CommandPtr getFeedforwardCharacterizationCommand();
-  frc2::CommandPtr getWheelRadiusCharacterizationCommand();
+	frc2::CommandPtr getMeasureMaxAttainableSpeedCommand();
+	frc2::CommandPtr getFeedforwardCharacterizationCommand();
+	frc2::CommandPtr getWheelRadiusCharacterizationCommand();
 
  private:
 	struct WheelRadiusCharacterizationState
@@ -45,9 +43,9 @@ class DriveCommands {
 
 	SubDrivetrain* mDrivetrain = nullptr;
 
-  WheelRadiusCharacterizationState* mState;
-  frc::SlewRateLimiter<units::radians_per_second>* mRotationLimiter;
-  frc::SlewRateLimiter<units::meters_per_second>* mSpeedLimiter;
+	WheelRadiusCharacterizationState* mState;
+	frc::SlewRateLimiter<units::radians_per_second>* mRotationLimiter;
+	frc::SlewRateLimiter<units::meters_per_second>* mSpeedLimiter;
 
 	std::vector<units::radians_per_second_t>* mVelocitySamples;
 	std::vector<units::volt_t>* mVoltageSamples;

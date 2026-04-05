@@ -6,6 +6,7 @@
 
 #include <frc2/command/Command.h>
 #include <frc2/command/CommandHelper.h>
+
 #include "subsystems/SubClimb.h"
 
 /**
@@ -16,21 +17,22 @@
  * Command will *not* work!
  */
 class ClimbUntilDown
-    : public frc2::CommandHelper<frc2::Command, ClimbUntilDown> {
+		: public frc2::CommandHelper<frc2::Command, ClimbUntilDown> {
  public:
-  /* You should consider using the more terse Command factories API instead
-   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
-   */
-  ClimbUntilDown(SubClimb * iSubClimb);
+	/* You should consider using the more terse Command factories API instead
+	 * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
+	 */
+	explicit ClimbUntilDown(SubClimb* iSubClimb);
 
-  void Initialize() override;
+	void Initialize() override;
 
-  void Execute() override;
+	void Execute() override;
 
-  void End(bool interrupted) override;
+	void End(bool interrupted) override;
 
-  bool IsFinished() override;
-  private:
-  SubClimb * mSubClimb;
-  int mCounter = 0;
+	bool IsFinished() override;
+
+ private:
+	SubClimb* mSubClimb;
+	int mCounter = 0;
 };

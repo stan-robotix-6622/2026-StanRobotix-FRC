@@ -7,9 +7,10 @@
 #include <frc2/command/CommandPtr.h>
 
 #include "commands/PivotIntake.h"
+
 #include "subsystems/SubIntake.h"
 
 class FullIntake {
  public:
-  static frc2::CommandPtr FullIntakeCommand(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake iTargetState);
+	static frc2::CommandPtr FullIntakeCommand(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake iTargetState);
 };
