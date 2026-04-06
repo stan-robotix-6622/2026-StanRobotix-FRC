@@ -57,5 +57,5 @@ frc2::CommandPtr SubFeeder::getFeedShooterCommand(units::volt_t iVoltage)
 
 bool SubFeeder::isFeederOn()
 {
-	return mFeederController->GetAppliedOutput() > 0;
+	return mFeederController->GetAppliedOutput() != 0;
 }

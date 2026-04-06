@@ -69,7 +69,7 @@ frc2::CommandPtr SubIntake::getIntakeCommand()
 
 bool SubIntake::isIntakeOn()
 {
-	return mIntakeMotor->GetAppliedOutput() > 0;
+	return mIntakeMotor->GetAppliedOutput() != 0;
 }
 
 void SubIntake::InitSendable(wpi::SendableBuilder& builder)
