@@ -22,14 +22,17 @@ class LookupTable {
 	{
 		for (unsigned int i = 0; i < ShooterLookupTable.size(); i++) {
 			if (ShooterLookupTable[i].distanceToTarget >= iDistance) {
-				units::meter_t wDeltaNextPreviousDistance = ShooterLookupTable[i].distanceToTarget - ShooterLookupTable[i - 1].distanceToTarget;
-				units::meter_t wDeltaCurrentPreviousDistance = iDistance - ShooterLookupTable[i - 1].distanceToTarget;
-				double interpolationRatio = (wDeltaCurrentPreviousDistance / wDeltaNextPreviousDistance);
-				units::turns_per_second_t wDeltaNextPreviousVelocity = (ShooterLookupTable[i].shooterVelocity - ShooterLookupTable[i - 1].shooterVelocity);
-				units::turns_per_second_t wDesiredVelocity = wDeltaNextPreviousVelocity * interpolationRatio + ShooterLookupTable[i - 1].shooterVelocity;
-				units::second_t wDeltaNextPreviousTOF = (ShooterLookupTable[i].timeOfFlight - ShooterLookupTable[i - 1].timeOfFlight);
-				units::second_t wCorrespondentTOF = wDeltaNextPreviousTOF * interpolationRatio + ShooterLookupTable[i - 1].timeOfFlight;
-				return ShooterStatus{iDistance, wDesiredVelocity, wCorrespondentTOF};
+				if (i != 0) {
+					units::meter_t wDeltaNextPreviousDistance = ShooterLookupTable[i].distanceToTarget - ShooterLookupTable[i - 1].distanceToTarget;
+					units::meter_t wDeltaCurrentPreviousDistance = iDistance - ShooterLookupTable[i - 1].distanceToTarget;
+					double interpolationRatio = (wDeltaCurrentPreviousDistance / wDeltaNextPreviousDistance);
+					units::turns_per_second_t wDeltaNextPreviousVelocity = (ShooterLookupTable[i].shooterVelocity - ShooterLookupTable[i - 1].shooterVelocity);
+					units::turns_per_second_t wDesiredVelocity = wDeltaNextPreviousVelocity * interpolationRatio + ShooterLookupTable[i - 1].shooterVelocity;
+					units::second_t wDeltaNextPreviousTOF = (ShooterLookupTable[i].timeOfFlight - ShooterLookupTable[i - 1].timeOfFlight);
+					units::second_t wCorrespondentTOF = wDeltaNextPreviousTOF * interpolationRatio + ShooterLookupTable[i - 1].timeOfFlight;
+					return ShooterStatus{iDistance, wDesiredVelocity, wCorrespondentTOF};
+				}
+				return ShooterLookupTable[i];
 			}
 		}
 		return ShooterLookupTable[ShooterLookupTable.size() - 1];	 // return the last value if iDistance is bigger than last value of array
