@@ -4,6 +4,8 @@
 
 #include "commands/ShootInPlace.h"
 
+#include "Constants.h"
+
 ShootInPlace::ShootInPlace(SubShooter* iShooter, SubDrivetrain* iDrivetrain) {
 	mShooter = iShooter;
 	mDrivetrain = iDrivetrain;
