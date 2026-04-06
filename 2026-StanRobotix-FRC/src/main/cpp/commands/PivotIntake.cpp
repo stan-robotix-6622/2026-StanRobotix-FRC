@@ -16,7 +16,7 @@ PivotIntake::PivotIntake(SubPivotIntake* iPivotIntake, StatePivotIntake iTarget)
 	mState = iTarget;
 
 	mPIDController = new frc::PIDController{PivotConstants::kP, PivotConstants::kI, PivotConstants::kD};
-	frc::SmartDashboard::PutData("pivot/Arm PID", mPIDController);
+	frc::SmartDashboard::PutData("commands/pivot intake/Arm PID", mPIDController);
 }
 
 // Called when the command is initially scheduled.

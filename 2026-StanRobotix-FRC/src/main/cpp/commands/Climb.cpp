@@ -15,7 +15,7 @@ Climb::Climb(SubClimb* iSubClimb, SubClimb::Direction iDirection)
 	AddRequirements(mSubClimb);
 	mPIDController = new frc::PIDController(0, 0, 0);
 
-	frc::SmartDashboard::PutData("climb/PID Controller", mPIDController);
+	frc::SmartDashboard::PutData("commands/climb/PID Controller", mPIDController);
 	mDirection = iDirection;
 }
 

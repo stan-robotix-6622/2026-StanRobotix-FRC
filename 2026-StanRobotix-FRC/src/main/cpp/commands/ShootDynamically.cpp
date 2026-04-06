@@ -19,8 +19,8 @@ ShootDynamically::ShootDynamically(SubShooter* iShooter, SubDrivetrain* iDrivetr
 	mShooterPIDController = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
 	mRotationPIDController = new frc::PIDController{DrivetrainConstants::PIDs::kRotationP, DrivetrainConstants::PIDs::kRotationI, DrivetrainConstants::PIDs::kRotationD};
 	mRotationPIDController->EnableContinuousInput(0, std::numbers::pi * 2);
-	frc::SmartDashboard::PutData("shooter/command/shooter PID 2", mShooterPIDController);
-	frc::SmartDashboard::PutData("shooter/command/rotation PID", mRotationPIDController);
+	frc::SmartDashboard::PutData("commands/shoot dynamically/shooter PID", mShooterPIDController);
+	frc::SmartDashboard::PutData("commands/shoot dynamically/rotation PID", mRotationPIDController);
 }
 
 // Called when the command is initially scheduled.
