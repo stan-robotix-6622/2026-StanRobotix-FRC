@@ -43,9 +43,8 @@ void SubShooter::setVoltage(units::volt_t iVoltage)
 	mLeaderShooterController->SetVoltage(iVoltage);
 };
 
-void SubShooter::setDesiredVelocity(units::turns_per_second_t iNextVelocity)
+void SubShooter::setVelocity(units::turns_per_second_t iNextVelocity)
 {
-	mDesiredVelocity = iNextVelocity;
 	mClossedLoopController->SetSetpoint(iNextVelocity.value(), ShooterConstants::kShooterClosedLoopControlType);
 
 	if (mRobotIsSimulated) {
@@ -55,6 +54,11 @@ void SubShooter::setDesiredVelocity(units::turns_per_second_t iNextVelocity)
 		mFollowMotorSim->iterate(units::turns_per_second_t(mFlywheelSim->GetAngularVelocity()).value(), 12, 0.02);
 	}
 };
+
+void SubShooter::setTargetVelocity(units::turns_per_second_t iTargetVelocity)
+{
+	mTargetVelocity = iTargetVelocity;
+}
 
 units::turns_per_second_t SubShooter::getVelocity()
 {
@@ -80,5 +84,5 @@ void SubShooter::InitSendable(wpi::SendableBuilder& builder)
 
 bool SubShooter::atDesiredVelocity()
 {
-	return units::math::abs(getVelocity() - mDesiredVelocity) < 0.5_tps && mDesiredVelocity != 0_tps;
+	return units::math::abs(getVelocity() - mTargetVelocity) < 1_tps && mTargetVelocity != 0_tps;
 }

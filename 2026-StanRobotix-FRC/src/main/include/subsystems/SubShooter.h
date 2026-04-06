@@ -24,7 +24,8 @@ class SubShooter : public frc2::SubsystemBase {
  public:
 	SubShooter();
 
-	void setDesiredVelocity(units::turns_per_second_t iNextVelocity);
+	void setVelocity(units::turns_per_second_t iNextVelocity);
+	void setTargetVelocity(units::turns_per_second_t iTargetVelocity);
 	void setVoltage(units::volt_t iVoltage);
 	units::turns_per_second_t getVelocity();
 
@@ -56,5 +57,5 @@ class SubShooter : public frc2::SubsystemBase {
 	frc::sim::FlywheelSim* mFlywheelSim;
 	frc::LinearSystem<1, 1, 1>* mFlywheelPlant;
 
-	units::turns_per_second_t mDesiredVelocity;
+	units::turns_per_second_t mTargetVelocity = 0_tps;
 };

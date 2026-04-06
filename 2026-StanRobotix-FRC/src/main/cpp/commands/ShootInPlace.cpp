@@ -27,12 +27,13 @@ void ShootInPlace::Execute() {
   mShooterStatus = LookupTable::interpolate(mDistanceToTarget);
 
 	mShooterPIDController->SetSetpoint(mShooterStatus.shooterVelocity.value());
+	mShooter->setTargetVelocity(mShooterStatus.shooterVelocity);
 
 	mPIDAdjustment = units::turns_per_second_t(mShooterPIDController->Calculate(mShooter->getVelocity().value()));
 	mCurrentVelocity = mShooter->getVelocity();
 	mAdjustedVelocity = mCurrentVelocity + mPIDAdjustment;
 
-	mShooter->setDesiredVelocity(mAdjustedVelocity);
+	mShooter->setVelocity(mAdjustedVelocity);
 
   if (mDrivetrain->isTowardsHub()) {
     mDrivetrain->modulesXFormation();
@@ -49,7 +50,8 @@ void ShootInPlace::Execute() {
 // Called once the command ends or is interrupted.
 void ShootInPlace::End(bool interrupted)
 {
-	mShooter->setDesiredVelocity(0_tps);
+	mShooter->setVelocity(0_tps);
+	mShooter->setTargetVelocity(0_tps);
 }
 
 // Returns true when the command should end.

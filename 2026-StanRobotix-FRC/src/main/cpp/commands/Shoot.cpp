@@ -22,6 +22,7 @@ void Shoot::Initialize()
 {
 	mSetpointVelocity = (units::turns_per_second_t)frc::SmartDashboard::GetNumber("tunable/Shooter Setpoint", ShooterConstants::PIDConstants::setpoint.value());
 	mPIDController->SetSetpoint(mSetpointVelocity.value());
+	mSubShooter->setTargetVelocity(mSetpointVelocity);
 }
 
 // Called repeatedly when this Command is scheduled to run
@@ -35,13 +36,14 @@ void Shoot::Execute()
 	// frc::SmartDashboard::PutNumber("shooter/command/current velocity", mCurrentVelocity.value());
 	// frc::SmartDashboard::PutNumber("shooter/command/adjusted velocity", mAdjustedVelocity.value());
 
-	mSubShooter->setDesiredVelocity(mAdjustedVelocity);
+	mSubShooter->setVelocity(mAdjustedVelocity);
 }
 
 // Called once the command ends or is interrupted.
 void Shoot::End(bool interrupted)
 {
-	mSubShooter->setDesiredVelocity(0_tps);
+	mSubShooter->setVelocity(0_tps);
+	mSubShooter->setTargetVelocity(0_tps);
 }
 
 // Returns true when the command should end.
