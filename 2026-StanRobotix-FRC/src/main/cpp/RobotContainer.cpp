@@ -119,7 +119,8 @@ void RobotContainer::ConfigureBindings()
       {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
       else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
 
-	mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this] { mDrivetrain->resetPose(SubDrivetrain::standardizePose(FieldConstants::kHubCenterPose2d)); }));
+	// mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this] { mDrivetrain->resetPose(SubDrivetrain::standardizePose(FieldConstants::kHubCenterPose2d)); }));
+	mCommandXboxController->Button(OperatorConstants::Button::LeftBumper).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kIn));
 
 	// mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
 	// mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());

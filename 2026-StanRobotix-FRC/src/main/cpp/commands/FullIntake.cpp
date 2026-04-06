@@ -13,6 +13,9 @@ frc2::CommandPtr FullIntake::FullIntakeCommand(SubIntake* iIntake, SubPivotIntak
 	}
 	else if (itargetState == PivotIntake::StatePivotIntake::kUp) {
 		return PivotIntake(iPivot, PivotIntake::StatePivotIntake::kUp).AlongWith(iIntake->Idle());
-	};
+	}
+	else if (itargetState == PivotIntake::StatePivotIntake::kIn) {
+		return PivotIntake(iPivot, PivotIntake::StatePivotIntake::kIn).AlongWith(iIntake->Idle());
+	}
 	return frc2::cmd::None();
 }
