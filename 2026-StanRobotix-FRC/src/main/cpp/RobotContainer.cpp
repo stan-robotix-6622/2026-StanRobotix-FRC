@@ -25,6 +25,7 @@
 #include "commands/FullIntake.h"
 #include "commands/PivotIntake.h"
 #include "commands/Shoot.h"
+#include "commands/ShootInPlace.h"
 #include "commands/ShootDynamically.h"
 
 namespace
@@ -139,6 +140,8 @@ void RobotContainer::ConfigureBindings()
                 << vector[i].timeOfFlight.value() << "_s},\n";
     }
     mShooterStatusPublisher.Set(vector); }));
+
+	mCommandXboxController->Button(OperatorConstants::Button::RightJoystick).ToggleOnTrue(ShootInPlace(mSubShooter, mDrivetrain).ToPtr());
 
 	mCommandXboxController->Button(OperatorConstants::Button::Start).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
 																																																						 (units::meter_t)frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value())); }));
