@@ -250,6 +250,14 @@ void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds)
 	setSwerveModuleStates(mDesiredSwerveStates);
 }
 
+void SubDrivetrain::modulesXFormation()
+{
+	mFrontLeftModule->setDesiredHeading(45_deg);
+	mFrontRightModule->setDesiredHeading(135_deg);
+	mBackLeftModule->setDesiredHeading(135_deg);
+	mBackRightModule->setDesiredHeading(45_deg);
+}
+
 frc2::CommandPtr SubDrivetrain::getFollowPathCommand(std::string iPathName)
 {
 	// wPath is of type std::shared_ptr<pathplanner::PathPlannerPath>

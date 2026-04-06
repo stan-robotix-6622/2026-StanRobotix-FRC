@@ -51,6 +51,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
 	frc::ChassisSpeeds getFieldRelativeSpeeds();
 	void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
 	void driveRobotRelative(frc::ChassisSpeeds iSpeeds);
+	void modulesXFormation();
 
 	frc::Pose2d getPose();
 	frc::Translation2d getTranslationToHub();
