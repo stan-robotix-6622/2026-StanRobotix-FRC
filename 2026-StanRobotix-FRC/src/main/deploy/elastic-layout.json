@@ -11,7 +11,7 @@
             "x": 512.0,
             "y": 0.0,
             "width": 256.0,
-            "height": 384.0,
+            "height": 512.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
@@ -60,6 +60,23 @@
                 "type": "Boolean Box",
                 "properties": {
                   "topic": "/SmartDashboard/Dashboard/atDesiredVelocity",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              },
+              {
+                "title": "isTowardsHub",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/SmartDashboard/drivetrain/isTowardsHub",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
