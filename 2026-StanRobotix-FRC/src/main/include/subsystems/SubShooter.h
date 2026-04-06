@@ -10,10 +10,15 @@
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 #include <wpi/sendable/SendableBuilder.h>
+#include <frc/system/LinearSystem.h>
+#include <frc/system/plant/DCMotor.h>
+#include <frc/simulation/FlywheelSim.h>
+#include <rev/sim/SparkMaxSim.h>
 
 #include <units/angle.h>
 #include <units/angular_velocity.h>
 #include <units/voltage.h>
+#include <units/moment_of_inertia.h>
 
 class SubShooter : public frc2::SubsystemBase {
  public:
@@ -40,6 +45,16 @@ class SubShooter : public frc2::SubsystemBase {
 	rev::spark::SparkMax* mFollowerShooterController;
 	rev::spark::SparkRelativeEncoder* mRelativeEncoder;
 	rev::spark::SparkClosedLoopController* mClossedLoopController;
+
+	// For simulation
+	bool mRobotIsSimulated = false;
+	units::kilogram_square_meter_t kMOI = 2_in * 2_in * 1.56_lb + 1.625_in * 1.625_in * 1.2_lb;
+	frc::DCMotor* mLeaderGearBox;
+	frc::DCMotor* mFollowGearBox;
+	rev::spark::SparkMaxSim* mLeaderMotorSim;
+	rev::spark::SparkMaxSim* mFollowMotorSim;
+	frc::sim::FlywheelSim* mFlywheelSim;
+	frc::LinearSystem<1, 1, 1>* mFlywheelPlant;
 
 	units::turns_per_second_t mDesiredVelocity;
 };

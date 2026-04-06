@@ -5,6 +5,8 @@
 #include "subsystems/SubShooter.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/RobotBase.h>
+#include <frc/system/plant/LinearSystemId.h>
 
 #include "Configs.h"
 
@@ -18,6 +20,17 @@ SubShooter::SubShooter()
 	mClossedLoopController = new rev::spark::SparkClosedLoopController{mLeaderShooterController->GetClosedLoopController()};
 
 	Configure();
+
+	// Simulation
+	if (frc::RobotBase::IsSimulation()) {
+		mRobotIsSimulated = true;
+		mLeaderGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
+		mFollowGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
+		mLeaderMotorSim = new rev::spark::SparkMaxSim{mLeaderShooterController, mLeaderGearBox};
+		mFollowMotorSim = new rev::spark::SparkMaxSim{mFollowerShooterController, mFollowGearBox};
+		mFlywheelPlant = new frc::LinearSystem<1, 1, 1>{frc::LinearSystemId::FlywheelSystem(frc::DCMotor::NEO(2), kMOI, ShooterConstants::kGearRatio)};
+		mFlywheelSim = new frc::sim::FlywheelSim{*mFlywheelPlant, frc::DCMotor::NEO(2), {0.0}};
+	}
 }
 
 void SubShooter::Periodic()
@@ -34,6 +47,13 @@ void SubShooter::setDesiredVelocity(units::turns_per_second_t iNextVelocity)
 {
 	mDesiredVelocity = iNextVelocity;
 	mClossedLoopController->SetSetpoint(iNextVelocity.value(), ShooterConstants::kShooterClosedLoopControlType);
+
+	if (mRobotIsSimulated) {
+		mFlywheelSim->SetInputVoltage(mFeedforward->Calculate(iNextVelocity));
+		mFlywheelSim->Update(0.02_s);
+		mLeaderMotorSim->iterate(units::turns_per_second_t(mFlywheelSim->GetAngularVelocity()).value(), 12, 0.02);
+		mFollowMotorSim->iterate(units::turns_per_second_t(mFlywheelSim->GetAngularVelocity()).value(), 12, 0.02);
+	}
 };
 
 units::turns_per_second_t SubShooter::getVelocity()
