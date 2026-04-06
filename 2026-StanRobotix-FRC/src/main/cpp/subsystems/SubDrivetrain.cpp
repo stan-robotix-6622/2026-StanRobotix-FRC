@@ -96,6 +96,11 @@ void SubDrivetrain::setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4> 
 	mFrontRightModule->setDesiredState(iStates[1]);
 	mBackLeftModule->setDesiredState(iStates[2]);
 	mBackRightModule->setDesiredState(iStates[3]);
+	
+	if (frc::RobotBase::IsSimulation())
+	{
+		mIMU->advanceSimulation(mKinematics->ToChassisSpeeds(iStates).omega);
+	}
 }
 
 void SubDrivetrain::ConfigurePathplanner()
