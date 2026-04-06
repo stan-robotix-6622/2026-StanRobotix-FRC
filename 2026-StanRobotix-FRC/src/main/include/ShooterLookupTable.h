@@ -32,7 +32,7 @@ class LookupTable {
 					units::second_t wCorrespondentTOF = wDeltaNextPreviousTOF * interpolationRatio + ShooterLookupTable[i - 1].timeOfFlight;
 					return ShooterStatus{iDistance, wDesiredVelocity, wCorrespondentTOF};
 				}
-				return ShooterLookupTable[i];
+				return {iDistance, 0_tps, 0_s};
 			}
 		}
 		return ShooterLookupTable[ShooterLookupTable.size() - 1];	 // return the last value if iDistance is bigger than last value of array
