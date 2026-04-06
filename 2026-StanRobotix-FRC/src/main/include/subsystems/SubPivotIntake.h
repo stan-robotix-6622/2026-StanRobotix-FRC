@@ -9,6 +9,10 @@
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 #include <wpi/sendable/SendableBuilder.h>
+#include <frc/system/LinearSystem.h>
+#include <frc/system/plant/DCMotor.h>
+#include <frc/simulation/SingleJointedArmSim.h>
+#include <rev/sim/SparkMaxSim.h>
 
 class SubPivotIntake : public frc2::SubsystemBase {
  public:
@@ -32,4 +36,12 @@ class SubPivotIntake : public frc2::SubsystemBase {
 	rev::spark::SparkMax* mPivotMotor;
 	rev::spark::SparkRelativeEncoder* mEncoder;
 	frc::ArmFeedforward* mFeedForward;
+
+	// For simulation
+	bool mRobotIsSimulated = false;
+	units::kilogram_square_meter_t kMOI = (2_lb * 12_in * 12_in) / 3;
+	frc::DCMotor* mGearBox;
+	rev::spark::SparkMaxSim* mMotorSim;
+	frc::sim::SingleJointedArmSim* mArmSim;
+	frc::LinearSystem<2, 1, 2>* mArmPlant;
 };
