@@ -20,8 +20,6 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
 	mDrivingGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
 	mTurningMotorSim = new rev::spark::SparkMaxSim{mTurningMotor, mTurningGearBox};
 	mDrivingMotorSim = new rev::spark::SparkMaxSim{mDrivingMotor, mDrivingGearBox};
-	mDrivingEncoderSim = new rev::spark::SparkRelativeEncoderSim{mDrivingMotorSim->GetRelativeEncoderSim()};
-	mTurningAbsoluteEncoderSim = new rev::spark::SparkAbsoluteEncoderSim{mTurningMotorSim->GetAbsoluteEncoderSim()};
 
 	mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
 													 ModuleConstants::kDrivingResetMode,
