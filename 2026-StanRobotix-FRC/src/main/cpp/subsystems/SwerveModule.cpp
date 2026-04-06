@@ -15,6 +15,7 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
 	mTurningMotor = new rev::spark::SparkMax{iTurningMotorID, ModuleConstants::kTurningMotorType};
 
 	// Simulation
+	mRobotIsSimulated = frc::RobotBase::IsSimulation();
 	mTurningGearBox = new frc::DCMotor{frc::DCMotor::NEO550()};
 	mDrivingGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
 	mTurningMotorSim = new rev::spark::SparkMaxSim{mTurningMotor, mTurningGearBox};
@@ -49,10 +50,8 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
 	mTurningClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
 	mDrivingClosedLoopController->SetSetpoint(mOptimizedState.speed.value(), ModuleConstants::kDrivingClosedLoopControlType);
 
-	if (frc::RobotBase::IsSimulation()) {
-		// mTurningMotorSim->SetPosition(mOptimizedState.angle.Radians().value());
+	if (mRobotIsSimulated) {
 		mTurningMotorSim->iterate((mOptimizedState.angle.Radians().value() - mTurningMotorSim->GetPosition()) / 0.02, 12, 0.02);
-		// mTurningAbsoluteEncoderSim->SetPosition()
 		mDrivingMotorSim->iterate(mOptimizedState.speed.value(), 12, 0.02);
 	}
 }
@@ -60,6 +59,10 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
 void SwerveModule::setDesiredHeading(frc::Rotation2d iDesiredHeading)
 {
 	mTurningClosedLoopController->SetSetpoint(iDesiredHeading.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
+
+	if (mRobotIsSimulated) {
+		mTurningMotorSim->iterate((iDesiredHeading.Radians().value() - mTurningMotorSim->GetPosition()) / 0.02, 12, 0.02);
+	}
 }
 
 void SwerveModule::setTurningVoltage(units::volt_t iVoltage)
