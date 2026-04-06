@@ -9,6 +9,8 @@
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 #include <wpi/sendable/SendableBuilder.h>
+#include <frc/system/plant/DCMotor.h>
+#include <rev/sim/SparkMaxSim.h>
 
 class SubIntake : public frc2::SubsystemBase {
  public:
@@ -28,4 +30,9 @@ class SubIntake : public frc2::SubsystemBase {
 	rev::spark::SparkMax* mIntakeMotor;
 
 	rev::spark::SparkRelativeEncoder* mEncoder;
+
+	// For simulation
+	bool mRobotIsSimulated = false;
+	frc::DCMotor* mGearBox;
+	rev::spark::SparkMaxSim* mMotorSim;
 };
