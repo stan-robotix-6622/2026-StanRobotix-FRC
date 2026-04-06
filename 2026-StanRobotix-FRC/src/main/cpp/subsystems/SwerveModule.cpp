@@ -15,11 +15,13 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
 	mTurningMotor = new rev::spark::SparkMax{iTurningMotorID, ModuleConstants::kTurningMotorType};
 
 	// Simulation
-	mRobotIsSimulated = frc::RobotBase::IsSimulation();
-	mTurningGearBox = new frc::DCMotor{frc::DCMotor::NEO550()};
-	mDrivingGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
-	mTurningMotorSim = new rev::spark::SparkMaxSim{mTurningMotor, mTurningGearBox};
-	mDrivingMotorSim = new rev::spark::SparkMaxSim{mDrivingMotor, mDrivingGearBox};
+	if (frc::RobotBase::IsSimulation()) {
+		mRobotIsSimulated = true;
+		mTurningGearBox = new frc::DCMotor{frc::DCMotor::NEO550()};
+		mDrivingGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
+		mTurningMotorSim = new rev::spark::SparkMaxSim{mTurningMotor, mTurningGearBox};
+		mDrivingMotorSim = new rev::spark::SparkMaxSim{mDrivingMotor, mDrivingGearBox};
+	}
 
 	mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
 													 ModuleConstants::kDrivingResetMode,
