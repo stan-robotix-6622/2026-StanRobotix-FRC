@@ -7,6 +7,8 @@
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkMax.h>
+#include <frc/system/plant/DCMotor.h>
+#include <rev/sim/SparkMaxSim.h>
 
 #include <units/voltage.h>
 
@@ -23,4 +25,9 @@ class SubFeeder : public frc2::SubsystemBase {
 
  private:
 	rev::spark::SparkMax* mFeederController;
+
+	// For simulation
+	bool mRobotIsSimulated = false;
+	frc::DCMotor* mGearBox;
+	rev::spark::SparkMaxSim* mMotorSim;
 };
