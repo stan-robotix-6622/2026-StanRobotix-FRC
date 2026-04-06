@@ -27,7 +27,6 @@
 #include "subsystems/IMU.h"
 #include "subsystems/Limelight.h"
 #include "subsystems/SwerveModule.h"
-#include "subsystems/SwerveModuleSim.h"
 
 class SubDrivetrain : public frc2::SubsystemBase {
  public:
@@ -90,11 +89,6 @@ class SubDrivetrain : public frc2::SubsystemBase {
 	SwerveModule* mFrontRightModule;
 	SwerveModule* mBackLeftModule;
 	SwerveModule* mBackRightModule;
-
-	SwerveModuleSim* mFrontLeftModuleSim;
-	SwerveModuleSim* mFrontRightModuleSim;
-	SwerveModuleSim* mBackLeftModuleSim;
-	SwerveModuleSim* mBackRightModuleSim;
 
 	frc::SwerveDriveKinematics<4>* mKinematics;
 	frc::Pose2d* mStartingRobotPose = new frc::Pose2d{0_m, 0_m, 0_rad};
