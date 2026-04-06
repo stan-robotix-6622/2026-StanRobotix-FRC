@@ -60,5 +60,5 @@ void SubShooter::InitSendable(wpi::SendableBuilder& builder)
 
 bool SubShooter::atDesiredVelocity()
 {
-	return units::math::abs(getVelocity() - mDesiredVelocity) < 0.5_tps;
+	return units::math::abs(getVelocity() - mDesiredVelocity) < 0.5_tps && mDesiredVelocity != 0_tps;
 }
