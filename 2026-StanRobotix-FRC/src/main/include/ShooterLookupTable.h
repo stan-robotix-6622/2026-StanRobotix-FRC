@@ -22,7 +22,7 @@ class LookupTable {
 	{
 		for (unsigned int i = 0; i < ShooterLookupTable.size(); i++) {
 			if (ShooterLookupTable[i].distanceToTarget >= iDistance) {
-				if (i != 0) {
+				if (i > 0) {
 					units::meter_t wDeltaNextPreviousDistance = ShooterLookupTable[i].distanceToTarget - ShooterLookupTable[i - 1].distanceToTarget;
 					units::meter_t wDeltaCurrentPreviousDistance = iDistance - ShooterLookupTable[i - 1].distanceToTarget;
 					double interpolationRatio = (wDeltaCurrentPreviousDistance / wDeltaNextPreviousDistance);
@@ -30,7 +30,7 @@ class LookupTable {
 					units::turns_per_second_t wDesiredVelocity = wDeltaNextPreviousVelocity * interpolationRatio + ShooterLookupTable[i - 1].shooterVelocity;
 					units::second_t wDeltaNextPreviousTOF = (ShooterLookupTable[i].timeOfFlight - ShooterLookupTable[i - 1].timeOfFlight);
 					units::second_t wCorrespondentTOF = wDeltaNextPreviousTOF * interpolationRatio + ShooterLookupTable[i - 1].timeOfFlight;
-					return ShooterStatus{iDistance, wDesiredVelocity, wCorrespondentTOF};
+					return {iDistance, wDesiredVelocity, wCorrespondentTOF};
 				}
 				return {iDistance, 0_tps, 0_s};
 			}
@@ -40,7 +40,8 @@ class LookupTable {
 
  private:
 	// This array needs to be sorted by the distanceToTarget value of the structs
-	static constexpr std::array<ShooterStatus, 4> ShooterLookupTable = {
+	static constexpr std::array<ShooterStatus, 5> ShooterLookupTable = {
+		ShooterStatus{0_m, 0_tps, 0_s},
 		ShooterStatus{2.3013_m, 40_tps, 0_s},
 		ShooterStatus{2.3497_m, 42.5_tps, 0_s},
 		ShooterStatus{2.522_m, 44.5_tps, 0_s},
