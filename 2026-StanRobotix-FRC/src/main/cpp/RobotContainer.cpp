@@ -136,13 +136,18 @@ void RobotContainer::ConfigureBindings()
     units::turns_per_second_t velocity = units::turns_per_second_t(frc::SmartDashboard::GetNumber("tunable/Shooter Setpoint", 0));
     units::second_t TOF = units::second_t(frc::SmartDashboard::GetNumber("tunable/Time of Flight", 0));
     vector.emplace_back(LookupTable::ShooterStatus{distance, velocity, TOF});
-    std::cout << "ShooterStatus vector:\n";
+    std::cout << "	static constexpr std::array<ShooterStatus, " << vector.size() << "> ShooterLookupTable = {\n";
     for (unsigned int i = 0; i < vector.size(); i++)
     {
-      std::cout << "    ShooterStatus{" << vector[i].distanceToTarget.value() << "_m, "
+      std::cout << "		ShooterStatus{" << vector[i].distanceToTarget.value() << "_m, "
                 << vector[i].shooterVelocity.value() << "_tps, "
-                << vector[i].timeOfFlight.value() << "_s},\n";
-    }
+                << vector[i].timeOfFlight.value() << "_s";
+			if (i != vector.size()) {
+				std::cout << ",";
+			}
+			std::cout << "\n";
+		}
+		std::cout << "}\n";
     mShooterStatusPublisher.Set(vector); }));
 
 	(mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::RightJoystick))
