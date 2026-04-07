@@ -67,5 +67,5 @@ void ShootDynamically::End(bool interrupted)
 // Returns true when the command should end.
 bool ShootDynamically::IsFinished()
 {
-	return false;
+	return !mDrivetrain->isInAllianceZone();
 }

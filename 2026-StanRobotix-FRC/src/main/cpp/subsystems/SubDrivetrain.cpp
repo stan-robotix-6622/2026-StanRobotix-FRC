@@ -72,6 +72,7 @@ void SubDrivetrain::Periodic()
 {
 	refreshSwerveModules();
 	frc::SmartDashboard::PutBoolean("drivetrain/isTowardsHub", isTowardsHub());
+	frc::SmartDashboard::PutBoolean("drivetrain/isInAllianceZone", isInAllianceZone());
 	mCurrentRotation2d = mIMU->getRotation2d();
 	mPoseEstimator->Update(mCurrentRotation2d, getSwerveModulePositions());
 	mField2d->SetRobotPose(getPose());
@@ -289,8 +290,8 @@ frc::Translation2d SubDrivetrain::getTranslationToHub()
 frc::Pose2d SubDrivetrain::getClosestPoseAtDistanceFromHub(units::meter_t iHubtoRobotDistance)
 {
 	frc::Translation2d wRobotToHubTranslation = getTranslationToHub();
-	// If the Robot is not in the alliance zone
-	if ((frc::DriverStation::GetAlliance().value() == frc::DriverStation::kBlue && wRobotToHubTranslation.X() < 0_m) || (frc::DriverStation::GetAlliance().value() == frc::DriverStation::kRed && wRobotToHubTranslation.X() > 0_m)) {
+
+	if (!isInAllianceZone()) {
 		return mPoseEstimator->GetEstimatedPosition();
 	}
 
@@ -343,13 +344,14 @@ bool SubDrivetrain::isTowardsHub()
 	return units::math::abs((wRobotAngle - wRobotToHubTranslation.Angle()).Degrees()) < 5_deg / (wRobotToHubTranslation.Norm()).value();
 };
 
-bool SubDrivetrain::isTowardsHubShooter()
+bool SubDrivetrain::isInAllianceZone()
 {
 	frc::Translation2d wRobotToHubTranslation = getTranslationToHub();
-	frc::Rotation2d wRobotAngle = getPose().Rotation();
-
-	return units::math::abs((wRobotAngle - wRobotToHubTranslation.Angle()).Degrees()) < 15_deg / (wRobotToHubTranslation.Norm()).value();
-};
+	if ((frc::DriverStation::GetAlliance().value() == frc::DriverStation::kBlue && wRobotToHubTranslation.X() < 0_m) || (frc::DriverStation::GetAlliance().value() == frc::DriverStation::kRed && wRobotToHubTranslation.X() > 0_m)) {
+		return false;
+	}
+	return true;
+}
 
 void SubDrivetrain::InitSendable(wpi::SendableBuilder& builder)
 {

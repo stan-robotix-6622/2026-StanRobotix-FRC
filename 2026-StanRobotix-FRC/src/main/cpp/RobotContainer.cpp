@@ -59,6 +59,8 @@ RobotContainer::RobotContainer()
 
 	mDriveCommands = new DriveCommands{mDrivetrain};
 
+	mIsInAllianceZoneTrigger = frc2::Trigger([this] {return mDrivetrain->isInAllianceZone();});
+
 	SetSubsystemDefaultCommands();
 	RegisterCommandsPathPlanner();
 	ConfigureBindings();
@@ -105,14 +107,14 @@ void RobotContainer::RegisterCommandsPathPlanner()
 
 void RobotContainer::ConfigureBindings()
 {
-	frc2::Trigger{[this] { return mDrivetrain->isTowardsHub() && mSubShooter->atDesiredVelocity(); }}
+	frc2::Trigger{[this] { return mDrivetrain->isTowardsHub() && mSubShooter->atDesiredVelocity() && mDrivetrain->isInAllianceZone(); }}
 			.Debounce(0.1_s)
 			.WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
 	mCommandXboxController->Button(OperatorConstants::Button::X).ToggleOnTrue(mSubClimb->GetClimbCommand(SubClimb::Direction::Lift));
-	mCommandXboxController->Button(OperatorConstants::kPivotDownButton).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
+	mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
 
-	mCommandXboxController->Button(OperatorConstants::kShootButton).ToggleOnTrue(Shoot(mSubShooter).ToPtr());
+	mCommandXboxController->Button(OperatorConstants::kShootButton).WhileTrue(Shoot(mSubShooter).ToPtr());
 	mCommandXboxController->Button(OperatorConstants::kFeedButton).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
 	mCommandXboxController->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
@@ -120,12 +122,13 @@ void RobotContainer::ConfigureBindings()
       else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
 
 	// mCommandXboxController->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this] { mDrivetrain->resetPose(SubDrivetrain::standardizePose(FieldConstants::kHubCenterPose2d)); }));
-	mCommandXboxController->Button(OperatorConstants::Button::LeftBumper).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kIn));
+	mCommandXboxController->Button(OperatorConstants::Button::LeftBumper).WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kIn));
 
 	// mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
 	// mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
 
-	mCommandXboxController->Button(OperatorConstants::Button::Back).ToggleOnTrue(ShootDynamically(mSubShooter, mDrivetrain, mCommandXboxController).ToPtr());
+	(mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Back))
+			.ToggleOnTrue(ShootDynamically(mSubShooter, mDrivetrain, mCommandXboxController).ToPtr());
 
 	mCommandXboxController->Button(OperatorConstants::Button::LeftJoystick).OnTrue(frc2::cmd::RunOnce([this] {
     std::vector<LookupTable::ShooterStatus> vector = mShooterStatusSubscriber.Get();
@@ -142,7 +145,8 @@ void RobotContainer::ConfigureBindings()
     }
     mShooterStatusPublisher.Set(vector); }));
 
-	mCommandXboxController->Button(OperatorConstants::Button::RightJoystick).ToggleOnTrue(ShootInPlace(mSubShooter, mDrivetrain).ToPtr());
+	(mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::RightJoystick))
+			.ToggleOnTrue(ShootInPlace(mSubShooter, mDrivetrain).ToPtr());
 
 	mCommandXboxController->Button(OperatorConstants::Button::Start).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
 																																																						 (units::meter_t)frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value())); }));
