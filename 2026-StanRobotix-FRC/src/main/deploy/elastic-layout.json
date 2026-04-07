@@ -3,7 +3,7 @@
   "grid_size": 128,
   "tabs": [
     {
-      "name": "Teleoperated",
+      "name": "Blue",
       "grid_layout": {
         "layouts": [
           {
@@ -11,7 +11,7 @@
             "x": 512.0,
             "y": 0.0,
             "width": 256.0,
-            "height": 512.0,
+            "height": 640.0,
             "type": "List Layout",
             "properties": {
               "label_position": "TOP"
@@ -77,6 +77,23 @@
                 "type": "Boolean Box",
                 "properties": {
                   "topic": "/SmartDashboard/drivetrain/isTowardsHub",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              },
+              {
+                "title": "isInAllianceZone",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/SmartDashboard/drivetrain/isInAllianceZone",
                   "period": 0.06,
                   "data_type": "boolean",
                   "true_color": 4283215696,
@@ -162,8 +179,8 @@
             "title": "Field2d",
             "x": 0.0,
             "y": 0.0,
-            "width": 512.0,
-            "height": 256.0,
+            "width": 256.0,
+            "height": 512.0,
             "type": "Field",
             "properties": {
               "topic": "/SmartDashboard/drivetrain/Field2d",
@@ -173,8 +190,8 @@
               "robot_length": 0.682625,
               "show_other_objects": true,
               "show_trajectories": true,
-              "field_rotation": -180.0,
-              "robot_color": 4294198070,
+              "field_rotation": -90.0,
+              "robot_color": 4282351615,
               "trajectory_color": 4294967295,
               "show_robot_outside_widget": true
             }
@@ -195,8 +212,8 @@
           },
           {
             "title": "pivot",
-            "x": 0.0,
-            "y": 256.0,
+            "x": 256.0,
+            "y": 0.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Radial Gauge",
@@ -216,9 +233,9 @@
           },
           {
             "title": "hubActive",
-            "x": 768.0,
+            "x": 896.0,
             "y": 0.0,
-            "width": 256.0,
+            "width": 128.0,
             "height": 256.0,
             "type": "Boolean Box",
             "properties": {
@@ -278,8 +295,8 @@
           },
           {
             "title": "climber",
-            "x": 256.0,
-            "y": 256.0,
+            "x": 768.0,
+            "y": 0.0,
             "width": 128.0,
             "height": 256.0,
             "type": "Number Bar",
@@ -292,6 +309,354 @@
               "divisions": 2,
               "inverted": false,
               "orientation": "vertical"
+            }
+          },
+          {
+            "title": "shooter velocity",
+            "x": 256.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Graph",
+            "properties": {
+              "topic": "/SmartDashboard/shooter/velocity (tps)",
+              "period": 0.033,
+              "data_type": "double",
+              "time_displayed": 15.0,
+              "min_value": 0.0,
+              "max_value": 100.0,
+              "color": 4278238420,
+              "line_width": 2.0
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Red",
+      "grid_layout": {
+        "layouts": [
+          {
+            "title": "Subsystems status",
+            "x": 512.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 640.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "isFeederOn",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/SmartDashboard/Dashboard/isFeederOn",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              },
+              {
+                "title": "isIntakeOn",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/SmartDashboard/Dashboard/isIntakeOn",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              },
+              {
+                "title": "atDesiredVelocity",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/SmartDashboard/Dashboard/atDesiredVelocity",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              },
+              {
+                "title": "isTowardsHub",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/SmartDashboard/drivetrain/isTowardsHub",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              },
+              {
+                "title": "isInAllianceZone",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Boolean Box",
+                "properties": {
+                  "topic": "/SmartDashboard/drivetrain/isInAllianceZone",
+                  "period": 0.06,
+                  "data_type": "boolean",
+                  "true_color": 4283215696,
+                  "false_color": 4294198070,
+                  "true_icon": "None",
+                  "false_icon": "None"
+                }
+              }
+            ]
+          },
+          {
+            "title": "tunable",
+            "x": 1024.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 384.0,
+            "type": "List Layout",
+            "properties": {
+              "label_position": "TOP"
+            },
+            "children": [
+              {
+                "title": "Drivetrain Distance Setpoint",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/tunable/Drivetrain Distance Setpoint",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Feeder Voltage",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/tunable/Feeder Voltage",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Shooter Setpoint",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/tunable/Shooter Setpoint",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              },
+              {
+                "title": "Time of Flight",
+                "x": 0.0,
+                "y": 0.0,
+                "width": 128.0,
+                "height": 128.0,
+                "type": "Text Display",
+                "properties": {
+                  "topic": "/SmartDashboard/tunable/Time of Flight",
+                  "period": 0.06,
+                  "data_type": "double",
+                  "show_submit_button": false
+                }
+              }
+            ]
+          }
+        ],
+        "containers": [
+          {
+            "title": "Field2d",
+            "x": 0.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 512.0,
+            "type": "Field",
+            "properties": {
+              "topic": "/SmartDashboard/drivetrain/Field2d",
+              "period": 0.06,
+              "field_game": "Rebuilt",
+              "robot_width": 0.7112,
+              "robot_length": 0.682625,
+              "show_other_objects": true,
+              "show_trajectories": true,
+              "field_rotation": 90.0,
+              "robot_color": 4294198070,
+              "trajectory_color": 4294967295,
+              "show_robot_outside_widget": true
+            }
+          },
+          {
+            "title": "swerve",
+            "x": 1024.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "SwerveDrive",
+            "properties": {
+              "topic": "/SmartDashboard/swerve",
+              "period": 0.06,
+              "show_robot_rotation": true,
+              "rotation_unit": "Radians"
+            }
+          },
+          {
+            "title": "pivot",
+            "x": 256.0,
+            "y": 0.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Radial Gauge",
+            "properties": {
+              "topic": "/SmartDashboard/pivot/angle (degrees)",
+              "period": 0.06,
+              "data_type": "double",
+              "start_angle": -90.0,
+              "end_angle": 90.0,
+              "min_value": 0.0,
+              "max_value": 180.0,
+              "number_of_labels": 0,
+              "wrap_value": false,
+              "show_pointer": true,
+              "show_ticks": false
+            }
+          },
+          {
+            "title": "hubActive",
+            "x": 896.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 256.0,
+            "type": "Boolean Box",
+            "properties": {
+              "topic": "/SmartDashboard/Dashboard/hubActive",
+              "period": 0.06,
+              "data_type": "boolean",
+              "true_color": 4283215696,
+              "false_color": 4294198070,
+              "true_icon": "None",
+              "false_icon": "None"
+            }
+          },
+          {
+            "title": "matchPeriod",
+            "x": 768.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Large Text Display",
+            "properties": {
+              "topic": "/SmartDashboard/Dashboard/matchPeriod",
+              "period": 0.06,
+              "data_type": "string"
+            }
+          },
+          {
+            "title": "timeLeftInMatch",
+            "x": 768.0,
+            "y": 384.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Match Time",
+            "properties": {
+              "topic": "/SmartDashboard/Dashboard/timeLeftInMatch",
+              "period": 0.06,
+              "data_type": "double",
+              "time_display_mode": "Minutes and Seconds",
+              "red_start_time": 20,
+              "yellow_start_time": 30
+            }
+          },
+          {
+            "title": "timeLeftInPeriod",
+            "x": 768.0,
+            "y": 512.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "Match Time",
+            "properties": {
+              "topic": "/SmartDashboard/Dashboard/timeLeftInPeriod",
+              "period": 0.06,
+              "data_type": "double",
+              "time_display_mode": "Minutes and Seconds",
+              "red_start_time": 5,
+              "yellow_start_time": 10
+            }
+          },
+          {
+            "title": "climber",
+            "x": 768.0,
+            "y": 0.0,
+            "width": 128.0,
+            "height": 256.0,
+            "type": "Number Bar",
+            "properties": {
+              "topic": "/SmartDashboard/climb/position",
+              "period": 0.06,
+              "data_type": "double",
+              "min_value": 0.0,
+              "max_value": 17.0,
+              "divisions": 2,
+              "inverted": false,
+              "orientation": "vertical"
+            }
+          },
+          {
+            "title": "shooter velocity",
+            "x": 256.0,
+            "y": 256.0,
+            "width": 256.0,
+            "height": 256.0,
+            "type": "Graph",
+            "properties": {
+              "topic": "/SmartDashboard/shooter/velocity (tps)",
+              "period": 0.033,
+              "data_type": "double",
+              "time_displayed": 15.0,
+              "min_value": 0.0,
+              "max_value": 100.0,
+              "color": 4278238420,
+              "line_width": 2.0
             }
           }
         ]
