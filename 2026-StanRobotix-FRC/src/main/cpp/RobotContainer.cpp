@@ -26,6 +26,7 @@
 #include "commands/FullIntake.h"
 #include "commands/PivotIntake.h"
 #include "commands/Shoot.h"
+#include "commands/ShootVariable.h"
 #include "commands/ShootInPlace.h"
 #include "commands/ShootDynamically.h"
 
@@ -95,15 +96,18 @@ void RobotContainer::RegisterCommandsPathPlanner()
 {
 	pathplanner::NamedCommands::registerCommand("Pivot-Up", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
 	pathplanner::NamedCommands::registerCommand("Pivot-Down", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
+	pathplanner::NamedCommands::registerCommand("Pivot-In", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kIn).ToPtr());
 	pathplanner::NamedCommands::registerCommand("Full-Intake", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
-	pathplanner::NamedCommands::registerCommand("GoTo3mFromHub", mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(3_m); }));
 	pathplanner::NamedCommands::registerCommand("Intake", mSubIntake->getIntakeCommand());
 	pathplanner::NamedCommands::registerCommand("Shoot", Shoot(mSubShooter).ToPtr());
+	pathplanner::NamedCommands::registerCommand("Shoot-Variable", ShootVariable(mSubShooter, mDrivetrain).ToPtr());
 	pathplanner::NamedCommands::registerCommand("Feed-Shooter", mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 	pathplanner::NamedCommands::registerCommand("Unstuck-Feeder", mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
 
 	pathplanner::EventTrigger("Intake").WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
 	pathplanner::EventTrigger("Shoot").WhileTrue(Shoot(mSubShooter).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter"));
+	pathplanner::EventTrigger("Shoot-Variable").WhileTrue(ShootVariable(mSubShooter, mDrivetrain).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter-Variable"));
+	pathplanner::EventTrigger("Feed").WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("run feeder"));
 
 	pathplanner::PointTowardsZoneTrigger("Hub").WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("feed Shooter"));
 }
