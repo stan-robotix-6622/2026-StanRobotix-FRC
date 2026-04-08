@@ -29,6 +29,7 @@
  * command-specific namespaces within this header, which can then be used where
  * they are needed.
  */
+
 namespace TemplateUnits
 {
 	template <typename Unit>
@@ -63,15 +64,6 @@ namespace OperatorConstants
 		inline constexpr int RightX = 4;
 		inline constexpr int RightY = 5;
 	}	 // namespace Axis
-
-	inline constexpr int kPivotDownButton = Button::B;
-
-	inline constexpr int kResetIMUButton = Button::RightBumper;
-	inline constexpr int kResetPoseButton = Button::LeftBumper;
-
-	inline constexpr int kShootButton = Button::Y;
-	inline constexpr int kUnstuckFuelButton = Button::X;
-	inline constexpr int kFeedButton = Button::A;
 }	 // namespace OperatorConstants
 
 namespace ShooterConstants
