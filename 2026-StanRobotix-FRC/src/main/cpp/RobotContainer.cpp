@@ -72,8 +72,8 @@ RobotContainer::RobotContainer()
 	mAutoChooser = pathplanner::AutoBuilder::buildAutoChooser();
 	frc::SmartDashboard::PutData("Auto Chooser", &mAutoChooser);
 
-	mShooterStatusPublisher = mNTShooterStatusTable->GetStructArrayTopic<LookupTable::ShooterStatus>("status array").Publish();
-	mShooterStatusSubscriber = mNTShooterStatusTable->GetStructArrayTopic<LookupTable::ShooterStatus>("status array").Subscribe(std::span<const LookupTable::ShooterStatus>());
+	// mShooterStatusPublisher = mNTShooterStatusTable->GetStructArrayTopic<LookupTable::ShooterStatus>("status array").Publish();
+	// mShooterStatusSubscriber = mNTShooterStatusTable->GetStructArrayTopic<LookupTable::ShooterStatus>("status array").Subscribe(std::span<const LookupTable::ShooterStatus>());
 }
 
 void RobotContainer::SetSubsystemDefaultCommands()
@@ -130,25 +130,25 @@ void RobotContainer::ConfigureBindings()
 
 	mCommandXboxController->Button(OperatorConstants::Button::LeftBumper).WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kIn));
 
-	mCommandXboxController->Button(OperatorConstants::Button::Start).OnTrue(frc2::cmd::RunOnce([this] {
-    std::vector<LookupTable::ShooterStatus> vector = mShooterStatusSubscriber.Get();
-    units::meter_t distance = mDrivetrain->getTranslationToHub().Norm();
-    units::turns_per_second_t velocity = units::turns_per_second_t(frc::SmartDashboard::GetNumber("tunable/Shooter Setpoint", 0));
-    units::second_t TOF = units::second_t(frc::SmartDashboard::GetNumber("tunable/Time of Flight", 0));
-    vector.emplace_back(LookupTable::ShooterStatus{distance, velocity, TOF});
-    std::cout << "ShooterLookupTable new values:\n";
-    for (unsigned int i = 0; i < vector.size(); i++)
-    {
-			std::cout << "		ShooterStatus{" << vector[i].distanceToTarget.value() << "_m, "
-			<< vector[i].shooterVelocity.value() << "_tps, "
-			<< vector[i].timeOfFlight.value() << "_s}";
-			if (i != vector.size()) {
-				std::cout << ",";
-			}
-			std::cout << "\n";
-		}
-		std::cout << "}\n";
-    mShooterStatusPublisher.Set(vector); }));
+	// mCommandXboxController->Button(OperatorConstants::Button::Start).OnTrue(frc2::cmd::RunOnce([this] {
+  //   std::vector<LookupTable::ShooterStatus> vector = mShooterStatusSubscriber.Get();
+  //   units::meter_t distance = mDrivetrain->getTranslationToHub().Norm();
+  //   units::turns_per_second_t velocity = units::turns_per_second_t(frc::SmartDashboard::GetNumber("tunable/Shooter Setpoint", 0));
+  //   units::second_t TOF = units::second_t(frc::SmartDashboard::GetNumber("tunable/Time of Flight", 0));
+  //   vector.emplace_back(LookupTable::ShooterStatus{distance, velocity, TOF});
+  //   std::cout << "ShooterLookupTable new values:\n";
+  //   for (unsigned int i = 0; i < vector.size(); i++)
+  //   {
+	// 		std::cout << "		ShooterStatus{" << vector[i].distanceToTarget.value() << "_m, "
+	// 		<< vector[i].shooterVelocity.value() << "_tps, "
+	// 		<< vector[i].timeOfFlight.value() << "_s}";
+	// 		if (i != vector.size()) {
+	// 			std::cout << ",";
+	// 		}
+	// 		std::cout << "\n";
+	// 	}
+	// 	std::cout << "}\n";
+  //   mShooterStatusPublisher.Set(vector); }));
 
 		(*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Back))
 		.ToggleOnTrue(ShootInPlace(mSubShooter, mDrivetrain).ToPtr());
