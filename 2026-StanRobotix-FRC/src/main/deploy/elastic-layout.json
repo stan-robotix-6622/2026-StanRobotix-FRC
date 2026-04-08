@@ -103,75 +103,6 @@
                 }
               }
             ]
-          },
-          {
-            "title": "tunable",
-            "x": 1024.0,
-            "y": 256.0,
-            "width": 256.0,
-            "height": 384.0,
-            "type": "List Layout",
-            "properties": {
-              "label_position": "TOP"
-            },
-            "children": [
-              {
-                "title": "Drivetrain Distance Setpoint",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/tunable/Drivetrain Distance Setpoint",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "Feeder Voltage",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/tunable/Feeder Voltage",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "Shooter Setpoint",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/tunable/Shooter Setpoint",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "Time of Flight",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/tunable/Time of Flight",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              }
-            ]
           }
         ],
         "containers": [
@@ -197,20 +128,6 @@
             }
           },
           {
-            "title": "swerve",
-            "x": 1024.0,
-            "y": 0.0,
-            "width": 256.0,
-            "height": 256.0,
-            "type": "SwerveDrive",
-            "properties": {
-              "topic": "/SmartDashboard/swerve",
-              "period": 0.06,
-              "show_robot_rotation": true,
-              "rotation_unit": "Radians"
-            }
-          },
-          {
             "title": "pivot",
             "x": 256.0,
             "y": 0.0,
@@ -233,10 +150,10 @@
           },
           {
             "title": "hubActive",
-            "x": 896.0,
+            "x": 768.0,
             "y": 0.0,
             "width": 128.0,
-            "height": 256.0,
+            "height": 640.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/SmartDashboard/Dashboard/hubActive",
@@ -250,7 +167,7 @@
           },
           {
             "title": "matchPeriod",
-            "x": 768.0,
+            "x": 256.0,
             "y": 256.0,
             "width": 256.0,
             "height": 128.0,
@@ -263,8 +180,8 @@
           },
           {
             "title": "timeLeftInMatch",
-            "x": 768.0,
-            "y": 384.0,
+            "x": 256.0,
+            "y": 512.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Match Time",
@@ -279,8 +196,8 @@
           },
           {
             "title": "timeLeftInPeriod",
-            "x": 768.0,
-            "y": 512.0,
+            "x": 256.0,
+            "y": 384.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Match Time",
@@ -295,8 +212,8 @@
           },
           {
             "title": "climber",
-            "x": 768.0,
-            "y": 0.0,
+            "x": 1152.0,
+            "y": 384.0,
             "width": 128.0,
             "height": 256.0,
             "type": "Number Bar",
@@ -313,8 +230,8 @@
           },
           {
             "title": "shooter velocity",
-            "x": 256.0,
-            "y": 256.0,
+            "x": 896.0,
+            "y": 384.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Graph",
@@ -327,6 +244,32 @@
               "max_value": 100.0,
               "color": 4278238420,
               "line_width": 2.0
+            }
+          },
+          {
+            "title": "Auto Chooser",
+            "x": 0.0,
+            "y": 512.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto Chooser",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "limelight",
+            "x": 896.0,
+            "y": 0.0,
+            "width": 384.0,
+            "height": 384.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/limelight",
+              "period": 0.06,
+              "rotation_turns": 0
             }
           }
         ]
@@ -433,75 +376,6 @@
                 }
               }
             ]
-          },
-          {
-            "title": "tunable",
-            "x": 1024.0,
-            "y": 256.0,
-            "width": 256.0,
-            "height": 384.0,
-            "type": "List Layout",
-            "properties": {
-              "label_position": "TOP"
-            },
-            "children": [
-              {
-                "title": "Drivetrain Distance Setpoint",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/tunable/Drivetrain Distance Setpoint",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "Feeder Voltage",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/tunable/Feeder Voltage",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "Shooter Setpoint",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/tunable/Shooter Setpoint",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              },
-              {
-                "title": "Time of Flight",
-                "x": 0.0,
-                "y": 0.0,
-                "width": 128.0,
-                "height": 128.0,
-                "type": "Text Display",
-                "properties": {
-                  "topic": "/SmartDashboard/tunable/Time of Flight",
-                  "period": 0.06,
-                  "data_type": "double",
-                  "show_submit_button": false
-                }
-              }
-            ]
           }
         ],
         "containers": [
@@ -527,20 +401,6 @@
             }
           },
           {
-            "title": "swerve",
-            "x": 1024.0,
-            "y": 0.0,
-            "width": 256.0,
-            "height": 256.0,
-            "type": "SwerveDrive",
-            "properties": {
-              "topic": "/SmartDashboard/swerve",
-              "period": 0.06,
-              "show_robot_rotation": true,
-              "rotation_unit": "Radians"
-            }
-          },
-          {
             "title": "pivot",
             "x": 256.0,
             "y": 0.0,
@@ -563,10 +423,10 @@
           },
           {
             "title": "hubActive",
-            "x": 896.0,
+            "x": 768.0,
             "y": 0.0,
             "width": 128.0,
-            "height": 256.0,
+            "height": 640.0,
             "type": "Boolean Box",
             "properties": {
               "topic": "/SmartDashboard/Dashboard/hubActive",
@@ -580,7 +440,7 @@
           },
           {
             "title": "matchPeriod",
-            "x": 768.0,
+            "x": 256.0,
             "y": 256.0,
             "width": 256.0,
             "height": 128.0,
@@ -593,8 +453,8 @@
           },
           {
             "title": "timeLeftInMatch",
-            "x": 768.0,
-            "y": 384.0,
+            "x": 256.0,
+            "y": 512.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Match Time",
@@ -609,8 +469,8 @@
           },
           {
             "title": "timeLeftInPeriod",
-            "x": 768.0,
-            "y": 512.0,
+            "x": 256.0,
+            "y": 384.0,
             "width": 256.0,
             "height": 128.0,
             "type": "Match Time",
@@ -625,8 +485,8 @@
           },
           {
             "title": "climber",
-            "x": 768.0,
-            "y": 0.0,
+            "x": 1152.0,
+            "y": 384.0,
             "width": 128.0,
             "height": 256.0,
             "type": "Number Bar",
@@ -643,8 +503,8 @@
           },
           {
             "title": "shooter velocity",
-            "x": 256.0,
-            "y": 256.0,
+            "x": 896.0,
+            "y": 384.0,
             "width": 256.0,
             "height": 256.0,
             "type": "Graph",
@@ -657,6 +517,32 @@
               "max_value": 100.0,
               "color": 4278238420,
               "line_width": 2.0
+            }
+          },
+          {
+            "title": "Auto Chooser",
+            "x": 0.0,
+            "y": 512.0,
+            "width": 256.0,
+            "height": 128.0,
+            "type": "ComboBox Chooser",
+            "properties": {
+              "topic": "/SmartDashboard/Auto Chooser",
+              "period": 0.06,
+              "sort_options": false
+            }
+          },
+          {
+            "title": "limelight",
+            "x": 896.0,
+            "y": 0.0,
+            "width": 384.0,
+            "height": 384.0,
+            "type": "Camera Stream",
+            "properties": {
+              "topic": "/CameraPublisher/limelight",
+              "period": 0.06,
+              "rotation_turns": 0
             }
           }
         ]
