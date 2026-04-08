@@ -94,10 +94,9 @@ void RobotContainer::SetSubsystemDefaultCommands()
 
 void RobotContainer::RegisterCommandsPathPlanner()
 {
-	pathplanner::NamedCommands::registerCommand("Pivot-Up", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
-	pathplanner::NamedCommands::registerCommand("Pivot-Down", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr());
-	pathplanner::NamedCommands::registerCommand("Pivot-In", PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kIn).ToPtr());
-	pathplanner::NamedCommands::registerCommand("Full-Intake", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
+	pathplanner::NamedCommands::registerCommand("Full-Intake-Down", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
+	pathplanner::NamedCommands::registerCommand("Full-Intake-In", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kIn));
+	pathplanner::NamedCommands::registerCommand("Full-Intake-Up", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
 	pathplanner::NamedCommands::registerCommand("Intake", mSubIntake->getIntakeCommand());
 	pathplanner::NamedCommands::registerCommand("Shoot", Shoot(mSubShooter).ToPtr());
 	pathplanner::NamedCommands::registerCommand("Shoot-Variable", ShootVariable(mSubShooter, mDrivetrain).ToPtr());

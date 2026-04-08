@@ -21,7 +21,13 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Shoot"
+                        "name": "Shoot-Variable"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake"
                       }
                     }
                   ]
@@ -84,7 +90,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Shoot"
+                        "name": "Shoot-Variable"
                       }
                     }
                   ]
@@ -97,13 +103,13 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 3.0
+                        "waitTime": 2.0
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "Shoot"
+                        "name": "Shoot-Variable"
                       }
                     },
                     {
@@ -147,7 +153,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Shoot"
+                        "name": "Shoot-Variable"
                       }
                     }
                   ]
@@ -160,13 +166,13 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 3.0
+                        "waitTime": 2.0
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "Shoot"
+                        "name": "Shoot-Variable"
                       }
                     },
                     {
