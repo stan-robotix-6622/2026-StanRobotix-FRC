@@ -94,9 +94,9 @@ namespace ShooterConstants
 
 	namespace PIDConstants
 	{
-		inline constexpr double kP = 4;
+		inline constexpr double kP = 3;
 		inline constexpr double kI = 0;
-		inline constexpr double kD = 0.5;
+		inline constexpr double kD = 0.08;
 
 		inline constexpr units::turns_per_second_t setpoint = 52_tps;	 // at 3.6m
 	}	 // namespace PIDConstants
