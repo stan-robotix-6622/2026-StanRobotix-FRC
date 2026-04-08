@@ -19,7 +19,7 @@
 
 #include "commands/DriveCommands.h"
 
-#include "subsystems/SubClimb.h"
+// #include "subsystems/SubClimb.h"
 #include "subsystems/SubDrivetrain.h"
 #include "subsystems/SubFeeder.h"
 #include "subsystems/SubIntake.h"
@@ -70,7 +70,7 @@ class RobotContainer {
 	frc2::CommandXboxController* mCommandXboxController;
 	frc2::CommandGenericHID* mCommandXboxControllerCopilot;
 
-	SubClimb* mSubClimb;
+	// SubClimb* mSubClimb;
 
 	SubShooter* mSubShooter = nullptr;
 	SubFeeder* mSubFeeder = nullptr;
