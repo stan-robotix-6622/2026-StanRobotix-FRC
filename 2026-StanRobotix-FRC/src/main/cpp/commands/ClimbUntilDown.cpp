@@ -4,6 +4,8 @@
 
 #include "commands/ClimbUntilDown.h"
 
+#include "commands/Climb.h"
+
 #include "Constants.h"
 
 ClimbUntilDown::ClimbUntilDown(SubClimb* iSubClimb)
@@ -28,7 +30,7 @@ void ClimbUntilDown::End(bool interrupted)
 {
 	mSubClimb->StopMotor();
 	mSubClimb->SetDownPosition(mSubClimb->GetPosition());
-	mSubClimb->SetDefaultCommand(mSubClimb->GetClimbCommand(SubClimb::Direction::Down));
+	mSubClimb->SetDefaultCommand(Climb(mSubClimb, SubClimb::Direction::Down).ToPtr());
 }
 
 // Returns true when the command should end.

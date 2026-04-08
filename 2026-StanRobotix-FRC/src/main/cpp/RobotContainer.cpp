@@ -20,6 +20,7 @@
 
 #include "Constants.h"
 
+#include "commands/Climb.h"
 #include "commands/ClimbUntilDown.h"
 #include "commands/DriveCommands.h"
 #include "commands/FullIntake.h"
@@ -36,9 +37,9 @@ namespace
 RobotContainer::RobotContainer()
 {
 	mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
-	mCommandXboxControllerCopilot = new frc2::CommandXboxController{OperatorConstants::kCopilotControllerPort};
+	mCommandXboxControllerCopilot = new frc2::CommandGenericHID{OperatorConstants::kCopilotControllerPort};
 	frc::SmartDashboard::PutData("Pilot Controller", &mCommandXboxController->GetHID());
-	frc::SmartDashboard::PutData("Copilot Controller", &mCommandXboxControllerCopilot->GetHID());
+	// frc::SmartDashboard::PutData("Copilot Controller", &mCommandXboxControllerCopilot->GetHID());
 
 	frc::SmartDashboard::PutNumber("tunable/Shooter Setpoint", ShooterConstants::PIDConstants::setpoint.value());
 	frc::SmartDashboard::PutNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value());
@@ -84,7 +85,7 @@ void RobotContainer::SetSubsystemDefaultCommands()
 			},
 			{mDrivetrain}));
 
-	mSubClimb->SetDefaultCommand(ClimbUntilDown(mSubClimb).ToPtr());
+	mSubClimb->SetDefaultCommand(ClimbUntilDown(mSubClimb).ToPtr().WithTimeout(3_s));
 	mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
 }
 
@@ -111,7 +112,7 @@ void RobotContainer::ConfigureBindings()
 			.Debounce(0.1_s)
 			.WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
-	mCommandXboxController->Button(OperatorConstants::Button::X).ToggleOnTrue(mSubClimb->GetClimbCommand(SubClimb::Direction::Lift));
+	mCommandXboxController->Button(OperatorConstants::Button::X).ToggleOnTrue(Climb(mSubClimb, SubClimb::Direction::Lift).ToPtr());
 	mCommandXboxController->Button(OperatorConstants::kPivotDownButton).WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
 
 	mCommandXboxController->Button(OperatorConstants::kShootButton).WhileTrue(Shoot(mSubShooter).ToPtr());
@@ -159,7 +160,7 @@ void RobotContainer::ConfigureBindings()
 
 void RobotContainer::ConfigureBindingsCopilot()
 {
-	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::A).ToggleOnTrue(mSubClimb->GetClimbCommand(SubClimb::Direction::Up)).OnTrue(frc2::cmd::Print("Climb Up"));
+	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::A).ToggleOnTrue(Climb(mSubClimb, SubClimb::Direction::Up).ToPtr()).OnTrue(frc2::cmd::Print("Climb Up"));
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::B).WhileTrue(frc2::cmd::RunEnd([this] { mSubClimb->SetSpeed(0.2); }, [this] { mSubClimb->StopMotor(); })).OnTrue(frc2::cmd::Print("Climb Down Manuel"));
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::X).WhileTrue(frc2::cmd::RunEnd([this] { mSubClimb->SetSpeed(-0.2); }, [this] { mSubClimb->StopMotor(); })).OnTrue(frc2::cmd::Print("Climb Up Manuel"));
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::Y).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("Outfeed"));

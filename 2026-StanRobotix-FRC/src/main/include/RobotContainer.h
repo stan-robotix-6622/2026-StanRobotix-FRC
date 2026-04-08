@@ -6,6 +6,7 @@
 
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/button/CommandXboxController.h>
+#include <frc2/command/button/CommandGenericHID.h>
 #include <frc2/command/CommandPtr.h>
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
@@ -67,7 +68,7 @@ class RobotContainer {
 
  private:
 	frc2::CommandXboxController* mCommandXboxController;
-	frc2::CommandXboxController* mCommandXboxControllerCopilot;
+	frc2::CommandGenericHID* mCommandXboxControllerCopilot;
 
 	SubClimb* mSubClimb;
 

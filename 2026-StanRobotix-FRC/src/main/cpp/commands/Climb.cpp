@@ -22,20 +22,23 @@ Climb::Climb(SubClimb* iSubClimb, SubClimb::Direction iDirection)
 // Called when the command is initially scheduled.
 void Climb::Initialize()
 {
+	mPIDController->Reset();
 	switch (mDirection) {
-		case SubClimb::Up:
+		case SubClimb::Direction::Up:
 			mPIDController->SetPID(ClimbConstants::kUpP, ClimbConstants::kUpI, ClimbConstants::kUpD);
-			mPIDController->SetSetpoint(mSubClimb->GetDownPosition() + ClimbConstants::kSetpointUpOffset);
+			mPIDController->SetSetpoint(mSubClimb->GetDownPosition() - ClimbConstants::kSetpointUpOffset);
 			break;
-		case SubClimb::Down:
+		case SubClimb::Direction::Down:
 			mPIDController->SetPID(ClimbConstants::kDownP, ClimbConstants::kDownI, ClimbConstants::kDownD);
 			mPIDController->SetSetpoint(mSubClimb->GetDownPosition());
 			break;
-		case SubClimb::Lift:
+		case SubClimb::Direction::Lift:
 			mPIDController->SetPID(ClimbConstants::kLiftP, ClimbConstants::kLiftI, ClimbConstants::kLiftD);
 			mPIDController->SetSetpoint(mSubClimb->GetDownPosition());
 			break;
 		default:
+			mPIDController->SetPID(0, 0, 0);
+			mPIDController->SetSetpoint(mSubClimb->GetPosition());
 			break;
 	}
 }
