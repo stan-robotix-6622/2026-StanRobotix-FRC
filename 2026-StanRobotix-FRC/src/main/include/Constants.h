@@ -298,11 +298,11 @@ namespace IntakeConstants
 namespace PivotConstants
 {
 	inline constexpr double kGearRatio = 16;
-	inline constexpr double kOffset = 2.5564447021484375;
+	inline constexpr double kOffset = 2.6366961002349854;
 	inline constexpr double kP = 2.0;
 	inline constexpr double kI = 0.0;
 	inline constexpr double kD = 0.2;
-	inline constexpr units::volt_t kG = 0.80_V;
+	inline constexpr units::volt_t kG = 1.37_V;
 	inline constexpr units::volt_t kS = 0.0_V;
 	inline constexpr TemplateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
 	inline constexpr double setpointUp = std::numbers::pi / 4;			// 45 deg up

@@ -45,6 +45,7 @@ RobotContainer::RobotContainer()
 	frc::SmartDashboard::PutNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value());
 	frc::SmartDashboard::PutNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value());
 	frc::SmartDashboard::PutNumber("tunable/Time of Flight", 0);
+	frc::SmartDashboard::PutNumber("tunable/Pivot kg", PivotConstants::kG.value());
 
 	mSubClimb = new SubClimb;
 	mSubShooter = new SubShooter{};
@@ -87,6 +88,7 @@ void RobotContainer::SetSubsystemDefaultCommands()
 
 	mSubClimb->SetDefaultCommand(ClimbUntilDown(mSubClimb).ToPtr().WithTimeout(3_s));
 	mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
+	// mSubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this] {mSubPivotIntake->SetVoltage(units::volt_t(frc::SmartDashboard::GetNumber("tunable/Pivot kg", PivotConstants::kG.value()) * cos(mSubPivotIntake->GetAngle().value())));}, {mSubPivotIntake}));
 }
 
 void RobotContainer::RegisterCommandsPathPlanner()
