@@ -62,7 +62,7 @@ RobotContainer::RobotContainer()
 
 	mDriveCommands = new DriveCommands{mDrivetrain};
 
-	mIsInAllianceZoneTrigger = frc2::Trigger([this] {return mDrivetrain->isInAllianceZone();});
+	mIsInAllianceZoneTrigger = new frc2::Trigger{[this] {return mDrivetrain->isInAllianceZone();}};
 
 	SetSubsystemDefaultCommands();
 	RegisterCommandsPathPlanner();
@@ -150,13 +150,13 @@ void RobotContainer::ConfigureBindings()
 		std::cout << "}\n";
     mShooterStatusPublisher.Set(vector); }));
 
-		(mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Back))
+		(*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Back))
 		.ToggleOnTrue(ShootInPlace(mSubShooter, mDrivetrain).ToPtr());
 
 	// mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
 	// mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
 
-	// (mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Back))
+	// (*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Back))
 	// 		.ToggleOnTrue(ShootDynamically(mSubShooter, mDrivetrain, mCommandXboxController).ToPtr());
 
 	// mCommandXboxController->Button(OperatorConstants::Button::Start).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(

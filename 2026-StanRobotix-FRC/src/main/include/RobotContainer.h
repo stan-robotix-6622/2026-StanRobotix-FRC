@@ -82,7 +82,7 @@ class RobotContainer {
 
 	DriveCommands* mDriveCommands;
 
-	frc2::Trigger mIsInAllianceZoneTrigger;
+	frc2::Trigger* mIsInAllianceZoneTrigger;
 
 	void ConfigureBindings();
 	void ConfigureBindingsCopilot();
