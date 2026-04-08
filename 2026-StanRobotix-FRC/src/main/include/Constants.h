@@ -206,7 +206,7 @@ namespace DrivetrainConstants
 
 	inline constexpr units::meters_per_second_t kAttainableSpeed = 4.50_mps;
 	inline constexpr units::meters_per_second_t kMaxDesiredSpeed = 4.50_mps;
-	inline constexpr units::radians_per_second_t kMaxDesiredAngularSpeed = std::numbers::pi * 2_rad_per_s;
+	inline constexpr units::radians_per_second_t kMaxDesiredAngularSpeed = std::numbers::pi * 3_rad_per_s;
 
 	namespace Commands
 	{
