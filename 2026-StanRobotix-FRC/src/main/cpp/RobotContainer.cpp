@@ -152,8 +152,10 @@ void RobotContainer::ConfigureBindings()
 	// 	std::cout << "}\n";
   //   mShooterStatusPublisher.Set(vector); }));
 
-		(*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Start))
-		.ToggleOnTrue(ShootInPlace(mSubShooter, mDrivetrain).ToPtr());
+	(*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Start))
+	.ToggleOnTrue(ShootInPlace(mSubShooter, mDrivetrain).ToPtr());
+
+	mCommandXboxController->Button(OperatorConstants::Button::Back).WhileTrue(frc2::cmd::Run([this] {mSubShooter->setVoltage(8_V); frc::SmartDashboard::PutNumber("shooter velocity", mSubShooter->getVelocity().value());}));
 
 	// mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
 	// mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
