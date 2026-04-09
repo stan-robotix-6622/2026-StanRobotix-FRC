@@ -98,18 +98,18 @@ void RobotContainer::RegisterCommandsPathPlanner()
 	pathplanner::NamedCommands::registerCommand("Full-Intake-Down", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
 	pathplanner::NamedCommands::registerCommand("Full-Intake-In", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kIn));
 	pathplanner::NamedCommands::registerCommand("Full-Intake-Up", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
-	pathplanner::NamedCommands::registerCommand("Intake", mSubIntake->getIntakeCommand());
+	pathplanner::NamedCommands::registerCommand("Intake", mSubIntake->getIntakeCommand(IntakeConstants::kSpeed));
 	pathplanner::NamedCommands::registerCommand("Shoot", Shoot(mSubShooter).ToPtr());
 	pathplanner::NamedCommands::registerCommand("Shoot-Variable", ShootVariable(mSubShooter, mDrivetrain).ToPtr());
 	pathplanner::NamedCommands::registerCommand("Feed-Shooter", mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
-	pathplanner::NamedCommands::registerCommand("Unstuck-Feeder", mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
+	pathplanner::NamedCommands::registerCommand("Out-Feed", mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
 
 	pathplanner::EventTrigger("Intake").WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
 	pathplanner::EventTrigger("Shoot").WhileTrue(Shoot(mSubShooter).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter"));
 	pathplanner::EventTrigger("Shoot-Variable").WhileTrue(ShootVariable(mSubShooter, mDrivetrain).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter-Variable"));
 	pathplanner::EventTrigger("Feed").WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("run feeder"));
 
-	pathplanner::PointTowardsZoneTrigger("Hub").WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("feed Shooter"));
+	(pathplanner::PointTowardsZoneTrigger("Hub") && frc2::Trigger([this] {return mDrivetrain->isTowardsHub() && mSubShooter->atDesiredVelocity();})).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("feed Shooter"));
 }
 
 void RobotContainer::ConfigureBindings()
@@ -169,6 +169,7 @@ void RobotContainer::ConfigureBindingsCopilot()
 	// mCommandXboxControllerCopilot->Button(OperatorConstants::Button::B).WhileTrue(mSubClimb->RunEnd([this] { mSubClimb->SetSpeed(0.2); }, [this] { mSubClimb->StopMotor(); })).OnTrue(frc2::cmd::Print("Climb Down Manuel"));
 	// mCommandXboxControllerCopilot->Button(OperatorConstants::Button::X).WhileTrue(mSubClimb->RunEnd([this] { mSubClimb->SetSpeed(-0.2); }, [this] { mSubClimb->StopMotor(); })).OnTrue(frc2::cmd::Print("Climb Up Manuel"));
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::Y).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("Outfeed"));
+	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::B).ToggleOnTrue(frc2::cmd::Parallel(PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr(), mSubIntake->getIntakeCommand(-IntakeConstants::kSpeed)));
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::A).WhileTrue(mSubPivotIntake->Run([this] {mSubPivotIntake->SetVoltage(PivotConstants::kG * units::math::cos(mSubPivotIntake->GetAngle()));})).OnTrue(frc2::cmd::Print("Pivot Neutre"));
 	mCommandXboxControllerCopilot->AxisGreaterThan(OperatorConstants::Axis::LeftY, 0.5).WhileTrue(mSubPivotIntake->Run([this] {mSubPivotIntake->SetVoltage(-1_V + PivotConstants::kG * units::math::cos(mSubPivotIntake->GetAngle()));})).OnTrue(frc2::cmd::Print("Pivot Up Manuel"));
 	mCommandXboxControllerCopilot->AxisLessThan(OperatorConstants::Axis::LeftY, -0.5).WhileTrue(mSubPivotIntake->Run([this] {mSubPivotIntake->SetVoltage(1_V + PivotConstants::kG * units::math::cos(mSubPivotIntake->GetAngle()));})).OnTrue(frc2::cmd::Print("Pivoy Down Manuel"));

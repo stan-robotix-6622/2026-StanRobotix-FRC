@@ -54,11 +54,11 @@ void SubIntake::SetSpeed(double iSpeed)
 	}
 }
 
-frc2::CommandPtr SubIntake::getIntakeCommand()
+frc2::CommandPtr SubIntake::getIntakeCommand(double iSpeed)
 {
 	return frc2::cmd::RunEnd(
-			[this] {
-				SetSpeed(IntakeConstants::kSpeed);
+			[this, iSpeed] {
+				SetSpeed(iSpeed);
 			},
 
 			[this] {

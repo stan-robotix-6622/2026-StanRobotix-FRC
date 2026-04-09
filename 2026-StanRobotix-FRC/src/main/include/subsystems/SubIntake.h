@@ -18,7 +18,7 @@ class SubIntake : public frc2::SubsystemBase {
 	void Stop();
 
 	void SetVoltage(double);
-	frc2::CommandPtr getIntakeCommand();
+	frc2::CommandPtr getIntakeCommand(double iSpeed);
 	void SetSpeed(double);
 	bool isIntakeOn();
 

@@ -6,10 +6,12 @@
 
 #include <frc2/command/Commands.h>
 
+#include "Constants.h"
+
 frc2::CommandPtr FullIntake::FullIntakeCommand(SubIntake* iIntake, SubPivotIntake* iPivot, PivotIntake::StatePivotIntake itargetState)
 {
 	if (itargetState == PivotIntake::StatePivotIntake::kDown) {
-		return PivotIntake(iPivot, PivotIntake::StatePivotIntake::kDown).AlongWith(iIntake->getIntakeCommand());
+		return PivotIntake(iPivot, PivotIntake::StatePivotIntake::kDown).AlongWith(iIntake->getIntakeCommand(IntakeConstants::kSpeed));
 	}
 	else if (itargetState == PivotIntake::StatePivotIntake::kUp) {
 		return PivotIntake(iPivot, PivotIntake::StatePivotIntake::kUp).AlongWith(iIntake->Idle());
