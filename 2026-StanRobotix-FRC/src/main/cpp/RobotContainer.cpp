@@ -169,8 +169,9 @@ void RobotContainer::ConfigureBindingsCopilot()
 	// mCommandXboxControllerCopilot->Button(OperatorConstants::Button::B).WhileTrue(mSubClimb->RunEnd([this] { mSubClimb->SetSpeed(0.2); }, [this] { mSubClimb->StopMotor(); })).OnTrue(frc2::cmd::Print("Climb Down Manuel"));
 	// mCommandXboxControllerCopilot->Button(OperatorConstants::Button::X).WhileTrue(mSubClimb->RunEnd([this] { mSubClimb->SetSpeed(-0.2); }, [this] { mSubClimb->StopMotor(); })).OnTrue(frc2::cmd::Print("Climb Up Manuel"));
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::Y).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("Outfeed"));
-	mCommandXboxControllerCopilot->AxisGreaterThan(OperatorConstants::Axis::LeftY, 0.5).WhileTrue(mSubPivotIntake->Run([this] {mSubPivotIntake->SetVoltage(3_V);})).OnTrue(frc2::cmd::Print("Pivot Up Manuel"));
-	mCommandXboxControllerCopilot->AxisLessThan(OperatorConstants::Axis::LeftY, -0.5).WhileTrue(mSubPivotIntake->Run([this] {mSubPivotIntake->SetVoltage(-3_V);})).OnTrue(frc2::cmd::Print("Pivoy Down Manuel"));
+	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::A).WhileTrue(mSubPivotIntake->Run([this] {mSubPivotIntake->SetVoltage(PivotConstants::kG * units::math::cos(mSubPivotIntake->GetAngle()));})).OnTrue(frc2::cmd::Print("Pivot Neutre"));
+	mCommandXboxControllerCopilot->AxisGreaterThan(OperatorConstants::Axis::LeftY, 0.5).WhileTrue(mSubPivotIntake->Run([this] {mSubPivotIntake->SetVoltage(-1_V + PivotConstants::kG * units::math::cos(mSubPivotIntake->GetAngle()));})).OnTrue(frc2::cmd::Print("Pivot Up Manuel"));
+	mCommandXboxControllerCopilot->AxisLessThan(OperatorConstants::Axis::LeftY, -0.5).WhileTrue(mSubPivotIntake->Run([this] {mSubPivotIntake->SetVoltage(1_V + PivotConstants::kG * units::math::cos(mSubPivotIntake->GetAngle()));})).OnTrue(frc2::cmd::Print("Pivoy Down Manuel"));
 
 	// mCommandXboxControllerCopilot->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
   //       {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
