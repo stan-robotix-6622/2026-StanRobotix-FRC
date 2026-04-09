@@ -6,6 +6,7 @@
 
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/button/CommandXboxController.h>
+#include <frc2/command/button/CommandGenericHID.h>
 #include <frc2/command/CommandPtr.h>
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
@@ -18,7 +19,7 @@
 
 #include "commands/DriveCommands.h"
 
-#include "subsystems/SubClimb.h"
+// #include "subsystems/SubClimb.h"
 #include "subsystems/SubDrivetrain.h"
 #include "subsystems/SubFeeder.h"
 #include "subsystems/SubIntake.h"
@@ -67,9 +68,9 @@ class RobotContainer {
 
  private:
 	frc2::CommandXboxController* mCommandXboxController;
-	frc2::CommandXboxController* mCommandXboxControllerCopilot;
+	frc2::CommandGenericHID* mCommandXboxControllerCopilot;
 
-	SubClimb* mSubClimb;
+	// SubClimb* mSubClimb;
 
 	SubShooter* mSubShooter = nullptr;
 	SubFeeder* mSubFeeder = nullptr;
@@ -81,6 +82,8 @@ class RobotContainer {
 
 	DriveCommands* mDriveCommands;
 
+	frc2::Trigger* mIsInAllianceZoneTrigger;
+
 	void ConfigureBindings();
 	void ConfigureBindingsCopilot();
 	void RegisterCommandsPathPlanner();
@@ -88,8 +91,8 @@ class RobotContainer {
 
 	frc::SendableChooser<frc2::Command*> mAutoChooser;
 
-	nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
-	std::shared_ptr<nt::NetworkTable> mNTShooterStatusTable = inst.GetTable("SmartDashboard/shooter");
-	nt::StructArrayPublisher<LookupTable::ShooterStatus> mShooterStatusPublisher;
-	nt::StructArraySubscriber<LookupTable::ShooterStatus> mShooterStatusSubscriber;
+	// nt::NetworkTableInstance inst = nt::NetworkTableInstance::GetDefault();
+	// std::shared_ptr<nt::NetworkTable> mNTShooterStatusTable = inst.GetTable("SmartDashboard/shooter");
+	// nt::StructArrayPublisher<LookupTable::ShooterStatus> mShooterStatusPublisher;
+	// nt::StructArraySubscriber<LookupTable::ShooterStatus> mShooterStatusSubscriber;
 };

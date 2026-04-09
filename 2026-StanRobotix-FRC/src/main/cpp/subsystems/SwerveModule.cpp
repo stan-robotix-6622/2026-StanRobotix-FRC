@@ -4,17 +4,25 @@
 
 #include "subsystems/SwerveModule.h"
 
+#include <frc/RobotBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "Configs.h"
 
 SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInverted, bool iTurningInverted)
 {
-	// Initialization of the motor controllers with the motorID constructor input
 	mDrivingMotor = new rev::spark::SparkMax{iDrivingMotorID, ModuleConstants::kDrivingMotorType};
 	mTurningMotor = new rev::spark::SparkMax{iTurningMotorID, ModuleConstants::kTurningMotorType};
 
-	// Configure the motors from Configs.h
+	// Simulation
+	if (frc::RobotBase::IsSimulation()) {
+		mRobotIsSimulated = true;
+		mTurningGearBox = new frc::DCMotor{frc::DCMotor::NEO550()};
+		mDrivingGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
+		mTurningMotorSim = new rev::spark::SparkMaxSim{mTurningMotor, mTurningGearBox};
+		mDrivingMotorSim = new rev::spark::SparkMaxSim{mDrivingMotor, mDrivingGearBox};
+	}
+
 	mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
 													 ModuleConstants::kDrivingResetMode,
 													 ModuleConstants::kDrivingPersistMode);
@@ -26,11 +34,9 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
 	mTurningClosedLoopController = new rev::spark::SparkClosedLoopController{mTurningMotor->GetClosedLoopController()};
 	mDrivingClosedLoopController = new rev::spark::SparkClosedLoopController{mDrivingMotor->GetClosedLoopController()};
 
-	// Initialization of the motor's encoders and absolute encoder
 	mDrivingEncoder = new rev::spark::SparkRelativeEncoder{mDrivingMotor->GetEncoder()};
 	mTurningAbsoluteEncoder = new rev::spark::SparkAbsoluteEncoder{mTurningMotor->GetAbsoluteEncoder()};
 
-	// Initialization of the molule's SwerveModulePosition and SwerveModuleState from the encoder's velocity and position
 	refreshModule();
 }
 
@@ -43,11 +49,20 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
 
 	mTurningClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
 	mDrivingClosedLoopController->SetSetpoint(mOptimizedState.speed.value(), ModuleConstants::kDrivingClosedLoopControlType);
+
+	if (mRobotIsSimulated) {
+		mTurningMotorSim->iterate((mOptimizedState.angle.Radians().value() - mTurningMotorSim->GetPosition()) / 0.02, 12, 0.02);
+		mDrivingMotorSim->iterate(mOptimizedState.speed.value(), 12, 0.02);
+	}
 }
 
 void SwerveModule::setDesiredHeading(frc::Rotation2d iDesiredHeading)
 {
 	mTurningClosedLoopController->SetSetpoint(iDesiredHeading.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
+
+	if (mRobotIsSimulated) {
+		mTurningMotorSim->iterate((iDesiredHeading.Radians().value() - mTurningMotorSim->GetPosition()) / 0.02, 12, 0.02);
+	}
 }
 
 void SwerveModule::setTurningVoltage(units::volt_t iVoltage)

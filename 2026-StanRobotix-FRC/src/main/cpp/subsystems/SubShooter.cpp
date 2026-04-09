@@ -5,6 +5,8 @@
 #include "subsystems/SubShooter.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/RobotBase.h>
+#include <frc/system/plant/LinearSystemId.h>
 
 #include "Configs.h"
 
@@ -18,9 +20,21 @@ SubShooter::SubShooter()
 	mClossedLoopController = new rev::spark::SparkClosedLoopController{mLeaderShooterController->GetClosedLoopController()};
 
 	Configure();
+
+	// Simulation
+	if (frc::RobotBase::IsSimulation()) {
+		mRobotIsSimulated = true;
+		mLeaderGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
+		mFollowGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
+		mLeaderMotorSim = new rev::spark::SparkMaxSim{mLeaderShooterController, mLeaderGearBox};
+		mFollowMotorSim = new rev::spark::SparkMaxSim{mFollowerShooterController, mFollowGearBox};
+		mFlywheelPlant = new frc::LinearSystem<1, 1, 1>{frc::LinearSystemId::FlywheelSystem(frc::DCMotor::NEO(2), kMOI, ShooterConstants::kGearRatio)};
+		mFlywheelSim = new frc::sim::FlywheelSim{*mFlywheelPlant, frc::DCMotor::NEO(2), {0.0}};
+	}
 }
 
-void SubShooter::Periodic() {
+void SubShooter::Periodic()
+{
 	frc::SmartDashboard::PutBoolean("Dashboard/atDesiredVelocity", atDesiredVelocity());
 }
 
@@ -29,11 +43,22 @@ void SubShooter::setVoltage(units::volt_t iVoltage)
 	mLeaderShooterController->SetVoltage(iVoltage);
 };
 
-void SubShooter::setDesiredVelocity(units::turns_per_second_t iNextVelocity)
+void SubShooter::setVelocity(units::turns_per_second_t iNextVelocity)
 {
-	mDesiredVelocity = iNextVelocity;
 	mClossedLoopController->SetSetpoint(iNextVelocity.value(), ShooterConstants::kShooterClosedLoopControlType);
+
+	if (mRobotIsSimulated) {
+		mFlywheelSim->SetInputVoltage(mFeedforward->Calculate(iNextVelocity));
+		mFlywheelSim->Update(0.02_s);
+		mLeaderMotorSim->iterate(units::turns_per_second_t(mFlywheelSim->GetAngularVelocity()).value(), 12, 0.02);
+		mFollowMotorSim->iterate(units::turns_per_second_t(mFlywheelSim->GetAngularVelocity()).value(), 12, 0.02);
+	}
 };
+
+void SubShooter::setTargetVelocity(units::turns_per_second_t iTargetVelocity)
+{
+	mTargetVelocity = iTargetVelocity;
+}
 
 units::turns_per_second_t SubShooter::getVelocity()
 {
@@ -59,5 +84,5 @@ void SubShooter::InitSendable(wpi::SendableBuilder& builder)
 
 bool SubShooter::atDesiredVelocity()
 {
-	return units::math::abs(getVelocity() - mDesiredVelocity) < 0.5_tps;
+	return units::math::abs(getVelocity() - mTargetVelocity) < 1_tps && mTargetVelocity != 0_tps;
 }

@@ -6,6 +6,7 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
+#include <frc/RobotBase.h>
 
 #include "Configs.h"
 
@@ -16,15 +17,27 @@ SubIntake::SubIntake()
 	mEncoder = new rev::spark::SparkRelativeEncoder{mIntakeMotor->GetEncoder()};
 
 	mIntakeMotor->Configure(Configs::Intake::Config(), IntakeConstants::kReset, IntakeConstants::kPersist);
+	
+	// Simulation
+	if (frc::RobotBase::IsSimulation()) {
+		mRobotIsSimulated = true;
+		mGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
+		mMotorSim = new rev::spark::SparkMaxSim{mIntakeMotor, mGearBox};
+	}
 }
 
-void SubIntake::Periodic() {
+void SubIntake::Periodic()
+{
 	frc::SmartDashboard::PutBoolean("Dashboard/isIntakeOn", isIntakeOn());
 }
 
 void SubIntake::Stop()
 {
 	mIntakeMotor->StopMotor();
+
+	if (mRobotIsSimulated) {
+		mMotorSim->SetAppliedOutput(0);
+	}
 }
 
 void SubIntake::SetVoltage(double iVoltage)
@@ -35,6 +48,10 @@ void SubIntake::SetVoltage(double iVoltage)
 void SubIntake::SetSpeed(double iSpeed)
 {
 	mIntakeMotor->Set(iSpeed);
+
+	if (mRobotIsSimulated) {
+		mMotorSim->SetAppliedOutput(iSpeed);
+	}
 }
 
 frc2::CommandPtr SubIntake::getIntakeCommand()
@@ -52,7 +69,7 @@ frc2::CommandPtr SubIntake::getIntakeCommand()
 
 bool SubIntake::isIntakeOn()
 {
-	return mIntakeMotor->GetAppliedOutput() > 0;
+	return mIntakeMotor->GetAppliedOutput() != 0;
 }
 
 void SubIntake::InitSendable(wpi::SendableBuilder& builder)

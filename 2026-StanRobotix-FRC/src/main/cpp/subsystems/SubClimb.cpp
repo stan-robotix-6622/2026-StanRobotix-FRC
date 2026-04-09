@@ -31,6 +31,7 @@ void SubClimb::Periodic()
 
 	frc::SmartDashboard::PutNumber("climb/current", mCurrent.value());
 	frc::SmartDashboard::PutNumber("climb/current filter", mCurrentFiltered);
+	frc::SmartDashboard::PutNumber("climb/down position", GetDownPosition());
 	frc::SmartDashboard::PutNumber("climb/position", GetDownPosition() - GetPosition());
 }
 

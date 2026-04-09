@@ -154,7 +154,7 @@ namespace Configs
 			pivotConfig.SetIdleMode(PivotConstants::kIdleMode);
 
 			pivotConfig.encoder.PositionConversionFactor(pivotFactor);
-			pivotConfig.encoder.VelocityConversionFactor(pivotFactor);
+			pivotConfig.encoder.VelocityConversionFactor(pivotFactor / 60);
 
 			pivotConfig.SmartCurrentLimit(PivotConstants::kCurrentLimit.value());
 

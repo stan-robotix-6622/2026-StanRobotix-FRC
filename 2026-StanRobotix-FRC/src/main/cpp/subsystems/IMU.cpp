@@ -9,6 +9,13 @@
 IMU::IMU()
 {
 	mIMU = new ctre::phoenix6::hardware::Pigeon2{CANid::kIMUPigeonID};
+	mSimIMU = &mIMU->GetSimState();
+}
+
+void IMU::advanceSimulation(units::radians_per_second_t iYawVelocity)
+{
+	mSimIMU->AddYaw(iYawVelocity * 0.02_s);
+	mSimIMU->SetAngularVelocityZ(iYawVelocity);
 }
 
 frc::Rotation2d IMU::getRotation2d()

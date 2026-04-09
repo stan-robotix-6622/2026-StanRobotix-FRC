@@ -6,6 +6,7 @@
 
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
+#include <frc/RobotBase.h>
 
 #include "Configs.h"
 
@@ -13,15 +14,27 @@ SubFeeder::SubFeeder()
 {
 	mFeederController = new rev::spark::SparkMax{CANid::kMotorFeederID, rev::spark::SparkLowLevel::MotorType::kBrushless};
 	Configure();
+	
+	// Simulation
+	if (frc::RobotBase::IsSimulation()) {
+		mRobotIsSimulated = true;
+		mGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
+		mMotorSim = new rev::spark::SparkMaxSim{mFeederController, mGearBox};
+	}
 }
 
-void SubFeeder::Periodic() {
+void SubFeeder::Periodic()
+{
 	frc::SmartDashboard::PutBoolean("Dashboard/isFeederOn", isFeederOn());
 }
 
 void SubFeeder::setVoltage(units::volt_t iOutput)
 {
 	mFeederController->SetVoltage(iOutput);
+
+	if (mRobotIsSimulated) {
+		mMotorSim->SetAppliedOutput(iOutput / 12_V);
+	}
 };
 
 rev::REVLibError SubFeeder::Configure()
@@ -44,5 +57,5 @@ frc2::CommandPtr SubFeeder::getFeedShooterCommand(units::volt_t iVoltage)
 
 bool SubFeeder::isFeederOn()
 {
-	return mFeederController->GetAppliedOutput() > 0;
+	return mFeederController->GetAppliedOutput() != 0;
 }

@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 5.58020166073547,
-        "y": 7.257378410438909
+        "y": 7.5
       },
       "prevControl": {
         "x": 6.58020166073547,
-        "y": 7.257378410438909
+        "y": 7.5
       },
       "nextControl": {
         "x": 5.08020166073547,
-        "y": 7.257378410438909
+        "y": 7.5
       },
       "isLocked": false,
       "linkedName": "Comp/Left Trench/Pass Corner"
@@ -33,11 +33,11 @@
     {
       "anchor": {
         "x": 4.159988137603797,
-        "y": 7.257378410438909
+        "y": 7.5
       },
       "prevControl": {
         "x": 5.159988137603797,
-        "y": 7.257378410438909
+        "y": 7.5
       },
       "nextControl": null,
       "isLocked": false,
@@ -50,7 +50,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 480.0,
     "nominalVoltage": 12.0,

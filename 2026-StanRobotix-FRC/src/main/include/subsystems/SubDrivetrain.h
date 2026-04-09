@@ -11,7 +11,6 @@
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc/smartdashboard/Field2d.h>
-#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/SubsystemBase.h>
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
@@ -50,6 +49,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
 	frc::ChassisSpeeds getFieldRelativeSpeeds();
 	void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
 	void driveRobotRelative(frc::ChassisSpeeds iSpeeds);
+	void modulesXFormation();
 
 	frc::Pose2d getPose();
 	frc::Translation2d getTranslationToHub();
@@ -62,7 +62,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
 	frc::Pose2d getClosestPoseAtDistanceFromHub(units::meter_t iDesiredDistance);
 	frc2::CommandPtr getGoToDistanceFromHubCommand(units::meter_t iDesiredDistance);
 	bool isTowardsHub();
-	bool isTowardsHubShooter();
+	bool isInAllianceZone();
 
  private:
 	frc::Translation2d* mFrontLeftLocation;

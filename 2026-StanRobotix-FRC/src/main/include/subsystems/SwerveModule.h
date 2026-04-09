@@ -9,6 +9,8 @@
 #include <frc/kinematics/SwerveModuleState.h>
 #include <rev/SparkAbsoluteEncoder.h>
 #include <rev/SparkClosedLoopController.h>
+#include <frc/system/plant/DCMotor.h>
+#include <rev/sim/SparkMaxSim.h>
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 #include <wpi/sendable/Sendable.h>
@@ -47,6 +49,13 @@ class SwerveModule : public wpi::Sendable {
 
 	rev::spark::SparkRelativeEncoder* mDrivingEncoder;
 	rev::spark::SparkAbsoluteEncoder* mTurningAbsoluteEncoder;
+
+	// For simulation
+	bool mRobotIsSimulated = false;
+	frc::DCMotor* mDrivingGearBox;
+	frc::DCMotor* mTurningGearBox;
+	rev::spark::SparkMaxSim* mDrivingMotorSim;
+	rev::spark::SparkMaxSim* mTurningMotorSim;
 
 	frc::Rotation2d mTurningCurrentAngle;
 

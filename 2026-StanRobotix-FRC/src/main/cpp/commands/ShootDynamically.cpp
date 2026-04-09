@@ -19,8 +19,8 @@ ShootDynamically::ShootDynamically(SubShooter* iShooter, SubDrivetrain* iDrivetr
 	mShooterPIDController = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
 	mRotationPIDController = new frc::PIDController{DrivetrainConstants::PIDs::kRotationP, DrivetrainConstants::PIDs::kRotationI, DrivetrainConstants::PIDs::kRotationD};
 	mRotationPIDController->EnableContinuousInput(0, std::numbers::pi * 2);
-	frc::SmartDashboard::PutData("shooter/command/shooter PID 2", mShooterPIDController);
-	frc::SmartDashboard::PutData("shooter/command/rotation PID", mRotationPIDController);
+	frc::SmartDashboard::PutData("commands/shoot dynamically/shooter PID", mShooterPIDController);
+	frc::SmartDashboard::PutData("commands/shoot dynamically/rotation PID", mRotationPIDController);
 }
 
 // Called when the command is initially scheduled.
@@ -42,12 +42,13 @@ void ShootDynamically::Execute()
 											 -mRobotMovement.vy * mShooterStatus.timeOfFlight};
 	}
 	mShooterPIDController->SetSetpoint(mShooterStatus.shooterVelocity.value());
+	mShooter->setTargetVelocity(mShooterStatus.shooterVelocity);
 
 	mPIDAdjustment = units::turns_per_second_t(mShooterPIDController->Calculate(mShooter->getVelocity().value()));
 	mCurrentVelocity = mShooter->getVelocity();
 	mAdjustedVelocity = mCurrentVelocity + mPIDAdjustment;
 
-	mShooter->setDesiredVelocity(mAdjustedVelocity);
+	mShooter->setVelocity(mAdjustedVelocity);
 
 	mRotationPIDController->SetSetpoint(mDrivetrain->getTranslationToHub().Angle().Radians().value());
 	mDrivetrain->driveFieldRelative(-mJoystick->GetLeftY(),
@@ -59,11 +60,12 @@ void ShootDynamically::Execute()
 // Called once the command ends or is interrupted.
 void ShootDynamically::End(bool interrupted)
 {
-	mShooter->setDesiredVelocity(0_tps);
+	mShooter->setVelocity(0_tps);
+	mShooter->setTargetVelocity(0_tps);
 }
 
 // Returns true when the command should end.
 bool ShootDynamically::IsFinished()
 {
-	return false;
+	return !mDrivetrain->isInAllianceZone();
 }

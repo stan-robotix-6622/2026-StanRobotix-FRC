@@ -29,6 +29,7 @@
  * command-specific namespaces within this header, which can then be used where
  * they are needed.
  */
+
 namespace TemplateUnits
 {
 	template <typename Unit>
@@ -63,15 +64,6 @@ namespace OperatorConstants
 		inline constexpr int RightX = 4;
 		inline constexpr int RightY = 5;
 	}	 // namespace Axis
-
-	inline constexpr int kPivotDownButton = Button::B;
-
-	inline constexpr int kResetIMUButton = Button::RightBumper;
-	inline constexpr int kResetPoseButton = Button::LeftBumper;
-
-	inline constexpr int kShootButton = Button::Y;
-	inline constexpr int kUnstuckFuelButton = Button::X;
-	inline constexpr int kFeedButton = Button::A;
 }	 // namespace OperatorConstants
 
 namespace ShooterConstants
@@ -94,9 +86,9 @@ namespace ShooterConstants
 
 	namespace PIDConstants
 	{
-		inline constexpr double kP = 4;
+		inline constexpr double kP = 3;
 		inline constexpr double kI = 0;
-		inline constexpr double kD = 0.5;
+		inline constexpr double kD = 0.08;
 
 		inline constexpr units::turns_per_second_t setpoint = 52_tps;	 // at 3.6m
 	}	 // namespace PIDConstants
@@ -137,7 +129,7 @@ namespace ModuleConstants
 {
 	inline constexpr double kDrivingMotorGearRatio = 4.71;																	// 5.08 rotations of the motor for 1 rotation of the ouput
 	inline constexpr units::volt_t kNominalVoltage = 12_V;																	// The voltage at which the max speeds are mesured
-	inline constexpr units::meter_t kWheelRadius = 0.035609_m;															// The radius of REV's plastic wheels, masured with the wheelCaracterizationCommand
+	inline constexpr units::meter_t kWheelRadius = 1.341628_in;															// The radius of REV's plastic wheels, masured with the wheelCaracterizationCommand
 	inline constexpr units::meter_t kWheelPerimeter = kWheelRadius * 2 * std::numbers::pi;	// in meters (diametre in inches * convertion to meters * pi)
 	inline constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260_rad_per_s;
 	inline constexpr units::meters_per_second_t kDriveWheelMaxFreeSpeed = 4.9180_mps;
@@ -206,7 +198,7 @@ namespace DrivetrainConstants
 
 	inline constexpr units::meters_per_second_t kAttainableSpeed = 4.50_mps;
 	inline constexpr units::meters_per_second_t kMaxDesiredSpeed = 4.50_mps;
-	inline constexpr units::radians_per_second_t kMaxDesiredAngularSpeed = std::numbers::pi * 2_rad_per_s;
+	inline constexpr units::radians_per_second_t kMaxDesiredAngularSpeed = std::numbers::pi * 3_rad_per_s;
 
 	namespace Commands
 	{
@@ -298,16 +290,16 @@ namespace IntakeConstants
 namespace PivotConstants
 {
 	inline constexpr double kGearRatio = 16;
-	inline constexpr double kOffset = 2.5564447021484375;
+	inline constexpr double kOffset = 2.6366961002349854;
 	inline constexpr double kP = 2.0;
 	inline constexpr double kI = 0.0;
 	inline constexpr double kD = 0.2;
-	inline constexpr units::volt_t kG = 0.80_V;
+	inline constexpr units::volt_t kG = 1.37_V;
 	inline constexpr units::volt_t kS = 0.0_V;
 	inline constexpr TemplateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
-	inline constexpr double setpointUp = std::numbers::pi / 4;		  // 45 deg up
-	inline constexpr double setpointIn = std::numbers::pi * 2 / 3;  // 120 deg up
-	inline constexpr double setpointDown = std::numbers::pi / 18;	  // 10 deg up
+	inline constexpr double setpointUp = std::numbers::pi / 4;			// 45 deg up
+	inline constexpr double setpointIn = std::numbers::pi * 2 / 3;	// 120 deg up
+	inline constexpr double setpointDown = std::numbers::pi / 18;		// 10 deg up
 	inline constexpr units::ampere_t kCurrentLimit = 60_A;
 
 	inline constexpr bool kInverted = false;
