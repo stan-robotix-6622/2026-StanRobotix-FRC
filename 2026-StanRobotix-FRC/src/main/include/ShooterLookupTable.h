@@ -44,7 +44,7 @@ class LookupTable {
 		ShooterStatus{2.3013_m, 40_tps, 0_s},
 		ShooterStatus{2.3497_m, 42.5_tps, 0_s},
 		ShooterStatus{2.522_m, 44.5_tps, 0_s}, 		
-		ShooterStatus{2.95276_m, 52_tps, 0_s},
+		ShooterStatus{2.95276_m, 49_tps, 0_s},
 		ShooterStatus{3.17149_m, 51_tps, 0_s},
  		ShooterStatus{3.48569_m, 52_tps, 0_s},
  		ShooterStatus{3.7852_m, 56_tps, 0_s},

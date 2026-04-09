@@ -150,7 +150,7 @@ void RobotContainer::ConfigureBindings()
 	// 	std::cout << "}\n";
   //   mShooterStatusPublisher.Set(vector); }));
 
-		(*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Back))
+		(*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Start))
 		.ToggleOnTrue(ShootInPlace(mSubShooter, mDrivetrain).ToPtr());
 
 	// mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
