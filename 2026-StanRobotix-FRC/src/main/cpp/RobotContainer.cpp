@@ -104,12 +104,12 @@ void RobotContainer::RegisterCommandsPathPlanner()
 	pathplanner::NamedCommands::registerCommand("Shoot-Variable", ShootVariable(mSubShooter, mDrivetrain).ToPtr());
 	pathplanner::NamedCommands::registerCommand("Feed-Shooter", mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 	pathplanner::NamedCommands::registerCommand("Out-Feed", mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
+	pathplanner::NamedCommands::registerCommand("Point-Hub", PointTowardsHub(mDrivetrain).ToPtr());
 
 	pathplanner::EventTrigger("Intake").WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
 	pathplanner::EventTrigger("Shoot").WhileTrue(Shoot(mSubShooter).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter"));
 	pathplanner::EventTrigger("Shoot-Variable").WhileTrue(ShootVariable(mSubShooter, mDrivetrain).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter-Variable"));
 	pathplanner::EventTrigger("Feed").WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("run feeder"));
-	pathplanner::EventTrigger("Point-Hub").WhileTrue(PointTowardsHub(mDrivetrain).ToPtr()).OnTrue(frc2::cmd::Print("point towards hub"));
 
 	(pathplanner::PointTowardsZoneTrigger("Hub") && frc2::Trigger([this] {return mDrivetrain->isTowardsHub() && mSubShooter->atDesiredVelocity();})).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("feed Shooter"));
 }
@@ -155,7 +155,7 @@ void RobotContainer::ConfigureBindings()
 	(*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Start))
 	.ToggleOnTrue(ShootInPlace(mSubShooter, mDrivetrain).ToPtr());
 
-	mCommandXboxController->Button(OperatorConstants::Button::Back).WhileTrue(frc2::cmd::Run([this] {mSubShooter->setVoltage(8_V); frc::SmartDashboard::PutNumber("shooter velocity", mSubShooter->getVelocity().value());}));
+	// mCommandXboxController->Button(OperatorConstants::Button::Back).WhileTrue(frc2::cmd::Run([this] {mSubShooter->setVoltage(8_V);}));
 
 	// mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
 	// mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
