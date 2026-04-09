@@ -69,7 +69,7 @@ namespace OperatorConstants
 namespace ShooterConstants
 {
 	inline constexpr units::volt_t kS = 0_V;
-	inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.904761_tps;
+	inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.142879_tps;
 	inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second_squared> kA = 0_V / 1_tr_per_s_sq;
 
 	inline constexpr bool kInverted = false;
@@ -299,7 +299,7 @@ namespace PivotConstants
 	inline constexpr TemplateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
 	inline constexpr double setpointUp = std::numbers::pi / 6;			// 30 deg up
 	inline constexpr double setpointIn = std::numbers::pi * 2 / 3;	// 120 deg up
-	inline constexpr double setpointDown = std::numbers::pi / 18;		// 10 deg up
+	inline constexpr double setpointDown = std::numbers::pi / 15;		// 12 deg up
 	inline constexpr units::ampere_t kCurrentLimit = 60_A;
 
 	inline constexpr bool kInverted = false;
