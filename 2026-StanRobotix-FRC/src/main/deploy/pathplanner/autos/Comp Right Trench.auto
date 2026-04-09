@@ -70,13 +70,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L Start"
+            "pathName": "R Start"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "L Shoot"
+            "pathName": "R Shoot"
           }
         },
         {
@@ -139,13 +139,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L Refuel"
+            "pathName": "R Refuel"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "L Shoot Bis"
+            "pathName": "R Shoot Bis"
           }
         },
         {

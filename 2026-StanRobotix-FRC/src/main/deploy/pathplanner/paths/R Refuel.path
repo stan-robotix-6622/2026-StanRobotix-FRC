@@ -21,7 +21,7 @@
       },
       "prevControl": {
         "x": 4.955374223476439,
-        "y": 0.5
+        "y": 0.5000000000000001
       },
       "nextControl": {
         "x": 7.58020166073547,
@@ -65,7 +65,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 90.0
   },
   "reversed": false,
   "folder": "Right Trench",
