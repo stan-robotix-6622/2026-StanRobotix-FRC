@@ -60,12 +60,6 @@
                       "data": {
                         "name": "Shoot-Variable"
                       }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Feed-Shooter"
-                      }
                     }
                   ]
                 }
@@ -129,12 +123,6 @@
                       "data": {
                         "name": "Shoot-Variable"
                       }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Feed-Shooter"
-                      }
                     }
                   ]
                 }
@@ -197,12 +185,6 @@
                       "type": "named",
                       "data": {
                         "name": "Shoot-Variable"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Feed-Shooter"
                       }
                     }
                   ]
