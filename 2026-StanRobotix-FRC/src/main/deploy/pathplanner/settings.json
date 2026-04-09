@@ -3,15 +3,16 @@
   "robotLength": 0.85725,
   "holonomicMode": true,
   "pathFolders": [
-    "Comp",
+    "Left Trench",
+    "Right Trench",
     "Tests"
   ],
   "autoFolders": [
     "Comp",
     "Test"
   ],
-  "defaultMaxVel": 2.0,
-  "defaultMaxAccel": 4.0,
+  "defaultMaxVel": 1.5,
+  "defaultMaxAccel": 2.0,
   "defaultMaxAngVel": 360.0,
   "defaultMaxAngAccel": 480.0,
   "defaultNominalVoltage": 12.0,

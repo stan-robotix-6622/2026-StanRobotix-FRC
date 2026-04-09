@@ -40,13 +40,76 @@
                     {
                       "type": "wait",
                       "data": {
+                        "waitTime": 2.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Shoot-Variable"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Feed-Shooter"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L Start"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L Shoot"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "race",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.5
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Shoot-Variable"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "race",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
                         "waitTime": 3.0
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "Shoot"
+                        "name": "Shoot-Variable"
                       }
                     },
                     {
@@ -64,13 +127,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Trench Start"
+            "pathName": "L Refuel"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Left Trench Shoot"
+            "pathName": "L Shoot Bis"
           }
         },
         {
@@ -103,70 +166,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Shoot-Variable"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Feed-Shooter"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left Trench Refuel"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Left Trench Shoot Bis"
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "race",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.5
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Shoot-Variable"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "race",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.0
+                        "waitTime": 3.0
                       }
                     },
                     {

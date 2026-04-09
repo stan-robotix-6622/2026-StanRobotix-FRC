@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.528,
-        "y": 4.149
+        "x": 4.159988137603797,
+        "y": 7.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.1295255041518395,
-        "y": 2.5233333333333325
+        "x": 4.409988137603797,
+        "y": 7.6
       },
       "isLocked": false,
-      "linkedName": "Tests/With fuel"
+      "linkedName": "Comp/Left Trench/Shooting Position"
     },
     {
       "anchor": {
-        "x": 1.954353499406881,
-        "y": 2.4802965599051015
+        "x": 4.159988137603797,
+        "y": 7.6
       },
       "prevControl": {
-        "x": 5.935255041518385,
-        "y": 2.609406880189799
+        "x": 3.909988137603797,
+        "y": 7.6
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Comp/Left Trench/Shooting Position"
     }
   ],
   "rotationTargets": [],
@@ -34,22 +34,15 @@
     {
       "fieldPosition": {
         "x": 4.626,
-        "y": 4.021
+        "y": 4.021328
       },
       "rotationOffset": 0.0,
-      "minWaypointRelativePos": 0.8408851422550093,
+      "minWaypointRelativePos": 0.5035516969218619,
       "maxWaypointRelativePos": 1.0,
       "name": "Hub"
     }
   ],
-  "eventMarkers": [
-    {
-      "name": "Shoot",
-      "waypointRelativePos": 0.7249736564805052,
-      "endWaypointRelativePos": 1.0,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.5,
     "maxAcceleration": 2.0,
@@ -60,13 +53,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -90.0
   },
   "reversed": false,
-  "folder": "Tests",
+  "folder": "Left Trench",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 90.0
+    "rotation": -90.0
   },
   "useDefaultConstraints": true
 }
