@@ -4,6 +4,7 @@
 
 #include "RobotContainer.h"
 
+#include <frc/RobotState.h>
 #include <frc/DriverStation.h>
 #include <frc/MathUtil.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -30,6 +31,7 @@
 #include "commands/ShootInPlace.h"
 #include "commands/ShootDynamically.h"
 #include "commands/PointTowardsHub.h"
+#include "commands/PointTowardsZone.h"
 
 namespace
 {
@@ -117,7 +119,7 @@ void RobotContainer::RegisterCommandsPathPlanner()
 
 void RobotContainer::ConfigureBindings()
 {
-	frc2::Trigger{[this] { return mDrivetrain->isTowardsHub() && mSubShooter->atDesiredVelocity() && mDrivetrain->isInAllianceZone(); }}
+	frc2::Trigger{[this] { if (frc::RobotState::IsAutonomous()) {return mSubShooter->atDesiredVelocity() && mDrivetrain->isInAllianceZone();} else {return mDrivetrain->isTowardsHub() && mSubShooter->atDesiredVelocity() && mDrivetrain->isInAllianceZone();} }}
 			.Debounce(0.1_s)
 			.WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
@@ -175,9 +177,8 @@ void RobotContainer::ConfigureBindingsCopilot()
 	// mCommandXboxControllerCopilot->Button(OperatorConstants::Button::X).WhileTrue(mSubClimb->RunEnd([this] { mSubClimb->SetSpeed(-0.2); }, [this] { mSubClimb->StopMotor(); })).OnTrue(frc2::cmd::Print("Climb Up Manuel"));
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::Y).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("Outfeed"));
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::B).ToggleOnTrue(frc2::cmd::Parallel(PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr(), mSubIntake->getIntakeCommand(-IntakeConstants::kSpeed)));
-	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::A).WhileTrue(mSubPivotIntake->Run([this] {mSubPivotIntake->SetVoltage(PivotConstants::kG * units::math::cos(mSubPivotIntake->GetAngle()));})).OnTrue(frc2::cmd::Print("Pivot Neutre"));
-	mCommandXboxControllerCopilot->AxisGreaterThan(OperatorConstants::Axis::LeftY, 0.5).WhileTrue(mSubPivotIntake->Run([this] {mSubPivotIntake->SetVoltage(-1_V + PivotConstants::kG * units::math::cos(mSubPivotIntake->GetAngle()));})).OnTrue(frc2::cmd::Print("Pivot Up Manuel"));
-	mCommandXboxControllerCopilot->AxisLessThan(OperatorConstants::Axis::LeftY, -0.5).WhileTrue(mSubPivotIntake->Run([this] {mSubPivotIntake->SetVoltage(1_V + PivotConstants::kG * units::math::cos(mSubPivotIntake->GetAngle()));})).OnTrue(frc2::cmd::Print("Pivoy Down Manuel"));
+	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::X).WhileTrue(frc2::cmd::Parallel(Shoot(mSubShooter).ToPtr(), PointTowardsZone(mDrivetrain).ToPtr()));
+	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::Y).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("Feed"));
 
 	// mCommandXboxControllerCopilot->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
   //       {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}

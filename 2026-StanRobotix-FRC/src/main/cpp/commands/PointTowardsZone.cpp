@@ -2,13 +2,16 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "commands/PointTowardsHub.h"
+#include "commands/PointTowardsZone.h"
 
+#include <numbers>
+
+#include <frc/DriverStation.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "Constants.h"
 
-PointTowardsHub::PointTowardsHub(SubDrivetrain* iDrivetrain)
+PointTowardsZone::PointTowardsZone(SubDrivetrain* iDrivetrain)
 {
   mDrivetrain = iDrivetrain;
   AddRequirements(mDrivetrain);
@@ -19,12 +22,19 @@ PointTowardsHub::PointTowardsHub(SubDrivetrain* iDrivetrain)
 }
 
 // Called when the command is initially scheduled.
-void PointTowardsHub::Initialize() {}
+void PointTowardsZone::Initialize()
+{
+  if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::kRed) {
+    mRotationPIDController->SetSetpoint(0);
+  }
+  else {
+    mRotationPIDController->SetSetpoint(std::numbers::pi);
+  }
+}
 
 // Called repeatedly when this Command is scheduled to run
-void PointTowardsHub::Execute()
+void PointTowardsZone::Execute()
 {
-  mRotationPIDController->SetSetpoint(mDrivetrain->getTranslationToHub().Angle().Radians().value());
   mDrivetrain->driveFieldRelative(0,
                                   0,
                                   mRotationPIDController->Calculate(mDrivetrain->getPose().Rotation().Radians().value()),
@@ -32,13 +42,13 @@ void PointTowardsHub::Execute()
 }
 
 // Called once the command ends or is interrupted.
-void PointTowardsHub::End(bool interrupted)
+void PointTowardsZone::End(bool interrupted)
 {
   mDrivetrain->driveFieldRelative(0, 0, 0, 0);
 }
 
 // Returns true when the command should end.
-bool PointTowardsHub::IsFinished()
+bool PointTowardsZone::IsFinished()
 {
   return mDrivetrain->isTowardsHub();
 }
