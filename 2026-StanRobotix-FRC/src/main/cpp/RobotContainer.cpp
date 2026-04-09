@@ -29,6 +29,7 @@
 #include "commands/ShootVariable.h"
 #include "commands/ShootInPlace.h"
 #include "commands/ShootDynamically.h"
+#include "commands/PointTowardsHub.h"
 
 namespace
 {
@@ -108,6 +109,7 @@ void RobotContainer::RegisterCommandsPathPlanner()
 	pathplanner::EventTrigger("Shoot").WhileTrue(Shoot(mSubShooter).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter"));
 	pathplanner::EventTrigger("Shoot-Variable").WhileTrue(ShootVariable(mSubShooter, mDrivetrain).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter-Variable"));
 	pathplanner::EventTrigger("Feed").WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("run feeder"));
+	pathplanner::EventTrigger("Point-Hub").WhileTrue(PointTowardsHub(mDrivetrain).ToPtr()).OnTrue(frc2::cmd::Print("point towards hub"));
 
 	(pathplanner::PointTowardsZoneTrigger("Hub") && frc2::Trigger([this] {return mDrivetrain->isTowardsHub() && mSubShooter->atDesiredVelocity();})).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("feed Shooter"));
 }
