@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 4.16,
-        "y": 0.5
+        "y": 0.65
       },
       "prevControl": null,
       "nextControl": {
         "x": 4.66,
-        "y": 0.5
+        "y": 0.65
       },
       "isLocked": false,
       "linkedName": "Comp/Right Trench/Shooting Position"
@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 5.58020166073547,
-        "y": 0.5
+        "y": 0.65
       },
       "prevControl": {
         "x": 5.08020166073547,
-        "y": 0.5
+        "y": 0.6500000000000001
       },
       "nextControl": {
         "x": 7.58020166073547,
-        "y": 0.5
+        "y": 0.65
       },
       "isLocked": false,
       "linkedName": "Comp/Right Trench/Pass Corner"

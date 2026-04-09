@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 5.58020166073547,
-        "y": 0.5
+        "y": 0.65
       },
       "prevControl": {
         "x": 7.322125198355942,
-        "y": 0.5000000000000002
+        "y": 0.6500000000000002
       },
       "nextControl": {
         "x": 5.0802016607354705,
-        "y": 0.49999999999999994
+        "y": 0.6499999999999999
       },
       "isLocked": false,
       "linkedName": "Comp/Right Trench/Pass Corner"
@@ -33,11 +33,11 @@
     {
       "anchor": {
         "x": 4.16,
-        "y": 0.5
+        "y": 0.65
       },
       "prevControl": {
         "x": 5.16,
-        "y": 0.5
+        "y": 0.65
       },
       "nextControl": null,
       "isLocked": false,

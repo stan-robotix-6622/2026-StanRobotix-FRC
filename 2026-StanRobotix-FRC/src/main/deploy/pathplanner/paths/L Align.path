@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 4.159988137603797,
-        "y": 7.6
+        "y": 7.4
       },
       "prevControl": null,
       "nextControl": {
         "x": 4.409988137603797,
-        "y": 7.6
+        "y": 7.399999999999999
       },
       "isLocked": false,
       "linkedName": "Comp/Left Trench/Shooting Position"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 4.159988137603797,
-        "y": 7.6
+        "y": 7.4
       },
       "prevControl": {
         "x": 3.909988137603797,
-        "y": 7.6
+        "y": 7.399999999999999
       },
       "nextControl": null,
       "isLocked": false,

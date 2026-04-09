@@ -35,6 +35,12 @@
                       "data": {
                         "name": "Point-Hub"
                       }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Out-Feed"
+                      }
                     }
                   ]
                 }
@@ -46,19 +52,13 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.0
+                        "waitTime": 5.0
                       }
                     },
                     {
                       "type": "named",
                       "data": {
                         "name": "Shoot-Variable"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Feed-Shooter"
                       }
                     }
                   ]
@@ -115,19 +115,13 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 3.0
+                        "waitTime": 7.0
                       }
                     },
                     {
                       "type": "named",
                       "data": {
                         "name": "Shoot-Variable"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Feed-Shooter"
                       }
                     }
                   ]
@@ -191,12 +185,6 @@
                       "type": "named",
                       "data": {
                         "name": "Shoot-Variable"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Feed-Shooter"
                       }
                     }
                   ]
