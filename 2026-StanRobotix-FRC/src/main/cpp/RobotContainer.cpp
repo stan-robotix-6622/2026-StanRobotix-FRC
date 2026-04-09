@@ -70,7 +70,9 @@ RobotContainer::RobotContainer()
 	ConfigureBindings();
 	ConfigureBindingsCopilot();
 
-	mAutoChooser = pathplanner::AutoBuilder::buildAutoChooser();
+	mAutoChooser = pathplanner::AutoBuilder::buildAutoChooserFilter([this] 
+			(const pathplanner::PathPlannerAuto& autoCommand)
+			{return autoCommand.GetName().starts_with("Comp");});
 	frc::SmartDashboard::PutData("Auto Chooser", &mAutoChooser);
 
 	// mShooterStatusPublisher = mNTShooterStatusTable->GetStructArrayTopic<LookupTable::ShooterStatus>("status array").Publish();
@@ -96,20 +98,19 @@ void RobotContainer::SetSubsystemDefaultCommands()
 
 void RobotContainer::RegisterCommandsPathPlanner()
 {
-	pathplanner::NamedCommands::registerCommand("Full-Intake-Down", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
+	pathplanner::NamedCommands::registerCommand("Full-Intake-Down", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown).AlongWith(frc2::cmd::Print("Intake down")));
 	pathplanner::NamedCommands::registerCommand("Full-Intake-In", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kIn));
 	pathplanner::NamedCommands::registerCommand("Full-Intake-Up", FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
 	pathplanner::NamedCommands::registerCommand("Intake", mSubIntake->getIntakeCommand(IntakeConstants::kSpeed));
-	pathplanner::NamedCommands::registerCommand("Shoot", Shoot(mSubShooter).ToPtr());
-	pathplanner::NamedCommands::registerCommand("Shoot-Variable", ShootVariable(mSubShooter, mDrivetrain).ToPtr());
+	pathplanner::NamedCommands::registerCommand("Shoot", Shoot(mSubShooter).ToPtr().AlongWith(frc2::cmd::Print("Shoot")));
+	pathplanner::NamedCommands::registerCommand("Shoot-Variable", ShootVariable(mSubShooter, mDrivetrain).ToPtr().AlongWith(frc2::cmd::Print("Shoot Variable")));
 	pathplanner::NamedCommands::registerCommand("Feed-Shooter", mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 	pathplanner::NamedCommands::registerCommand("Out-Feed", mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage));
 	pathplanner::NamedCommands::registerCommand("Point-Hub", PointTowardsHub(mDrivetrain).ToPtr());
 
-	pathplanner::EventTrigger("Intake").WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
+	pathplanner::EventTrigger("Full-Intake-Down").WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown)).OnTrue(frc2::cmd::Print("run Intake"));
 	pathplanner::EventTrigger("Shoot").WhileTrue(Shoot(mSubShooter).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter"));
 	pathplanner::EventTrigger("Shoot-Variable").WhileTrue(ShootVariable(mSubShooter, mDrivetrain).ToPtr()).OnTrue(frc2::cmd::Print("run Shooter-Variable"));
-	pathplanner::EventTrigger("Feed").WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("run feeder"));
 
 	(pathplanner::PointTowardsZoneTrigger("Hub") && frc2::Trigger([this] {return mDrivetrain->isTowardsHub() && mSubShooter->atDesiredVelocity();})).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("feed Shooter"));
 }
@@ -130,7 +131,7 @@ void RobotContainer::ConfigureBindings()
       {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
       else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
 
-	mCommandXboxController->Button(OperatorConstants::Button::LeftBumper).WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kIn));
+	mCommandXboxController->Button(OperatorConstants::Button::LeftBumper).ToggleOnTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kIn));
 
 	// mCommandXboxController->Button(OperatorConstants::Button::Start).OnTrue(frc2::cmd::RunOnce([this] {
   //   std::vector<LookupTable::ShooterStatus> vector = mShooterStatusSubscriber.Get();
@@ -153,7 +154,7 @@ void RobotContainer::ConfigureBindings()
   //   mShooterStatusPublisher.Set(vector); }));
 
 	(*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Start))
-	.ToggleOnTrue(ShootInPlace(mSubShooter, mDrivetrain).ToPtr());
+	.WhileTrue(ShootInPlace(mSubShooter, mDrivetrain).ToPtr());
 
 	// mCommandXboxController->Button(OperatorConstants::Button::Back).WhileTrue(frc2::cmd::Run([this] {mSubShooter->setVoltage(8_V);}));
 
