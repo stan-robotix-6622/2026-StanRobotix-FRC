@@ -3,9 +3,10 @@
   "robotLength": 0.85725,
   "holonomicMode": true,
   "pathFolders": [
+    "Test",
     "Left Trench",
-    "Right Trench",
-    "Tests"
+    "Center Depot",
+    "Right Trench"
   ],
   "autoFolders": [
     "Comp",

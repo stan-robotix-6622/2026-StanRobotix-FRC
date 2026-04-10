@@ -119,8 +119,12 @@ void RobotContainer::RegisterCommandsPathPlanner()
 
 void RobotContainer::ConfigureBindings()
 {
-	frc2::Trigger{[this] { if (frc::RobotState::IsAutonomous()) {return mSubShooter->atDesiredVelocity() && mDrivetrain->isInAllianceZone();} else {return mDrivetrain->isTowardsHub() && mSubShooter->atDesiredVelocity() && mDrivetrain->isInAllianceZone();} }}
-			.Debounce(0.1_s)
+	frc2::Trigger{[this] {
+		if (frc::RobotState::IsAutonomous()) {
+			return mSubShooter->atDesiredVelocity() && mDrivetrain->isInAllianceZone();
+		} else {
+			return mDrivetrain->isTowardsHub() && mSubShooter->atDesiredVelocity() && mDrivetrain->isInAllianceZone()
+			;}}}.Debounce(0.1_s)
 			.WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
 	// mCommandXboxController->Button(OperatorConstants::Button::X).ToggleOnTrue(Climb(mSubClimb, SubClimb::Direction::Lift).ToPtr());

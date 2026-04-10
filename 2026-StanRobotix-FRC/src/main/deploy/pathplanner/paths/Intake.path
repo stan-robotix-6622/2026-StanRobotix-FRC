@@ -52,7 +52,7 @@
     "rotation": 90.0
   },
   "reversed": false,
-  "folder": "Tests",
+  "folder": "Test",
   "idealStartingState": {
     "velocity": 0.5,
     "rotation": 90.0
