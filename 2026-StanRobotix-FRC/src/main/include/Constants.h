@@ -86,7 +86,7 @@ namespace ShooterConstants
 
 	namespace PIDConstants
 	{
-		inline constexpr double kP = 1;
+		inline constexpr double kP = 4;
 		inline constexpr double kI = 0;
 		inline constexpr double kD = 0;
 
@@ -299,7 +299,7 @@ namespace PivotConstants
 	inline constexpr TemplateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
 	inline constexpr double setpointUp = std::numbers::pi / 6;			// 30 deg up
 	inline constexpr double setpointIn = std::numbers::pi * 2 / 3;	// 120 deg up
-	inline constexpr double setpointDown = std::numbers::pi / 15;		// 12 deg up
+	inline constexpr double setpointDown = std::numbers::pi / 18;		// 10 deg up
 	inline constexpr units::ampere_t kCurrentLimit = 60_A;
 
 	inline constexpr bool kInverted = false;
