@@ -30,14 +30,16 @@ class SwerveModule : public wpi::Sendable {
 
 	units::radians_per_second_t getTurningVelocity();
 
+	
 	void InitSendable(wpi::SendableBuilder& builder) override;
-
+	
 	void setDesiredState(frc::SwerveModuleState iDesiredState);
 	void setDesiredHeading(frc::Rotation2d iDesiredHeading);
-
+	
 	void setTurningVoltage(units::volt_t iVoltage);
 	void setDrivingVoltage(units::volt_t iVoltage);
-
+	
+	void seedEncoder();
 	void refreshModule();
 
  private:
@@ -48,6 +50,7 @@ class SwerveModule : public wpi::Sendable {
 	rev::spark::SparkClosedLoopController* mTurningClosedLoopController;
 
 	rev::spark::SparkRelativeEncoder* mDrivingEncoder;
+	rev::spark::SparkRelativeEncoder* mTurningEncoder;
 	rev::spark::SparkAbsoluteEncoder* mTurningAbsoluteEncoder;
 
 	// For simulation

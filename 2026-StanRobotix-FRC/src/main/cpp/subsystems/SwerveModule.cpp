@@ -35,9 +35,11 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
 	mDrivingClosedLoopController = new rev::spark::SparkClosedLoopController{mDrivingMotor->GetClosedLoopController()};
 
 	mDrivingEncoder = new rev::spark::SparkRelativeEncoder{mDrivingMotor->GetEncoder()};
+	mTurningEncoder = new rev::spark::SparkRelativeEncoder{mTurningMotor->GetEncoder()};
 	mTurningAbsoluteEncoder = new rev::spark::SparkAbsoluteEncoder{mTurningMotor->GetAbsoluteEncoder()};
 
 	refreshModule();
+	seedEncoder();
 }
 
 void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
@@ -88,6 +90,11 @@ frc::SwerveModulePosition SwerveModule::getModulePosition()
 units::radians_per_second_t SwerveModule::getTurningVelocity()
 {
 	return units::radians_per_second_t(mTurningAbsoluteEncoder->GetVelocity());
+}
+
+void SwerveModule::seedEncoder()
+{
+	mTurningEncoder->SetPosition(mTurningAbsoluteEncoder->GetPosition());
 }
 
 void SwerveModule::refreshModule()

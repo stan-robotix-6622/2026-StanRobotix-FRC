@@ -128,6 +128,7 @@ namespace PathPlannerConstants
 namespace ModuleConstants
 {
 	inline constexpr double kDrivingMotorGearRatio = 4.71;																	// 5.08 rotations of the motor for 1 rotation of the ouput
+	inline constexpr double kTurningGearRatio = 9424 / 203;
 	inline constexpr units::volt_t kNominalVoltage = 12_V;																	// The voltage at which the max speeds are mesured
 	inline constexpr units::meter_t kWheelRadius = 1.341628_in;															// The radius of REV's plastic wheels, masured with the wheelCaracterizationCommand
 	inline constexpr units::meter_t kWheelPerimeter = kWheelRadius * 2 * std::numbers::pi;	// in meters (diametre in inches * convertion to meters * pi)

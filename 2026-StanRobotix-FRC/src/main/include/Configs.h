@@ -41,13 +41,18 @@ namespace Configs
 		{
 			static SparkMaxConfig turningConfig{};
 
-			constexpr double turningFactor = ModuleConstants::kTurningFactor;
+			constexpr double turningAbsoluteFactor = ModuleConstants::kTurningFactor;
+			constexpr double turningRelativeFactor = ModuleConstants::kTurningFactor / ModuleConstants::kTurningGearRatio;
 
 			turningConfig.Inverted(ModuleConstants::Config::kTurningMotorInverted);
 			turningConfig.SetIdleMode(ModuleConstants::Config::kTurningIdleMode);
 
-			turningConfig.absoluteEncoder.VelocityConversionFactor(turningFactor / ModuleConstants::Config::kRPMtoRPSFactor);
-			turningConfig.absoluteEncoder.PositionConversionFactor(turningFactor);
+			turningConfig.encoder.VelocityConversionFactor(turningRelativeFactor / ModuleConstants::Config::kRPMtoRPSFactor);
+			turningConfig.encoder.PositionConversionFactor(turningRelativeFactor);
+			turningConfig.encoder.Inverted(iEncoderInverted);
+
+			turningConfig.absoluteEncoder.VelocityConversionFactor(turningAbsoluteFactor / ModuleConstants::Config::kRPMtoRPSFactor);
+			turningConfig.absoluteEncoder.PositionConversionFactor(turningAbsoluteFactor);
 			turningConfig.absoluteEncoder.Inverted(iEncoderInverted);
 			turningConfig.absoluteEncoder.ZeroCentered(ModuleConstants::Config::kTurningEncoderZeroCentered);
 			turningConfig.absoluteEncoder.Apply(AbsoluteEncoderConfig::Presets::REV_ThroughBoreEncoder());
