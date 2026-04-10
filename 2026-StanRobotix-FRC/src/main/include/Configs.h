@@ -49,7 +49,7 @@ namespace Configs
 
 			turningConfig.encoder.VelocityConversionFactor(turningRelativeFactor / ModuleConstants::Config::kRPMtoRPSFactor);
 			turningConfig.encoder.PositionConversionFactor(turningRelativeFactor);
-			turningConfig.encoder.Inverted(iEncoderInverted);
+			// turningConfig.encoder.Inverted(iEncoderInverted);
 
 			turningConfig.absoluteEncoder.VelocityConversionFactor(turningAbsoluteFactor / ModuleConstants::Config::kRPMtoRPSFactor);
 			turningConfig.absoluteEncoder.PositionConversionFactor(turningAbsoluteFactor);

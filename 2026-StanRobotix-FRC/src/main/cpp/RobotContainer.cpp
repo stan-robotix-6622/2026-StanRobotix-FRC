@@ -50,7 +50,7 @@ RobotContainer::RobotContainer()
 	frc::SmartDashboard::PutNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value());
 	frc::SmartDashboard::PutNumber("tunable/Time of Flight", 0);
 	frc::SmartDashboard::PutNumber("tunable/Pivot kg", PivotConstants::kG.value());
-	frc::SmartDashboard::PutNumber("tunable/Shooter tolerance", 1);
+	frc::SmartDashboard::PutNumber("tunable/Shooter tolerance", ShooterConstants::PIDConstants::kTolerance.value());
 	frc::SmartDashboard::PutNumber("tunable/Offset pivot", PivotConstants::kOffset);
 
 	// mSubClimb = new SubClimb;

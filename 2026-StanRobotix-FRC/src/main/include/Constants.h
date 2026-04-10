@@ -69,7 +69,7 @@ namespace OperatorConstants
 namespace ShooterConstants
 {
 	inline constexpr units::volt_t kS = 0_V;
-	inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.142879_tps;
+	inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.3339_tps;
 	inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second_squared> kA = 0_V / 1_tr_per_s_sq;
 
 	inline constexpr bool kInverted = false;
@@ -86,11 +86,13 @@ namespace ShooterConstants
 
 	namespace PIDConstants
 	{
-		inline constexpr double kP = 4;
+		inline constexpr double kP = 2;
 		inline constexpr double kI = 0;
-		inline constexpr double kD = 0;
+		inline constexpr double kD = 0.03;
 
-		inline constexpr units::turns_per_second_t setpoint = 70_tps;	 // at 3.6m
+		inline constexpr units::turns_per_second_t kTolerance = 2_tps;
+
+		inline constexpr units::turns_per_second_t setpoint = 60_tps;	 // at 3.6m
 	}	 // namespace PIDConstants
 
 	namespace Config
@@ -291,7 +293,7 @@ namespace IntakeConstants
 namespace PivotConstants
 {
 	inline constexpr double kGearRatio = 16;
-	inline constexpr double kOffset = 2.6366961002349854;
+	inline constexpr double kOffset = 2.5805954933166504;
 	inline constexpr double kP = 2.0;
 	inline constexpr double kI = 0.0;
 	inline constexpr double kD = 0.2;

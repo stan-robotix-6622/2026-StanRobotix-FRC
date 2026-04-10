@@ -90,7 +90,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
 	SwerveModule* mBackRightModule;
 
 	frc::SwerveDriveKinematics<4>* mKinematics;
-	frc::Pose2d* mStartingRobotPose = new frc::Pose2d{0_m, 0_m, 0_rad};
+	frc::Pose2d* mStartingRobotPose = new frc::Pose2d{0_m, 0_m, 0_deg};
 	frc::SwerveDriveOdometry<4>* mOdometry;
 	frc::SwerveDrivePoseEstimator<4>* mPoseEstimator;
 
