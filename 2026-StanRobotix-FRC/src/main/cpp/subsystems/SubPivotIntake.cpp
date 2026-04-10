@@ -66,7 +66,7 @@ void SubPivotIntake::KeepPosition()
 
 units::radian_t SubPivotIntake::GetAngle()
 {
-	return units::radian_t(PivotConstants::kOffset + mEncoder->GetPosition());
+	return units::radian_t(frc::SmartDashboard::GetNumber("tunable/Offset pivot", PivotConstants::kOffset) + mEncoder->GetPosition());
 }
 
 void SubPivotIntake::InitSendable(wpi::SendableBuilder& builder)

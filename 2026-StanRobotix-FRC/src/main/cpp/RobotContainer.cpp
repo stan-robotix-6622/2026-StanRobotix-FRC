@@ -50,6 +50,8 @@ RobotContainer::RobotContainer()
 	frc::SmartDashboard::PutNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value());
 	frc::SmartDashboard::PutNumber("tunable/Time of Flight", 0);
 	frc::SmartDashboard::PutNumber("tunable/Pivot kg", PivotConstants::kG.value());
+	frc::SmartDashboard::PutNumber("tunable/Shooter tolerance", 1);
+	frc::SmartDashboard::PutNumber("tunable/Offset pivot", PivotConstants::kOffset);
 
 	// mSubClimb = new SubClimb;
 	mSubShooter = new SubShooter{};
@@ -133,9 +135,9 @@ void RobotContainer::ConfigureBindings()
 	mCommandXboxController->Button(OperatorConstants::Button::Y).WhileTrue(Shoot(mSubShooter).ToPtr());
 	mCommandXboxController->Button(OperatorConstants::Button::B).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
-	mCommandXboxController->Button(OperatorConstants::Button::RightBumper).OnTrue(frc2::cmd::RunOnce([this] { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
-      {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
-      else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
+	// mCommandXboxController->Button(OperatorConstants::Button::RightBumper).OnTrue(frc2::cmd::RunOnce([this] { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
+  //     {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
+  //     else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
 
 	mCommandXboxController->Button(OperatorConstants::Button::LeftBumper).WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kIn));
 
@@ -162,7 +164,7 @@ void RobotContainer::ConfigureBindings()
 	(*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Start))
 	.WhileTrue(ShootInPlace(mSubShooter, mDrivetrain).ToPtr());
 
-	// mCommandXboxController->Button(OperatorConstants::Button::Back).WhileTrue(frc2::cmd::Run([this] {mSubShooter->setVoltage(8_V);}));
+	mCommandXboxController->Button(OperatorConstants::Button::Back).WhileTrue(frc2::cmd::Run([this] {mSubShooter->setVoltage(8_V);}));
 
 	// mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
 	// mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
@@ -184,9 +186,9 @@ void RobotContainer::ConfigureBindingsCopilot()
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::X).WhileTrue(frc2::cmd::Parallel(Shoot(mSubShooter).ToPtr(), PointTowardsZone(mDrivetrain).ToPtr()));
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::Y).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("Feed"));
 
-	// mCommandXboxControllerCopilot->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
-  //       {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
-  //       else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
+	mCommandXboxControllerCopilot->Button(OperatorConstants::kResetIMUButton).WhileTrue(frc2::cmd::RunOnce([this] { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
+        {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
+        else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
 
 	// mCommandXboxControllerCopilot->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this] { mDrivetrain->resetPose(SubDrivetrain::standardizePose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()))); }));
 }

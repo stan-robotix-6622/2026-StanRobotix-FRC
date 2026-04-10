@@ -84,5 +84,6 @@ void SubShooter::InitSendable(wpi::SendableBuilder& builder)
 
 bool SubShooter::atDesiredVelocity()
 {
-	return units::math::abs(getVelocity() - mTargetVelocity) < 1_tps && mTargetVelocity != 0_tps;
+	return units::math::abs(getVelocity() - mTargetVelocity) < 
+	units::turns_per_second_t(frc::SmartDashboard::GetNumber("tunable/Shooter tolerance", 1)) && mTargetVelocity != 0_tps;
 }
