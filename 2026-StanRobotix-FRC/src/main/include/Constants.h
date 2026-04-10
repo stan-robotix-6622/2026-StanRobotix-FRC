@@ -281,7 +281,7 @@ namespace IntakeConstants
 	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 	inline constexpr units::ampere_t kCurrentLimit = 80_A;
 
-	inline constexpr double kSpeed = 1;
+	inline constexpr double kSpeed = 0.7;
 
 	inline constexpr double kGearRatio = 3;
 	inline constexpr units::meter_t kWheelRadius = 1.5_in;
