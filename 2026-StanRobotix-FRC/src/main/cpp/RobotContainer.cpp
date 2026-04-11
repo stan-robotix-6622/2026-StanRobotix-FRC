@@ -90,7 +90,7 @@ void RobotContainer::SetSubsystemDefaultCommands()
 				mDrivetrain->driveFieldRelative(Deadband(-mCommandXboxController->GetLeftY(), 0.05),
 																				Deadband(-mCommandXboxController->GetLeftX(), 0.05),
 																				Deadband(-mCommandXboxController->GetRightX(), 0.05),
-																				(0.5 + (mCommandXboxController->GetRightTriggerAxis() / 2)));
+																				(0.5 + (mCommandXboxController->GetRightTriggerAxis() / 4)));
 			},
 			{mDrivetrain}));
 
@@ -172,8 +172,8 @@ void RobotContainer::ConfigureBindings()
 	// (*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Back))
 	// 		.WhileTrue(ShootDynamically(mSubShooter, mDrivetrain, mCommandXboxController).ToPtr());
 
-	// mCommandXboxController->Button(OperatorConstants::Button::Start).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
-	// 																																																					 (units::meter_t)frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value())); }));
+	mCommandXboxController->Button(OperatorConstants::Button::RightJoystick).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
+																																																						 (units::meter_t)frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value())); }));
 }
 
 void RobotContainer::ConfigureBindingsCopilot()
