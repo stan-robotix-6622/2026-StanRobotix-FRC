@@ -24,11 +24,16 @@ PointTowardsZone::PointTowardsZone(SubDrivetrain* iDrivetrain)
 // Called when the command is initially scheduled.
 void PointTowardsZone::Initialize()
 {
-  if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::kRed) {
-    mRotationPIDController->SetSetpoint(0);
+  if (frc::DriverStation::GetAlliance()) {
+    if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::kRed) {
+      mRotationPIDController->SetSetpoint(0);
+    }
+    else {
+      mRotationPIDController->SetSetpoint(std::numbers::pi);
+    }
   }
   else {
-    mRotationPIDController->SetSetpoint(std::numbers::pi);
+    mRotationPIDController->SetSetpoint(0);
   }
 }
 
