@@ -49,7 +49,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 5.0
+                  "waitTime": 3.0
                 }
               },
               {
@@ -70,13 +70,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L Refuel 1"
+            "pathName": "L Refuel Middle"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "L Shoot"
+            "pathName": "L Shoot Middle"
           }
         },
         {
@@ -86,7 +86,44 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 7.0
+                  "waitTime": 4.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot-Variable"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Point-Hub"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L Refuel Hub"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L Shoot Hub"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 4.0
                 }
               },
               {
