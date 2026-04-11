@@ -20,7 +20,7 @@ class Limelight {
  public:
 	explicit Limelight(std::string_view iName);
 
-	std::optional<frc::Pose2d> getPoseEstimation(frc::Pose2d iCurrentRobotPose, units::radians_per_second_t iRobotRotationalVelocity);
+	std::optional<frc::Pose2d> getPoseEstimation(frc::Pose2d iCurrentRobotPose, units::radians_per_second_t iRobotRotationalVelocity, bool iMegaTag2);
 
 	void setCameraPosition(units::meter_t forward, units::meter_t right, units::meter_t up, units::degree_t roll, units::degree_t pitch, units::degree_t yaw);
 

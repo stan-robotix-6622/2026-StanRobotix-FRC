@@ -164,10 +164,10 @@ void RobotContainer::ConfigureBindings()
 	(*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Start))
 	.WhileTrue(ShootInPlace(mSubShooter, mDrivetrain).ToPtr());
 
-	mCommandXboxController->Button(OperatorConstants::Button::Back).WhileTrue(frc2::cmd::Run([this] {mSubShooter->setVoltage(8_V);}));
+	// mCommandXboxController->Button(OperatorConstants::Button::Back).WhileTrue(frc2::cmd::Run([this] {mSubShooter->setVoltage(8_V);}));
 
-	// mCommandXboxController->Button(7).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
-	// mCommandXboxController->Button(8).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
+	// mCommandXboxController->Button(OperatorConstants::Button::Start).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
+	mCommandXboxController->Button(OperatorConstants::Button::Back).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
 
 	// (*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Back))
 	// 		.WhileTrue(ShootDynamically(mSubShooter, mDrivetrain, mCommandXboxController).ToPtr());
@@ -189,6 +189,8 @@ void RobotContainer::ConfigureBindingsCopilot()
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::RightBumper).WhileTrue(frc2::cmd::RunOnce([this] { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
         {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
         else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
+
+	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::LeftBumper).OnTrue(frc2::cmd::RunOnce([this] {mDrivetrain->switchDriveType();}));
 
 	// mCommandXboxControllerCopilot->Button(OperatorConstants::kResetPoseButton).WhileTrue(frc2::cmd::RunOnce([this] { mDrivetrain->resetPose(SubDrivetrain::standardizePose(frc::Pose2d(2_m, 7_m, mDrivetrain->getPose().Rotation()))); }));
 }

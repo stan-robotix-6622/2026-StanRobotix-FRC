@@ -77,7 +77,7 @@ void SubDrivetrain::Periodic()
 	mPoseEstimator->Update(mCurrentRotation2d, getSwerveModulePositions());
 	mField2d->SetRobotPose(getPose());
 
-	mLimelightEstimatedPose = mLimelight->getPoseEstimation(getPose(), mIMU->getYawRate());
+	mLimelightEstimatedPose = mLimelight->getPoseEstimation(getPose(), mIMU->getYawRate(), mFieldRelative);
 	if (mLimelightEstimatedPose) {
 		mPoseEstimator->AddVisionMeasurement(mLimelightEstimatedPose.value(), frc::Timer::GetFPGATimestamp());
 	}
@@ -89,6 +89,11 @@ void SubDrivetrain::Periodic()
 	mCurrentPose2dPublisher.Set(mPoseEstimator->GetEstimatedPosition());
 	mTranslationToHubPublisher.Set(getPose().Translation() + getTranslationToHub());
 	mRotationToHubPublisher.Set(getTranslationToHub().Angle());
+}
+
+void SubDrivetrain::switchDriveType()
+{
+	mFieldRelative = !mFieldRelative;
 }
 
 void SubDrivetrain::setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4> iStates)
@@ -171,18 +176,27 @@ wpi::array<frc::SwerveModulePosition, 4> SubDrivetrain::getSwerveModulePositions
 
 void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation)
 {
-	if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue) {
-		mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iX,
-																																				iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iY,
-																																				iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
-																																				getPose().Rotation());
+	if (mFieldRelative) {
+		if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue) {
+			mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iX,
+																																					iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iY,
+																																					iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
+																																					getPose().Rotation());
+		}
+		else {
+			mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * -iX,
+																																					iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * -iY,
+																																					iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
+																																					getPose().Rotation());
+		}
 	}
 	else {
-		mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * -iX,
-																																				iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * -iY,
-																																				iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
-																																				getPose().Rotation());
+			mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iX,
+																																					iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iY,
+																																					iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
+																																					0_rad);
 	}
+	
 	mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(mDesiredChassisSpeeds);	// The array has in order: fl, fr, bl, br
 	mKinematics->DesaturateWheelSpeeds(&mDesiredSwerveStates, DrivetrainConstants::kAttainableSpeed);
 

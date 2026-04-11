@@ -50,6 +50,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
 	void driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation);
 	void driveRobotRelative(frc::ChassisSpeeds iSpeeds);
 	void modulesXFormation();
+	void switchDriveType();
 
 	frc::Pose2d getPose();
 	frc::Translation2d getTranslationToHub();
@@ -95,6 +96,8 @@ class SubDrivetrain : public frc2::SubsystemBase {
 	frc::SwerveDrivePoseEstimator<4>* mPoseEstimator;
 
 	frc::Field2d* mField2d;
+
+	bool mFieldRelative = true;
 
 	wpi::array<double, 3>* visionMeasurementStdDevs;
 	wpi::array<double, 3>* stateStdDevs;

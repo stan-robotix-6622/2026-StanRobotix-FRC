@@ -13,13 +13,13 @@ Limelight::Limelight(std::string_view iName)
 	mPoseEstimatorPublisher = mNTLimelightTable->GetStructTopic<frc::Pose2d>("Pose Estimator").Publish();
 }
 
-std::optional<frc::Pose2d> Limelight::getPoseEstimation(frc::Pose2d iCurrentRobotPose, units::radians_per_second_t iRobotRotationalVelocity)
+std::optional<frc::Pose2d> Limelight::getPoseEstimation(frc::Pose2d iCurrentRobotPose, units::radians_per_second_t iRobotRotationalVelocity, bool iMegaTag2)
 {
 	// Update la rotation du robot pour la Limelight
 
 	LimelightHelpers::SetRobotOrientation(mName, iCurrentRobotPose.Rotation().Degrees().value(), 0, 0, 0, 0, 0);
 
-	if (LimelightConstants::kUseMegaTag2) {
+	if (iMegaTag2) {
 		mLimelightPoseEstimate = LimelightHelpers::getBotPoseEstimate_wpiBlue_MegaTag2(mName);
 	}
 	else {
@@ -36,6 +36,10 @@ std::optional<frc::Pose2d> Limelight::getPoseEstimation(frc::Pose2d iCurrentRobo
 		mRejectCameraUpdate = true;
 	}
 	else if (mLimelightPoseEstimate.pose == frc::Pose2d(0_m, 0_m, 0_rad)) {
+		mRejectCameraUpdate = true;
+	}
+	else if (!iMegaTag2 && mLimelightPoseEstimate.tagCount < 2)
+	{
 		mRejectCameraUpdate = true;
 	}
 
