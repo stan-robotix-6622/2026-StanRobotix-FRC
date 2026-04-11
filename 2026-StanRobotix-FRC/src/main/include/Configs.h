@@ -96,10 +96,10 @@ namespace Configs
 			leaderConfig.closedLoop.feedForward.kA(ShooterConstants::kA.value());
 
 			// Configs added according to https://www.chiefdelphi.com/t/psa-rev-spark-default-velocity-filtering-is-still-really-bad-for-flywheels/514567
-			// leaderConfig.encoder.UvwAverageDepth(4);
-			// leaderConfig.encoder.UvwMeasurementPeriod(16);
-			// leaderConfig.encoder.QuadratureAverageDepth(4);
-			// leaderConfig.encoder.QuadratureMeasurementPeriod(16);
+			leaderConfig.encoder.UvwAverageDepth(4);
+			leaderConfig.encoder.UvwMeasurementPeriod(16);
+			leaderConfig.encoder.QuadratureAverageDepth(4);
+			leaderConfig.encoder.QuadratureMeasurementPeriod(16);
 
 			leaderConfig.SmartCurrentLimit(ShooterConstants::kCurrentLimit.value());
 
