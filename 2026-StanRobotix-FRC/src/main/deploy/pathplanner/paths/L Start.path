@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.159988137603797,
-        "y": 7.4
+        "x": 3.568232502965599,
+        "y": 7.580154211150653
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.659988137603797,
-        "y": 7.399999999999999
+        "x": 3.260384146554051,
+        "y": 7.228272026766187
       },
       "isLocked": false,
-      "linkedName": "Comp/Left Trench/Shooting Position"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.58020166073547,
-        "y": 7.4
+        "x": 2.0834638196915787,
+        "y": 6.407402135231316
       },
       "prevControl": {
-        "x": 5.08020166073547,
-        "y": 7.4
-      },
-      "nextControl": {
-        "x": 7.58020166073547,
-        "y": 7.4
-      },
-      "isLocked": false,
-      "linkedName": "Comp/Left Trench/Pass Corner"
-    },
-    {
-      "anchor": {
-        "x": 7.614,
-        "y": 5.8
-      },
-      "prevControl": {
-        "x": 7.614,
-        "y": 7.3
+        "x": 3.598571131887481,
+        "y": 7.832800472549556
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Comp/Left Trench/Center"
+      "linkedName": "Comp/Left Trench/Shooting Position"
     }
   ],
   "rotationTargets": [],
@@ -56,16 +40,16 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 2.5,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 360.0,
-    "maxAngularAcceleration": 480.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -42.981600833206905
   },
   "reversed": false,
   "folder": "Left Trench",

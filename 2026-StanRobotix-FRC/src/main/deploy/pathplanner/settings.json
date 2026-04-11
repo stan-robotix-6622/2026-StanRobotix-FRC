@@ -12,10 +12,10 @@
     "Comp",
     "Test"
   ],
-  "defaultMaxVel": 1.5,
-  "defaultMaxAccel": 2.0,
+  "defaultMaxVel": 2.5,
+  "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 360.0,
-  "defaultMaxAngAccel": 480.0,
+  "defaultMaxAngAccel": 720.0,
   "defaultNominalVoltage": 12.0,
   "robotMass": 50.0,
   "robotMOI": 6.883,

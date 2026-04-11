@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.614,
-        "y": 5.8
+        "x": 5.946014234875446,
+        "y": 4.922633451957295
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.614,
-        "y": 6.8
+        "x": 5.745282531836044,
+        "y": 5.928764871868577
       },
       "isLocked": false,
-      "linkedName": "Comp/Left Trench/Center"
+      "linkedName": "Comp/Left Trench/Front Hub"
     },
     {
       "anchor": {
@@ -20,45 +20,70 @@
         "y": 7.4
       },
       "prevControl": {
-        "x": 6.08020166073547,
-        "y": 7.4
+        "x": 5.973592188072304,
+        "y": 7.227327859127746
       },
       "nextControl": {
-        "x": 5.08020166073547,
-        "y": 7.4
+        "x": 5.335294793051241,
+        "y": 7.507497741350403
       },
       "isLocked": false,
-      "linkedName": "Comp/Left Trench/Pass Corner"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.159988137603797,
+        "x": 3.320771055753263,
         "y": 7.4
       },
       "prevControl": {
-        "x": 5.159988137603797,
-        "y": 7.399999999999999
+        "x": 3.587192371359586,
+        "y": 7.428965717769744
+      },
+      "nextControl": {
+        "x": 3.0507323515915514,
+        "y": 7.370640994419481
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.0834638196915787,
+        "y": 6.407402135231316
+      },
+      "prevControl": {
+        "x": 2.322320652660085,
+        "y": 6.481208729409987
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "Comp/Left Trench/Shooting Position"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 2.5,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 360.0,
-    "maxAngularAcceleration": 480.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -42.981600833206905
   },
   "reversed": false,
   "folder": "Left Trench",

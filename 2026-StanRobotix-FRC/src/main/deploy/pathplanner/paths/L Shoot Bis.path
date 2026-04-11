@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 4.159988137603797,
-        "y": 7.4
+        "x": 2.0834638196915787,
+        "y": 6.407402135231316
       },
       "prevControl": {
-        "x": 5.159988137603797,
-        "y": 7.399999999999999
+        "x": 3.0834638196915787,
+        "y": 6.407402135231314
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,16 +49,16 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 1.5,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 2.5,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 360.0,
-    "maxAngularAcceleration": 480.0,
+    "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": -42.981600833206905
   },
   "reversed": false,
   "folder": "Left Trench",
