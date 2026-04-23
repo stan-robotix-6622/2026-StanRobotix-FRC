@@ -58,10 +58,7 @@ namespace Configs
 			turningConfig.closedLoop.PositionWrappingEnabled(ModuleConstants::Config::kTurningClosedLoopPositionWrapping);
 			turningConfig.closedLoop.PositionWrappingMinInput(ModuleConstants::Config::kTurningClosedLoopMinInput);
 			turningConfig.closedLoop.PositionWrappingMaxInput(ModuleConstants::Config::kTurningClosedLoopMaxInput);
-
-			turningConfig.closedLoop.maxMotion.AllowedProfileError(ModuleConstants::Config::kTurningClosedLoopTolerance);
-			turningConfig.closedLoop.maxMotion.CruiseVelocity(9999999);
-			turningConfig.closedLoop.maxMotion.MaxAcceleration(9999999);
+			turningConfig.closedLoop.AllowedClosedLoopError(ModuleConstants::Config::kTurningClosedLoopTolerance);
 
 			turningConfig.SmartCurrentLimit(ModuleConstants::kTurningCurrentLimit.value());
 
