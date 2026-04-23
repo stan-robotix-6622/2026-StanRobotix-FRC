@@ -14,7 +14,8 @@ IMU::IMU()
 
 void IMU::advanceSimulation(units::radians_per_second_t iYawVelocity)
 {
-	mSimIMU->AddYaw(iYawVelocity * 0.02_s);
+	mSimIMU->SetAngularVelocityX(0_rad_per_s);
+	mSimIMU->SetAngularVelocityY(0_rad_per_s);
 	mSimIMU->SetAngularVelocityZ(iYawVelocity);
 }
 
