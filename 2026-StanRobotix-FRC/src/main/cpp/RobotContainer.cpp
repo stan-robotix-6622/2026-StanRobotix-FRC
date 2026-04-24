@@ -90,7 +90,7 @@ void RobotContainer::SetSubsystemDefaultCommands()
 				mDrivetrain->driveFieldRelative(Deadband(-mCommandXboxController->GetLeftY(), 0.05),
 																				Deadband(-mCommandXboxController->GetLeftX(), 0.05),
 																				Deadband(-mCommandXboxController->GetRightX(), 0.05),
-																				(0.5 + (mCommandXboxController->GetRightTriggerAxis() / 4)));
+																				(0.6 + (mCommandXboxController->GetRightTriggerAxis() / 4)));
 			},
 			{mDrivetrain}));
 
