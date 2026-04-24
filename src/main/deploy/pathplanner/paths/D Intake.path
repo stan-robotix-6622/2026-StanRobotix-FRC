@@ -1,0 +1,113 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.749928825622776,
+        "y": 6.052348754448399
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.5782173451886465,
+        "y": 6.741045886242818
+      },
+      "isLocked": false,
+      "linkedName": "Comp/Center Depot/Shooting Position 1"
+    },
+    {
+      "anchor": {
+        "x": 1.0,
+        "y": 7.0
+      },
+      "prevControl": {
+        "x": 1.6,
+        "y": 7.0
+      },
+      "nextControl": {
+        "x": 0.75,
+        "y": 7.0
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.46958481613285974,
+        "y": 5.847924080664294
+      },
+      "prevControl": {
+        "x": 0.4309818012761486,
+        "y": 6.388366288658252
+      },
+      "nextControl": {
+        "x": 0.5126215895610919,
+        "y": 5.24540925266904
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.2018149466192183,
+        "y": 4.37391459074733
+      },
+      "prevControl": {
+        "x": 0.760083036773429,
+        "y": 4.793523131672598
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": -110.0
+    },
+    {
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": -90.0
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [
+    {
+      "fieldPosition": {
+        "x": 4.625594,
+        "y": 4.021328
+      },
+      "rotationOffset": 0.0,
+      "minWaypointRelativePos": 2.75,
+      "maxWaypointRelativePos": 3.0,
+      "name": "Hub"
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "Shoot-Variable",
+      "waypointRelativePos": 2.0,
+      "endWaypointRelativePos": 3,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.5,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0.0,
+    "rotation": -7.594643368591429
+  },
+  "reversed": false,
+  "folder": "Center Depot",
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": -35.192
+  },
+  "useDefaultConstraints": true
+}
