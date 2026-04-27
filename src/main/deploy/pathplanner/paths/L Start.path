@@ -1,0 +1,61 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.568232502965599,
+        "y": 7.580154211150653
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.260384146554051,
+        "y": 7.228272026766187
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.0834638196915787,
+        "y": 6.407402135231316
+      },
+      "prevControl": {
+        "x": 3.598571131887481,
+        "y": 7.832800472549556
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Comp/Left Trench/Shooting Position"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Full-Intake-Down",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": 2.0,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.5,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -42.981600833206905
+  },
+  "reversed": false,
+  "folder": "Left Trench",
+  "idealStartingState": {
+    "velocity": 0.0,
+    "rotation": -90.0
+  },
+  "useDefaultConstraints": true
+}
