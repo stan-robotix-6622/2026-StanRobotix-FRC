@@ -1,0 +1,122 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.0834638196915787,
+        "y": 6.407402135231316
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.37432446837838,
+        "y": 6.583991842778685
+      },
+      "isLocked": false,
+      "linkedName": "Comp/Left Trench/Shooting Position"
+    },
+    {
+      "anchor": {
+        "x": 3.7188612099644134,
+        "y": 7.41876631079478
+      },
+      "prevControl": {
+        "x": 3.3264390612345967,
+        "y": 7.427646361583934
+      },
+      "nextControl": {
+        "x": 4.610367886290417,
+        "y": 7.398592565275397
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.569442467378411,
+        "y": 7.41876631079478
+      },
+      "prevControl": {
+        "x": 5.205132069367129,
+        "y": 7.440179529583999
+      },
+      "nextControl": {
+        "x": 5.9552740879659565,
+        "y": 7.396088130450378
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.602930011862398,
+        "y": 7.052953736654803
+      },
+      "prevControl": {
+        "x": 7.619259310212013,
+        "y": 7.322387159423438
+      },
+      "nextControl": {
+        "x": 7.581411625148281,
+        "y": 6.697900355871886
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.602930011862398,
+        "y": 5.062502965599051
+      },
+      "prevControl": {
+        "x": 7.61085836595673,
+        "y": 5.312377216376026
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Comp/Left Trench/Refuel Mid"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 2.0,
+      "rotationDegrees": 0.0
+    },
+    {
+      "waypointRelativePos": 3.0,
+      "rotationDegrees": -88.87669728592462
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "Intake",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": 4.0,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 2.5,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.0
+  },
+  "reversed": false,
+  "folder": "Left Trench",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -42.981600833206905
+  },
+  "useDefaultConstraints": true
+}
