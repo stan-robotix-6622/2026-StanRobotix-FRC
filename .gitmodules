@@ -1,0 +1,3 @@
+[submodule "src/stanbrairy"]
+	path = src/stanbrairy
+	url = https://github.com/stan-robotix-6622/Stanbrairy.git
