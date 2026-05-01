@@ -179,7 +179,7 @@ logs/
 # Folder that has CTRE Phoenix Sim device config storage
 ctre_sim/
 
-# Simulation revlog folders
+# REV simulation log files
 /*.revlog
 
 # clangd
