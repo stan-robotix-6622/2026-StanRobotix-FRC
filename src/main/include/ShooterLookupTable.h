@@ -54,4 +54,4 @@ class LookupTable {
 	};
 };
 
-#include "struct/ShooterStatusStruct.h"
+#include "rebuilt/struct/ShooterStatusStruct.h"
