@@ -6,7 +6,6 @@
 
 #include <frc/RobotState.h>
 #include <frc/DriverStation.h>
-#include <frc/MathUtil.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/button/Trigger.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
@@ -32,6 +31,8 @@
 #include "commands/ShootDynamically.h"
 #include "commands/PointTowardsHub.h"
 #include "commands/PointTowardsZone.h"
+
+#include "stanbrairy/controller/deadband.h"
 
 namespace
 {
@@ -87,9 +88,9 @@ void RobotContainer::SetSubsystemDefaultCommands()
 {
 	mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
 			[this] {
-				mDrivetrain->driveFieldRelative(Deadband(-mCommandXboxController->GetLeftY(), 0.05),
-																				Deadband(-mCommandXboxController->GetLeftX(), 0.05),
-																				Deadband(-mCommandXboxController->GetRightX(), 0.05),
+				mDrivetrain->driveFieldRelative(stanbrairy::Deadband(-mCommandXboxController->GetLeftY(), 0.05),
+																				stanbrairy::Deadband(-mCommandXboxController->GetLeftX(), 0.05),
+																				stanbrairy::Deadband(-mCommandXboxController->GetRightX(), 0.05),
 																				(0.6 + (mCommandXboxController->GetRightTriggerAxis() / 4)));
 			},
 			{mDrivetrain}));
@@ -198,18 +199,4 @@ void RobotContainer::ConfigureBindingsCopilot()
 frc2::Command* RobotContainer::GetAutonomousCommand()
 {
 	return mAutoChooser.GetSelected();
-}
-
-double RobotContainer::Deadband(double iInput, double iThreshold, bool iSquared)
-{
-	if (abs(iInput) < iThreshold) {
-		return 0.0;
-	}
-	if (!iSquared) {
-		// ((iInput > 0) - (iInput < 0)) gives us the sign of iInput
-		// Then we scale the value of iInput over the range [-1; iThreshold] or [iTheshold; 1]
-		return (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold));
-	}
-	// Same as above but we square the value and keep the sign of the initial iInput
-	return frc::CopyDirectionPow((1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold)), 2);
 }
