@@ -11,6 +11,8 @@
 
 #include "RobotContainer.h"
 
+#include "rebuilt/MatchStatus.h"
+
 class Robot : public frc::TimedRobot {
  public:
 	Robot();
@@ -33,6 +35,6 @@ class Robot : public frc::TimedRobot {
 
 	RobotContainer m_container;
 
-	Rebuilt::MatchStatus mMatchStatus;
+	Rebuilt::Match::Status mMatchStatus;
 	bool mConnectedToDriveStation = false;
 };

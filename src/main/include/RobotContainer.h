@@ -26,28 +26,6 @@
 #include "subsystems/SubPivotIntake.h"
 #include "subsystems/SubShooter.h"
 
-namespace Rebuilt
-{
-	enum MatchPeriod {
-		Autonomous,
-		TransitionShift,
-		Shift1,
-		Shift2,
-		Shift3,
-		Shift4,
-		Endgame
-	};
-
-	struct MatchStatus
-	{
-		bool hubActive;
-		MatchPeriod matchPeriod;
-		std::string_view matchPeriodName;
-		units::second_t timeLeftInPeriod;
-		units::second_t timeLeftInMatch;
-	};
-}	 // namespace Rebuilt
-
 /**
  * This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -60,11 +38,6 @@ class RobotContainer {
 	RobotContainer();
 
 	frc2::Command* GetAutonomousCommand();
-
-	// Made from the example code at https://www.chiefdelphi.com/uploads/default/original/3X/b/a/ba7ccfd90bac0934e374dd4459d813cee2903942.pdf
-	double Deadband(double iInput, double iThreshold, bool iSquared = false);
-
-	Rebuilt::MatchStatus getMatchStatus();
 
  private:
 	frc2::CommandXboxController* mCommandXboxController;

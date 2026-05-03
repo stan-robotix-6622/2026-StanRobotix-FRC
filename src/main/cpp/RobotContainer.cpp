@@ -6,7 +6,6 @@
 
 #include <frc/RobotState.h>
 #include <frc/DriverStation.h>
-#include <frc/MathUtil.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/button/Trigger.h>
 #include <pathplanner/lib/auto/AutoBuilder.h>
@@ -32,6 +31,8 @@
 #include "commands/ShootDynamically.h"
 #include "commands/PointTowardsHub.h"
 #include "commands/PointTowardsZone.h"
+
+#include "stanbrairy/controller/deadband.h"
 
 namespace
 {
@@ -87,9 +88,9 @@ void RobotContainer::SetSubsystemDefaultCommands()
 {
 	mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
 			[this] {
-				mDrivetrain->driveFieldRelative(Deadband(-mCommandXboxController->GetLeftY(), 0.05),
-																				Deadband(-mCommandXboxController->GetLeftX(), 0.05),
-																				Deadband(-mCommandXboxController->GetRightX(), 0.05),
+				mDrivetrain->driveFieldRelative(stanbrairy::Deadband(-mCommandXboxController->GetLeftY(), 0.05),
+																				stanbrairy::Deadband(-mCommandXboxController->GetLeftX(), 0.05),
+																				stanbrairy::Deadband(-mCommandXboxController->GetRightX(), 0.05),
 																				(0.6 + (mCommandXboxController->GetRightTriggerAxis() / 4)));
 			},
 			{mDrivetrain}));
@@ -198,90 +199,4 @@ void RobotContainer::ConfigureBindingsCopilot()
 frc2::Command* RobotContainer::GetAutonomousCommand()
 {
 	return mAutoChooser.GetSelected();
-}
-
-double RobotContainer::Deadband(double iInput, double iThreshold, bool iSquared)
-{
-	if (abs(iInput) < iThreshold) {
-		return 0.0;
-	}
-	if (!iSquared) {
-		// ((iInput > 0) - (iInput < 0)) gives us the sign of iInput
-		// Then we scale the value of iInput over the range [-1; iThreshold] or [iTheshold; 1]
-		return (1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold));
-	}
-	// Same as above but we square the value and keep the sign of the initial iInput
-	return frc::CopyDirectionPow((1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold)), 2);
-}
-
-Rebuilt::MatchStatus RobotContainer::getMatchStatus()
-{
-	std::string gameData = frc::DriverStation::GetGameSpecificMessage();
-	units::second_t matchTime = frc::DriverStation::GetMatchTime();
-	// mAlliance is of type std::optional<frc::DriverStation::Alliance>
-	auto mAlliance = frc::DriverStation::GetAlliance();
-	Rebuilt::MatchStatus status;
-	status.timeLeftInMatch = matchTime;
-
-	if (matchTime <= 30_s) {
-		if (gameData[0] != 'B' && gameData[0] != 'R') {
-			status.timeLeftInMatch = matchTime + 140_s;
-			status.timeLeftInPeriod = matchTime;
-			status.matchPeriod = Rebuilt::MatchPeriod::Autonomous;
-			status.matchPeriodName = "Autonomous";
-		}
-		else {
-			status.timeLeftInPeriod = matchTime;
-			status.matchPeriod = Rebuilt::MatchPeriod::Endgame;
-			status.matchPeriodName = "Endgame";
-		}
-	}
-	else {
-		status.timeLeftInPeriod = units::math::fmod(matchTime - 30_s, 25_s);
-	}
-	if (matchTime >= 130_s) {
-		status.matchPeriod = Rebuilt::MatchPeriod::TransitionShift;
-		status.matchPeriodName = "Transition Shift";
-	}
-	else if (matchTime >= 105_s) {
-		status.matchPeriod = Rebuilt::MatchPeriod::Shift1;
-		status.matchPeriodName = "Shift 1";
-	}
-	else if (matchTime >= 80_s) {
-		status.matchPeriod = Rebuilt::MatchPeriod::Shift2;
-		status.matchPeriodName = "Shift 2";
-	}
-	else if (matchTime >= 55_s) {
-		status.matchPeriod = Rebuilt::MatchPeriod::Shift3;
-		status.matchPeriodName = "Shift 3";
-	}
-	else if (matchTime >= 30_s) {
-		status.matchPeriod = Rebuilt::MatchPeriod::Shift4;
-		status.matchPeriodName = "Shift 4";
-	}
-	if (status.matchPeriod == Rebuilt::MatchPeriod::Autonomous || status.matchPeriod == Rebuilt::MatchPeriod::TransitionShift || status.matchPeriod == Rebuilt::MatchPeriod::Endgame) {
-		status.hubActive = true;
-	}
-	else {
-		if (gameData[0] == 'B') {	 // Blue starts inactive
-			if (status.matchPeriod == Rebuilt::MatchPeriod::Shift2 || status.matchPeriod == Rebuilt::MatchPeriod::Shift4) {
-				status.hubActive = mAlliance.value() == frc::DriverStation::kBlue;
-			}
-			else {
-				status.hubActive = mAlliance.value() == frc::DriverStation::kRed;
-			}
-		}
-		else if (gameData[0] == 'R') {	// Red starts inactive
-			if (status.matchPeriod == Rebuilt::MatchPeriod::Shift2 || status.matchPeriod == Rebuilt::MatchPeriod::Shift4) {
-				status.hubActive = mAlliance.value() == frc::DriverStation::kRed;
-			}
-			else {
-				status.hubActive = mAlliance.value() == frc::DriverStation::kBlue;
-			}
-		}
-		else {
-			status.hubActive = false;
-		}
-	}
-	return status;
 }
