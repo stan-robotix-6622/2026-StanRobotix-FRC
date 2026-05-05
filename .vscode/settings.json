@@ -1,6 +1,10 @@
 {
   "java.configuration.updateBuildConfiguration": "disabled",
   "java.import.gradle.enabled": false,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": false,
+  "editor.detectIndentation": false,
+	"workbench.editor.languageDetection": false,
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
