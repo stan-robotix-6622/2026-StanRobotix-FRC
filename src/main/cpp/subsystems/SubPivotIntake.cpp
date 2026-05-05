@@ -4,8 +4,8 @@
 
 #include "subsystems/SubPivotIntake.h"
 
-#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/RobotBase.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/system/plant/LinearSystemId.h>
 
 #include <numbers>

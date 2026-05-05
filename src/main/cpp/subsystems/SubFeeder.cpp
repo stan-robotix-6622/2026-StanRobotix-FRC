@@ -4,9 +4,9 @@
 
 #include "subsystems/SubFeeder.h"
 
+#include <frc/RobotBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
-#include <frc/RobotBase.h>
 
 #include "Configs.h"
 
@@ -14,7 +14,7 @@ SubFeeder::SubFeeder()
 {
 	mFeederController = new rev::spark::SparkMax{CANid::kMotorFeederID, rev::spark::SparkLowLevel::MotorType::kBrushless};
 	Configure();
-	
+
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
 		mRobotIsSimulated = true;

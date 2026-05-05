@@ -1,16 +1,22 @@
 cppHeaderFileInclude {
-   \.h$
-   \.hpp$
-   \.inc$
-   \.inl$
+	\.h$
+	\.hpp$
+	\.inc$
+	\.inl$
 }
 cppSrcFileInclude {
-   \.cpp$
+	\.cpp$
 }
 modifiableFileExclude {
-   src/main/include/LimelightHelpers.h$
-   src/main/deploy/*
-   src/test/*
-   gradle/*
-   .json$
+	src/main/include/LimelightHelpers.h$
+	src/main/deploy/*
+	src/test/*
+	gradle/*
+	.json$
+}
+licenseUpdateExclude {
+	src/rebuilt/*
+	src/stanbrairy/*
+	src/main/include/Configs.h$
+	src/main/include/ShooterLookupTable.h$
 }

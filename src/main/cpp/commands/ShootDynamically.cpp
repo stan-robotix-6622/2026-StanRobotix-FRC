@@ -39,7 +39,7 @@ void ShootDynamically::Execute()
 		mDistanceToTarget = (mTranslationToHub + mTargetMovement).Norm();
 		mShooterStatus = LookupTable::interpolate(mDistanceToTarget);
 		mTargetMovement = {-mRobotMovement.vx * mShooterStatus.timeOfFlight,
-											 -mRobotMovement.vy * mShooterStatus.timeOfFlight};
+		                   -mRobotMovement.vy * mShooterStatus.timeOfFlight};
 	}
 	mShooterPIDController->SetSetpoint(mShooterStatus.shooterVelocity.value());
 	mShooter->setTargetVelocity(mShooterStatus.shooterVelocity);
@@ -52,9 +52,9 @@ void ShootDynamically::Execute()
 
 	mRotationPIDController->SetSetpoint(mDrivetrain->getTranslationToHub().Angle().Radians().value());
 	mDrivetrain->driveFieldRelative(-mJoystick->GetLeftY(),
-																	-mJoystick->GetLeftX(),
-																	mRotationPIDController->Calculate(mDrivetrain->getPose().Rotation().Radians().value()),
-																	(0.5 + (mJoystick->GetRightTriggerAxis() / 2)));
+	                                -mJoystick->GetLeftX(),
+	                                mRotationPIDController->Calculate(mDrivetrain->getPose().Rotation().Radians().value()),
+	                                (0.5 + (mJoystick->GetRightTriggerAxis() / 2)));
 }
 
 // Called once the command ends or is interrupted.

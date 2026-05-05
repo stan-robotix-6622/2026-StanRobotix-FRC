@@ -5,14 +5,14 @@
 #pragma once
 
 #include <frc/controller/ArmFeedforward.h>
+#include <frc/simulation/SingleJointedArmSim.h>
+#include <frc/system/LinearSystem.h>
+#include <frc/system/plant/DCMotor.h>
 #include <frc2/command/SubsystemBase.h>
+#include <rev/sim/SparkMaxSim.h>
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 #include <wpi/sendable/SendableBuilder.h>
-#include <frc/system/LinearSystem.h>
-#include <frc/system/plant/DCMotor.h>
-#include <frc/simulation/SingleJointedArmSim.h>
-#include <rev/sim/SparkMaxSim.h>
 
 class SubPivotIntake : public frc2::SubsystemBase {
  public:

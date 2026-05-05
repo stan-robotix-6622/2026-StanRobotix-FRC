@@ -4,8 +4,8 @@
 
 #include "subsystems/SubShooter.h"
 
-#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/RobotBase.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/system/plant/LinearSystemId.h>
 
 #include "Configs.h"
@@ -84,6 +84,5 @@ void SubShooter::InitSendable(wpi::SendableBuilder& builder)
 
 bool SubShooter::atDesiredVelocity()
 {
-	return units::math::abs(getVelocity() - mTargetVelocity) < 
-	units::turns_per_second_t(frc::SmartDashboard::GetNumber("tunable/Shooter tolerance", ShooterConstants::PIDConstants::kTolerance.value())) && mTargetVelocity != 0_tps;
+	return units::math::abs(getVelocity() - mTargetVelocity) < units::turns_per_second_t(frc::SmartDashboard::GetNumber("tunable/Shooter tolerance", ShooterConstants::PIDConstants::kTolerance.value())) && mTargetVelocity != 0_tps;
 }

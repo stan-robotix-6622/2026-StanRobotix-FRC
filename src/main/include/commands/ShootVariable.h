@@ -12,8 +12,8 @@
 
 #include "ShooterLookupTable.h"
 
-#include "subsystems/SubShooter.h"
 #include "subsystems/SubDrivetrain.h"
+#include "subsystems/SubShooter.h"
 
 /**
  * An example command.
@@ -23,24 +23,24 @@
  * Command will *not* work!
  */
 class ShootVariable
-    : public frc2::CommandHelper<frc2::Command, ShootVariable> {
+		: public frc2::CommandHelper<frc2::Command, ShootVariable> {
  public:
-  /* You should consider using the more terse Command factories API instead
-   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
-   */
-  ShootVariable(SubShooter* iShooter, SubDrivetrain* iDrivetrain);
+	/* You should consider using the more terse Command factories API instead
+	 * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
+	 */
+	ShootVariable(SubShooter* iShooter, SubDrivetrain* iDrivetrain);
 
-  void Initialize() override;
+	void Initialize() override;
 
-  void Execute() override;
+	void Execute() override;
 
-  void End(bool interrupted) override;
+	void End(bool interrupted) override;
 
-  bool IsFinished() override;
+	bool IsFinished() override;
 
  private:
 	SubShooter* mShooter;
-  SubDrivetrain* mDrivetrain;
+	SubDrivetrain* mDrivetrain;
 
 	frc::PIDController* mShooterPIDController;
 	units::turns_per_second_t mCurrentVelocity;

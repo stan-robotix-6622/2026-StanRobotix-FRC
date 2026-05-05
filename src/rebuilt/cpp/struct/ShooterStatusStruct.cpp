@@ -9,7 +9,7 @@ namespace
 	constexpr size_t kDistanceOff = 0;
 	constexpr size_t kVelocityOff = kDistanceOff + 8;
 	constexpr size_t kTOFOff = kVelocityOff + 8;
-}	 // namespace
+} // namespace
 
 using StructType = wpi::Struct<LookupTable::ShooterStatus>;
 

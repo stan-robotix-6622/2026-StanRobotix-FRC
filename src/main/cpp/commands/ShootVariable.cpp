@@ -4,13 +4,14 @@
 
 #include "commands/ShootVariable.h"
 
-#include "frc/smartdashboard/SmartDashboard.h"
-
 #include "Constants.h"
 
-ShootVariable::ShootVariable(SubShooter* iShooter, SubDrivetrain* iDrivetrain) {
+#include "frc/smartdashboard/SmartDashboard.h"
+
+ShootVariable::ShootVariable(SubShooter* iShooter, SubDrivetrain* iDrivetrain)
+{
 	mShooter = iShooter;
-  mDrivetrain = iDrivetrain;
+	mDrivetrain = iDrivetrain;
 	AddRequirements(mShooter);
 
 	mShooterPIDController = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
@@ -21,9 +22,10 @@ ShootVariable::ShootVariable(SubShooter* iShooter, SubDrivetrain* iDrivetrain) {
 void ShootVariable::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void ShootVariable::Execute() {
-  mDistanceToTarget = mDrivetrain->getTranslationToHub().Norm();
-  mShooterStatus = LookupTable::interpolate(mDistanceToTarget);
+void ShootVariable::Execute()
+{
+	mDistanceToTarget = mDrivetrain->getTranslationToHub().Norm();
+	mShooterStatus = LookupTable::interpolate(mDistanceToTarget);
 
 	mShooterPIDController->SetSetpoint(mShooterStatus.shooterVelocity.value());
 	mShooter->setTargetVelocity(mShooterStatus.shooterVelocity);
@@ -43,6 +45,7 @@ void ShootVariable::End(bool interrupted)
 }
 
 // Returns true when the command should end.
-bool ShootVariable::IsFinished() {
-  return false;
+bool ShootVariable::IsFinished()
+{
+	return false;
 }
