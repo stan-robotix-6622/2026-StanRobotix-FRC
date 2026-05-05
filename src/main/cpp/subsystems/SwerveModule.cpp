@@ -24,11 +24,11 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
 	}
 
 	mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
-													 ModuleConstants::kDrivingResetMode,
-													 ModuleConstants::kDrivingPersistMode);
+	                         ModuleConstants::kDrivingResetMode,
+	                         ModuleConstants::kDrivingPersistMode);
 	mTurningMotor->Configure(Configs::SwerveModule::TurningConfig(iTurningInverted),
-													 ModuleConstants::kTurningResetMode,
-													 ModuleConstants::kTurningPersistMode);
+	                         ModuleConstants::kTurningResetMode,
+	                         ModuleConstants::kTurningPersistMode);
 
 	// Initialization of the motors' ClosedLoopController
 	mTurningClosedLoopController = new rev::spark::SparkClosedLoopController{mTurningMotor->GetClosedLoopController()};
@@ -100,9 +100,9 @@ void SwerveModule::seedEncoder()
 void SwerveModule::refreshModule()
 {
 	mModuleState = frc::SwerveModuleState{units::meters_per_second_t(mDrivingEncoder->GetVelocity()),
-																				frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
+	                                      frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
 	mModulePosition = frc::SwerveModulePosition{units::meter_t(mDrivingEncoder->GetPosition()),
-																							frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
+	                                            frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
 }
 
 void SwerveModule::InitSendable(wpi::SendableBuilder& builder)

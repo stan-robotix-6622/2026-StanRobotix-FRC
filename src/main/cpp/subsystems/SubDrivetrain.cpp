@@ -58,8 +58,8 @@ SubDrivetrain::SubDrivetrain()
 	mPoseEstimator = new frc::SwerveDrivePoseEstimator<4>{*mKinematics, mIMU->getRotation2d(), getSwerveModulePositions(), *mStartingRobotPose};
 
 	visionMeasurementStdDevs = new wpi::array<double, 3>{LimelightConstants::kPoseEstimatorStandardDeviationX,
-																											 LimelightConstants::kPoseEstimatorStandardDeviationY,
-																											 LimelightConstants::kPoseEstimatorStandardDeviationYaw};
+	                                                     LimelightConstants::kPoseEstimatorStandardDeviationY,
+	                                                     LimelightConstants::kPoseEstimatorStandardDeviationYaw};
 	mPoseEstimator->SetVisionMeasurementStdDevs(*visionMeasurementStdDevs);
 
 	mField2d = new frc::Field2d{};
@@ -102,9 +102,8 @@ void SubDrivetrain::setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4> 
 	mFrontRightModule->setDesiredState(iStates[1]);
 	mBackLeftModule->setDesiredState(iStates[2]);
 	mBackRightModule->setDesiredState(iStates[3]);
-	
-	if (frc::RobotBase::IsSimulation())
-	{
+
+	if (frc::RobotBase::IsSimulation()) {
 		mIMU->advanceSimulation(mKinematics->ToChassisSpeeds(iStates).omega);
 	}
 }
@@ -118,19 +117,19 @@ void SubDrivetrain::ConfigurePathplanner()
 	pathplanner::RobotConfig PathPlannerConfig = pathplanner::RobotConfig::fromGUISettings();
 
 	pathplanner::AutoBuilder::configure(
-			[this]() { return getPose(); },																																																								 // Robot pose supplier
-			[this](frc::Pose2d pose) { resetPose(pose); },																																																 // Method to reset odometry (will be called if your auto has a starting pose)
-			[this]() { return getRobotRelativeSpeeds(); },																																																 // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-			[this](auto speeds, auto feedforwards) { driveRobotRelative(speeds); },																																				 // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-			std::make_shared<pathplanner::PPHolonomicDriveController>(																																										 // PPHolonomicController is the built in path following controller for holonomic drive trains
-					pathplanner::PIDConstants(PathPlannerConstants::kPTranslation, PathPlannerConstants::kITranslation, PathPlannerConstants::kDTranslation),	 // Translation PID constants
-					pathplanner::PIDConstants(PathPlannerConstants::kPRotation, PathPlannerConstants::kIRotation, PathPlannerConstants::kDRotation)						 // Rotation PID constants
+			[this]() { return getPose(); },                                                                                                               // Robot pose supplier
+			[this](frc::Pose2d pose) { resetPose(pose); },                                                                                                // Method to reset odometry (will be called if your auto has a starting pose)
+			[this]() { return getRobotRelativeSpeeds(); },                                                                                                // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+			[this](auto speeds, auto feedforwards) { driveRobotRelative(speeds); },                                                                       // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+			std::make_shared<pathplanner::PPHolonomicDriveController>(                                                                                    // PPHolonomicController is the built in path following controller for holonomic drive trains
+					pathplanner::PIDConstants(PathPlannerConstants::kPTranslation, PathPlannerConstants::kITranslation, PathPlannerConstants::kDTranslation), // Translation PID constants
+					pathplanner::PIDConstants(PathPlannerConstants::kPRotation, PathPlannerConstants::kIRotation, PathPlannerConstants::kDRotation)           // Rotation PID constants
 					),
-			PathPlannerConfig,	// The robot configuration
+			PathPlannerConfig, // The robot configuration
 			[]() {
 				// Boolean supplier that controls when the path will be mirrored for the red alliance
-				// This will flip the path being followed to the red side of the field.
-				// THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+		    // This will flip the path being followed to the red side of the field.
+		    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
 				std::optional<frc::DriverStation::Alliance> alliance = frc::DriverStation::GetAlliance();
 				if (alliance) {
@@ -138,7 +137,7 @@ void SubDrivetrain::ConfigurePathplanner()
 				}
 				return false;
 			},
-			this	// Reference to this subsystem to set requirements
+			this // Reference to this subsystem to set requirements
 	);
 	frc::DataLogManager::Log("Finished Autobuilder Configuration");
 
@@ -161,17 +160,17 @@ void SubDrivetrain::refreshSwerveModules()
 wpi::array<frc::SwerveModuleState, 4> SubDrivetrain::getSwerveModuleStates()
 {
 	return wpi::array<frc::SwerveModuleState, 4>{mFrontLeftModule->getModuleState(),
-																								mFrontRightModule->getModuleState(),
-																								mBackLeftModule->getModuleState(),
-																								mBackRightModule->getModuleState()};
+	                                             mFrontRightModule->getModuleState(),
+	                                             mBackLeftModule->getModuleState(),
+	                                             mBackRightModule->getModuleState()};
 }
 
 wpi::array<frc::SwerveModulePosition, 4> SubDrivetrain::getSwerveModulePositions()
 {
 	return wpi::array<frc::SwerveModulePosition, 4>{mFrontLeftModule->getModulePosition(),
-																									mFrontRightModule->getModulePosition(),
-																									mBackLeftModule->getModulePosition(),
-																									mBackRightModule->getModulePosition()};
+	                                                mFrontRightModule->getModulePosition(),
+	                                                mBackLeftModule->getModulePosition(),
+	                                                mBackRightModule->getModulePosition()};
 }
 
 void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation)
@@ -179,25 +178,25 @@ void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpe
 	if (mFieldRelative) {
 		if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue) {
 			mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iX,
-																																					iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iY,
-																																					iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
-																																					getPose().Rotation());
+			                                                                    iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iY,
+			                                                                    iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
+			                                                                    getPose().Rotation());
 		}
 		else {
 			mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * -iX,
-																																					iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * -iY,
-																																					iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
-																																					getPose().Rotation());
+			                                                                    iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * -iY,
+			                                                                    iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
+			                                                                    getPose().Rotation());
 		}
 	}
 	else {
-			mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iX,
-																																					iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iY,
-																																					iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
-																																					0_rad);
+		mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iX,
+		                                                                    iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iY,
+		                                                                    iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
+		                                                                    0_rad);
 	}
-	
-	mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(mDesiredChassisSpeeds);	// The array has in order: fl, fr, bl, br
+
+	mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(mDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
 	mKinematics->DesaturateWheelSpeeds(&mDesiredSwerveStates, DrivetrainConstants::kAttainableSpeed);
 
 	mDesiredChassisSpeedsPublisher.Set(mDesiredChassisSpeeds);
@@ -253,14 +252,14 @@ frc::ChassisSpeeds SubDrivetrain::getFieldRelativeSpeeds()
 {
 	mCurrentChassisSpeeds = mKinematics->ToChassisSpeeds(getSwerveModuleStates());
 	return frc::ChassisSpeeds::FromRobotRelativeSpeeds(mCurrentChassisSpeeds.vx,
-																										 mCurrentChassisSpeeds.vy,
-																										 mCurrentChassisSpeeds.omega,
-																										 getPose().Rotation());
+	                                                   mCurrentChassisSpeeds.vy,
+	                                                   mCurrentChassisSpeeds.omega,
+	                                                   getPose().Rotation());
 }
 
 void SubDrivetrain::driveRobotRelative(frc::ChassisSpeeds iDesiredChassisSpeeds)
 {
-	mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(iDesiredChassisSpeeds);	// The array has in order: fl, fr, bl, br
+	mDesiredSwerveStates = mKinematics->ToSwerveModuleStates(iDesiredChassisSpeeds); // The array has in order: fl, fr, bl, br
 
 	setSwerveModuleStates(mDesiredSwerveStates);
 }
@@ -338,8 +337,8 @@ frc2::CommandPtr SubDrivetrain::getGoToDistanceFromHubCommand(units::meter_t iHu
 	auto wDistanceFromHubPath = std::make_shared<pathplanner::PathPlannerPath>(
 			wWaypoints,
 			wConstraints,
-			std::nullopt,																								 // The ideal starting state, this is only relevant for pre-planned paths, so can be nullopt for on-the-fly paths.
-			pathplanner::GoalEndState(0.0_mps, wDesiredPose.Rotation())	 // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+			std::nullopt,                                               // The ideal starting state, this is only relevant for pre-planned paths, so can be nullopt for on-the-fly paths.
+			pathplanner::GoalEndState(0.0_mps, wDesiredPose.Rotation()) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
 	);
 
 	// The path is already different depending on the Alliance color

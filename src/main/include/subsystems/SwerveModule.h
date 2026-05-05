@@ -7,10 +7,10 @@
 #include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
-#include <rev/SparkAbsoluteEncoder.h>
-#include <rev/SparkClosedLoopController.h>
 #include <frc/system/plant/DCMotor.h>
 #include <rev/sim/SparkMaxSim.h>
+#include <rev/SparkAbsoluteEncoder.h>
+#include <rev/SparkClosedLoopController.h>
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 #include <wpi/sendable/Sendable.h>
@@ -30,15 +30,14 @@ class SwerveModule : public wpi::Sendable {
 
 	units::radians_per_second_t getTurningVelocity();
 
-	
 	void InitSendable(wpi::SendableBuilder& builder) override;
-	
+
 	void setDesiredState(frc::SwerveModuleState iDesiredState);
 	void setDesiredHeading(frc::Rotation2d iDesiredHeading);
-	
+
 	void setTurningVoltage(units::volt_t iVoltage);
 	void setDrivingVoltage(units::volt_t iVoltage);
-	
+
 	void seedEncoder();
 	void refreshModule();
 

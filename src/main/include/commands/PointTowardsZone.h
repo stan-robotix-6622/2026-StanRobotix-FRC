@@ -18,20 +18,21 @@
  * Command will *not* work!
  */
 class PointTowardsZone
-    : public frc2::CommandHelper<frc2::Command, PointTowardsZone> {
+		: public frc2::CommandHelper<frc2::Command, PointTowardsZone> {
  public:
-  /* You should consider using the more terse Command factories API instead
-   * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
-   */
-  PointTowardsZone(SubDrivetrain* iDrivetrain);
+	/* You should consider using the more terse Command factories API instead
+	 * https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands
+	 */
+	PointTowardsZone(SubDrivetrain* iDrivetrain);
 
-  void Initialize() override;
+	void Initialize() override;
 
-  void Execute() override;
+	void Execute() override;
 
-  void End(bool interrupted) override;
+	void End(bool interrupted) override;
 
-  bool IsFinished() override;
+	bool IsFinished() override;
+
  private:
 	SubDrivetrain* mDrivetrain;
 

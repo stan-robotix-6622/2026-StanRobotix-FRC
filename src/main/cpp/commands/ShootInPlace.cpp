@@ -8,7 +8,8 @@
 
 #include "Constants.h"
 
-ShootInPlace::ShootInPlace(SubShooter* iShooter, SubDrivetrain* iDrivetrain) {
+ShootInPlace::ShootInPlace(SubShooter* iShooter, SubDrivetrain* iDrivetrain)
+{
 	mShooter = iShooter;
 	mDrivetrain = iDrivetrain;
 	AddRequirements({mShooter, mDrivetrain});
@@ -24,9 +25,10 @@ ShootInPlace::ShootInPlace(SubShooter* iShooter, SubDrivetrain* iDrivetrain) {
 void ShootInPlace::Initialize() {}
 
 // Called repeatedly when this Command is scheduled to run
-void ShootInPlace::Execute() {
-  mDistanceToTarget = mDrivetrain->getTranslationToHub().Norm();
-  mShooterStatus = LookupTable::interpolate(mDistanceToTarget);
+void ShootInPlace::Execute()
+{
+	mDistanceToTarget = mDrivetrain->getTranslationToHub().Norm();
+	mShooterStatus = LookupTable::interpolate(mDistanceToTarget);
 
 	mShooterPIDController->SetSetpoint(mShooterStatus.shooterVelocity.value());
 	mShooter->setTargetVelocity(mShooterStatus.shooterVelocity);
@@ -37,16 +39,16 @@ void ShootInPlace::Execute() {
 
 	mShooter->setVelocity(mAdjustedVelocity);
 
-  if (mDrivetrain->isTowardsHub()) {
-    mDrivetrain->modulesXFormation();
-  }
-  else {
-    mRotationPIDController->SetSetpoint(mDrivetrain->getTranslationToHub().Angle().Radians().value());
-    mDrivetrain->driveFieldRelative(0,
-                                    0,
-                                    mRotationPIDController->Calculate(mDrivetrain->getPose().Rotation().Radians().value()),
-                                    0.5);
-  }
+	if (mDrivetrain->isTowardsHub()) {
+		mDrivetrain->modulesXFormation();
+	}
+	else {
+		mRotationPIDController->SetSetpoint(mDrivetrain->getTranslationToHub().Angle().Radians().value());
+		mDrivetrain->driveFieldRelative(0,
+		                                0,
+		                                mRotationPIDController->Calculate(mDrivetrain->getPose().Rotation().Radians().value()),
+		                                0.5);
+	}
 }
 
 // Called once the command ends or is interrupted.
@@ -57,6 +59,7 @@ void ShootInPlace::End(bool interrupted)
 }
 
 // Returns true when the command should end.
-bool ShootInPlace::IsFinished() {
-  return false;
+bool ShootInPlace::IsFinished()
+{
+	return false;
 }

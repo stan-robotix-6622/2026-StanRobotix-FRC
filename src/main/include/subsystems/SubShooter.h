@@ -5,20 +5,20 @@
 #pragma once
 
 #include <frc/controller/SimpleMotorFeedforward.h>
+#include <frc/simulation/FlywheelSim.h>
+#include <frc/system/LinearSystem.h>
+#include <frc/system/plant/DCMotor.h>
 #include <frc2/command/SubsystemBase.h>
+#include <rev/sim/SparkMaxSim.h>
 #include <rev/SparkClosedLoopController.h>
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 #include <wpi/sendable/SendableBuilder.h>
-#include <frc/system/LinearSystem.h>
-#include <frc/system/plant/DCMotor.h>
-#include <frc/simulation/FlywheelSim.h>
-#include <rev/sim/SparkMaxSim.h>
 
 #include <units/angle.h>
 #include <units/angular_velocity.h>
-#include <units/voltage.h>
 #include <units/moment_of_inertia.h>
+#include <units/voltage.h>
 
 class SubShooter : public frc2::SubsystemBase {
  public:
