@@ -45,8 +45,8 @@ wpi.cpp.debugSimulation = false
 
 // Default enable simgui
 wpi.sim.addGui().defaultEnabled = true
-// Enable DS but not by default
-wpi.sim.addDriverstation()
+// Default enable DS 
+wpi.sim.addDriverstation().defaultEnabled = true
 
 model {
     components {
