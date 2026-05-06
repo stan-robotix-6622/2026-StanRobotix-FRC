@@ -134,7 +134,7 @@ void RobotContainer::ConfigureBindings()
 	mCommandXboxController->Button(OperatorConstants::Button::Y).WhileTrue(Shoot(mSubShooter).ToPtr());
 	mCommandXboxController->Button(OperatorConstants::Button::B).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
-	// mCommandXboxController->Button(OperatorConstants::Button::RightBumper).OnTrue(frc2::cmd::RunOnce([this] { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
+	// mCommandXboxController->Button(OperatorConstants::Button::RightBumper).OnTrue(frc2::cmd::RunOnce([this] { if (frc::DriverStation::GetAlliance() && frc::DriverStation::GetAlliance().value() == frc::DriverStation::kBlue)
 	//     {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
 	//     else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
 
@@ -185,7 +185,7 @@ void RobotContainer::ConfigureBindingsCopilot()
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::X).WhileTrue(frc2::cmd::Parallel(Shoot(mSubShooter).ToPtr(), PointTowardsZone(mDrivetrain).ToPtr()));
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::A).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("Feed"));
 
-	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::RightBumper).WhileTrue(frc2::cmd::RunOnce([this] { if (frc::DriverStation::GetAlliance() == frc::DriverStation::kBlue)
+	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::RightBumper).WhileTrue(frc2::cmd::RunOnce([this] { if (frc::DriverStation::GetAlliance() && frc::DriverStation::GetAlliance().value() == frc::DriverStation::kBlue)
         {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
         else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
 
