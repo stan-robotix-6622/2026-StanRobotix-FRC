@@ -360,10 +360,15 @@ bool SubDrivetrain::isTowardsHub()
 bool SubDrivetrain::isInAllianceZone()
 {
 	frc::Translation2d wRobotToHubTranslation = getTranslationToHub();
-	if ((frc::DriverStation::GetAlliance().value() == frc::DriverStation::kBlue && wRobotToHubTranslation.X() < 0_m) || (frc::DriverStation::GetAlliance().value() == frc::DriverStation::kRed && wRobotToHubTranslation.X() > 0_m)) {
-		return false;
+	// mAlliance is of type std::optional<frc::DriverStation::Alliance>
+	auto mAlliance = frc::DriverStation::GetAlliance();
+	if (mAlliance) {
+		if ((mAlliance == frc::DriverStation::kBlue && wRobotToHubTranslation.X() < 0_m) || (mAlliance == frc::DriverStation::kRed && wRobotToHubTranslation.X() > 0_m)) {
+			return false;
+		}
+		return true;
 	}
-	return true;
+	return false;
 }
 
 void SubDrivetrain::InitSendable(wpi::SendableBuilder& builder)

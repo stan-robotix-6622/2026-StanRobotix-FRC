@@ -129,8 +129,8 @@ namespace PathPlannerConstants
 
 namespace ModuleConstants
 {
-	inline constexpr double kDrivingMotorGearRatio = 4.71; // 5.08 rotations of the motor for 1 rotation of the ouput
-	inline constexpr double kTurningGearRatio = 9424 / 203;
+	inline constexpr double kDrivingMotorGearRatio = 4.71;                                 // 4.71 rotations of the motor for 1 rotation of the ouput
+	inline constexpr double kTurningGearRatio = 9424 / 203;                                // 9424 rotations of the motor for 203 rotations of the output
 	inline constexpr units::volt_t kNominalVoltage = 12_V;                                 // The voltage at which the max speeds are mesured
 	inline constexpr units::meter_t kWheelRadius = 1.341628_in;                            // The radius of REV's plastic wheels, masured with the wheelCaracterizationCommand
 	inline constexpr units::meter_t kWheelPerimeter = kWheelRadius * 2 * std::numbers::pi; // in meters (diametre in inches * convertion to meters * pi)
@@ -141,7 +141,7 @@ namespace ModuleConstants
 	inline constexpr double kTurningFactor = 2 * std::numbers::pi;
 
 	inline constexpr rev::spark::SparkLowLevel::ControlType kDrivingClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kVelocity;
-	inline constexpr rev::spark::SparkLowLevel::ControlType kTurningClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kMAXMotionPositionControl;
+	inline constexpr rev::spark::SparkLowLevel::ControlType kTurningClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kPosition;
 
 	inline constexpr rev::spark::SparkLowLevel::MotorType kDrivingMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
 	inline constexpr rev::spark::SparkLowLevel::MotorType kTurningMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
@@ -173,7 +173,7 @@ namespace ModuleConstants
 		inline constexpr rev::spark::SparkBaseConfig::IdleMode kTurningIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 
 		inline constexpr rev::spark::FeedbackSensor kDrivingClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kPrimaryEncoder;
-		inline constexpr rev::spark::FeedbackSensor kTurningClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kAbsoluteEncoder;
+		inline constexpr rev::spark::FeedbackSensor kTurningClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kPrimaryEncoder;
 
 		inline constexpr bool kTurningMotorInverted = false;
 		inline constexpr bool kTurningEncoderZeroCentered = true;
