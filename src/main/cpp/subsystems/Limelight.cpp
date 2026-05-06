@@ -38,8 +38,7 @@ std::optional<frc::Pose2d> Limelight::getPoseEstimation(frc::Pose2d iCurrentRobo
 	else if (mLimelightPoseEstimate.pose == frc::Pose2d(0_m, 0_m, 0_rad)) {
 		mRejectCameraUpdate = true;
 	}
-	else if (!iMegaTag2 && mLimelightPoseEstimate.tagCount < 2)
-	{
+	else if (!iMegaTag2 && mLimelightPoseEstimate.tagCount < 2) {
 		mRejectCameraUpdate = true;
 	}
 

@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 #pragma once
 
 #include <rev/config/SparkMaxConfig.h>
@@ -82,7 +78,7 @@ namespace Configs
 			leaderConfig.SetIdleMode(ShooterConstants::kIdleMode);
 
 			leaderConfig.encoder.PositionConversionFactor(shootingFactor);
-			leaderConfig.encoder.VelocityConversionFactor(shootingFactor / 60);	 // for rpm to tps
+			leaderConfig.encoder.VelocityConversionFactor(shootingFactor / 60); // for rpm to tps
 
 			leaderConfig.closedLoop.SetFeedbackSensor(ShooterConstants::Config::kShooterClosedLoopFeedbackSensor);
 			// leaderConfig.closedLoop.Pid(ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD);
@@ -187,4 +183,4 @@ namespace Configs
 			return followerConfig;
 		}
 	};
-}	 // namespace Configs
+} // namespace Configs

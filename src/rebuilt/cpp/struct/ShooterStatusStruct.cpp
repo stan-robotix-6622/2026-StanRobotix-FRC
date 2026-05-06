@@ -2,14 +2,14 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include "struct/ShooterStatusStruct.h"
+#include "rebuilt/struct/ShooterStatusStruct.h"
 
 namespace
 {
 	constexpr size_t kDistanceOff = 0;
 	constexpr size_t kVelocityOff = kDistanceOff + 8;
 	constexpr size_t kTOFOff = kVelocityOff + 8;
-}	 // namespace
+} // namespace
 
 using StructType = wpi::Struct<LookupTable::ShooterStatus>;
 

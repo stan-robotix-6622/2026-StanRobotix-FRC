@@ -6,8 +6,8 @@
 
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Translation2d.h>
-#include <rev/config/SparkBaseConfig.h>	 // For the spark IdleMode
-#include <rev/SparkBase.h>							 // Include Spark variable types
+#include <rev/config/SparkBaseConfig.h> // For the spark IdleMode
+#include <rev/SparkBase.h>              // Include Spark variable types
 
 #include <numbers>
 
@@ -34,7 +34,7 @@ namespace TemplateUnits
 {
 	template <typename Unit>
 	using VoltageInverse = units::unit_t<units::detail::unit_multiply<units::voltage::volts, units::inverse<Unit>>, double, units::linear_scale>;
-}	 // namespace TemplateUnits
+} // namespace TemplateUnits
 
 namespace OperatorConstants
 {
@@ -53,7 +53,7 @@ namespace OperatorConstants
 		inline constexpr int Start = 8;
 		inline constexpr int LeftJoystick = 9;
 		inline constexpr int RightJoystick = 10;
-	}	 // namespace Button
+	} // namespace Button
 
 	namespace Axis
 	{
@@ -63,8 +63,8 @@ namespace OperatorConstants
 		inline constexpr int RightTrigger = 3;
 		inline constexpr int RightX = 4;
 		inline constexpr int RightY = 5;
-	}	 // namespace Axis
-}	 // namespace OperatorConstants
+	} // namespace Axis
+} // namespace OperatorConstants
 
 namespace ShooterConstants
 {
@@ -92,14 +92,14 @@ namespace ShooterConstants
 
 		inline constexpr units::turns_per_second_t kTolerance = 2_tps;
 
-		inline constexpr units::turns_per_second_t setpoint = 60_tps;	 // at 3.6m
-	}	 // namespace PIDConstants
+		inline constexpr units::turns_per_second_t setpoint = 60_tps; // at 3.6m
+	} // namespace PIDConstants
 
 	namespace Config
 	{
 		inline constexpr rev::spark::FeedbackSensor kShooterClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kPrimaryEncoder;
-	}	 // namespace Config
-}	 // namespace ShooterConstants
+	} // namespace Config
+} // namespace ShooterConstants
 
 namespace FeederConstants
 {
@@ -110,7 +110,7 @@ namespace FeederConstants
 	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
 	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
 	inline constexpr units::ampere_t kCurrentLimit = 80_A;
-}	 // namespace FeederConstants
+} // namespace FeederConstants
 
 namespace PathPlannerConstants
 {
@@ -125,15 +125,15 @@ namespace PathPlannerConstants
 	inline constexpr units::meters_per_second_squared_t kMaxAcceleration = 0.3_mps_sq;
 	inline constexpr units::degrees_per_second_t kMaxAngularVelocity = 36.0_deg_per_s;
 	inline constexpr units::degrees_per_second_squared_t kMaxAngularAcceleration = 72.0_deg_per_s_sq;
-}	 // namespace PathPlannerConstants
+} // namespace PathPlannerConstants
 
 namespace ModuleConstants
 {
-	inline constexpr double kDrivingMotorGearRatio = 4.71;																	// 5.08 rotations of the motor for 1 rotation of the ouput
+	inline constexpr double kDrivingMotorGearRatio = 4.71; // 5.08 rotations of the motor for 1 rotation of the ouput
 	inline constexpr double kTurningGearRatio = 9424 / 203;
-	inline constexpr units::volt_t kNominalVoltage = 12_V;																	// The voltage at which the max speeds are mesured
-	inline constexpr units::meter_t kWheelRadius = 1.341628_in;															// The radius of REV's plastic wheels, masured with the wheelCaracterizationCommand
-	inline constexpr units::meter_t kWheelPerimeter = kWheelRadius * 2 * std::numbers::pi;	// in meters (diametre in inches * convertion to meters * pi)
+	inline constexpr units::volt_t kNominalVoltage = 12_V;                                 // The voltage at which the max speeds are mesured
+	inline constexpr units::meter_t kWheelRadius = 1.341628_in;                            // The radius of REV's plastic wheels, masured with the wheelCaracterizationCommand
+	inline constexpr units::meter_t kWheelPerimeter = kWheelRadius * 2 * std::numbers::pi; // in meters (diametre in inches * convertion to meters * pi)
 	inline constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260_rad_per_s;
 	inline constexpr units::meters_per_second_t kDriveWheelMaxFreeSpeed = 4.9180_mps;
 
@@ -181,8 +181,8 @@ namespace ModuleConstants
 		inline constexpr double kTurningClosedLoopMinInput = -std::numbers::pi;
 		inline constexpr double kTurningClosedLoopMaxInput = std::numbers::pi;
 		inline constexpr double kTurningClosedLoopTolerance = std::numbers::pi / 360;
-	}	 // namespace Config
-}	 // namespace ModuleConstants
+	} // namespace Config
+} // namespace ModuleConstants
 
 namespace DrivetrainConstants
 {
@@ -213,15 +213,15 @@ namespace DrivetrainConstants
 		inline constexpr units::second_t kWheelRadiusMeasurementStartDelay = 1.0_s;
 		inline constexpr units::radians_per_second_t kWheelRadiusMaxVelocity = 0.25_rad_per_s;
 		inline constexpr units::radians_per_second_squared_t kWheelRadiusRampRate = 0.05_rad_per_s_sq;
-	}	 // namespace Commands
+	} // namespace Commands
 
 	namespace PIDs
 	{
 		inline constexpr double kRotationP = 3.0;
 		inline constexpr double kRotationI = 0.0;
 		inline constexpr double kRotationD = 0.3;
-	}	 // namespace PIDs
-}	 // namespace DrivetrainConstants
+	} // namespace PIDs
+} // namespace DrivetrainConstants
 
 namespace LimelightConstants
 {
@@ -237,20 +237,20 @@ namespace LimelightConstants
 	inline constexpr units::degree_t kPitch = 0_deg;
 	inline constexpr units::degree_t kYaw = 0_deg;
 
-	inline constexpr double kPoseEstimatorStandardDeviationX = 0.7;				// Default/Recommended values
-	inline constexpr double kPoseEstimatorStandardDeviationY = 0.7;				// Default/Recommended values
-	inline constexpr double kPoseEstimatorStandardDeviationYaw = 999999;	// Default/Recommended values
-}	 // namespace LimelightConstants
+	inline constexpr double kPoseEstimatorStandardDeviationX = 0.7;      // Default/Recommended values
+	inline constexpr double kPoseEstimatorStandardDeviationY = 0.7;      // Default/Recommended values
+	inline constexpr double kPoseEstimatorStandardDeviationYaw = 999999; // Default/Recommended values
+} // namespace LimelightConstants
 
 // Values found at https://firstfrc.blob.core.windows.net/frc2026/FieldAssets/2026-field-dimension-dwgs.pdf#page=3
 // For the Welded Field
 namespace FieldConstants
 {
-	inline constexpr frc::Translation2d kHubCenterTranslation2d = frc::Translation2d{182.11_in, 158.32_in};		 // From the right corner of blue alliance wall
-	inline constexpr frc::Pose2d kHubCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};							 // From the right corner of blue alliance wall
-	inline constexpr frc::Translation2d kFieldCenterTranslation2d = frc::Translation2d{325.61_in, 158.32_in};	 // From the right corner of blue alliance wall
-	inline constexpr frc::Pose2d kFieldCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};						 // From the right corner of blue alliance wall
-}	 // namespace FieldConstants
+	inline constexpr frc::Translation2d kHubCenterTranslation2d = frc::Translation2d{182.11_in, 158.32_in};   // From the right corner of blue alliance wall
+	inline constexpr frc::Pose2d kHubCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};              // From the right corner of blue alliance wall
+	inline constexpr frc::Translation2d kFieldCenterTranslation2d = frc::Translation2d{325.61_in, 158.32_in}; // From the right corner of blue alliance wall
+	inline constexpr frc::Pose2d kFieldCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};            // From the right corner of blue alliance wall
+} // namespace FieldConstants
 
 namespace CANid
 {
@@ -274,7 +274,7 @@ namespace CANid
 
 	inline constexpr int kMotorClimbLeaderID = 14;
 	inline constexpr int kMotorClimbFollowerID = 15;
-}	 // namespace CANid
+} // namespace CANid
 
 namespace IntakeConstants
 {
@@ -288,7 +288,7 @@ namespace IntakeConstants
 
 	inline constexpr double kGearRatio = 3;
 	inline constexpr units::meter_t kWheelRadius = 1.5_in;
-}	 // namespace IntakeConstants
+} // namespace IntakeConstants
 
 namespace PivotConstants
 {
@@ -300,16 +300,16 @@ namespace PivotConstants
 	inline constexpr units::volt_t kG = 1.37_V;
 	inline constexpr units::volt_t kS = 0.0_V;
 	inline constexpr TemplateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
-	inline constexpr double setpointUp = std::numbers::pi / 6;			// 30 deg up
-	inline constexpr double setpointIn = std::numbers::pi * 2 / 3;	// 120 deg up
-	inline constexpr double setpointDown = std::numbers::pi / 18;		// 10 deg up
+	inline constexpr double setpointUp = std::numbers::pi / 6;     // 30 deg up
+	inline constexpr double setpointIn = std::numbers::pi * 2 / 3; // 120 deg up
+	inline constexpr double setpointDown = std::numbers::pi / 18;  // 10 deg up
 	inline constexpr units::ampere_t kCurrentLimit = 60_A;
 
 	inline constexpr bool kInverted = false;
 	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
 	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
 	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
-}	 // namespace PivotConstants
+} // namespace PivotConstants
 
 namespace ClimbConstants
 {
@@ -335,4 +335,4 @@ namespace ClimbConstants
 	inline constexpr double kConstantSpeed = 0.2;
 
 	inline constexpr units::ampere_t kCurrentLimit = 60_A;
-}	 // namespace ClimbConstants
+} // namespace ClimbConstants

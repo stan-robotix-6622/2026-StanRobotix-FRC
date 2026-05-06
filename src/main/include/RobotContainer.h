@@ -5,8 +5,8 @@
 #pragma once
 
 #include <frc/smartdashboard/SendableChooser.h>
-#include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/button/CommandGenericHID.h>
+#include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/CommandPtr.h>
 #include <networktables/NetworkTable.h>
 #include <networktables/NetworkTableInstance.h>
@@ -19,34 +19,13 @@
 
 #include "commands/DriveCommands.h"
 
-// #include "subsystems/SubClimb.h"
 #include "subsystems/SubDrivetrain.h"
 #include "subsystems/SubFeeder.h"
 #include "subsystems/SubIntake.h"
 #include "subsystems/SubPivotIntake.h"
 #include "subsystems/SubShooter.h"
 
-namespace Rebuilt
-{
-	enum MatchPeriod {
-		Autonomous,
-		TransitionShift,
-		Shift1,
-		Shift2,
-		Shift3,
-		Shift4,
-		Endgame
-	};
-
-	struct MatchStatus
-	{
-		bool hubActive;
-		MatchPeriod matchPeriod;
-		std::string_view matchPeriodName;
-		units::second_t timeLeftInPeriod;
-		units::second_t timeLeftInMatch;
-	};
-}	 // namespace Rebuilt
+// #include "subsystems/SubClimb.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -60,11 +39,6 @@ class RobotContainer {
 	RobotContainer();
 
 	frc2::Command* GetAutonomousCommand();
-
-	// Made from the example code at https://www.chiefdelphi.com/uploads/default/original/3X/b/a/ba7ccfd90bac0934e374dd4459d813cee2903942.pdf
-	double Deadband(double iInput, double iThreshold, bool iSquared = false);
-
-	Rebuilt::MatchStatus getMatchStatus();
 
  private:
 	frc2::CommandXboxController* mCommandXboxController;

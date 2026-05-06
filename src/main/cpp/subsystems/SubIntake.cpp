@@ -4,9 +4,9 @@
 
 #include "subsystems/SubIntake.h"
 
+#include <frc/RobotBase.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/Commands.h>
-#include <frc/RobotBase.h>
 
 #include "Configs.h"
 
@@ -17,7 +17,7 @@ SubIntake::SubIntake()
 	mEncoder = new rev::spark::SparkRelativeEncoder{mIntakeMotor->GetEncoder()};
 
 	mIntakeMotor->Configure(Configs::Intake::Config(), IntakeConstants::kReset, IntakeConstants::kPersist);
-	
+
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
 		mRobotIsSimulated = true;

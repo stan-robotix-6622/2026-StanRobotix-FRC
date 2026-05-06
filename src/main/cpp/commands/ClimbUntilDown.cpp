@@ -4,9 +4,9 @@
 
 #include "commands/ClimbUntilDown.h"
 
-#include "commands/Climb.h"
-
 #include "Constants.h"
+
+#include "commands/Climb.h"
 
 ClimbUntilDown::ClimbUntilDown(SubClimb* iSubClimb)
 {

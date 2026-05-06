@@ -36,7 +36,7 @@ Robot::Robot()
 void Robot::RobotPeriodic()
 {
 	if (mConnectedToDriveStation) {
-		mMatchStatus = m_container.getMatchStatus();
+		mMatchStatus = Rebuilt::getMatchStatus();
 		frc::SmartDashboard::PutNumber("Dashboard/timeLeftInMatch", mMatchStatus.timeLeftInMatch.value());
 		frc::SmartDashboard::PutNumber("Dashboard/timeLeftInPeriod", mMatchStatus.timeLeftInPeriod.value());
 		frc::SmartDashboard::PutString("Dashboard/matchPeriod", mMatchStatus.matchPeriodName);

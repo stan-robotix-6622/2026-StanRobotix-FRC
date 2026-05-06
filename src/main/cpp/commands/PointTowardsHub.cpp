@@ -10,8 +10,8 @@
 
 PointTowardsHub::PointTowardsHub(SubDrivetrain* iDrivetrain)
 {
-  mDrivetrain = iDrivetrain;
-  AddRequirements(mDrivetrain);
+	mDrivetrain = iDrivetrain;
+	AddRequirements(mDrivetrain);
 
 	mRotationPIDController = new frc::PIDController{DrivetrainConstants::PIDs::kRotationP, DrivetrainConstants::PIDs::kRotationI, DrivetrainConstants::PIDs::kRotationD};
 	mRotationPIDController->EnableContinuousInput(0, std::numbers::pi * 2);
@@ -24,21 +24,21 @@ void PointTowardsHub::Initialize() {}
 // Called repeatedly when this Command is scheduled to run
 void PointTowardsHub::Execute()
 {
-  mRotationPIDController->SetSetpoint(mDrivetrain->getTranslationToHub().Angle().Radians().value());
-  mDrivetrain->driveFieldRelative(0,
-                                  0,
-                                  mRotationPIDController->Calculate(mDrivetrain->getPose().Rotation().Radians().value()),
-                                  0.5);
+	mRotationPIDController->SetSetpoint(mDrivetrain->getTranslationToHub().Angle().Radians().value());
+	mDrivetrain->driveFieldRelative(0,
+	                                0,
+	                                mRotationPIDController->Calculate(mDrivetrain->getPose().Rotation().Radians().value()),
+	                                0.5);
 }
 
 // Called once the command ends or is interrupted.
 void PointTowardsHub::End(bool interrupted)
 {
-  mDrivetrain->driveFieldRelative(0, 0, 0, 0);
+	mDrivetrain->driveFieldRelative(0, 0, 0, 0);
 }
 
 // Returns true when the command should end.
 bool PointTowardsHub::IsFinished()
 {
-  return mDrivetrain->isTowardsHub();
+	return mDrivetrain->isTowardsHub();
 }

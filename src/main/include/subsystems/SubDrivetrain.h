@@ -115,7 +115,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
 
 	// The values are meant to be changed before being used
 	wpi::array<frc::SwerveModuleState, 4> mDesiredSwerveStates = {frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
-																																frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
-																																frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
-																																frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)}};
+	                                                              frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
+	                                                              frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
+	                                                              frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)}};
 };
