@@ -44,7 +44,7 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
 
 void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
 {
-	mTurningCurrentAngle = frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()));
+	mTurningCurrentAngle = frc::Rotation2d(units::radian_t(mTurningEncoder->GetPosition()));
 	mOptimizedState = iDesiredState;
 	mOptimizedState.Optimize(mTurningCurrentAngle);
 	mOptimizedState.CosineScale(mTurningCurrentAngle);
@@ -89,7 +89,7 @@ frc::SwerveModulePosition SwerveModule::getModulePosition()
 
 units::radians_per_second_t SwerveModule::getTurningVelocity()
 {
-	return units::radians_per_second_t(mTurningAbsoluteEncoder->GetVelocity());
+	return units::radians_per_second_t(mTurningEncoder->GetVelocity());
 }
 
 void SwerveModule::seedEncoder()
@@ -100,15 +100,15 @@ void SwerveModule::seedEncoder()
 void SwerveModule::refreshModule()
 {
 	mModuleState = frc::SwerveModuleState{units::meters_per_second_t(mDrivingEncoder->GetVelocity()),
-	                                      frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
+	                                      frc::Rotation2d(units::radian_t(mTurningEncoder->GetPosition()))};
 	mModulePosition = frc::SwerveModulePosition{units::meter_t(mDrivingEncoder->GetPosition()),
-	                                            frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
+	                                            frc::Rotation2d(units::radian_t(mTurningEncoder->GetPosition()))};
 }
 
 void SwerveModule::InitSendable(wpi::SendableBuilder& builder)
 {
 	builder.SetSmartDashboardType("swerve/module");
-	builder.AddDoubleProperty("turning velocity", [this] { return mTurningAbsoluteEncoder->GetVelocity(); }, nullptr);
-	builder.AddDoubleProperty("turning position", [this] { return mTurningAbsoluteEncoder->GetPosition(); }, nullptr);
+	builder.AddDoubleProperty("turning velocity", [this] { return mTurningEncoder->GetVelocity(); }, nullptr);
+	builder.AddDoubleProperty("turning position", [this] { return mTurningEncoder->GetPosition(); }, nullptr);
 	builder.AddDoubleProperty("driving velocity", [this] { return mDrivingEncoder->GetVelocity(); }, nullptr);
 }
