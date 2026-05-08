@@ -19,6 +19,7 @@
 #include <units/length.h>
 #include <units/velocity.h>
 #include <units/voltage.h>
+#include <units/time.h>
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -97,8 +98,15 @@ namespace ShooterConstants
 
 	namespace Config
 	{
-		inline constexpr rev::spark::FeedbackSensor kShooterClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kPrimaryEncoder;
+		inline constexpr rev::spark::FeedbackSensor kClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kPrimaryEncoder;
 	} // namespace Config
+
+	namespace SystemId
+	{
+		inline constexpr TemplateUnits::VoltageInverse<units::second> kRampRate = 1_V / 1_s;
+		inline constexpr units::volt_t kStepVoltage = 1_V;
+		inline constexpr units::second_t kTimeout = 10_s;
+	}
 } // namespace ShooterConstants
 
 namespace FeederConstants

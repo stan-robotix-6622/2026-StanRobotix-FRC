@@ -19,6 +19,8 @@
 #include <units/angular_velocity.h>
 #include <units/moment_of_inertia.h>
 #include <units/voltage.h>
+#include <frc2/command/sysid/SysIdRoutine.h>
+
 
 class SubShooter : public frc2::SubsystemBase {
  public:
@@ -28,6 +30,8 @@ class SubShooter : public frc2::SubsystemBase {
 	void setTargetVelocity(units::turns_per_second_t iTargetVelocity);
 	void setVoltage(units::volt_t iVoltage);
 	units::turns_per_second_t getVelocity();
+
+	// void SysIdRoutine(frc2::sysid::SysIdRoutine routine);
 
 	// The first index of the array is the result of the Leader's configuration and
 	// the second is the result of the Follower's configuration
@@ -58,4 +62,8 @@ class SubShooter : public frc2::SubsystemBase {
 	frc::LinearSystem<1, 1, 1>* mFlywheelPlant;
 
 	units::turns_per_second_t mTargetVelocity = 0_tps;
+
+	frc2::sysid::SysIdRoutine* mRoutine;
+
+	
 };

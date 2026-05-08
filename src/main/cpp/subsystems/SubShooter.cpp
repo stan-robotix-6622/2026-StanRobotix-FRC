@@ -16,7 +16,14 @@ SubShooter::SubShooter()
 	mFollowerShooterController = new rev::spark::SparkMax{CANid::kFollowerMotorShooterID, rev::spark::SparkLowLevel::MotorType::kBrushless};
 	mRelativeEncoder = new rev::spark::SparkRelativeEncoder{mLeaderShooterController->GetEncoder()};
 	mFeedforward = new frc::SimpleMotorFeedforward<units::turns>{ShooterConstants::kS, ShooterConstants::kV};
-
+	mRoutine = new frc2::sysid::SysIdRoutine{
+			frc2::sysid::Config
+			{
+				ShooterConstants::SystemId::kRampRate,
+				ShooterConstants::SystemId::kStepVoltage,
+				ShooterConstants::SystemId::kTimeout
+			}
+		};
 	mClossedLoopController = new rev::spark::SparkClosedLoopController{mLeaderShooterController->GetClosedLoopController()};
 
 	Configure();
@@ -31,6 +38,8 @@ SubShooter::SubShooter()
 		mFlywheelPlant = new frc::LinearSystem<1, 1, 1>{frc::LinearSystemId::FlywheelSystem(frc::DCMotor::NEO(2), kMOI, ShooterConstants::kGearRatio)};
 		mFlywheelSim = new frc::sim::FlywheelSim{*mFlywheelPlant, frc::DCMotor::NEO(2), {0.0}};
 	}
+
+	
 }
 
 void SubShooter::Periodic()
@@ -86,3 +95,8 @@ bool SubShooter::atDesiredVelocity()
 {
 	return units::math::abs(getVelocity() - mTargetVelocity) < units::turns_per_second_t(frc::SmartDashboard::GetNumber("tunable/Shooter tolerance", ShooterConstants::PIDConstants::kTolerance.value())) && mTargetVelocity != 0_tps;
 }
+
+// void SubShooter::SysIdRoutine(frc2::sysid::SysIdRoutine routine)
+// {
+// 	routine.
+// }
