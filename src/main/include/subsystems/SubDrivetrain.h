@@ -29,6 +29,23 @@
 
 class SubDrivetrain : public frc2::SubsystemBase {
  public:
+	struct State
+	{
+		bool fieldRelative = true;
+		std::optional<frc::Pose2d> limelightEstimatedPose;
+		frc::ChassisSpeeds desiredChassisSpeeds;
+		frc::ChassisSpeeds currentChassisSpeeds;
+		frc::Rotation2d currentRotation2d;
+		wpi::array<frc::SwerveModuleState, 4> currentSwerveStates = {frc::SwerveModuleState{0_mps, 0_rad},
+		                                                             frc::SwerveModuleState{0_mps, 0_rad},
+		                                                             frc::SwerveModuleState{0_mps, 0_rad},
+		                                                             frc::SwerveModuleState{0_mps, 0_rad}};
+		wpi::array<frc::SwerveModuleState, 4> desiredSwerveStates = {frc::SwerveModuleState{0_mps, 0_rad},
+		                                                             frc::SwerveModuleState{0_mps, 0_rad},
+		                                                             frc::SwerveModuleState{0_mps, 0_rad},
+		                                                             frc::SwerveModuleState{0_mps, 0_rad}};
+	};
+
 	SubDrivetrain();
 
 	void Periodic() override;
@@ -97,25 +114,10 @@ class SubDrivetrain : public frc2::SubsystemBase {
 
 	frc::Field2d* mField2d;
 
-	bool mFieldRelative = true;
-
-	wpi::array<double, 3>* visionMeasurementStdDevs;
-	wpi::array<double, 3>* stateStdDevs;
-
 	Limelight* mLimelight;
 
 	// Declaring the IMU object
 	IMU* mIMU;
 
-	// These attributes are used to not create new variables every time a function is called
-	std::optional<frc::Pose2d> mLimelightEstimatedPose;
-	frc::ChassisSpeeds mDesiredChassisSpeeds;
-	frc::ChassisSpeeds mCurrentChassisSpeeds;
-	frc::Rotation2d mCurrentRotation2d;
-
-	// The values are meant to be changed before being used
-	wpi::array<frc::SwerveModuleState, 4> mDesiredSwerveStates = {frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
-	                                                              frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
-	                                                              frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
-	                                                              frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)}};
+	State mState;
 };

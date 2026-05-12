@@ -237,9 +237,8 @@ namespace LimelightConstants
 	inline constexpr units::degree_t kPitch = 0_deg;
 	inline constexpr units::degree_t kYaw = 0_deg;
 
-	inline constexpr double kPoseEstimatorStandardDeviationX = 0.7;      // Default/Recommended values
-	inline constexpr double kPoseEstimatorStandardDeviationY = 0.7;      // Default/Recommended values
-	inline constexpr double kPoseEstimatorStandardDeviationYaw = 999999; // Default/Recommended values
+
+	inline constexpr wpi::array<double, 3> kVisionMeasurementStdDevs{0.7, 0.7, 999999.0}; // Default/Recommended values
 } // namespace LimelightConstants
 
 // Values found at https://firstfrc.blob.core.windows.net/frc2026/FieldAssets/2026-field-dimension-dwgs.pdf#page=3
