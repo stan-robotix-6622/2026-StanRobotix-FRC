@@ -81,9 +81,15 @@ RobotContainer::RobotContainer()
 	mAutoChooser.OnChange([this] (frc2::Command* iNewCommand)
 			{
 				std::string wNewCommandName = iNewCommand->GetName();
-				if (wNewCommandName != "class frc2::Command") // Verify the command is named
-				{
+				if (wNewCommandName != "class frc2::Command") /* Verify the command is named */ {
 					mDrivetrain->resetPose(robotixLib::pathplannerUtils::getStartingPoseOfAuto(wNewCommandName));
+				}
+				else {
+					std::optional<frc::Pose2d> wLimelightPose = mDrivetrain->getLimelight()->getPoseEstimation(mDrivetrain->getPose(), mDrivetrain->getIMU()->getYawRate(), false);
+					if (wLimelightPose)
+					{
+						mDrivetrain->resetPose(wLimelightPose.value());
+					}
 				}
 			});
 

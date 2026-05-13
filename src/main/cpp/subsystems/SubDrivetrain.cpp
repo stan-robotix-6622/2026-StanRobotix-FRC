@@ -240,6 +240,11 @@ IMU* SubDrivetrain::getIMU()
 	return mIMU;
 }
 
+Limelight* SubDrivetrain::getLimelight()
+{
+	return mLimelight;
+}
+
 frc::ChassisSpeeds SubDrivetrain::getRobotRelativeSpeeds()
 {
 	mState.currentChassisSpeeds = mKinematics->ToChassisSpeeds(getSwerveModuleStates());

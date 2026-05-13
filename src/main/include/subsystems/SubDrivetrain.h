@@ -76,6 +76,8 @@ class SubDrivetrain : public frc2::SubsystemBase {
 	void resetIMU(units::degree_t iAngle);
 	IMU* getIMU();
 
+	Limelight* getLimelight();
+
 	static frc::Pose2d standardizePose(frc::Pose2d iPose);
 	frc::Pose2d getClosestPoseAtDistanceFromHub(units::meter_t iDesiredDistance);
 	frc2::CommandPtr getGoToDistanceFromHubCommand(units::meter_t iDesiredDistance);
