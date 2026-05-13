@@ -16,14 +16,14 @@ SubShooter::SubShooter()
 	mFollowerShooterController = new rev::spark::SparkMax{CANid::kFollowerMotorShooterID, rev::spark::SparkLowLevel::MotorType::kBrushless};
 	mRelativeEncoder = new rev::spark::SparkRelativeEncoder{mLeaderShooterController->GetEncoder()};
 	mFeedforward = new frc::SimpleMotorFeedforward<units::turns>{ShooterConstants::kS, ShooterConstants::kV};
-	mRoutine = new frc2::sysid::SysIdRoutine{
-			frc2::sysid::Config
-			{
-				ShooterConstants::SystemId::kRampRate,
-				ShooterConstants::SystemId::kStepVoltage,
-				ShooterConstants::SystemId::kTimeout
-			}
-		};
+	// mRoutine = new frc2::sysid::SysIdRoutine{
+	// 		frc2::sysid::Config
+	// 		{
+	// 			ShooterConstants::SystemId::kRampRate,
+	// 			ShooterConstants::SystemId::kStepVoltage,
+	// 			ShooterConstants::SystemId::kTimeout
+	// 		}
+	// 	};
 	mClossedLoopController = new rev::spark::SparkClosedLoopController{mLeaderShooterController->GetClosedLoopController()};
 
 	Configure();
