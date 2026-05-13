@@ -59,13 +59,11 @@ model {
             sources.cpp {
                 source {
                     srcDir 'src/main/cpp'
-                    srcDir 'src/stanbrairy/cpp'
                     srcDir 'src/rebuilt/cpp'
                     include '**/*.cpp', '**/*.cc'
                 }
                 exportedHeaders {
                     srcDir 'src/main/include'
-                    srcDir 'src/stanbrairy/include'
                     srcDir 'src/rebuilt/include'
                 }
             }
