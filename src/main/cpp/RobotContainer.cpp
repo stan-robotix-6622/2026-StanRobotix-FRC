@@ -30,7 +30,7 @@
 #include "commands/ShootInPlace.h"
 #include "commands/ShootVariable.h"
 
-#include "stanbrairy/controller/deadband.h"
+#include "RobotixLib.hpp"
 
 // #include "commands/Climb.h"
 // #include "commands/ClimbUntilDown.h"
@@ -87,9 +87,9 @@ void RobotContainer::SetSubsystemDefaultCommands()
 {
 	mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
 			[this] {
-				mDrivetrain->driveFieldRelative(stanbrairy::deadband(-mCommandXboxController->GetLeftY(), 0.05),
-		                                    stanbrairy::deadband(-mCommandXboxController->GetLeftX(), 0.05),
-		                                    stanbrairy::deadband(-mCommandXboxController->GetRightX(), 0.05),
+				mDrivetrain->driveFieldRelative(robotixLib::deadband(-mCommandXboxController->GetLeftY(), 0.05),
+		                                    robotixLib::deadband(-mCommandXboxController->GetLeftX(), 0.05),
+		                                    robotixLib::deadband(-mCommandXboxController->GetRightX(), 0.05),
 		                                    (0.6 + (mCommandXboxController->GetRightTriggerAxis() / 4)));
 			},
 			{mDrivetrain}));
