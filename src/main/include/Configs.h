@@ -79,7 +79,7 @@ namespace Configs
 			leaderConfig.encoder.PositionConversionFactor(shootingFactor);
 			leaderConfig.encoder.VelocityConversionFactor(shootingFactor / 60); // for rpm to tps
 
-			leaderConfig.closedLoop.SetFeedbackSensor(ShooterConstants::Config::kShooterClosedLoopFeedbackSensor);
+			leaderConfig.closedLoop.SetFeedbackSensor(ShooterConstants::Config::kClosedLoopFeedbackSensor);
 			// leaderConfig.closedLoop.Pid(ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD);
 			// leaderConfig.closedLoop.OutputRange(-1, 1);
 
