@@ -33,7 +33,7 @@
 namespace TemplateUnits
 {
 	template <typename Unit>
-	using VoltageInverse = units::unit_t<units::detail::unit_multiply<units::voltage::volts, units::inverse<Unit>>, double, units::linear_scale>;
+	using VoltageInverse = units::unit_t<units::compound_unit<units::volt, units::inverse<Unit>>>;
 } // namespace TemplateUnits
 
 namespace OperatorConstants
