@@ -7,6 +7,7 @@
 
 #include <units/angle.h>
 #include <units/length.h>
+#include <units/voltage.h>
 
 namespace robotixLib
 {
@@ -24,4 +25,10 @@ namespace robotixLib
 	{
 		frc::Pose2d getStartingPoseOfAuto(std::string iAutoName);
 	} // namespace pathplannerUtils
+
+	namespace templateUnits
+	{
+		template <typename Unit>
+		using VoltageInverse = units::unit_t<units::compound_unit<units::volts, units::inverse<Unit>>>;
+	} // namespace templateUnits
 } // namespace robotixLib

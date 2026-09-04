@@ -77,8 +77,8 @@ void SubShooter::InitSendable(wpi::SendableBuilder& builder)
 	builder.SetSmartDashboardType("shooter");
 	builder.AddDoubleProperty("velocity (tps)", [this] { return getVelocity().value(); }, nullptr);
 	builder.AddDoubleProperty("velocity (rpm)", [this] { return units::revolutions_per_minute_t(getVelocity()).value(); }, nullptr);
-	builder.AddDoubleProperty("kA", [this] { return mFeedforward->GetKa().value(); }, [this](double iKa) { return mFeedforward->SetKa(TemplateUnits::VoltageInverse<units::turns_per_second_squared>(iKa)); });
-	builder.AddDoubleProperty("kV", [this] { return mFeedforward->GetKv().value(); }, [this](double iKv) { return mFeedforward->SetKv(TemplateUnits::VoltageInverse<units::turns_per_second>(iKv)); });
+	builder.AddDoubleProperty("kA", [this] { return mFeedforward->GetKa().value(); }, [this](double iKa) { return mFeedforward->SetKa(robotixLib::templateUnits::VoltageInverse<units::turns_per_second_squared>(iKa)); });
+	builder.AddDoubleProperty("kV", [this] { return mFeedforward->GetKv().value(); }, [this](double iKv) { return mFeedforward->SetKv(robotixLib::templateUnits::VoltageInverse<units::turns_per_second>(iKv)); });
 	builder.AddDoubleProperty("kS", [this] { return mFeedforward->GetKs().value(); }, [this](double iKs) { return mFeedforward->SetKs(units::volt_t(iKs)); });
 }
 

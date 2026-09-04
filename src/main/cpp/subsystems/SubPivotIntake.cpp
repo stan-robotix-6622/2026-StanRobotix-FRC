@@ -75,7 +75,7 @@ void SubPivotIntake::InitSendable(wpi::SendableBuilder& builder)
 	builder.AddDoubleProperty("position", [this] { return mEncoder->GetPosition(); }, nullptr);
 	builder.AddDoubleProperty("angle (radians)", [this] { return GetAngle().value(); }, nullptr);
 	builder.AddDoubleProperty("angle (degrees)", [this] { return units::degree_t(GetAngle()).value(); }, nullptr);
-	builder.AddDoubleProperty("kV", [this] { return mFeedForward->GetKv().value(); }, [this](double iKv) { return mFeedForward->SetKv(TemplateUnits::VoltageInverse<units::radians_per_second>(iKv)); });
+	builder.AddDoubleProperty("kV", [this] { return mFeedForward->GetKv().value(); }, [this](double iKv) { return mFeedForward->SetKv(robotixLib::templateUnits::VoltageInverse<units::radians_per_second>(iKv)); });
 	builder.AddDoubleProperty("kG", [this] { return mFeedForward->GetKg().value(); }, [this](double iKg) { return mFeedForward->SetKg(units::volt_t(iKg)); });
 	builder.AddDoubleProperty("kS", [this] { return mFeedForward->GetKs().value(); }, [this](double iKs) { return mFeedForward->SetKs(units::volt_t(iKs)); });
 }
