@@ -24,4 +24,10 @@ namespace robotixLib
 	{
 		frc::Pose2d getStartingPoseOfAuto(std::string iAutoName);
 	} // namespace pathplannerUtils
+
+	namespace templateUnits
+	{
+		template <typename Unit>
+		using VoltageInverse = units::unit_t<units::compound_unit<units::volt, units::inverse<Unit>>>;
+	} // namespace templateUnits
 } // namespace robotixLib

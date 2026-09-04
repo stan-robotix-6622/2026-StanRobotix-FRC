@@ -20,6 +20,8 @@
 #include <units/velocity.h>
 #include <units/voltage.h>
 
+#include "RobotixLib.hpp"
+
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants.  This should not be used for any other
@@ -29,12 +31,6 @@
  * command-specific namespaces within this header, which can then be used where
  * they are needed.
  */
-
-namespace TemplateUnits
-{
-	template <typename Unit>
-	using VoltageInverse = units::unit_t<units::compound_unit<units::volt, units::inverse<Unit>>>;
-} // namespace TemplateUnits
 
 namespace OperatorConstants
 {
@@ -69,8 +65,8 @@ namespace OperatorConstants
 namespace ShooterConstants
 {
 	inline constexpr units::volt_t kS = 0_V;
-	inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.3339_tps;
-	inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second_squared> kA = 0_V / 1_tr_per_s_sq;
+	inline constexpr robotixLib::templateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.3339_tps;
+	inline constexpr robotixLib::templateUnits::VoltageInverse<units::turns_per_second_squared> kA = 0_V / 1_tr_per_s_sq;
 
 	inline constexpr bool kInverted = false;
 	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
@@ -209,7 +205,7 @@ namespace DrivetrainConstants
 		inline constexpr units::meters_per_second_squared_t kMaxSpeedRampRate = 0.5_mps_sq;
 		inline constexpr units::meters_per_second_t kMaxSpeedMaxVelocity = 5_mps;
 		inline constexpr units::second_t kFeedforwartStartDelay = 2.0_s;
-		inline constexpr TemplateUnits::VoltageInverse<units::seconds> kFeedforwardRampRate = 1_V / 1_s;
+		inline constexpr robotixLib::templateUnits::VoltageInverse<units::seconds> kFeedforwardRampRate = 1_V / 1_s;
 		inline constexpr units::second_t kWheelRadiusMeasurementStartDelay = 1.0_s;
 		inline constexpr units::radians_per_second_t kWheelRadiusMaxVelocity = 0.25_rad_per_s;
 		inline constexpr units::radians_per_second_squared_t kWheelRadiusRampRate = 0.05_rad_per_s_sq;
@@ -299,7 +295,7 @@ namespace PivotConstants
 	inline constexpr double kD = 0.2;
 	inline constexpr units::volt_t kG = 1.37_V;
 	inline constexpr units::volt_t kS = 0.0_V;
-	inline constexpr TemplateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
+	inline constexpr robotixLib::templateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
 	inline constexpr double setpointUp = std::numbers::pi / 6;     // 30 deg up
 	inline constexpr double setpointIn = std::numbers::pi * 2 / 3; // 120 deg up
 	inline constexpr double setpointDown = std::numbers::pi / 18;  // 10 deg up
