@@ -19,4 +19,6 @@ licenseUpdateExclude {
 	src/rebuilt/*
 	src/main/include/Configs.h$
 	src/main/include/ShooterLookupTable.h$
+	src/main/include/RobotixLib.hpp$
+	src/main/cpp/RobotixLib.cpp$
 }
