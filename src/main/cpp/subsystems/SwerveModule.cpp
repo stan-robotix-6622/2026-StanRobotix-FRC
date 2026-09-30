@@ -5,6 +5,7 @@
 #include "subsystems/SwerveModule.h"
 
 #include <frc/RobotBase.h>
+#include <frc/system/plant/LinearSystemId.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "Configs.h"
@@ -21,6 +22,8 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
 		mDrivingGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
 		mTurningMotorSim = new rev::spark::SparkMaxSim{mTurningMotor, mTurningGearBox};
 		mDrivingMotorSim = new rev::spark::SparkMaxSim{mDrivingMotor, mDrivingGearBox};
+		mDrivingFlywheelSim = new frc::sim::FlywheelSim{frc::LinearSystemId::FlywheelSystem(*mDrivingGearBox, 0.025_kg_sq_m, ModuleConstants::kDrivingGearRatio), *mDrivingGearBox};
+		mTurningFlywheelSim = new frc::sim::FlywheelSim{frc::LinearSystemId::FlywheelSystem(*mTurningGearBox, ChassisConstants::kModuleMOI, ModuleConstants::kTurningGearRatio), *mTurningGearBox};
 	}
 
 	mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
@@ -33,6 +36,11 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
 	// Initialization of the motors' ClosedLoopController
 	mTurningClosedLoopController = new rev::spark::SparkClosedLoopController{mTurningMotor->GetClosedLoopController()};
 	mDrivingClosedLoopController = new rev::spark::SparkClosedLoopController{mDrivingMotor->GetClosedLoopController()};
+	mDrivingPID = new frc::PIDController{ModuleConstants::kDrivingP, ModuleConstants::kDrivingI, ModuleConstants::kDrivingD};
+	mTurningPID = new frc::PIDController{ModuleConstants::kTurningP, ModuleConstants::kTurningI, ModuleConstants::kTurningD};
+	mTurningPID->EnableContinuousInput(ModuleConstants::Config::kTurningClosedLoopMinInput, ModuleConstants::Config::kTurningClosedLoopMaxInput);
+	mDrivingFeedforward = new frc::SimpleMotorFeedforward<units::meters>{0_V, 12_V / ModuleConstants::kDriveWheelMaxFreeSpeed};
+	mTurningFeedforward = new frc::SimpleMotorFeedforward<units::radians>{0_V, 12_V / ModuleConstants::kTurningWheelFreeSpeedRadps};
 
 	mDrivingEncoder = new rev::spark::SparkRelativeEncoder{mDrivingMotor->GetEncoder()};
 	mTurningEncoder = new rev::spark::SparkRelativeEncoder{mTurningMotor->GetEncoder()};
@@ -53,8 +61,21 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
 	mDrivingClosedLoopController->SetSetpoint(mOptimizedState.speed.value(), ModuleConstants::kDrivingClosedLoopControlType);
 
 	if (mRobotIsSimulated) {
-		mTurningMotorSim->iterate((mOptimizedState.angle.Radians().value() - mTurningMotorSim->GetPosition()) / 0.02, 12, 0.02);
-		mDrivingMotorSim->iterate(mOptimizedState.speed.value(), 12, 0.02);
+		mDrivingPID->SetSetpoint(mOptimizedState.speed.value());
+		mTurningPID->SetSetpoint(mOptimizedState.angle.Radians().value());
+		// frc::SmartDashboard::PutNumber("drivetrain/swerve turning pid output", mTurningPID->Calculate(mTurningMotorSim->GetVelocity()));
+		// mDrivingFlywheelSim->SetInputVoltage(units::volt_t(
+		//   mDrivingFeedforward->Calculate(units::meters_per_second_t(mTurningMotorSim->GetVelocity()), units::meters_per_second_t(mDrivingPID->Calculate(mDrivingMotorSim->GetVelocity())))
+		// ));
+
+		mTurningFlywheelSim->SetInputVoltage(units::volt_t(
+				mTurningFeedforward->Calculate(units::radians_per_second_t(mDrivingMotorSim->GetVelocity()), units::radians_per_second_t(mTurningPID->Calculate(mTurningMotorSim->GetVelocity())))
+		));
+		// frc::SmartDashboard::PutNumber("drivetrain/swerve module turning voltage", mTurningFeedforward->Calculate(units::radians_per_second_t(mDrivingMotorSim->GetVelocity()), units::radians_per_second_t(mTurningPID->Calculate(mTurningMotorSim->GetVelocity()))).value());
+		// mDrivingFlywheelSim->Update(0.02_s);
+		mTurningFlywheelSim->Update(0.02_s);
+		// mDrivingMotorSim->iterate(mDrivingFlywheelSim->GetAngularVelocity().value(), 12, 0.02);
+		mTurningMotorSim->iterate(mTurningFlywheelSim->GetAngularVelocity().value(), 12, 0.02);
 	}
 }
 

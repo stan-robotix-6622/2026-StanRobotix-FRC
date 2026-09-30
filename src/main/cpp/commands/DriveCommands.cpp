@@ -171,7 +171,7 @@ frc2::CommandPtr DriveCommands::getWheelRadiusCharacterizationCommand()
 										}
 										wWheelDelta /= 4;
 										units::meter_t wheelRadius =
-												(mState->gyroDelta * DrivetrainConstants::kFrontLeftTranslation.Norm()) / wWheelDelta;
+												(mState->gyroDelta * ChassisConstants::kFrontLeftTranslation.Norm()) / wWheelDelta;
 
 										frc::DataLogManager::Log("********** Wheel Radius Characterization Results **********");
 										frc::DataLogManager::Log("Wheel Delta: " + std::to_string(wWheelDelta.value()) + " radians");

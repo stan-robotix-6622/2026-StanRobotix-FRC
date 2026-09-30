@@ -21,10 +21,10 @@
 
 SubDrivetrain::SubDrivetrain()
 {
-	mFrontLeftLocation = new frc::Translation2d{DrivetrainConstants::kFrontLeftTranslation};
-	mFrontRightLocation = new frc::Translation2d{DrivetrainConstants::kFrontRightTranslation};
-	mBackLeftLocation = new frc::Translation2d{DrivetrainConstants::kBackLeftTranslation};
-	mBackRightLocation = new frc::Translation2d{DrivetrainConstants::kBackRightTranslation};
+	mFrontLeftLocation = new frc::Translation2d{ChassisConstants::kFrontLeftTranslation};
+	mFrontRightLocation = new frc::Translation2d{ChassisConstants::kFrontRightTranslation};
+	mBackLeftLocation = new frc::Translation2d{ChassisConstants::kBackLeftTranslation};
+	mBackRightLocation = new frc::Translation2d{ChassisConstants::kBackRightTranslation};
 
 	mFrontLeftModule = new SwerveModule{CANid::kFrontLeftMotorID, CANid::kFrontLeftMotor550ID, false};
 	mFrontRightModule = new SwerveModule{CANid::kFrontRightMotorID, CANid::kFrontRightMotor550ID, false};
