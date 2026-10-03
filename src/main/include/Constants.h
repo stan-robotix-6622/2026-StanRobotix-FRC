@@ -20,6 +20,9 @@
 #include <units/velocity.h>
 #include <units/voltage.h>
 #include <units/time.h>
+#include <units/moment_of_inertia.h>
+
+#include "RobotixLib.hpp"
 
 /**
  * The Constants header provides a convenient place for teams to hold robot-wide
@@ -30,12 +33,6 @@
  * command-specific namespaces within this header, which can then be used where
  * they are needed.
  */
-
-namespace TemplateUnits
-{
-	template <typename Unit>
-	using VoltageInverse = units::unit_t<units::detail::unit_multiply<units::voltage::volts, units::inverse<Unit>>, double, units::linear_scale>;
-} // namespace TemplateUnits
 
 namespace OperatorConstants
 {
@@ -67,59 +64,6 @@ namespace OperatorConstants
 	} // namespace Axis
 } // namespace OperatorConstants
 
-namespace ShooterConstants
-{
-	inline constexpr units::volt_t kS = 0_V;
-	inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.3339_tps;
-	inline constexpr TemplateUnits::VoltageInverse<units::turns_per_second_squared> kA = 0_V / 1_tr_per_s_sq;
-
-	inline constexpr bool kInverted = false;
-	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
-	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
-	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
-
-	inline constexpr bool kFollowerinverted = false;
-	inline constexpr double kGearRatio = 1;
-
-	inline constexpr rev::spark::SparkLowLevel::ControlType kShooterClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kVelocity;
-
-	inline constexpr units::ampere_t kCurrentLimit = 80_A;
-
-	namespace PIDConstants
-	{
-		inline constexpr double kP = 4;
-		inline constexpr double kI = 0;
-		inline constexpr double kD = 0.08;
-
-		inline constexpr units::turns_per_second_t kTolerance = 2_tps;
-
-		inline constexpr units::turns_per_second_t setpoint = 60_tps; // at 3.6m
-	} // namespace PIDConstants
-
-	namespace Config
-	{
-		inline constexpr rev::spark::FeedbackSensor kClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kPrimaryEncoder;
-	} // namespace Config
-
-	namespace SystemId
-	{
-		inline constexpr TemplateUnits::VoltageInverse<units::second> kRampRate = 1_V / 1_s;
-		inline constexpr units::volt_t kStepVoltage = 1_V;
-		inline constexpr units::second_t kTimeout = 10_s;
-	}
-} // namespace ShooterConstants
-
-namespace FeederConstants
-{
-	inline constexpr units::volt_t kDesiredVoltage = 9_V;
-
-	inline constexpr bool kInverted = true;
-	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
-	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
-	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
-	inline constexpr units::ampere_t kCurrentLimit = 80_A;
-} // namespace FeederConstants
-
 namespace PathPlannerConstants
 {
 	inline constexpr double kPTranslation = 5.0;
@@ -135,9 +79,37 @@ namespace PathPlannerConstants
 	inline constexpr units::degrees_per_second_squared_t kMaxAngularAcceleration = 72.0_deg_per_s_sq;
 } // namespace PathPlannerConstants
 
+namespace ChassisConstants
+{
+	// Left-Right
+	inline constexpr units::meter_t kRobotWidth = 28_in;
+	// Front-Back
+	inline constexpr units::meter_t kRobotLength = 26.875_in;
+	// In both directions
+	inline constexpr units::meter_t kModuleCornerOffset = 1.75_in;
+
+	// We take for granted a rectangular frame
+	inline constexpr frc::Translation2d kFrontLeftTranslation  = 
+			frc::Translation2d{(ChassisConstants::kRobotLength / 2 - ChassisConstants::kModuleCornerOffset),
+												 (ChassisConstants::kRobotWidth / 2 - ChassisConstants::kModuleCornerOffset)};
+	inline constexpr frc::Translation2d kFrontRightTranslation = 
+			frc::Translation2d{(ChassisConstants::kRobotLength / 2 - ChassisConstants::kModuleCornerOffset),
+												 -(ChassisConstants::kRobotWidth / 2 - ChassisConstants::kModuleCornerOffset)};
+	inline constexpr frc::Translation2d kBackLeftTranslation   = 
+			frc::Translation2d{-(ChassisConstants::kRobotLength / 2 - ChassisConstants::kModuleCornerOffset),
+												 (ChassisConstants::kRobotWidth / 2 - ChassisConstants::kModuleCornerOffset)};
+	inline constexpr frc::Translation2d kBackRightTranslation  = 
+			frc::Translation2d{-(ChassisConstants::kRobotLength / 2 - ChassisConstants::kModuleCornerOffset),
+												 -(ChassisConstants::kRobotWidth / 2 - ChassisConstants::kModuleCornerOffset)};
+
+	inline constexpr units::kilogram_t kRobotMass = 60_kg;
+	inline constexpr units::kilogram_square_meter_t kRobotMOI = 6_kg_sq_m;
+	inline constexpr units::kilogram_square_meter_t kModuleMOI = 0.0003917128_kg_sq_m; // 1.33855 lb*in^2
+}
+
 namespace ModuleConstants
 {
-	inline constexpr double kDrivingMotorGearRatio = 4.71;                                 // 4.71 rotations of the motor for 1 rotation of the ouput
+	inline constexpr double kDrivingGearRatio = 4.71;                                      // 4.71 rotations of the motor for 1 rotation of the ouput
 	inline constexpr double kTurningGearRatio = 9424 / 203;                                // 9424 rotations of the motor for 203 rotations of the output
 	inline constexpr units::volt_t kNominalVoltage = 12_V;                                 // The voltage at which the max speeds are mesured
 	inline constexpr units::meter_t kWheelRadius = 1.341628_in;                            // The radius of REV's plastic wheels, masured with the wheelCaracterizationCommand
@@ -145,7 +117,7 @@ namespace ModuleConstants
 	inline constexpr units::radians_per_second_t kTurningWheelFreeSpeedRadps = 24.260_rad_per_s;
 	inline constexpr units::meters_per_second_t kDriveWheelMaxFreeSpeed = 4.9180_mps;
 
-	inline constexpr double kDrivingFactor = ModuleConstants::kWheelPerimeter.value() / kDrivingMotorGearRatio;
+	inline constexpr double kDrivingFactor = ModuleConstants::kWheelPerimeter.value() / kDrivingGearRatio;
 	inline constexpr double kTurningFactor = 2 * std::numbers::pi;
 
 	inline constexpr rev::spark::SparkLowLevel::ControlType kDrivingClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kVelocity;
@@ -194,19 +166,6 @@ namespace ModuleConstants
 
 namespace DrivetrainConstants
 {
-	// Left-Right
-	inline constexpr units::meter_t kRobotWidth = 28_in;
-	// Front-Back
-	inline constexpr units::meter_t kRobotLength = 26.875_in;
-	// In both directions
-	inline constexpr units::meter_t kModuleCornerOffset = 1.75_in;
-
-	// We take for granted a rectangular frame
-	inline constexpr frc::Translation2d kFrontLeftTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
-	inline constexpr frc::Translation2d kFrontRightTranslation = frc::Translation2d{(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
-	inline constexpr frc::Translation2d kBackLeftTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), (kRobotWidth / 2 - kModuleCornerOffset)};
-	inline constexpr frc::Translation2d kBackRightTranslation = frc::Translation2d{-(kRobotLength / 2 - kModuleCornerOffset), -(kRobotWidth / 2 - kModuleCornerOffset)};
-
 	inline constexpr units::meters_per_second_t kAttainableSpeed = 4.50_mps;
 	inline constexpr units::meters_per_second_t kMaxDesiredSpeed = 4.50_mps;
 	inline constexpr units::radians_per_second_t kMaxDesiredAngularSpeed = std::numbers::pi * 3_rad_per_s;
@@ -217,7 +176,7 @@ namespace DrivetrainConstants
 		inline constexpr units::meters_per_second_squared_t kMaxSpeedRampRate = 0.5_mps_sq;
 		inline constexpr units::meters_per_second_t kMaxSpeedMaxVelocity = 5_mps;
 		inline constexpr units::second_t kFeedforwartStartDelay = 2.0_s;
-		inline constexpr TemplateUnits::VoltageInverse<units::seconds> kFeedforwardRampRate = 1_V / 1_s;
+		inline constexpr robotixLib::templateUnits::VoltageInverse<units::seconds> kFeedforwardRampRate = 1_V / 1_s;
 		inline constexpr units::second_t kWheelRadiusMeasurementStartDelay = 1.0_s;
 		inline constexpr units::radians_per_second_t kWheelRadiusMaxVelocity = 0.25_rad_per_s;
 		inline constexpr units::radians_per_second_squared_t kWheelRadiusRampRate = 0.05_rad_per_s_sq;
@@ -250,16 +209,6 @@ namespace LimelightConstants
 	inline constexpr double kPoseEstimatorStandardDeviationYaw = 999999; // Default/Recommended values
 } // namespace LimelightConstants
 
-// Values found at https://firstfrc.blob.core.windows.net/frc2026/FieldAssets/2026-field-dimension-dwgs.pdf#page=3
-// For the Welded Field
-namespace FieldConstants
-{
-	inline constexpr frc::Translation2d kHubCenterTranslation2d = frc::Translation2d{182.11_in, 158.32_in};   // From the right corner of blue alliance wall
-	inline constexpr frc::Pose2d kHubCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};              // From the right corner of blue alliance wall
-	inline constexpr frc::Translation2d kFieldCenterTranslation2d = frc::Translation2d{325.61_in, 158.32_in}; // From the right corner of blue alliance wall
-	inline constexpr frc::Pose2d kFieldCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};            // From the right corner of blue alliance wall
-} // namespace FieldConstants
-
 namespace CANid
 {
 	inline constexpr int kMotorFeederID = 13;
@@ -278,11 +227,75 @@ namespace CANid
 
 	inline constexpr int kMotorPivotID = 9;
 	inline constexpr int kMotorIntakeID = 10;
+
 	inline constexpr int kIMUPigeonID = 0;
 
 	inline constexpr int kMotorClimbLeaderID = 14;
 	inline constexpr int kMotorClimbFollowerID = 15;
 } // namespace CANid
+
+namespace ShooterConstants
+{
+	inline constexpr units::volt_t kS = 0_V;
+	inline constexpr robotixLib::templateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.3339_tps;
+	inline constexpr robotixLib::templateUnits::VoltageInverse<units::turns_per_second_squared> kA = 0_V / 1_tr_per_s_sq;
+
+	inline constexpr bool kInverted = false;
+	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
+	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
+
+	inline constexpr bool kFollowerinverted = false;
+	inline constexpr double kGearRatio = 1;
+
+	inline constexpr rev::spark::SparkLowLevel::ControlType kShooterClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kVelocity;
+
+	inline constexpr units::ampere_t kCurrentLimit = 80_A;
+
+	namespace PIDConstants
+	{
+		inline constexpr double kP = 4;
+		inline constexpr double kI = 0;
+		inline constexpr double kD = 0.08;
+
+		inline constexpr units::turns_per_second_t kTolerance = 2_tps;
+
+		inline constexpr units::turns_per_second_t setpoint = 60_tps; // at 3.6m
+	} // namespace PIDConstants
+
+	namespace Config
+	{
+		inline constexpr rev::spark::FeedbackSensor kClosedLoopFeedbackSensor = rev::spark::FeedbackSensor::kPrimaryEncoder;
+	} // namespace Config
+
+	namespace SystemId
+	{
+		inline constexpr robotixLib::templateUnits::VoltageInverse<units::second> kRampRate = 1_V / 1_s;
+		inline constexpr units::volt_t kStepVoltage = 1_V;
+		inline constexpr units::second_t kTimeout = 10_s;
+	}
+} // namespace ShooterConstants
+
+namespace FeederConstants
+{
+	inline constexpr units::volt_t kDesiredVoltage = 9_V;
+
+	inline constexpr bool kInverted = true;
+	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
+	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
+	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
+	inline constexpr units::ampere_t kCurrentLimit = 80_A;
+} // namespace FeederConstants
+
+// Values found at https://firstfrc.blob.core.windows.net/frc2026/FieldAssets/2026-field-dimension-dwgs.pdf#page=3
+// For the Welded Field
+namespace FieldConstants
+{
+	inline constexpr frc::Translation2d kHubCenterTranslation2d = frc::Translation2d{182.11_in, 158.32_in};   // From the right corner of blue alliance wall
+	inline constexpr frc::Pose2d kHubCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};              // From the right corner of blue alliance wall
+	inline constexpr frc::Translation2d kFieldCenterTranslation2d = frc::Translation2d{325.61_in, 158.32_in}; // From the right corner of blue alliance wall
+	inline constexpr frc::Pose2d kFieldCenterPose2d = frc::Pose2d{kHubCenterTranslation2d, 0_rad};            // From the right corner of blue alliance wall
+} // namespace FieldConstants
 
 namespace IntakeConstants
 {
@@ -307,7 +320,7 @@ namespace PivotConstants
 	inline constexpr double kD = 0.2;
 	inline constexpr units::volt_t kG = 1.37_V;
 	inline constexpr units::volt_t kS = 0.0_V;
-	inline constexpr TemplateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
+	inline constexpr robotixLib::templateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
 	inline constexpr double setpointUp = std::numbers::pi / 6;     // 30 deg up
 	inline constexpr double setpointIn = std::numbers::pi * 2 / 3; // 120 deg up
 	inline constexpr double setpointDown = std::numbers::pi / 18;  // 10 deg up

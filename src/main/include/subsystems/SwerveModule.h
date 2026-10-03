@@ -5,9 +5,12 @@
 #pragma once
 
 #include <frc/geometry/Rotation2d.h>
+#include <frc/controller/PIDController.h>
+#include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
 #include <frc/system/plant/DCMotor.h>
+#include <frc/simulation/FlywheelSim.h>
 #include <rev/sim/SparkMaxSim.h>
 #include <rev/SparkAbsoluteEncoder.h>
 #include <rev/SparkClosedLoopController.h>
@@ -58,6 +61,14 @@ class SwerveModule : public wpi::Sendable {
 	frc::DCMotor* mTurningGearBox;
 	rev::spark::SparkMaxSim* mDrivingMotorSim;
 	rev::spark::SparkMaxSim* mTurningMotorSim;
+
+	frc::sim::FlywheelSim* mDrivingFlywheelSim;
+	frc::sim::FlywheelSim* mTurningFlywheelSim;
+
+	frc::SimpleMotorFeedforward<units::meters>* mDrivingFeedforward;
+	frc::SimpleMotorFeedforward<units::radians>* mTurningFeedforward;
+	frc::PIDController* mDrivingPID;
+	frc::PIDController* mTurningPID;
 
 	frc::Rotation2d mTurningCurrentAngle;
 
