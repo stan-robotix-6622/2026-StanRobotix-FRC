@@ -226,6 +226,7 @@ namespace CANid
 	inline constexpr int kBackLeftMotor550ID = 1;
 
 	inline constexpr int kMotorPivotID = 9;
+	inline constexpr int kFollowerMotorPivotID = 0; //to determine
 	inline constexpr int kMotorIntakeID = 10;
 
 	inline constexpr int kIMUPigeonID = 0;
@@ -309,6 +310,7 @@ namespace IntakeConstants
 
 	inline constexpr double kGearRatio = 3;
 	inline constexpr units::meter_t kWheelRadius = 1.5_in;
+	inline constexpr bool kFollowerinverted = false;
 } // namespace IntakeConstants
 
 namespace PivotConstants

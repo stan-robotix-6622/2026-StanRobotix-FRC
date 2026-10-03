@@ -123,7 +123,7 @@ namespace Configs
 
 	class Intake {
 	 public:
-		static SparkMaxConfig& Config()
+		static SparkMaxConfig& LeaderConfig()
 		{
 			static SparkMaxConfig intakeConfig{};
 			constexpr double intakeFactor = 1 / IntakeConstants::kGearRatio;
@@ -137,6 +137,15 @@ namespace Configs
 			intakeConfig.SmartCurrentLimit(IntakeConstants::kCurrentLimit.value());
 
 			return intakeConfig;
+		}
+		static SparkMaxConfig& FollowerConfig()
+		{
+			static SparkMaxConfig followerConfig{};
+
+			followerConfig.Apply(Configs::Intake::LeaderConfig());
+			followerConfig.Follow(CANid::kMotorIntakeID, IntakeConstants::kFollowerinverted);
+
+			return followerConfig;
 		}
 	};
 

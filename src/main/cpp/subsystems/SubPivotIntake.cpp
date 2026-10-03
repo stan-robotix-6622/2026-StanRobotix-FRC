@@ -16,6 +16,7 @@
 SubPivotIntake::SubPivotIntake()
 {
 	mPivotMotor = new rev::spark::SparkMax{CANid::kMotorPivotID, rev::spark::SparkLowLevel::MotorType::kBrushless};
+	mPivotMotorFollower = new rev::spark::SparkMax{CANid::kFollowerMotorPivotID, rev::spark::SparkLowLevel::MotorType::kBrushless};
 	mEncoder = new rev::spark::SparkRelativeEncoder{mPivotMotor->GetEncoder()};
 	mFeedForward = new frc::ArmFeedforward{PivotConstants::kS, PivotConstants::kG, PivotConstants::kV};
 
@@ -69,6 +70,13 @@ units::radian_t SubPivotIntake::GetAngle()
 {
 	return units::radian_t(frc::SmartDashboard::GetNumber("tunable/Offset pivot", PivotConstants::kOffset) + mEncoder->GetPosition());
 }
+
+std::array<rev::REVLibError, 2> SubPivotIntake::Configure()
+{
+	return {
+		mPivotMotor->Configure(Configs::Intake::LeaderConfig(), IntakeConstants::kReset, IntakeConstants::kPersist),
+		mPivotMotorFollower->Configure(Configs::Intake::FollowerConfig(), IntakeConstants::kReset, IntakeConstants::kPersist)};
+};
 
 void SubPivotIntake::InitSendable(wpi::SendableBuilder& builder)
 {
