@@ -104,7 +104,7 @@ void SubDrivetrain::setSwerveModuleStates(wpi::array<frc::SwerveModuleState, 4> 
 	mBackRightModule->setDesiredState(iStates[3]);
 
 	if (frc::RobotBase::IsSimulation()) {
-		mIMU->advanceSimulation(mKinematics->ToChassisSpeeds(iStates).omega);
+		mIMU->advanceSimulation(mKinematics->ToChassisSpeeds(getSwerveModuleStates()).omega);
 	}
 }
 
