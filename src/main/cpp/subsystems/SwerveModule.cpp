@@ -63,18 +63,15 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
 	if (mRobotIsSimulated) {
 		mDrivingPID->SetSetpoint(mOptimizedState.speed.value());
 		mTurningPID->SetSetpoint(mOptimizedState.angle.Radians().value());
-		// frc::SmartDashboard::PutNumber("drivetrain/swerve turning pid output", mTurningPID->Calculate(mTurningMotorSim->GetVelocity()));
-		// mDrivingFlywheelSim->SetInputVoltage(units::volt_t(
-		//   mDrivingFeedforward->Calculate(units::meters_per_second_t(mTurningMotorSim->GetVelocity()), units::meters_per_second_t(mDrivingPID->Calculate(mDrivingMotorSim->GetVelocity())))
-		// ));
-
-		mTurningFlywheelSim->SetInputVoltage(units::volt_t(
-				mTurningFeedforward->Calculate(units::radians_per_second_t(mDrivingMotorSim->GetVelocity()), units::radians_per_second_t(mTurningPID->Calculate(mTurningMotorSim->GetVelocity())))
+		mDrivingFlywheelSim->SetInputVoltage(units::volt_t(
+		  mDrivingFeedforward->Calculate(units::meters_per_second_t(mTurningMotorSim->GetVelocity()), units::meters_per_second_t(mDrivingPID->Calculate(mDrivingMotorSim->GetVelocity())))
 		));
-		// frc::SmartDashboard::PutNumber("drivetrain/swerve module turning voltage", mTurningFeedforward->Calculate(units::radians_per_second_t(mDrivingMotorSim->GetVelocity()), units::radians_per_second_t(mTurningPID->Calculate(mTurningMotorSim->GetVelocity()))).value());
-		// mDrivingFlywheelSim->Update(0.02_s);
+		mTurningFlywheelSim->SetInputVoltage(units::volt_t(
+				mTurningFeedforward->Calculate(units::radians_per_second_t(mDrivingMotorSim->GetVelocity()), units::radians_per_second_t(mTurningPID->Calculate(mTurningMotorSim->GetPosition())))
+		));
+		mDrivingFlywheelSim->Update(0.02_s);
 		mTurningFlywheelSim->Update(0.02_s);
-		// mDrivingMotorSim->iterate(mDrivingFlywheelSim->GetAngularVelocity().value(), 12, 0.02);
+		mDrivingMotorSim->iterate(mDrivingFlywheelSim->GetAngularVelocity().value(), 12, 0.02);
 		mTurningMotorSim->iterate(mTurningFlywheelSim->GetAngularVelocity().value(), 12, 0.02);
 	}
 }
