@@ -31,7 +31,6 @@ SubShooter::SubShooter()
 
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
-		mRobotIsSimulated = true;
 		mLeaderGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
 		mFollowGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
 		mLeaderMotorSim = new rev::spark::SparkMaxSim{mLeaderShooterController, mLeaderGearBox};
@@ -39,8 +38,6 @@ SubShooter::SubShooter()
 		mFlywheelPlant = new frc::LinearSystem<1, 1, 1>{frc::LinearSystemId::FlywheelSystem(frc::DCMotor::NEO(2), kMOI, ShooterConstants::kGearRatio)};
 		mFlywheelSim = new frc::sim::FlywheelSim{*mFlywheelPlant, frc::DCMotor::NEO(2), {0.0}};
 	}
-
-	
 }
 
 void SubShooter::Periodic()
@@ -51,19 +48,19 @@ void SubShooter::Periodic()
 void SubShooter::setVoltage(units::volt_t iVoltage)
 {
 	mLeaderShooterController->SetVoltage(iVoltage);
-};
+}
 
 void SubShooter::setVelocity(units::turns_per_second_t iNextVelocity)
 {
 	mClossedLoopController->SetSetpoint(iNextVelocity.value(), ShooterConstants::kShooterClosedLoopControlType);
 
-	if (mRobotIsSimulated) {
+	if (frc::RobotBase::IsSimulation()) {
 		mFlywheelSim->SetInputVoltage(mFeedforward->Calculate(iNextVelocity));
 		mFlywheelSim->Update(0.02_s);
 		mLeaderMotorSim->iterate(units::turns_per_second_t(mFlywheelSim->GetAngularVelocity()).value(), 12, 0.02);
 		mFollowMotorSim->iterate(units::turns_per_second_t(mFlywheelSim->GetAngularVelocity()).value(), 12, 0.02);
 	}
-};
+}
 
 void SubShooter::setTargetVelocity(units::turns_per_second_t iTargetVelocity)
 {
@@ -73,14 +70,14 @@ void SubShooter::setTargetVelocity(units::turns_per_second_t iTargetVelocity)
 units::turns_per_second_t SubShooter::getVelocity()
 {
 	return units::turns_per_second_t(mRelativeEncoder->GetVelocity());
-};
+}
 
 std::array<rev::REVLibError, 2> SubShooter::Configure()
 {
 	return {
 		mLeaderShooterController->Configure(Configs::Shooter::LeaderConfig(), ShooterConstants::kReset, ShooterConstants::kPersist),
 		mFollowerShooterController->Configure(Configs::Shooter::FollowerConfig(), ShooterConstants::kReset, ShooterConstants::kPersist)};
-};
+}
 
 void SubShooter::InitSendable(wpi::SendableBuilder& builder)
 {

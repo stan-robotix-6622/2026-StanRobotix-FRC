@@ -20,7 +20,6 @@ SubIntake::SubIntake()
 
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
-		mRobotIsSimulated = true;
 		mGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
 		mMotorSim = new rev::spark::SparkMaxSim{mIntakeMotor, mGearBox};
 	}
@@ -35,7 +34,7 @@ void SubIntake::Stop()
 {
 	mIntakeMotor->StopMotor();
 
-	if (mRobotIsSimulated) {
+	if (frc::RobotBase::IsSimulation()) {
 		mMotorSim->SetAppliedOutput(0);
 	}
 }
@@ -49,7 +48,7 @@ void SubIntake::SetSpeed(double iSpeed)
 {
 	mIntakeMotor->Set(iSpeed);
 
-	if (mRobotIsSimulated) {
+	if (frc::RobotBase::IsSimulation()) {
 		mMotorSim->SetAppliedOutput(iSpeed);
 	}
 }

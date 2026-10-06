@@ -24,7 +24,6 @@ SubPivotIntake::SubPivotIntake()
 
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
-		mRobotIsSimulated = true;
 		mGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
 		mMotorSim = new rev::spark::SparkMaxSim{mPivotMotor, mGearBox};
 		mArmPlant = new frc::LinearSystem<2, 1, 2>{frc::LinearSystemId::SingleJointedArmSystem(*mGearBox, kMOI, PivotConstants::kGearRatio)};
@@ -43,7 +42,7 @@ void SubPivotIntake::SetVoltage(units::volt_t iVoltage)
 {
 	mPivotMotor->SetVoltage(iVoltage);
 
-	if (mRobotIsSimulated) {
+	if (frc::RobotBase::IsSimulation()) {
 		mArmSim->SetInputVoltage(iVoltage);
 		mArmSim->Update(0.02_s);
 		mMotorSim->iterate(mArmSim->GetVelocity().value(), 12, 0.02);
@@ -54,7 +53,7 @@ void SubPivotIntake::SetVelocity(units::radians_per_second_t iVelocity)
 {
 	mPivotMotor->SetVoltage(mFeedForward->Calculate(GetAngle(), iVelocity));
 
-	if (mRobotIsSimulated) {
+	if (frc::RobotBase::IsSimulation()) {
 		mArmSim->SetInputVoltage(mFeedForward->Calculate(GetAngle(), iVelocity));
 		mArmSim->Update(0.02_s);
 		mMotorSim->iterate(mArmSim->GetVelocity().value(), 12, 0.02);

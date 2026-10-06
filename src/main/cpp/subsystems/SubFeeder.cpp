@@ -17,7 +17,6 @@ SubFeeder::SubFeeder()
 
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
-		mRobotIsSimulated = true;
 		mGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
 		mMotorSim = new rev::spark::SparkMaxSim{mFeederController, mGearBox};
 	}
@@ -32,7 +31,7 @@ void SubFeeder::setVoltage(units::volt_t iOutput)
 {
 	mFeederController->SetVoltage(iOutput);
 
-	if (mRobotIsSimulated) {
+	if (frc::RobotBase::IsSimulation()) {
 		mMotorSim->SetAppliedOutput(iOutput / 12_V);
 	}
 };

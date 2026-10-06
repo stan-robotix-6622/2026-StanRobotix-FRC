@@ -27,7 +27,6 @@ class SubFeeder : public frc2::SubsystemBase {
 	rev::spark::SparkMax* mFeederController;
 
 	// For simulation
-	bool mRobotIsSimulated = false;
 	frc::DCMotor* mGearBox;
 	rev::spark::SparkMaxSim* mMotorSim;
 };

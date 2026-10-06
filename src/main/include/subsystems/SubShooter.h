@@ -52,7 +52,6 @@ class SubShooter : public frc2::SubsystemBase {
 	rev::spark::SparkClosedLoopController* mClossedLoopController;
 
 	// For simulation
-	bool mRobotIsSimulated = false;
 	units::kilogram_square_meter_t kMOI = 2_in * 2_in * 1.56_lb + 1.625_in * 1.625_in * 1.2_lb;
 	frc::DCMotor* mLeaderGearBox;
 	frc::DCMotor* mFollowGearBox;

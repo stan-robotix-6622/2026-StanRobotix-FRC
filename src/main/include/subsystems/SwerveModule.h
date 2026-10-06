@@ -56,7 +56,6 @@ class SwerveModule : public wpi::Sendable {
 	rev::spark::SparkAbsoluteEncoder* mTurningAbsoluteEncoder;
 
 	// For simulation
-	bool mRobotIsSimulated = false;
 	frc::DCMotor* mDrivingGearBox;
 	frc::DCMotor* mTurningGearBox;
 	rev::spark::SparkMaxSim* mDrivingMotorSim;

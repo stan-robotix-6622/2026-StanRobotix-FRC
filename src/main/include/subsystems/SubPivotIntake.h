@@ -41,7 +41,6 @@ class SubPivotIntake : public frc2::SubsystemBase {
 	frc::ArmFeedforward* mFeedForward;
 
 	// For simulation
-	bool mRobotIsSimulated = false;
 	units::kilogram_square_meter_t kMOI = (2_lb * 12_in * 12_in) / 3;
 	frc::DCMotor* mGearBox;
 	rev::spark::SparkMaxSim* mMotorSim;

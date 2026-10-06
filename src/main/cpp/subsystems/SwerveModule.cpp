@@ -17,7 +17,6 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
 
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
-		mRobotIsSimulated = true;
 		mTurningGearBox = new frc::DCMotor{frc::DCMotor::NEO550()};
 		mDrivingGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
 		mTurningMotorSim = new rev::spark::SparkMaxSim{mTurningMotor, mTurningGearBox};
@@ -60,7 +59,7 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
 	mTurningClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
 	mDrivingClosedLoopController->SetSetpoint(mOptimizedState.speed.value(), ModuleConstants::kDrivingClosedLoopControlType);
 
-	if (mRobotIsSimulated) {
+	if (frc::RobotBase::IsSimulation()) {
 		mDrivingPID->SetSetpoint(mOptimizedState.speed.value());
 		mTurningPID->SetSetpoint(mOptimizedState.angle.Radians().value());
 		mDrivingFlywheelSim->SetInputVoltage(units::volt_t(
@@ -80,7 +79,7 @@ void SwerveModule::setDesiredHeading(frc::Rotation2d iDesiredHeading)
 {
 	mTurningClosedLoopController->SetSetpoint(iDesiredHeading.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
 
-	if (mRobotIsSimulated) {
+	if (frc::RobotBase::IsSimulation()) {
 		mTurningMotorSim->iterate((iDesiredHeading.Radians().value() - mTurningMotorSim->GetPosition()) / 0.02, 12, 0.02);
 	}
 }
