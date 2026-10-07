@@ -123,7 +123,7 @@ namespace Configs
 
 	class Intake {
 	 public:
-		static SparkMaxConfig& LeaderConfig()
+		static SparkMaxConfig& Config()
 		{
 			static SparkMaxConfig intakeConfig{};
 			constexpr double intakeFactor = 1 / IntakeConstants::kGearRatio;
@@ -138,20 +138,11 @@ namespace Configs
 
 			return intakeConfig;
 		}
-		static SparkMaxConfig& FollowerConfig()
-		{
-			static SparkMaxConfig followerConfig{};
-
-			followerConfig.Apply(Configs::Intake::LeaderConfig());
-			followerConfig.Follow(CANid::kMotorIntakeID, IntakeConstants::kFollowerinverted);
-
-			return followerConfig;
-		}
 	};
 
 	class Pivot {
 	 public:
-		static SparkMaxConfig& Config()
+		static SparkMaxConfig& LeaderConfig()
 		{
 			static SparkMaxConfig pivotConfig{};
 			constexpr double pivotFactor = (2 * std::numbers::pi) / PivotConstants::kGearRatio;
@@ -165,6 +156,15 @@ namespace Configs
 			pivotConfig.SmartCurrentLimit(PivotConstants::kCurrentLimit.value());
 
 			return pivotConfig;
+		}
+		static SparkMaxConfig& FollowerConfig()
+		{
+			static SparkMaxConfig followerConfig{};
+
+			followerConfig.Apply(Configs::Intake::Config());
+			followerConfig.Follow(CANid::kMotorPivotID, PivotConstants::kFollowerinverted);
+
+			return followerConfig;
 		}
 	};
 

@@ -20,10 +20,11 @@ SubPivotIntake::SubPivotIntake()
 	mEncoder = new rev::spark::SparkRelativeEncoder{mPivotMotor->GetEncoder()};
 	mFeedForward = new frc::ArmFeedforward{PivotConstants::kS, PivotConstants::kG, PivotConstants::kV};
 
-	// mPivotMotor->Configure(Configs::Pivot::Config(), PivotConstants::kReset, PivotConstants::kPersist);
+	mPivotMotor->Configure(Configs::Pivot::LeaderConfig(), PivotConstants::kReset, PivotConstants::kPersist);
 
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
+		mRobotIsSimulated = true;
 		mGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
 		mMotorSim = new rev::spark::SparkMaxSim{mPivotMotor, mGearBox};
 		mArmPlant = new frc::LinearSystem<2, 1, 2>{frc::LinearSystemId::SingleJointedArmSystem(*mGearBox, kMOI, PivotConstants::kGearRatio)};
@@ -42,7 +43,7 @@ void SubPivotIntake::SetVoltage(units::volt_t iVoltage)
 {
 	mPivotMotor->SetVoltage(iVoltage);
 
-	if (frc::RobotBase::IsSimulation()) {
+	if (mRobotIsSimulated) {
 		mArmSim->SetInputVoltage(iVoltage);
 		mArmSim->Update(0.02_s);
 		mMotorSim->iterate(mArmSim->GetVelocity().value(), 12, 0.02);
@@ -53,7 +54,7 @@ void SubPivotIntake::SetVelocity(units::radians_per_second_t iVelocity)
 {
 	mPivotMotor->SetVoltage(mFeedForward->Calculate(GetAngle(), iVelocity));
 
-	if (frc::RobotBase::IsSimulation()) {
+	if (mRobotIsSimulated) {
 		mArmSim->SetInputVoltage(mFeedForward->Calculate(GetAngle(), iVelocity));
 		mArmSim->Update(0.02_s);
 		mMotorSim->iterate(mArmSim->GetVelocity().value(), 12, 0.02);
@@ -70,12 +71,12 @@ units::radian_t SubPivotIntake::GetAngle()
 	return units::radian_t(frc::SmartDashboard::GetNumber("tunable/Offset pivot", PivotConstants::kOffset) + mEncoder->GetPosition());
 }
 
-// std::array<rev::REVLibError, 2> SubPivotIntake::Configure()
-// {
-// 	return {
-// 		mPivotMotor->Configure(Configs::Intake::LeaderConfig(), IntakeConstants::kReset, IntakeConstants::kPersist),
-// 		mPivotMotorFollower->Configure(Configs::Intake::FollowerConfig(), IntakeConstants::kReset, IntakeConstants::kPersist)};
-// };
+std::array<rev::REVLibError, 2> SubPivotIntake::Configure()
+{
+	return {
+		mPivotMotor->Configure(Configs::Intake::Config(), IntakeConstants::kReset, IntakeConstants::kPersist),
+		mPivotMotorFollower->Configure(Configs::Pivot::LeaderConfig(), IntakeConstants::kReset, IntakeConstants::kPersist)};
+};
 
 void SubPivotIntake::InitSendable(wpi::SendableBuilder& builder)
 {
