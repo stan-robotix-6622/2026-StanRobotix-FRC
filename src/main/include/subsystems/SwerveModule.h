@@ -4,13 +4,13 @@
 
 #pragma once
 
-#include <frc/geometry/Rotation2d.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/SimpleMotorFeedforward.h>
+#include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
-#include <frc/system/plant/DCMotor.h>
 #include <frc/simulation/FlywheelSim.h>
+#include <frc/system/plant/DCMotor.h>
 #include <rev/sim/SparkMaxSim.h>
 #include <rev/SparkAbsoluteEncoder.h>
 #include <rev/SparkClosedLoopController.h>

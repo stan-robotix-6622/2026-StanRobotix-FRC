@@ -19,6 +19,7 @@
 #include <vector>
 
 #include "Constants.h"
+#include "RobotixLib.hpp"
 
 #include "commands/DriveCommands.h"
 #include "commands/FullIntake.h"
@@ -29,8 +30,6 @@
 #include "commands/ShootDynamically.h"
 #include "commands/ShootInPlace.h"
 #include "commands/ShootVariable.h"
-
-#include "RobotixLib.hpp"
 
 // #include "commands/Climb.h"
 // #include "commands/ClimbUntilDown.h"

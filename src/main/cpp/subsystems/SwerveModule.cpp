@@ -5,8 +5,8 @@
 #include "subsystems/SwerveModule.h"
 
 #include <frc/RobotBase.h>
-#include <frc/system/plant/LinearSystemId.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/system/plant/LinearSystemId.h>
 
 #include "Configs.h"
 
@@ -63,11 +63,9 @@ void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
 		mDrivingPID->SetSetpoint(mOptimizedState.speed.value());
 		mTurningPID->SetSetpoint(mOptimizedState.angle.Radians().value());
 		mDrivingFlywheelSim->SetInputVoltage(units::volt_t(
-		  mDrivingFeedforward->Calculate(units::meters_per_second_t(mTurningMotorSim->GetVelocity()), units::meters_per_second_t(mDrivingPID->Calculate(mDrivingMotorSim->GetVelocity())))
-		));
+				mDrivingFeedforward->Calculate(units::meters_per_second_t(mTurningMotorSim->GetVelocity()), units::meters_per_second_t(mDrivingPID->Calculate(mDrivingMotorSim->GetVelocity())))));
 		mTurningFlywheelSim->SetInputVoltage(units::volt_t(
-				mTurningFeedforward->Calculate(units::radians_per_second_t(mDrivingMotorSim->GetVelocity()), units::radians_per_second_t(mTurningPID->Calculate(mTurningMotorSim->GetPosition())))
-		));
+				mTurningFeedforward->Calculate(units::radians_per_second_t(mDrivingMotorSim->GetVelocity()), units::radians_per_second_t(mTurningPID->Calculate(mTurningMotorSim->GetPosition())))));
 		mDrivingFlywheelSim->Update(0.02_s);
 		mTurningFlywheelSim->Update(0.02_s);
 		mDrivingMotorSim->iterate(mDrivingFlywheelSim->GetAngularVelocity().value(), 12, 0.02);

@@ -17,10 +17,10 @@
 #include <units/angular_velocity.h>
 #include <units/current.h>
 #include <units/length.h>
+#include <units/moment_of_inertia.h>
+#include <units/time.h>
 #include <units/velocity.h>
 #include <units/voltage.h>
-#include <units/time.h>
-#include <units/moment_of_inertia.h>
 
 #include "RobotixLib.hpp"
 
@@ -89,23 +89,23 @@ namespace ChassisConstants
 	inline constexpr units::meter_t kModuleCornerOffset = 1.75_in;
 
 	// We take for granted a rectangular frame
-	inline constexpr frc::Translation2d kFrontLeftTranslation  = 
+	inline constexpr frc::Translation2d kFrontLeftTranslation =
 			frc::Translation2d{(ChassisConstants::kRobotLength / 2 - ChassisConstants::kModuleCornerOffset),
-												 (ChassisConstants::kRobotWidth / 2 - ChassisConstants::kModuleCornerOffset)};
-	inline constexpr frc::Translation2d kFrontRightTranslation = 
+	                       (ChassisConstants::kRobotWidth / 2 - ChassisConstants::kModuleCornerOffset)};
+	inline constexpr frc::Translation2d kFrontRightTranslation =
 			frc::Translation2d{(ChassisConstants::kRobotLength / 2 - ChassisConstants::kModuleCornerOffset),
-												 -(ChassisConstants::kRobotWidth / 2 - ChassisConstants::kModuleCornerOffset)};
-	inline constexpr frc::Translation2d kBackLeftTranslation   = 
+	                       -(ChassisConstants::kRobotWidth / 2 - ChassisConstants::kModuleCornerOffset)};
+	inline constexpr frc::Translation2d kBackLeftTranslation =
 			frc::Translation2d{-(ChassisConstants::kRobotLength / 2 - ChassisConstants::kModuleCornerOffset),
-												 (ChassisConstants::kRobotWidth / 2 - ChassisConstants::kModuleCornerOffset)};
-	inline constexpr frc::Translation2d kBackRightTranslation  = 
+	                       (ChassisConstants::kRobotWidth / 2 - ChassisConstants::kModuleCornerOffset)};
+	inline constexpr frc::Translation2d kBackRightTranslation =
 			frc::Translation2d{-(ChassisConstants::kRobotLength / 2 - ChassisConstants::kModuleCornerOffset),
-												 -(ChassisConstants::kRobotWidth / 2 - ChassisConstants::kModuleCornerOffset)};
+	                       -(ChassisConstants::kRobotWidth / 2 - ChassisConstants::kModuleCornerOffset)};
 
 	inline constexpr units::kilogram_t kRobotMass = 60_kg;
 	inline constexpr units::kilogram_square_meter_t kRobotMOI = 6_kg_sq_m;
 	inline constexpr units::kilogram_square_meter_t kModuleMOI = 0.0003917128_kg_sq_m; // 1.33855 lb*in^2
-}
+} // namespace ChassisConstants
 
 namespace ModuleConstants
 {
@@ -226,7 +226,7 @@ namespace CANid
 	inline constexpr int kBackLeftMotor550ID = 1;
 
 	inline constexpr int kMotorPivotID = 9;
-	inline constexpr int kFollowerMotorPivotID = 0; //to determine
+	inline constexpr int kFollowerMotorPivotID = 0; // to determine
 	inline constexpr int kMotorIntakeID = 10;
 
 	inline constexpr int kIMUPigeonID = 0;
@@ -274,7 +274,7 @@ namespace ShooterConstants
 		inline constexpr robotixLib::templateUnits::VoltageInverse<units::second> kRampRate = 1_V / 1_s;
 		inline constexpr units::volt_t kStepVoltage = 1_V;
 		inline constexpr units::second_t kTimeout = 10_s;
-	}
+	} // namespace SystemId
 } // namespace ShooterConstants
 
 namespace FeederConstants

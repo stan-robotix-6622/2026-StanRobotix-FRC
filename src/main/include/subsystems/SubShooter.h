@@ -9,6 +9,7 @@
 #include <frc/system/LinearSystem.h>
 #include <frc/system/plant/DCMotor.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc2/command/sysid/SysIdRoutine.h>
 #include <rev/sim/SparkMaxSim.h>
 #include <rev/SparkClosedLoopController.h>
 #include <rev/SparkMax.h>
@@ -19,8 +20,6 @@
 #include <units/angular_velocity.h>
 #include <units/moment_of_inertia.h>
 #include <units/voltage.h>
-#include <frc2/command/sysid/SysIdRoutine.h>
-
 
 class SubShooter : public frc2::SubsystemBase {
  public:
@@ -63,6 +62,4 @@ class SubShooter : public frc2::SubsystemBase {
 	units::turns_per_second_t mTargetVelocity = 0_tps;
 
 	frc2::sysid::SysIdRoutine* mRoutine;
-
-	
 };
