@@ -10,6 +10,7 @@
 
 #include "Configs.h"
 #include "RobotixLib.hpp"
+#include "subsystems/SubShooter.h"
 
 SubShooter::SubShooter()
 {
@@ -105,6 +106,14 @@ bool SubShooter::atDesiredVelocity()
 	return units::math::abs(getVelocity() - mTargetVelocity) < units::turns_per_second_t(frc::SmartDashboard::GetNumber("tunable/Shooter tolerance", ShooterConstants::PIDConstants::kTolerance.value())) && mTargetVelocity != 0_tps;
 }
 
+frc2::CommandPtr SubShooter::SysIdQuasistatic(frc2::sysid::Direction direction)
+{
+	return mRoutine->Quasistatic(direction);
+}
+frc2::CommandPtr SubShooter::SysIdDynamic(frc2::sysid::Direction direction)
+{
+	return mRoutine->Dynamic(direction);
+}
 // void SubShooter::SysIdRoutine(frc2::sysid::SysIdRoutine routine)
 // {
 // 	routine.

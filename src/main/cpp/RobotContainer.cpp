@@ -132,6 +132,16 @@ void RobotContainer::ConfigureBindings()
 	// mCommandXboxController->Button(OperatorConstants::Button::A).WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
 
 	mCommandXboxController->Button(OperatorConstants::Button::Y).WhileTrue(Shoot(mSubShooter).ToPtr());
+
+	mCommandXboxController->Button(OperatorConstants::Button::Y && OperatorConstants::Button::LeftBumper)
+		.WhileTrue(mSubShooter->SysIdQuasistatic(frc2::sysid::Direction::kForward));
+	mCommandXboxController->Button(OperatorConstants::Button::A && OperatorConstants::Button::LeftBumper)
+		.WhileTrue(mSubShooter->SysIdQuasistatic(frc2::sysid::Direction::kReverse));
+	mCommandXboxController->Button(OperatorConstants::Button::X && OperatorConstants::Button::LeftBumper)
+		.WhileTrue(mSubShooter->SysIdDynamic(frc2::sysid::Direction::kForward));
+	mCommandXboxController->Button(OperatorConstants::Button::B && OperatorConstants::Button::LeftBumper)
+		.WhileTrue(mSubShooter->SysIdDynamic(frc2::sysid::Direction::kReverse));
+
 	mCommandXboxController->Button(OperatorConstants::Button::B).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
 	// mCommandXboxController->Button(OperatorConstants::Button::RightBumper).OnTrue(frc2::cmd::RunOnce([this] { if (frc::DriverStation::GetAlliance() && frc::DriverStation::GetAlliance().value() == frc::DriverStation::kBlue)
@@ -173,6 +183,7 @@ void RobotContainer::ConfigureBindings()
 
 	mCommandXboxController->Button(OperatorConstants::Button::RightJoystick).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
 																																																										 (units::meter_t)frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value())); }));
+
 }
 
 void RobotContainer::ConfigureBindingsCopilot()
