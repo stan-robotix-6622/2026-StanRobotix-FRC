@@ -17,15 +17,23 @@ SubShooter::SubShooter()
 	mFollowerShooterController = new rev::spark::SparkMax{CANid::kFollowerMotorShooterID, rev::spark::SparkLowLevel::MotorType::kBrushless};
 	mRelativeEncoder = new rev::spark::SparkRelativeEncoder{mLeaderShooterController->GetEncoder()};
 	mFeedforward = new frc::SimpleMotorFeedforward<units::turns>{ShooterConstants::kS, ShooterConstants::kV};
-	// mRoutine = new frc2::sysid::SysIdRoutine{
-	// 		frc2::sysid::Config
-	// 		{
-	// 			ShooterConstants::SystemId::kRampRate,
-	// 			ShooterConstants::SystemId::kStepVoltage,
-	// 			ShooterConstants::SystemId::kTimeout
-	// 		}
-	// 	};
 	mClossedLoopController = new rev::spark::SparkClosedLoopController{mLeaderShooterController->GetClosedLoopController()};
+	
+	mConfig = new frc2::sysid::Config{std::nullopt, std::nullopt, std::nullopt, nullptr};
+	mMechanism = new frc2::sysid::Mechanism{
+		[this] (units::volt_t iVoltage) {
+			mLeaderShooterController->SetVoltage(iVoltage);
+		}, [this] (frc::sysid::SysIdRoutineLog * log)
+		{
+			log->Motor("Shooter Leader")
+					.position(units::turn_t(mRelativeEncoder->GetPosition()))
+					.velocity(units::turns_per_second_t(mRelativeEncoder->GetVelocity()))
+					.current(units::ampere_t(mLeaderShooterController->GetOutputCurrent()));
+		},
+		this,
+		"SubShooter"
+	};
+	mRoutine = new frc2::sysid::SysIdRoutine{*mConfig, *mMechanism};
 
 	Configure();
 

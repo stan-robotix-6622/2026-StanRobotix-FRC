@@ -64,6 +64,6 @@ class SubShooter : public frc2::SubsystemBase {
 	units::turns_per_second_t mTargetVelocity = 0_tps;
 
 	frc2::sysid::SysIdRoutine* mRoutine;
-
-	
+	frc2::sysid::Config* mConfig;
+	frc2::sysid::Mechanism* mMechanism;
 };
