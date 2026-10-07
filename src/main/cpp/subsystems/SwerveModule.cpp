@@ -36,9 +36,9 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
 	mTurningClosedLoopController = new rev::spark::SparkClosedLoopController{mTurningMotor->GetClosedLoopController()};
 	mDrivingClosedLoopController = new rev::spark::SparkClosedLoopController{mDrivingMotor->GetClosedLoopController()};
 	mDrivingPID = new frc::PIDController{ModuleConstants::kDrivingP, ModuleConstants::kDrivingI, ModuleConstants::kDrivingD};
-	mTurningPID = new frc::PIDController{ModuleConstants::kTurningP, ModuleConstants::kTurningI, ModuleConstants::kTurningD};
+	mTurningPID = new frc::PIDController{8, ModuleConstants::kTurningI, ModuleConstants::kTurningD};
 	mTurningPID->EnableContinuousInput(ModuleConstants::Config::kTurningClosedLoopMinInput, ModuleConstants::Config::kTurningClosedLoopMaxInput);
-	mDrivingFeedforward = new frc::SimpleMotorFeedforward<units::meters>{0_V, 12_V / ModuleConstants::kDriveWheelMaxFreeSpeed};
+	mDrivingFeedforward = new frc::SimpleMotorFeedforward<units::meters>{0_V, 2.4 * 12_V / ModuleConstants::kDriveWheelMaxFreeSpeed};
 	mTurningFeedforward = new frc::SimpleMotorFeedforward<units::radians>{0_V, 12_V / ModuleConstants::kTurningWheelFreeSpeedRadps};
 
 	mDrivingEncoder = new rev::spark::SparkRelativeEncoder{mDrivingMotor->GetEncoder()};
