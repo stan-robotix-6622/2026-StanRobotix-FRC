@@ -46,5 +46,4 @@ class SubPivotIntake : public frc2::SubsystemBase {
 	rev::spark::SparkMaxSim* mMotorSim;
 	frc::sim::SingleJointedArmSim* mArmSim;
 	frc::LinearSystem<2, 1, 2>* mArmPlant;
-  bool mRobotIsSimulated;
 };
