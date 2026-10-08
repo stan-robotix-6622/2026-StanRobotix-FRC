@@ -162,7 +162,7 @@ namespace Configs
 			static SparkMaxConfig followerConfig{};
 
 			followerConfig.Apply(Configs::Intake::Config());
-			followerConfig.Follow(CANid::kMotorPivotID, PivotConstants::kFollowerinverted);
+			followerConfig.Follow(CANid::kLeaderMotorPivotID, PivotConstants::kFollowerinverted);
 
 			return followerConfig;
 		}

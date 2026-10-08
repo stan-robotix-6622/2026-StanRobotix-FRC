@@ -35,8 +35,8 @@ class SubPivotIntake : public frc2::SubsystemBase {
 	std::array<rev::REVLibError, 2> Configure();
 
  private:
-	rev::spark::SparkMax* mPivotMotor;
-	rev::spark::SparkMax* mPivotMotorFollower;
+	rev::spark::SparkMax* mPivotLeaderMotor;
+	rev::spark::SparkMax* mPivotFollowerMotor;
 	rev::spark::SparkRelativeEncoder* mEncoder;
 	frc::ArmFeedforward* mFeedForward;
 

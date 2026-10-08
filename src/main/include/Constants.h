@@ -225,7 +225,7 @@ namespace CANid
 	inline constexpr int kBackLeftMotorID = 2;
 	inline constexpr int kBackLeftMotor550ID = 1;
 
-	inline constexpr int kMotorPivotID = 9;
+	inline constexpr int kLeaderMotorPivotID = 9;
 	inline constexpr int kFollowerMotorPivotID = 0; //to determine
 	inline constexpr int kMotorIntakeID = 10;
 

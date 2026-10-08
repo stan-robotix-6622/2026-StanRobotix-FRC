@@ -15,9 +15,9 @@
 
 SubPivotIntake::SubPivotIntake()
 {
-	mPivotMotor = new rev::spark::SparkMax{CANid::kMotorPivotID, rev::spark::SparkLowLevel::MotorType::kBrushless};
-	mPivotMotorFollower = new rev::spark::SparkMax{CANid::kFollowerMotorPivotID, rev::spark::SparkLowLevel::MotorType::kBrushless};
-	mEncoder = new rev::spark::SparkRelativeEncoder{mPivotMotor->GetEncoder()};
+	mPivotLeaderMotor = new rev::spark::SparkMax{CANid::kLeaderMotorPivotID, rev::spark::SparkLowLevel::MotorType::kBrushless};
+	mPivotFollowerMotor = new rev::spark::SparkMax{CANid::kFollowerMotorPivotID, rev::spark::SparkLowLevel::MotorType::kBrushless};
+	mEncoder = new rev::spark::SparkRelativeEncoder{mPivotLeaderMotor->GetEncoder()};
 	mFeedForward = new frc::ArmFeedforward{PivotConstants::kS, PivotConstants::kG, PivotConstants::kV};
 
 	Configure();
@@ -25,8 +25,8 @@ SubPivotIntake::SubPivotIntake()
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
 		mRobotIsSimulated = true;
-		mGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
-		mMotorSim = new rev::spark::SparkMaxSim{mPivotMotor, mGearBox};
+		mGearBox = new frc::DCMotor{frc::DCMotor::NEO(2)};
+		mMotorSim = new rev::spark::SparkMaxSim{mPivotLeaderMotor, mGearBox};
 		mArmPlant = new frc::LinearSystem<2, 1, 2>{frc::LinearSystemId::SingleJointedArmSystem(*mGearBox, kMOI, PivotConstants::kGearRatio)};
 		mArmSim = new frc::sim::SingleJointedArmSim{*mArmPlant, *mGearBox, PivotConstants::kGearRatio, 12_in, 0_deg, 150_deg, true, units::radian_t(PivotConstants::kOffset), {0.0, 0.0}};
 	}
@@ -36,12 +36,12 @@ void SubPivotIntake::Periodic() {}
 
 void SubPivotIntake::Stop()
 {
-	mPivotMotor->StopMotor();
+	mPivotLeaderMotor->StopMotor();
 }
 
 void SubPivotIntake::SetVoltage(units::volt_t iVoltage)
 {
-	mPivotMotor->SetVoltage(iVoltage);
+	mPivotLeaderMotor->SetVoltage(iVoltage);
 
 	if (mRobotIsSimulated) {
 		mArmSim->SetInputVoltage(iVoltage);
@@ -52,7 +52,7 @@ void SubPivotIntake::SetVoltage(units::volt_t iVoltage)
 
 void SubPivotIntake::SetVelocity(units::radians_per_second_t iVelocity)
 {
-	mPivotMotor->SetVoltage(mFeedForward->Calculate(GetAngle(), iVelocity));
+	mPivotLeaderMotor->SetVoltage(mFeedForward->Calculate(GetAngle(), iVelocity));
 
 	if (mRobotIsSimulated) {
 		mArmSim->SetInputVoltage(mFeedForward->Calculate(GetAngle(), iVelocity));
@@ -63,7 +63,7 @@ void SubPivotIntake::SetVelocity(units::radians_per_second_t iVelocity)
 
 void SubPivotIntake::KeepPosition()
 {
-	mPivotMotor->SetVoltage(mFeedForward->Calculate(GetAngle(), 0_rad_per_s));
+	mPivotLeaderMotor->SetVoltage(mFeedForward->Calculate(GetAngle(), 0_rad_per_s));
 }
 
 units::radian_t SubPivotIntake::GetAngle()
