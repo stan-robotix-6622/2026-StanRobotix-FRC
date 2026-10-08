@@ -72,12 +72,16 @@ units::turns_per_second_t SubShooter::getVelocity()
 	return units::turns_per_second_t(mRelativeEncoder->GetVelocity());
 }
 
-std::array<rev::REVLibError, 2> SubShooter::Configure()
+std::array<frc::Alert*, 2> SubShooter::Configure()
 {
 	return {
-		mLeaderShooterController->Configure(Configs::Shooter::LeaderConfig(), ShooterConstants::kReset, ShooterConstants::kPersist),
-		mFollowerShooterController->Configure(Configs::Shooter::FollowerConfig(), ShooterConstants::kReset, ShooterConstants::kPersist)};
-}
+		robotixLib::getAlertForREVErrorMessage(
+			mLeaderShooterController->Configure(Configs::Shooter::LeaderConfig(), ShooterConstants::kReset, ShooterConstants::kPersist),
+			"Shooter Leader"),
+		robotixLib::getAlertForREVErrorMessage(
+			mFollowerShooterController->Configure(Configs::Shooter::FollowerConfig(), ShooterConstants::kReset, ShooterConstants::kPersist),
+			"Shooter Follower")};
+};
 
 void SubShooter::InitSendable(wpi::SendableBuilder& builder)
 {

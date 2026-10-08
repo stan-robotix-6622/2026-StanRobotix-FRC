@@ -34,7 +34,7 @@ class SubShooter : public frc2::SubsystemBase {
 
 	// The first index of the array is the result of the Leader's configuration and
 	// the second is the result of the Follower's configuration
-	std::array<rev::REVLibError, 2> Configure();
+	std::array<frc::Alert*, 2> Configure();
 
 	void Periodic() override;
 

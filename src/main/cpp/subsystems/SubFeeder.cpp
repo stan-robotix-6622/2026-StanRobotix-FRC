@@ -9,10 +9,12 @@
 #include <frc2/command/Commands.h>
 
 #include "Configs.h"
+#include "RobotixLib.hpp"
 
 SubFeeder::SubFeeder()
 {
 	mFeederController = new rev::spark::SparkMax{CANid::kMotorFeederID, rev::spark::SparkLowLevel::MotorType::kBrushless};
+
 	Configure();
 
 	// Simulation
@@ -36,9 +38,11 @@ void SubFeeder::setVoltage(units::volt_t iOutput)
 	}
 };
 
-rev::REVLibError SubFeeder::Configure()
+frc::Alert* SubFeeder::Configure()
 {
-	return mFeederController->Configure(Configs::Feeder::Config(), FeederConstants::kReset, FeederConstants::kPersist);
+	return robotixLib::getAlertForREVErrorMessage(
+		mFeederController->Configure(Configs::Feeder::Config(), FeederConstants::kReset, FeederConstants::kPersist),
+		"Feeder");
 };
 
 frc2::CommandPtr SubFeeder::getFeedShooterCommand(units::volt_t iVoltage)

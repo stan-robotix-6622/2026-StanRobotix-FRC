@@ -9,6 +9,7 @@
 #include <frc2/command/Commands.h>
 
 #include "Configs.h"
+#include "RobotixLib.hpp"
 
 SubIntake::SubIntake()
 {
@@ -16,7 +17,9 @@ SubIntake::SubIntake()
 
 	mEncoder = new rev::spark::SparkRelativeEncoder{mIntakeMotor->GetEncoder()};
 
-	mIntakeMotor->Configure(Configs::Intake::Config(), IntakeConstants::kReset, IntakeConstants::kPersist);
+	robotixLib::getAlertForREVErrorMessage(
+		mIntakeMotor->Configure(Configs::Intake::Config(), IntakeConstants::kReset, IntakeConstants::kPersist),
+		"Intake");
 
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
