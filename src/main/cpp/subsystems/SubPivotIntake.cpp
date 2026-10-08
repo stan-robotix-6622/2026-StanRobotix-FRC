@@ -21,36 +21,7 @@ SubPivotIntake::SubPivotIntake()
 	mEncoder = new rev::spark::SparkRelativeEncoder{mPivotLeaderMotor->GetEncoder()};
 	mFeedForward = new frc::ArmFeedforward{PivotConstants::kS, PivotConstants::kG, PivotConstants::kV};
 
-	std::array<rev::REVLibError, 2> ErrorMessages = Configure();
-	std::array<frc::Alert*, 2> mConfigurationErrors;
-	switch (ErrorMessages[0])
-	{
-		case rev::REVLibError::kCANDisconnected:
-			mConfigurationErrors[0] = new frc::Alert{"Pivot Leader Motor controller is Disconnected from CAN", frc::Alert::AlertType::kError};
-			break;
-		case rev::REVLibError::kOk:
-			mConfigurationErrors[0] = new frc::Alert{"Pivot Leader Motor controller can correctly configured", frc::Alert::AlertType::kInfo};
-			break;
-
-		default:
-			mConfigurationErrors[0] = new frc::Alert{"Pivot Leader Motor controller was configured with unknow error message", frc::Alert::AlertType::kWarning};
-			break;
-	}
-	mConfigurationErrors[0]->Set(true);
-	switch (ErrorMessages[1])
-	{
-		case rev::REVLibError::kCANDisconnected:
-			mConfigurationErrors[1] = new frc::Alert{"Pivot Follower Motor controller is Disconnected from CAN", frc::Alert::AlertType::kError};
-			break;
-		case rev::REVLibError::kOk:
-			mConfigurationErrors[1] = new frc::Alert{"Pivot Follower Motor controller can correctly configured", frc::Alert::AlertType::kInfo};
-			break;
-
-		default:
-			mConfigurationErrors[1] = new frc::Alert{"Pivot Follower Motor controller was configured with unknow error message", frc::Alert::AlertType::kWarning};
-			break;
-	}
-	mConfigurationErrors[1]->Set(true);
+	Configure();
 
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
@@ -101,11 +72,15 @@ units::radian_t SubPivotIntake::GetAngle()
 	return units::radian_t(frc::SmartDashboard::GetNumber("tunable/Offset pivot", PivotConstants::kOffset) + mEncoder->GetPosition());
 }
 
-std::array<rev::REVLibError, 2> SubPivotIntake::Configure()
+std::array<frc::Alert*, 2> SubPivotIntake::Configure()
 {
 	return {
-		mPivotLeaderMotor->Configure(Configs::Pivot::LeaderConfig(), IntakeConstants::kReset, IntakeConstants::kPersist),
-		mPivotFollowerMotor->Configure(Configs::Pivot::FollowerConfig(), IntakeConstants::kReset, IntakeConstants::kPersist)};
+		robotixLib::getAlertForREVErrorMessage(
+			mPivotLeaderMotor->Configure(Configs::Pivot::LeaderConfig(), IntakeConstants::kReset, IntakeConstants::kPersist),
+			"Pivot Leader"),
+		robotixLib::getAlertForREVErrorMessage(
+			mPivotFollowerMotor->Configure(Configs::Pivot::FollowerConfig(), IntakeConstants::kReset, IntakeConstants::kPersist),
+			"Pivot Follower")};
 };
 
 void SubPivotIntake::InitSendable(wpi::SendableBuilder& builder)

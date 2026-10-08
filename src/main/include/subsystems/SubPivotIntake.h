@@ -32,7 +32,7 @@ class SubPivotIntake : public frc2::SubsystemBase {
 
 	void InitSendable(wpi::SendableBuilder& builder) override;
 
-	std::array<rev::REVLibError, 2> Configure();
+	std::array<frc::Alert*, 2> Configure();
 
  private:
 	rev::spark::SparkMax* mPivotLeaderMotor;

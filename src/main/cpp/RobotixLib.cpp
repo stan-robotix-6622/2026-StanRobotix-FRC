@@ -31,6 +31,55 @@ double robotixLib::deadband(double iInput, double iThreshold, bool iSquared)
 	return frc::CopyDirectionPow((1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold)), 2);
 }
 
+frc::Alert* robotixLib::getAlertForREVErrorMessage(rev::REVLibError iErrorMessage, std::string iMotorName)
+{
+	frc::Alert* wAlert;
+	switch (iErrorMessage) {
+		case rev::REVLibError::kOk:
+			wAlert = new frc::Alert{"Configuration", "Le controlleur du moteur" + iMotorName + " a été configuré correctement", frc::Alert::AlertType::kInfo};
+			break;
+		case rev::REVLibError::kError:
+			wAlert = new frc::Alert{"Configuration", "La configuration du controlleur du moteur " + iMotorName + " a résulté en une erreure", frc::Alert::AlertType::kError};
+			break;
+		case rev::REVLibError::kTimeout:
+			wAlert = new frc::Alert{"Configuration", "La configuration du controlleur du moteur " + iMotorName + " ne s'est pas effectué à temps", frc::Alert::AlertType::kWarning};
+			break;
+		case rev::REVLibError::kCantFindFirmware:
+			wAlert = new frc::Alert{"Configuration", "Na pas pu trouver le micrologiciel du controlleur du moteur " + iMotorName + " lors de sa configuration", frc::Alert::AlertType::kError};
+			break;
+		case rev::REVLibError::kFirmwareTooOld:
+			wAlert = new frc::Alert{"Configuration", "Le micrologiciel du controlleur du moteur " + iMotorName + " est trop vieux", frc::Alert::AlertType::kWarning};
+			break;
+		case rev::REVLibError::kFirmwareTooNew:
+			wAlert = new frc::Alert{"Configuration", "Le micrologiciel du controlleur du moteur " + iMotorName + " est trop récent", frc::Alert::AlertType::kWarning};
+			break;
+		case rev::REVLibError::kFollowConfigMismatch:
+			wAlert = new frc::Alert{"Configuration", "La configuration du controlleur du moteur " + iMotorName + " a une incompatibilité pour le Follower", frc::Alert::AlertType::kError};
+			break;
+		case rev::REVLibError::kCANDisconnected:
+			wAlert = new frc::Alert{"Configuration", "Le controlleur du moteur " + iMotorName + " est déconnecté du bus CAN", frc::Alert::AlertType::kError};
+			break;
+		case rev::REVLibError::kDuplicateCANId:
+			wAlert = new frc::Alert{"Configuration", "Le CAN Id du controlleur du moteur " + iMotorName + " est le même qu'un autre controlleur de moteur", frc::Alert::AlertType::kError};
+			break;
+		case rev::REVLibError::kInvalidCANId:
+			wAlert = new frc::Alert{"Configuration", "Le CAN Id du controlleur du moteur " + iMotorName + " est invalide", frc::Alert::AlertType::kError};
+			break;
+		case rev::REVLibError::kCannotPersistParametersWhileEnabled:
+			wAlert = new frc::Alert{"Configuration", "Le peut pas persister la configuration du controlleur du moteur " + iMotorName + " lorsque le robot est activé", frc::Alert::AlertType::kWarning};
+			break;
+
+		default:
+			wAlert = new frc::Alert{"Configuration", "La configuration du controlleur du moteur" + iMotorName + " a résulté en une erreure inconnue", frc::Alert::AlertType::kWarning};
+			break;
+	}
+	// if (iErrorMessage != rev::REVLibError::kOk)
+	// {
+		wAlert->Set(true);
+	// }
+	return wAlert;
+}
+
 units::degree_t robotixLib::odometryUtils::GetAngleToTarget(frc::Translation2d iCurrentTranslation, frc::Translation2d iTargetTranslation)
 {
 	frc::Translation2d wTranslationToTarget = iTargetTranslation - iCurrentTranslation;
