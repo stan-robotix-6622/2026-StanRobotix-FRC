@@ -5,6 +5,7 @@
 #include "subsystems/SubPivotIntake.h"
 
 #include <frc/RobotBase.h>
+#include <frc/Alert.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/system/plant/LinearSystemId.h>
 
@@ -20,7 +21,36 @@ SubPivotIntake::SubPivotIntake()
 	mEncoder = new rev::spark::SparkRelativeEncoder{mPivotLeaderMotor->GetEncoder()};
 	mFeedForward = new frc::ArmFeedforward{PivotConstants::kS, PivotConstants::kG, PivotConstants::kV};
 
-	Configure();
+	std::array<rev::REVLibError, 2> ErrorMessages = Configure();
+	std::array<frc::Alert*, 2> mConfigurationErrors;
+	switch (ErrorMessages[0])
+	{
+		case rev::REVLibError::kCANDisconnected:
+			mConfigurationErrors[0] = new frc::Alert{"Pivot Leader Motor controller is Disconnected from CAN", frc::Alert::AlertType::kError};
+			break;
+		case rev::REVLibError::kOk:
+			mConfigurationErrors[0] = new frc::Alert{"Pivot Leader Motor controller can correctly configured", frc::Alert::AlertType::kInfo};
+			break;
+
+		default:
+			mConfigurationErrors[0] = new frc::Alert{"Pivot Leader Motor controller was configured with unknow error message", frc::Alert::AlertType::kWarning};
+			break;
+	}
+	mConfigurationErrors[0]->Set(true);
+	switch (ErrorMessages[1])
+	{
+		case rev::REVLibError::kCANDisconnected:
+			mConfigurationErrors[1] = new frc::Alert{"Pivot Follower Motor controller is Disconnected from CAN", frc::Alert::AlertType::kError};
+			break;
+		case rev::REVLibError::kOk:
+			mConfigurationErrors[1] = new frc::Alert{"Pivot Follower Motor controller can correctly configured", frc::Alert::AlertType::kInfo};
+			break;
+
+		default:
+			mConfigurationErrors[1] = new frc::Alert{"Pivot Follower Motor controller was configured with unknow error message", frc::Alert::AlertType::kWarning};
+			break;
+	}
+	mConfigurationErrors[1]->Set(true);
 
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
