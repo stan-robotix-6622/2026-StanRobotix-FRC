@@ -230,9 +230,6 @@ namespace CANid
 	inline constexpr int kMotorIntakeID = 10;
 
 	inline constexpr int kIMUPigeonID = 0;
-
-	inline constexpr int kMotorClimbLeaderID = 14;
-	inline constexpr int kMotorClimbFollowerID = 15;
 } // namespace CANid
 
 namespace ShooterConstants
@@ -334,29 +331,3 @@ namespace PivotConstants
 	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
 	inline constexpr bool kFollowerinverted = false;
 } // namespace PivotConstants
-
-namespace ClimbConstants
-{
-	inline constexpr rev::spark::SparkLowLevel::MotorType kMotorTypeLeader = rev::spark::SparkLowLevel::MotorType::kBrushless;
-	inline constexpr rev::spark::SparkLowLevel::MotorType kMotorTypeFollower = rev::spark::SparkLowLevel::MotorType::kBrushless;
-	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
-
-	inline constexpr double kDownP = 0.02;
-	inline constexpr double kDownI = 0.001;
-	inline constexpr double kDownD = 0;
-	inline constexpr double kUpP = 0.015;
-	inline constexpr double kUpI = 0.001;
-	inline constexpr double kUpD = 0;
-	inline constexpr double kLiftP = 0.02;
-	inline constexpr double kLiftI = 0.001;
-	inline constexpr double kLiftD = 0;
-
-	inline constexpr double kSetpointUpOffset = 16.7;
-
-	inline constexpr bool kInverted = false;
-	inline constexpr bool kInverseFollowerMotor = false;
-	inline constexpr double kMaxCurrentFiltered = 15.0;
-	inline constexpr double kConstantSpeed = 0.2;
-
-	inline constexpr units::ampere_t kCurrentLimit = 60_A;
-} // namespace ClimbConstants

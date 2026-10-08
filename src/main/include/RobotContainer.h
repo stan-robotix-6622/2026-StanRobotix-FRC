@@ -25,8 +25,6 @@
 #include "subsystems/SubPivotIntake.h"
 #include "subsystems/SubShooter.h"
 
-// #include "subsystems/SubClimb.h"
-
 /**
  * This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
@@ -43,8 +41,6 @@ class RobotContainer {
  private:
 	frc2::CommandXboxController* mCommandXboxController;
 	frc2::CommandGenericHID* mCommandXboxControllerCopilot;
-
-	// SubClimb* mSubClimb;
 
 	SubShooter* mSubShooter = nullptr;
 	SubFeeder* mSubFeeder = nullptr;

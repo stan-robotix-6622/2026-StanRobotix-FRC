@@ -31,9 +31,6 @@
 #include "commands/ShootInPlace.h"
 #include "commands/ShootVariable.h"
 
-// #include "commands/Climb.h"
-// #include "commands/ClimbUntilDown.h"
-
 namespace
 {
 	const units::meter_t DrivetrainDefaultSetpoint = 3_m;
@@ -54,7 +51,6 @@ RobotContainer::RobotContainer()
 	frc::SmartDashboard::PutNumber("tunable/Shooter tolerance", ShooterConstants::PIDConstants::kTolerance.value());
 	frc::SmartDashboard::PutNumber("tunable/Offset pivot", PivotConstants::kOffset);
 
-	// mSubClimb = new SubClimb;
 	mSubShooter = new SubShooter{};
 	mSubFeeder = new SubFeeder{};
 	mDrivetrain = new SubDrivetrain{};
@@ -93,8 +89,6 @@ void RobotContainer::SetSubsystemDefaultCommands()
 			},
 			{mDrivetrain}));
 
-	// mSubClimb->SetDefaultCommand(ClimbUntilDown(mSubClimb).ToPtr().WithTimeout(3_s));
-
 	mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
 	// mSubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this] {mSubPivotIntake->SetVoltage(units::volt_t(frc::SmartDashboard::GetNumber("tunable/Pivot kg", PivotConstants::kG.value()) * cos(mSubPivotIntake->GetAngle().value())));}, {mSubPivotIntake}));
 }
@@ -127,7 +121,6 @@ void RobotContainer::ConfigureBindings()
 			return mDrivetrain->isTowardsHub() && mSubShooter->atDesiredVelocity() && mDrivetrain->isInAllianceZone()
 			;} }}.Debounce(0.1_s).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
-	// mCommandXboxController->Button(OperatorConstants::Button::X).WhileTrue(Climb(mSubClimb, SubClimb::Direction::Lift).ToPtr());
 	mCommandXboxController->Button(OperatorConstants::Button::A).WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
 
 	mCommandXboxController->Button(OperatorConstants::Button::Y).WhileTrue(Shoot(mSubShooter).ToPtr());
@@ -174,9 +167,6 @@ void RobotContainer::ConfigureBindings()
 
 void RobotContainer::ConfigureBindingsCopilot()
 {
-	// mCommandXboxControllerCopilot->Button(OperatorConstants::Button::A).WhileTrue(Climb(mSubClimb, SubClimb::Direction::Up).ToPtr()).OnTrue(frc2::cmd::Print("Climb Up"));
-	// mCommandXboxControllerCopilot->Button(OperatorConstants::Button::B).WhileTrue(mSubClimb->RunEnd([this] { mSubClimb->SetSpeed(0.2); }, [this] { mSubClimb->StopMotor(); })).OnTrue(frc2::cmd::Print("Climb Down Manuel"));
-	// mCommandXboxControllerCopilot->Button(OperatorConstants::Button::X).WhileTrue(mSubClimb->RunEnd([this] { mSubClimb->SetSpeed(-0.2); }, [this] { mSubClimb->StopMotor(); })).OnTrue(frc2::cmd::Print("Climb Up Manuel"));
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::Y).WhileTrue(mSubFeeder->getFeedShooterCommand(-FeederConstants::kDesiredVoltage)).OnTrue(frc2::cmd::Print("Outfeed"));
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::B).WhileTrue(frc2::cmd::Parallel(PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kDown).ToPtr(), mSubIntake->getIntakeCommand(-IntakeConstants::kSpeed)));
 	mCommandXboxControllerCopilot->Button(OperatorConstants::Button::X).WhileTrue(frc2::cmd::Parallel(Shoot(mSubShooter).ToPtr(), PointTowardsZone(mDrivetrain).ToPtr()));

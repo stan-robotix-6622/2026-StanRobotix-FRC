@@ -167,28 +167,4 @@ namespace Configs
 			return followerConfig;
 		}
 	};
-
-	class Climb {
-	 public:
-		static SparkMaxConfig& LeaderConfig()
-		{
-			static SparkMaxConfig leaderConfig;
-
-			leaderConfig.Inverted(ClimbConstants::kInverted);
-			leaderConfig.SetIdleMode(ClimbConstants::kIdleMode);
-
-			leaderConfig.SmartCurrentLimit(ClimbConstants::kCurrentLimit.value());
-
-			return leaderConfig;
-		}
-		static SparkMaxConfig& FollowerConfig()
-		{
-			static SparkMaxConfig followerConfig;
-
-			followerConfig.Apply(Climb::LeaderConfig());
-			followerConfig.Follow(CANid::kMotorClimbLeaderID, ClimbConstants::kInverseFollowerMotor);
-
-			return followerConfig;
-		}
-	};
 } // namespace Configs
