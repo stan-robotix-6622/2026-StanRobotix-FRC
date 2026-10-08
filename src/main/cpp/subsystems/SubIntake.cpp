@@ -16,7 +16,7 @@ SubIntake::SubIntake()
 
 	mEncoder = new rev::spark::SparkRelativeEncoder{mIntakeMotor->GetEncoder()};
 
-	// mIntakeMotor->Configure(Configs::Intake::Config(), IntakeConstants::kReset, IntakeConstants::kPersist);
+	mIntakeMotor->Configure(Configs::Intake::Config(), IntakeConstants::kReset, IntakeConstants::kPersist);
 
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {

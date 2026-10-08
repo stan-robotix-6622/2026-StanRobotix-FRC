@@ -20,7 +20,7 @@ SubPivotIntake::SubPivotIntake()
 	mEncoder = new rev::spark::SparkRelativeEncoder{mPivotMotor->GetEncoder()};
 	mFeedForward = new frc::ArmFeedforward{PivotConstants::kS, PivotConstants::kG, PivotConstants::kV};
 
-	mPivotMotor->Configure(Configs::Pivot::LeaderConfig(), PivotConstants::kReset, PivotConstants::kPersist);
+	Configure();
 
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
@@ -74,8 +74,8 @@ units::radian_t SubPivotIntake::GetAngle()
 std::array<rev::REVLibError, 2> SubPivotIntake::Configure()
 {
 	return {
-		mPivotMotor->Configure(Configs::Intake::Config(), IntakeConstants::kReset, IntakeConstants::kPersist),
-		mPivotMotorFollower->Configure(Configs::Pivot::LeaderConfig(), IntakeConstants::kReset, IntakeConstants::kPersist)};
+		mPivotLeaderMotor->Configure(Configs::Pivot::LeaderConfig(), IntakeConstants::kReset, IntakeConstants::kPersist),
+		mPivotFollowerMotor->Configure(Configs::Pivot::FollowerConfig(), IntakeConstants::kReset, IntakeConstants::kPersist)};
 };
 
 void SubPivotIntake::InitSendable(wpi::SendableBuilder& builder)
