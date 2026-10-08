@@ -73,10 +73,10 @@ frc::Alert* robotixLib::getAlertForREVErrorMessage(rev::REVLibError iErrorMessag
 			wAlert = new frc::Alert{"Configuration", "La configuration du controlleur du moteur" + iMotorName + " a résulté en une erreure inconnue", frc::Alert::AlertType::kWarning};
 			break;
 	}
-	// if (iErrorMessage != rev::REVLibError::kOk)
-	// {
+	if (iErrorMessage != rev::REVLibError::kOk)
+	{
 		wAlert->Set(true);
-	// }
+	}
 	return wAlert;
 }
 
