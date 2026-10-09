@@ -9,8 +9,9 @@
 #include <frc/system/plant/LinearSystemId.h>
 
 #include "Configs.h"
+#include "RobotixLib.hpp"
 
-SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInverted, bool iTurningInverted)
+SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, SwerveModule::Position iPosition, int iDrivingInverted, bool iTurningInverted)
 {
 	mDrivingMotor = new rev::spark::SparkMax{iDrivingMotorID, ModuleConstants::kDrivingMotorType};
 	mTurningMotor = new rev::spark::SparkMax{iTurningMotorID, ModuleConstants::kTurningMotorType};
@@ -25,12 +26,16 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
 		mTurningFlywheelSim = new frc::sim::FlywheelSim{frc::LinearSystemId::FlywheelSystem(*mTurningGearBox, ChassisConstants::kModuleMOI, ModuleConstants::kTurningGearRatio), *mTurningGearBox};
 	}
 
-	mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
-	                         ModuleConstants::kDrivingResetMode,
-	                         ModuleConstants::kDrivingPersistMode);
-	mTurningMotor->Configure(Configs::SwerveModule::TurningConfig(iTurningInverted),
-	                         ModuleConstants::kTurningResetMode,
-	                         ModuleConstants::kTurningPersistMode);
+	robotixLib::getAlertForREVErrorMessage(
+		mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
+														ModuleConstants::kDrivingResetMode,
+														ModuleConstants::kDrivingPersistMode),
+		"Driving" + getModuleName());
+	robotixLib::getAlertForREVErrorMessage(
+		mTurningMotor->Configure(Configs::SwerveModule::TurningConfig(iTurningInverted),
+														ModuleConstants::kTurningResetMode,
+														ModuleConstants::kTurningPersistMode),
+		"Turning" + getModuleName());
 
 	// Initialization of the motors' ClosedLoopController
 	mTurningClosedLoopController = new rev::spark::SparkClosedLoopController{mTurningMotor->GetClosedLoopController()};
@@ -118,6 +123,27 @@ void SwerveModule::refreshModule()
 	                                      frc::Rotation2d(units::radian_t(mTurningEncoder->GetPosition()))};
 	mModulePosition = frc::SwerveModulePosition{units::meter_t(mDrivingEncoder->GetPosition()),
 	                                            frc::Rotation2d(units::radian_t(mTurningEncoder->GetPosition()))};
+}
+
+std::string SwerveModule::getModuleName(SwerveModule::Position iPosition)
+{
+	switch (iPosition) {
+		case FrontLeft:
+			return "FrontLeft Module";
+		case FrontRight:
+			return "FrontRight Module";
+		case BackLeft:
+			return "BackLeft Module";
+		case BackRight:
+			return "BackRight Module";
+		default:
+			return "Swerve Module";
+	}
+}
+
+std::string SwerveModule::getModuleName()
+{
+	return getModuleName(mPosition);
 }
 
 void SwerveModule::InitSendable(wpi::SendableBuilder& builder)

@@ -26,7 +26,14 @@
 
 class SwerveModule : public wpi::Sendable {
  public:
-	SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInveryed = false, bool iTurningInverted = true);
+	enum Position {
+		FrontLeft,
+		FrontRight,
+		BackLeft,
+		BackRight
+	};
+
+	SwerveModule(int iDrivingMotorID, int iTurningMotorID, SwerveModule::Position iPosition, int iDrivingInverted = false, bool iTurningInverted = true);
 
 	frc::SwerveModulePosition getModulePosition();
 	frc::SwerveModuleState getModuleState();
@@ -44,7 +51,12 @@ class SwerveModule : public wpi::Sendable {
 	void seedEncoder();
 	void refreshModule();
 
+	std::string getModuleName();
+	static std::string getModuleName(SwerveModule::Position iPosition);
+
  private:
+	SwerveModule::Position mPosition;
+
 	rev::spark::SparkMax* mDrivingMotor;
 	rev::spark::SparkMax* mTurningMotor;
 
