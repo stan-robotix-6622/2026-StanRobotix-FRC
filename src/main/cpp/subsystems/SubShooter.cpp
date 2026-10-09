@@ -48,6 +48,13 @@ void SubShooter::Periodic()
 void SubShooter::setVoltage(units::volt_t iVoltage)
 {
 	mLeaderShooterController->SetVoltage(iVoltage);
+
+	if (frc::RobotBase::IsSimulation()) {
+		mFlywheelSim->SetInputVoltage(iVoltage);
+		mFlywheelSim->Update(0.02_s);
+		mLeaderMotorSim->iterate(units::turns_per_second_t(mFlywheelSim->GetAngularVelocity()).value(), 12, 0.02);
+		mFollowMotorSim->iterate(units::turns_per_second_t(mFlywheelSim->GetAngularVelocity()).value(), 12, 0.02);
+	}
 }
 
 void SubShooter::setVelocity(units::turns_per_second_t iNextVelocity)
