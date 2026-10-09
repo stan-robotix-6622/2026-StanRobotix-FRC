@@ -36,7 +36,7 @@ frc::Alert* robotixLib::getAlertForREVErrorMessage(rev::REVLibError iErrorMessag
 	frc::Alert* wAlert;
 	switch (iErrorMessage) {
 		case rev::REVLibError::kOk:
-			wAlert = new frc::Alert{"Configuration", "Le controlleur du moteur" + iMotorName + " a été configuré correctement", frc::Alert::AlertType::kInfo};
+			wAlert = new frc::Alert{"Configuration", "Le controlleur du moteur " + iMotorName + " a été configuré correctement", frc::Alert::AlertType::kInfo};
 			break;
 		case rev::REVLibError::kError:
 			wAlert = new frc::Alert{"Configuration", "La configuration du controlleur du moteur " + iMotorName + " a résulté en une erreure", frc::Alert::AlertType::kError};
