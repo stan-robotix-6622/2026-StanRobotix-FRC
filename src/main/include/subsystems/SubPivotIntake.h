@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <frc/Alert.h>
 #include <frc/controller/ArmFeedforward.h>
 #include <frc/simulation/SingleJointedArmSim.h>
 #include <frc/system/LinearSystem.h>

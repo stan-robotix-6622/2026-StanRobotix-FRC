@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <frc/Alert.h>
 #include <frc/system/plant/DCMotor.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>

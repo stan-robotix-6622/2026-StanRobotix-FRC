@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <frc/Alert.h>
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/simulation/FlywheelSim.h>
 #include <frc/system/LinearSystem.h>
