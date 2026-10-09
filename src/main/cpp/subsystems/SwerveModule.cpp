@@ -45,9 +45,27 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivi
 	mDrivingEncoder = new rev::spark::SparkRelativeEncoder{mDrivingMotor->GetEncoder()};
 	mTurningEncoder = new rev::spark::SparkRelativeEncoder{mTurningMotor->GetEncoder()};
 	mTurningAbsoluteEncoder = new rev::spark::SparkAbsoluteEncoder{mTurningMotor->GetAbsoluteEncoder()};
+	mConfig = new frc2::sysid::Config{std::nullopt, std::nullopt, std::nullopt, nullptr};
+	mMechanism = new frc2::sysid::Mechanism{
+		[this] (units::volt_t iVoltage) { 
+			mDrivingMotor->SetVoltage(iVoltage);
+		}, 
+		[this] (frc::sysid::SysIdRoutineLog * log)
+		{
+			log->Motor("Drivetrain")
+					.position(units::turn_t(mDrivingEncoder->GetPosition()))
+					.velocity(units::turns_per_second_t(mDrivingEncoder->GetVelocity()))
+					.voltage(units::volt_t(mDrivingMotor->GetBusVoltage()));
+		},
+		this,
+		"Drivetrain"
+	};
+	mDriveRoutine = new frc2::sysid::SysIdRoutine{*mConfig, *mMechanism};
 
 	refreshModule();
 	seedEncoder();
+
+	
 }
 
 void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)

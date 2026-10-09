@@ -18,6 +18,7 @@
 #include <rev/SparkRelativeEncoder.h>
 #include <wpi/sendable/Sendable.h>
 #include <wpi/sendable/SendableBuilder.h>
+#include <frc2/command/sysid/SysIdRoutine.h>
 
 #include <units/angle.h>
 #include <units/angular_velocity.h>
@@ -76,4 +77,8 @@ class SwerveModule : public wpi::Sendable {
 
 	frc::SwerveModuleState mModuleState;
 	frc::SwerveModulePosition mModulePosition;
+
+	frc2::sysid::SysIdRoutine* mDriveRoutine;
+	frc2::sysid::Config* mConfig;
+	frc2::sysid::Mechanism* mMechanism;
 };

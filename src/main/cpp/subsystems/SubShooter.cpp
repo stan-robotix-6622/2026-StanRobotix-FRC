@@ -29,12 +29,13 @@ SubShooter::SubShooter()
 			log->Motor("Shooter Leader")
 					.position(units::turn_t(mRelativeEncoder->GetPosition()))
 					.velocity(units::turns_per_second_t(mRelativeEncoder->GetVelocity()))
-					.current(units::ampere_t(mLeaderShooterController->GetOutputCurrent()));
+					.current(units::ampere_t(mLeaderShooterController->GetOutputCurrent()))
+					.voltage(units::volt_t(mLeaderShooterController->Get() * mLeaderShooterController->GetBusVoltage()));
 		},
 		this,
 		"SubShooter"
 	};
-	mRoutine = new frc2::sysid::SysIdRoutine{*mConfig, *mMechanism};
+	mShooterRoutine = new frc2::sysid::SysIdRoutine{*mConfig, *mMechanism};
 
 	Configure();
 
@@ -108,11 +109,11 @@ bool SubShooter::atDesiredVelocity()
 
 frc2::CommandPtr SubShooter::SysIdQuasistatic(frc2::sysid::Direction direction)
 {
-	return mRoutine->Quasistatic(direction);
+	return mShooterRoutine->Quasistatic(direction);
 }
 frc2::CommandPtr SubShooter::SysIdDynamic(frc2::sysid::Direction direction)
 {
-	return mRoutine->Dynamic(direction);
+	return mShooterRoutine->Dynamic(direction);
 }
 // void SubShooter::SysIdRoutine(frc2::sysid::SysIdRoutine routine)
 // {

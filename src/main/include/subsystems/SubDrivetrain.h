@@ -65,6 +65,10 @@ class SubDrivetrain : public frc2::SubsystemBase {
 	bool isTowardsHub();
 	bool isInAllianceZone();
 
+	frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction);
+  frc2::CommandPtr SysIdDynamic(frc2::sysid::Direction direction);
+
+
  private:
 	frc::Translation2d* mFrontLeftLocation;
 	frc::Translation2d* mFrontRightLocation;
