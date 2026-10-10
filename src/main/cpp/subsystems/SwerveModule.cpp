@@ -13,6 +13,8 @@
 
 SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, SwerveModule::Position iPosition, int iDrivingInverted, bool iTurningInverted)
 {
+	mPosition = iPosition;
+
 	mDrivingMotor = new rev::spark::SparkMax{iDrivingMotorID, ModuleConstants::kDrivingMotorType};
 	mTurningMotor = new rev::spark::SparkMax{iTurningMotorID, ModuleConstants::kTurningMotorType};
 
@@ -30,12 +32,12 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, SwerveModul
 		mDrivingMotor->Configure(Configs::SwerveModule::DrivingConfig(iDrivingInverted),
 														ModuleConstants::kDrivingResetMode,
 														ModuleConstants::kDrivingPersistMode),
-		"Driving" + getModuleName());
+		"Driving " + getModuleName());
 	robotixLib::getAlertForREVErrorMessage(
 		mTurningMotor->Configure(Configs::SwerveModule::TurningConfig(iTurningInverted),
 														ModuleConstants::kTurningResetMode,
 														ModuleConstants::kTurningPersistMode),
-		"Turning" + getModuleName());
+		"Turning " + getModuleName());
 
 	// Initialization of the motors' ClosedLoopController
 	mTurningClosedLoopController = new rev::spark::SparkClosedLoopController{mTurningMotor->GetClosedLoopController()};
