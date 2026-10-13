@@ -226,7 +226,7 @@ namespace CANid
 	inline constexpr int kBackLeftMotor550ID = 1;
 
 	inline constexpr int kLeaderMotorPivotID = 9;
-	inline constexpr int kFollowerMotorPivotID = 0; //to determine
+	inline constexpr int kFollowerMotorPivotID = 14;
 	inline constexpr int kMotorIntakeID = 10;
 
 	inline constexpr int kIMUPigeonID = 0;
@@ -312,22 +312,22 @@ namespace IntakeConstants
 
 namespace PivotConstants
 {
-	inline constexpr double kGearRatio = 16;
-	inline constexpr double kOffset = 2.5805954933166504;
-	inline constexpr double kP = 2.0;
+	inline constexpr double kGearRatio = 20;
+	inline constexpr double kOffset = 1.39127516746521;
+	inline constexpr double kP = 0.0;
 	inline constexpr double kI = 0.0;
-	inline constexpr double kD = 0.2;
-	inline constexpr units::volt_t kG = 1.37_V;
+	inline constexpr double kD = 0.0;
+	inline constexpr units::volt_t kG = 0.0_V;
 	inline constexpr units::volt_t kS = 0.0_V;
 	inline constexpr robotixLib::templateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
 	inline constexpr double setpointUp = std::numbers::pi / 6;     // 30 deg up
-	inline constexpr double setpointIn = std::numbers::pi * 2 / 3; // 120 deg up
+	inline constexpr double setpointIn = std::numbers::pi / 3;     // 60 deg up
 	inline constexpr double setpointDown = std::numbers::pi / 18;  // 10 deg up
-	inline constexpr units::ampere_t kCurrentLimit = 60_A;
+	inline constexpr units::ampere_t kCurrentLimit = 40_A;
 
-	inline constexpr bool kInverted = false;
+	inline constexpr bool kInverted = true;
 	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
 	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
 	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
-	inline constexpr bool kFollowerinverted = false;
+	inline constexpr bool kFollowerinverted = true;
 } // namespace PivotConstants
