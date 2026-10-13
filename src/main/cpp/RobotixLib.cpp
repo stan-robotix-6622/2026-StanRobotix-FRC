@@ -31,7 +31,7 @@ double robotixLib::deadband(double iInput, double iThreshold, bool iSquared)
 	return frc::CopyDirectionPow((1 / (1 - iThreshold)) * (iInput - (((iInput > 0) - (iInput < 0)) * iThreshold)), 2);
 }
 
-frc::Alert* robotixLib::getAlertForREVErrorMessage(rev::REVLibError iErrorMessage, std::string iMotorName)
+frc::Alert* robotixLib::getAlertForREVErrorMessage(rev::REVLibError iErrorMessage, std::string iMotorName, bool iShowWhenOk)
 {
 	frc::Alert* wAlert;
 	switch (iErrorMessage) {
@@ -73,7 +73,7 @@ frc::Alert* robotixLib::getAlertForREVErrorMessage(rev::REVLibError iErrorMessag
 			wAlert = new frc::Alert{"Configuration", "La configuration du controlleur du moteur" + iMotorName + " a résulté en une erreure inconnue", frc::Alert::AlertType::kWarning};
 			break;
 	}
-	if (iErrorMessage != rev::REVLibError::kOk)
+	if (iErrorMessage != rev::REVLibError::kOk || iShowWhenOk)
 	{
 		wAlert->Set(true);
 	}
