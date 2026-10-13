@@ -89,8 +89,8 @@ void RobotContainer::SetSubsystemDefaultCommands()
 			},
 			{mDrivetrain}));
 
-	mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
-	// mSubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this] {mSubPivotIntake->SetVoltage(units::volt_t(frc::SmartDashboard::GetNumber("tunable/Pivot kg", PivotConstants::kG.value()) * cos(mSubPivotIntake->GetAngle().value())));}, {mSubPivotIntake}));
+	// mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
+	mSubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this] {mSubPivotIntake->SetVoltage(units::volt_t(frc::SmartDashboard::GetNumber("tunable/Pivot kg", PivotConstants::kG.value()) * cos(mSubPivotIntake->GetAngle().value())));}, {mSubPivotIntake}));
 
 	mSubShooter->SetDefaultCommand(mSubShooter->Run([this] {mSubShooter->setVoltage(0_V);}));
 	mSubFeeder->SetDefaultCommand(mSubFeeder->Run([this] {mSubFeeder->setVoltage(0_V);}));
@@ -125,17 +125,17 @@ void RobotContainer::ConfigureBindings()
 	// 		return mDrivetrain->isTowardsHub() && mSubShooter->atDesiredVelocity() && mDrivetrain->isInAllianceZone()
 	// 		;} }}.Debounce(0.1_s).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
-	mCommandXboxController->Button(OperatorConstants::Button::A).WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
+	// mCommandXboxController->Button(OperatorConstants::Button::A).WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kDown));
 
 	// mCommandXboxController->Button(OperatorConstants::Button::Y).WhileTrue(Shoot(mSubShooter).ToPtr());
 
-	mCommandXboxController->Button(OperatorConstants::Button::Y && OperatorConstants::Button::LeftBumper)
+	(mCommandXboxController->Button(OperatorConstants::Button::Y) && mCommandXboxController->Button(OperatorConstants::Button::LeftBumper))
 		.WhileTrue(mSubShooter->SysIdQuasistatic(frc2::sysid::Direction::kForward));
-	mCommandXboxController->Button(OperatorConstants::Button::A && OperatorConstants::Button::LeftBumper)
+	(mCommandXboxController->Button(OperatorConstants::Button::A) && mCommandXboxController->Button(OperatorConstants::Button::LeftBumper))
 		.WhileTrue(mSubShooter->SysIdQuasistatic(frc2::sysid::Direction::kReverse));
-	mCommandXboxController->Button(OperatorConstants::Button::X && OperatorConstants::Button::LeftBumper)
+	(mCommandXboxController->Button(OperatorConstants::Button::X) && mCommandXboxController->Button(OperatorConstants::Button::LeftBumper))
 		.WhileTrue(mSubShooter->SysIdDynamic(frc2::sysid::Direction::kForward));
-	mCommandXboxController->Button(OperatorConstants::Button::B && OperatorConstants::Button::LeftBumper)
+	(mCommandXboxController->Button(OperatorConstants::Button::B) && mCommandXboxController->Button(OperatorConstants::Button::LeftBumper))
 		.WhileTrue(mSubShooter->SysIdDynamic(frc2::sysid::Direction::kReverse));
 
 	// mCommandXboxController->Button(OperatorConstants::Button::B).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
@@ -144,7 +144,7 @@ void RobotContainer::ConfigureBindings()
 	//     {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
 	//     else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
 
-	mCommandXboxController->Button(OperatorConstants::Button::LeftBumper).WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kIn));
+	// mCommandXboxController->Button(OperatorConstants::Button::LeftBumper).WhileTrue(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kIn));
 
 	// mCommandXboxController->Button(OperatorConstants::Button::Back).OnTrue(frc2::cmd::RunOnce([this] {
   //   std::vector<LookupTable::ShooterStatus> vector = mShooterStatusSubscriber.Get();
@@ -175,8 +175,8 @@ void RobotContainer::ConfigureBindings()
 	// (*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Back))
 	// 		.WhileTrue(ShootDynamically(mSubShooter, mDrivetrain, mCommandXboxController).ToPtr());
 
-	mCommandXboxController->Button(OperatorConstants::Button::RightJoystick).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
-																																																										 (units::meter_t)frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value())); }));
+	// mCommandXboxController->Button(OperatorConstants::Button::RightJoystick).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
+	// 																																																									 (units::meter_t)frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value())); }));
 
 }
 

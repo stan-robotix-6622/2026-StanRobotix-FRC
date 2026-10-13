@@ -122,7 +122,3 @@ frc2::CommandPtr SubShooter::SysIdDynamic(frc2::sysid::Direction direction)
 {
 	return mShooterRoutine->Dynamic(direction);
 }
-// void SubShooter::SysIdRoutine(frc2::sysid::SysIdRoutine routine)
-// {
-// 	routine.
-// }
