@@ -32,7 +32,6 @@ class SubIntake : public frc2::SubsystemBase {
 	rev::spark::SparkRelativeEncoder* mEncoder;
 
 	// For simulation
-	bool mRobotIsSimulated = false;
 	frc::DCMotor* mGearBox;
 	rev::spark::SparkMaxSim* mMotorSim;
 };

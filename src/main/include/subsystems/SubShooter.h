@@ -4,11 +4,13 @@
 
 #pragma once
 
+#include <frc/Alert.h>
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/simulation/FlywheelSim.h>
 #include <frc/system/LinearSystem.h>
 #include <frc/system/plant/DCMotor.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc2/command/sysid/SysIdRoutine.h>
 #include <rev/sim/SparkMaxSim.h>
 #include <rev/SparkClosedLoopController.h>
 #include <rev/SparkMax.h>
@@ -19,8 +21,6 @@
 #include <units/angular_velocity.h>
 #include <units/moment_of_inertia.h>
 #include <units/voltage.h>
-#include <frc2/command/sysid/SysIdRoutine.h>
-
 
 class SubShooter : public frc2::SubsystemBase {
  public:
@@ -35,7 +35,7 @@ class SubShooter : public frc2::SubsystemBase {
 
 	// The first index of the array is the result of the Leader's configuration and
 	// the second is the result of the Follower's configuration
-	std::array<rev::REVLibError, 2> Configure();
+	std::array<frc::Alert*, 2> Configure();
 
 	void Periodic() override;
 
@@ -55,7 +55,6 @@ class SubShooter : public frc2::SubsystemBase {
 	rev::spark::SparkClosedLoopController* mClossedLoopController;
 
 	// For simulation
-	bool mRobotIsSimulated = false;
 	units::kilogram_square_meter_t kMOI = 2_in * 2_in * 1.56_lb + 1.625_in * 1.625_in * 1.2_lb;
 	frc::DCMotor* mLeaderGearBox;
 	frc::DCMotor* mFollowGearBox;

@@ -5,6 +5,7 @@
 #include "subsystems/SubPivotIntake.h"
 
 #include <frc/RobotBase.h>
+#include <frc/Alert.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc/system/plant/LinearSystemId.h>
 
@@ -15,17 +16,17 @@
 
 SubPivotIntake::SubPivotIntake()
 {
-	mPivotMotor = new rev::spark::SparkMax{CANid::kMotorPivotID, rev::spark::SparkLowLevel::MotorType::kBrushless};
-	mEncoder = new rev::spark::SparkRelativeEncoder{mPivotMotor->GetEncoder()};
+	mPivotLeaderMotor = new rev::spark::SparkMax{CANid::kLeaderMotorPivotID, rev::spark::SparkLowLevel::MotorType::kBrushless};
+	mPivotFollowerMotor = new rev::spark::SparkMax{CANid::kFollowerMotorPivotID, rev::spark::SparkLowLevel::MotorType::kBrushless};
+	mEncoder = new rev::spark::SparkRelativeEncoder{mPivotLeaderMotor->GetEncoder()};
 	mFeedForward = new frc::ArmFeedforward{PivotConstants::kS, PivotConstants::kG, PivotConstants::kV};
 
-	mPivotMotor->Configure(Configs::Pivot::Config(), PivotConstants::kReset, PivotConstants::kPersist);
+	Configure();
 
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
-		mRobotIsSimulated = true;
-		mGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
-		mMotorSim = new rev::spark::SparkMaxSim{mPivotMotor, mGearBox};
+		mGearBox = new frc::DCMotor{frc::DCMotor::NEO(2)};
+		mMotorSim = new rev::spark::SparkMaxSim{mPivotLeaderMotor, mGearBox};
 		mArmPlant = new frc::LinearSystem<2, 1, 2>{frc::LinearSystemId::SingleJointedArmSystem(*mGearBox, kMOI, PivotConstants::kGearRatio)};
 		mArmSim = new frc::sim::SingleJointedArmSim{*mArmPlant, *mGearBox, PivotConstants::kGearRatio, 12_in, 0_deg, 150_deg, true, units::radian_t(PivotConstants::kOffset), {0.0, 0.0}};
 	}
@@ -35,14 +36,14 @@ void SubPivotIntake::Periodic() {}
 
 void SubPivotIntake::Stop()
 {
-	mPivotMotor->StopMotor();
+	mPivotLeaderMotor->StopMotor();
 }
 
 void SubPivotIntake::SetVoltage(units::volt_t iVoltage)
 {
-	mPivotMotor->SetVoltage(iVoltage);
+	mPivotLeaderMotor->SetVoltage(iVoltage);
 
-	if (mRobotIsSimulated) {
+	if (frc::RobotBase::IsSimulation()) {
 		mArmSim->SetInputVoltage(iVoltage);
 		mArmSim->Update(0.02_s);
 		mMotorSim->iterate(mArmSim->GetVelocity().value(), 12, 0.02);
@@ -51,9 +52,9 @@ void SubPivotIntake::SetVoltage(units::volt_t iVoltage)
 
 void SubPivotIntake::SetVelocity(units::radians_per_second_t iVelocity)
 {
-	mPivotMotor->SetVoltage(mFeedForward->Calculate(GetAngle(), iVelocity));
+	mPivotLeaderMotor->SetVoltage(mFeedForward->Calculate(GetAngle(), iVelocity));
 
-	if (mRobotIsSimulated) {
+	if (frc::RobotBase::IsSimulation()) {
 		mArmSim->SetInputVoltage(mFeedForward->Calculate(GetAngle(), iVelocity));
 		mArmSim->Update(0.02_s);
 		mMotorSim->iterate(mArmSim->GetVelocity().value(), 12, 0.02);
@@ -62,13 +63,24 @@ void SubPivotIntake::SetVelocity(units::radians_per_second_t iVelocity)
 
 void SubPivotIntake::KeepPosition()
 {
-	mPivotMotor->SetVoltage(mFeedForward->Calculate(GetAngle(), 0_rad_per_s));
+	mPivotLeaderMotor->SetVoltage(mFeedForward->Calculate(GetAngle(), 0_rad_per_s));
 }
 
 units::radian_t SubPivotIntake::GetAngle()
 {
 	return units::radian_t(frc::SmartDashboard::GetNumber("tunable/Offset pivot", PivotConstants::kOffset) + mEncoder->GetPosition());
 }
+
+std::array<frc::Alert*, 2> SubPivotIntake::Configure()
+{
+	return {
+		robotixLib::getAlertForREVErrorMessage(
+			mPivotLeaderMotor->Configure(Configs::Pivot::LeaderConfig(), IntakeConstants::kReset, IntakeConstants::kPersist),
+			"Pivot Leader"),
+		robotixLib::getAlertForREVErrorMessage(
+			mPivotFollowerMotor->Configure(Configs::Pivot::FollowerConfig(), IntakeConstants::kReset, IntakeConstants::kPersist),
+			"Pivot Follower")};
+};
 
 void SubPivotIntake::InitSendable(wpi::SendableBuilder& builder)
 {

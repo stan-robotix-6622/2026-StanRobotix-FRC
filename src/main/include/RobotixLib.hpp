@@ -1,7 +1,13 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 #pragma once
 
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Translation2d.h>
+#include <frc/Alert.h>
+#include <rev/REVLibError.h>
 
 #include <string>
 
@@ -14,13 +20,15 @@ namespace robotixLib
 	// Made from the example code at https://www.chiefdelphi.com/uploads/default/original/3X/b/a/ba7ccfd90bac0934e374dd4459d813cee2903942.pdf
 	double deadband(double iInput, double iThreshold, bool iSquared = false);
 
+	frc::Alert* getAlertForREVErrorMessage(rev::REVLibError iErrorMessage, std::string iMotorName);
+
 	namespace odometryUtils
 	{
 		units::degree_t GetAngleToTarget(frc::Translation2d iCurrentTranslation, frc::Translation2d iTargetTranslation);
 
 		units::meter_t GetDistanceToTarget(frc::Translation2d iCurrentTranslation, frc::Translation2d iTargetTranslation);
 	} // namespace odometryUtils
-	
+
 	namespace pathplannerUtils
 	{
 		frc::Pose2d getStartingPoseOfAuto(std::string iAutoName);

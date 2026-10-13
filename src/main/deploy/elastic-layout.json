@@ -211,24 +211,6 @@
             }
           },
           {
-            "title": "climber",
-            "x": 1152.0,
-            "y": 384.0,
-            "width": 128.0,
-            "height": 256.0,
-            "type": "Number Bar",
-            "properties": {
-              "topic": "/SmartDashboard/climb/position",
-              "period": 0.06,
-              "data_type": "double",
-              "min_value": 0.0,
-              "max_value": 17.0,
-              "divisions": 2,
-              "inverted": false,
-              "orientation": "vertical"
-            }
-          },
-          {
             "title": "shooter velocity",
             "x": 896.0,
             "y": 384.0,
@@ -481,24 +463,6 @@
               "time_display_mode": "Minutes and Seconds",
               "red_start_time": 5,
               "yellow_start_time": 10
-            }
-          },
-          {
-            "title": "climber",
-            "x": 1152.0,
-            "y": 384.0,
-            "width": 128.0,
-            "height": 256.0,
-            "type": "Number Bar",
-            "properties": {
-              "topic": "/SmartDashboard/climb/position",
-              "period": 0.06,
-              "data_type": "double",
-              "min_value": 0.0,
-              "max_value": 17.0,
-              "divisions": 2,
-              "inverted": false,
-              "orientation": "vertical"
             }
           },
           {

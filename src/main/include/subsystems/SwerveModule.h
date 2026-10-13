@@ -4,11 +4,14 @@
 
 #pragma once
 
+#include <frc/controller/PIDController.h>
+#include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
+#include <frc/simulation/FlywheelSim.h>
 #include <frc/system/plant/DCMotor.h>
 #include <frc/simulation/FlywheelSim.h>
 #include <rev/sim/SparkMaxSim.h>
@@ -27,7 +30,14 @@
 
 class SwerveModule : public wpi::Sendable {
  public:
-	SwerveModule(int iDrivingMotorID, int iTurningMotorID, bool iDrivingInveryed = false, bool iTurningInverted = true);
+	enum Position {
+		FrontLeft,
+		FrontRight,
+		BackLeft,
+		BackRight
+	};
+
+	SwerveModule(int iDrivingMotorID, int iTurningMotorID, SwerveModule::Position iPosition, int iDrivingInverted = false, bool iTurningInverted = true);
 
 	frc::SwerveModulePosition getModulePosition();
 	frc::SwerveModuleState getModuleState();
@@ -45,7 +55,12 @@ class SwerveModule : public wpi::Sendable {
 	void seedEncoder();
 	void refreshModule();
 
+	std::string getModuleName();
+	static std::string getModuleName(SwerveModule::Position iPosition);
+
  private:
+	SwerveModule::Position mPosition;
+
 	rev::spark::SparkMax* mDrivingMotor;
 	rev::spark::SparkMax* mTurningMotor;
 
@@ -57,7 +72,6 @@ class SwerveModule : public wpi::Sendable {
 	rev::spark::SparkAbsoluteEncoder* mTurningAbsoluteEncoder;
 
 	// For simulation
-	bool mRobotIsSimulated = false;
 	frc::DCMotor* mDrivingGearBox;
 	frc::DCMotor* mTurningGearBox;
 	rev::spark::SparkMaxSim* mDrivingMotorSim;

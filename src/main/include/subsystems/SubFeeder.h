@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <frc/Alert.h>
 #include <frc/system/plant/DCMotor.h>
 #include <frc2/command/CommandPtr.h>
 #include <frc2/command/SubsystemBase.h>
@@ -17,7 +18,7 @@ class SubFeeder : public frc2::SubsystemBase {
 	SubFeeder();
 
 	void setVoltage(units::volt_t iOutput);
-	rev::REVLibError Configure();
+	frc::Alert* Configure();
 	frc2::CommandPtr getFeedShooterCommand(units::volt_t iVoltage);
 	bool isFeederOn();
 
@@ -27,7 +28,6 @@ class SubFeeder : public frc2::SubsystemBase {
 	rev::spark::SparkMax* mFeederController;
 
 	// For simulation
-	bool mRobotIsSimulated = false;
 	frc::DCMotor* mGearBox;
 	rev::spark::SparkMaxSim* mMotorSim;
 };

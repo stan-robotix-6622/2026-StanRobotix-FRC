@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <frc/Alert.h>
 #include <frc/controller/ArmFeedforward.h>
 #include <frc/simulation/SingleJointedArmSim.h>
 #include <frc/system/LinearSystem.h>
@@ -32,13 +33,15 @@ class SubPivotIntake : public frc2::SubsystemBase {
 
 	void InitSendable(wpi::SendableBuilder& builder) override;
 
+	std::array<frc::Alert*, 2> Configure();
+
  private:
-	rev::spark::SparkMax* mPivotMotor;
+	rev::spark::SparkMax* mPivotLeaderMotor;
+	rev::spark::SparkMax* mPivotFollowerMotor;
 	rev::spark::SparkRelativeEncoder* mEncoder;
 	frc::ArmFeedforward* mFeedForward;
 
 	// For simulation
-	bool mRobotIsSimulated = false;
 	units::kilogram_square_meter_t kMOI = (2_lb * 12_in * 12_in) / 3;
 	frc::DCMotor* mGearBox;
 	rev::spark::SparkMaxSim* mMotorSim;

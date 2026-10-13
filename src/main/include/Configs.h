@@ -142,7 +142,7 @@ namespace Configs
 
 	class Pivot {
 	 public:
-		static SparkMaxConfig& Config()
+		static SparkMaxConfig& LeaderConfig()
 		{
 			static SparkMaxConfig pivotConfig{};
 			constexpr double pivotFactor = (2 * std::numbers::pi) / PivotConstants::kGearRatio;
@@ -157,27 +157,12 @@ namespace Configs
 
 			return pivotConfig;
 		}
-	};
-
-	class Climb {
-	 public:
-		static SparkMaxConfig& LeaderConfig()
-		{
-			static SparkMaxConfig leaderConfig;
-
-			leaderConfig.Inverted(ClimbConstants::kInverted);
-			leaderConfig.SetIdleMode(ClimbConstants::kIdleMode);
-
-			leaderConfig.SmartCurrentLimit(ClimbConstants::kCurrentLimit.value());
-
-			return leaderConfig;
-		}
 		static SparkMaxConfig& FollowerConfig()
 		{
-			static SparkMaxConfig followerConfig;
+			static SparkMaxConfig followerConfig{};
 
-			followerConfig.Apply(Climb::LeaderConfig());
-			followerConfig.Follow(CANid::kMotorClimbLeaderID, ClimbConstants::kInverseFollowerMotor);
+			followerConfig.Apply(Configs::Intake::Config());
+			followerConfig.Follow(CANid::kLeaderMotorPivotID, PivotConstants::kFollowerinverted);
 
 			return followerConfig;
 		}
