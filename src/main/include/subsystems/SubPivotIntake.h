@@ -10,6 +10,7 @@
 #include <frc/system/LinearSystem.h>
 #include <frc/system/plant/DCMotor.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc2/command/sysid/SysIdRoutine.h>
 #include <rev/sim/SparkMaxSim.h>
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
@@ -38,6 +39,9 @@ class SubPivotIntake : public frc2::SubsystemBase {
 
 	std::array<frc::Alert*, 2> Configure();
 
+	frc2::CommandPtr SysIdQuasistatic(frc2::sysid::Direction direction);
+  frc2::CommandPtr SysIdDynamic(frc2::sysid::Direction direction);
+
  private:
 	rev::spark::SparkMax* mLeftPivotMotor;
 	rev::spark::SparkMax* mRightPivotMotor;
@@ -57,4 +61,8 @@ class SubPivotIntake : public frc2::SubsystemBase {
 	frc::sim::SingleJointedArmSim* mRightArmSim;
 	frc::LinearSystem<2, 1, 2>* mLeftArmPlant;
 	frc::LinearSystem<2, 1, 2>* mRightArmPlant;
+
+	frc2::sysid::SysIdRoutine* mPivotRoutine;
+	frc2::sysid::Config* mConfig;
+	frc2::sysid::Mechanism* mMechanism;
 };

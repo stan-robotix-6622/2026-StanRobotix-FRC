@@ -25,6 +25,29 @@ SubPivotIntake::SubPivotIntake()
 
 	Configure();
 
+	mConfig = new frc2::sysid::Config{std::nullopt, std::nullopt, std::nullopt, nullptr};
+	mMechanism = new frc2::sysid::Mechanism{
+		[this] (units::volt_t iVoltage) {
+			mRightPivotMotor->SetVoltage(iVoltage);
+			mLeftPivotMotor->SetVoltage(iVoltage);
+		}, [this] (frc::sysid::SysIdRoutineLog * log)
+		{
+			log->Motor("Left Pivot Motor")
+					.position(units::turn_t(mLeftEncoder->GetPosition()))
+					.velocity(units::turns_per_second_t(mLeftEncoder->GetVelocity()))
+					.current(units::ampere_t(mLeftPivotMotor->GetOutputCurrent()))
+					.voltage(units::volt_t(mLeftPivotMotor->Get() * mLeftPivotMotor->GetBusVoltage()));
+			log->Motor("Right Pivot Motor")
+					.position(units::turn_t(mRightEncoder->GetPosition()))
+					.velocity(units::turns_per_second_t(mRightEncoder->GetVelocity()))
+					.current(units::ampere_t(mRightPivotMotor->GetOutputCurrent()))
+					.voltage(units::volt_t(mRightPivotMotor->Get() * mRightPivotMotor->GetBusVoltage()));
+		},
+		this,
+		"SubPivotIntake"
+	};
+	mPivotRoutine = new frc2::sysid::SysIdRoutine{*mConfig, *mMechanism};
+
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
 		mLeftGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
@@ -132,4 +155,13 @@ void SubPivotIntake::InitSendable(wpi::SendableBuilder& builder)
 	builder.AddDoubleProperty("kG right", [this] { return mRightFeedForward->GetKg().value(); }, [this](double iKg) { return mRightFeedForward->SetKg(units::volt_t(iKg)); });
 	builder.AddDoubleProperty("kS right", [this] { return mRightFeedForward->GetKs().value(); }, [this](double iKs) { return mRightFeedForward->SetKs(units::volt_t(iKs)); });
 	builder.AddDoubleProperty("kS right", [this] { return mRightFeedForward->GetKs().value(); }, [this](double iKs) { return mRightFeedForward->SetKs(units::volt_t(iKs)); });
+}
+
+frc2::CommandPtr SubPivotIntake::SysIdQuasistatic(frc2::sysid::Direction direction)
+{
+	return mPivotRoutine->Quasistatic(direction);
+}
+frc2::CommandPtr SubPivotIntake::SysIdDynamic(frc2::sysid::Direction direction)
+{
+	return mPivotRoutine->Dynamic(direction);
 }

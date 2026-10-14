@@ -141,6 +141,15 @@ void RobotContainer::ConfigureBindings()
 	(mCommandXboxController->Button(OperatorConstants::Button::B) && mCommandXboxController->Button(OperatorConstants::Button::LeftBumper))
 		.WhileTrue(mSubShooter->SysIdDynamic(frc2::sysid::Direction::kReverse)).OnTrue(frc2::cmd::Print("Shooter Reverse Dynamic SysId"));
 
+	(mCommandXboxController->Button(OperatorConstants::Button::Y) && mCommandXboxController->Button(OperatorConstants::Button::RightBumper))
+		.WhileTrue(mSubPivotIntake->SysIdQuasistatic(frc2::sysid::Direction::kForward)).OnTrue(frc2::cmd::Print("Pivot Forward Quasistatic SysId"));
+	(mCommandXboxController->Button(OperatorConstants::Button::A) && mCommandXboxController->Button(OperatorConstants::Button::RightBumper))
+		.WhileTrue(mSubPivotIntake->SysIdQuasistatic(frc2::sysid::Direction::kReverse)).OnTrue(frc2::cmd::Print("Pivot Reverse Quasistatic SysId"));
+	(mCommandXboxController->Button(OperatorConstants::Button::X) && mCommandXboxController->Button(OperatorConstants::Button::RightBumper))
+		.WhileTrue(mSubPivotIntake->SysIdDynamic(frc2::sysid::Direction::kForward)).OnTrue(frc2::cmd::Print("Pivot Forward Dynamic SysId"));
+	(mCommandXboxController->Button(OperatorConstants::Button::B) && mCommandXboxController->Button(OperatorConstants::Button::RightBumper))
+		.WhileTrue(mSubPivotIntake->SysIdDynamic(frc2::sysid::Direction::kReverse)).OnTrue(frc2::cmd::Print("Pivot Reverse Dynamic SysId"));
+
 	// mCommandXboxController->Button(OperatorConstants::Button::B).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
 	// mCommandXboxController->Button(OperatorConstants::Button::RightBumper).OnTrue(frc2::cmd::RunOnce([this] { if (frc::DriverStation::GetAlliance() && frc::DriverStation::GetAlliance().value() == frc::DriverStation::kBlue)
