@@ -18,7 +18,7 @@ SubShooter::SubShooter()
 	mRelativeEncoder = new rev::spark::SparkRelativeEncoder{mLeaderShooterController->GetEncoder()};
 	mFeedforward = new frc::SimpleMotorFeedforward<units::turns>{ShooterConstants::kS, ShooterConstants::kV};
 	mClossedLoopController = new rev::spark::SparkClosedLoopController{mLeaderShooterController->GetClosedLoopController()};
-	
+
 	mConfig = new frc2::sysid::Config{std::nullopt, std::nullopt, std::nullopt, nullptr};
 	mMechanism = new frc2::sysid::Mechanism{
 		[this] (units::volt_t iVoltage) {
@@ -97,7 +97,7 @@ std::array<frc::Alert*, 2> SubShooter::Configure()
 		robotixLib::getAlertForREVErrorMessage(
 			mFollowerShooterController->Configure(Configs::Shooter::FollowerConfig(), ShooterConstants::kReset, ShooterConstants::kPersist),
 			"Shooter Follower")};
-};
+}
 
 void SubShooter::InitSendable(wpi::SendableBuilder& builder)
 {
@@ -118,6 +118,7 @@ frc2::CommandPtr SubShooter::SysIdQuasistatic(frc2::sysid::Direction direction)
 {
 	return mShooterRoutine->Quasistatic(direction);
 }
+
 frc2::CommandPtr SubShooter::SysIdDynamic(frc2::sysid::Direction direction)
 {
 	return mShooterRoutine->Dynamic(direction);
