@@ -90,7 +90,7 @@ void RobotContainer::SetSubsystemDefaultCommands()
 			{mDrivetrain}));
 
 	// mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
-	mSubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this] {mSubPivotIntake->SetVoltage(units::volt_t(frc::SmartDashboard::GetNumber("tunable/Pivot kg", PivotConstants::kG.value()) * cos(mSubPivotIntake->GetAngle().value())));}, {mSubPivotIntake}));
+	// mSubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this] {mSubPivotIntake->SetVoltage(units::volt_t(frc::SmartDashboard::GetNumber("tunable/Pivot kg", PivotConstants::kG.value()) * cos(mSubPivotIntake->GetAngle().value())));}, {mSubPivotIntake}));
 
 	mSubShooter->SetDefaultCommand(mSubShooter->Run([this] {mSubShooter->setVoltage(0_V);}));
 	mSubFeeder->SetDefaultCommand(mSubFeeder->Run([this] {mSubFeeder->setVoltage(0_V);}));
@@ -130,13 +130,13 @@ void RobotContainer::ConfigureBindings()
 	// mCommandXboxController->Button(OperatorConstants::Button::Y).WhileTrue(Shoot(mSubShooter).ToPtr());
 
 	(mCommandXboxController->Button(OperatorConstants::Button::Y) && mCommandXboxController->Button(OperatorConstants::Button::LeftBumper))
-		.WhileTrue(mSubShooter->SysIdQuasistatic(frc2::sysid::Direction::kForward));
+		.WhileTrue(mSubShooter->SysIdQuasistatic(frc2::sysid::Direction::kForward)).OnTrue(frc2::cmd::Print("Shooter Forward Quasistatic SysId"));
 	(mCommandXboxController->Button(OperatorConstants::Button::A) && mCommandXboxController->Button(OperatorConstants::Button::LeftBumper))
-		.WhileTrue(mSubShooter->SysIdQuasistatic(frc2::sysid::Direction::kReverse));
+		.WhileTrue(mSubShooter->SysIdQuasistatic(frc2::sysid::Direction::kReverse)).OnTrue(frc2::cmd::Print("Shooter Reverse Quasistatic SysId"));
 	(mCommandXboxController->Button(OperatorConstants::Button::X) && mCommandXboxController->Button(OperatorConstants::Button::LeftBumper))
-		.WhileTrue(mSubShooter->SysIdDynamic(frc2::sysid::Direction::kForward));
+		.WhileTrue(mSubShooter->SysIdDynamic(frc2::sysid::Direction::kForward)).OnTrue(frc2::cmd::Print("Shooter Forward Dynamic SysId"));
 	(mCommandXboxController->Button(OperatorConstants::Button::B) && mCommandXboxController->Button(OperatorConstants::Button::LeftBumper))
-		.WhileTrue(mSubShooter->SysIdDynamic(frc2::sysid::Direction::kReverse));
+		.WhileTrue(mSubShooter->SysIdDynamic(frc2::sysid::Direction::kReverse)).OnTrue(frc2::cmd::Print("Shooter Reverse Dynamic SysId"));
 
 	// mCommandXboxController->Button(OperatorConstants::Button::B).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 

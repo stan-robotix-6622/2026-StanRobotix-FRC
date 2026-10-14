@@ -234,9 +234,9 @@ namespace CANid
 
 namespace ShooterConstants
 {
-	inline constexpr units::volt_t kS = 0_V;
-	inline constexpr robotixLib::templateUnits::VoltageInverse<units::turns_per_second> kV = 8_V / 61.3339_tps;
-	inline constexpr robotixLib::templateUnits::VoltageInverse<units::turns_per_second_squared> kA = 0_V / 1_tr_per_s_sq;
+	inline constexpr units::volt_t kS = 0.29639_V;
+	inline constexpr robotixLib::templateUnits::VoltageInverse<units::turns_per_second> kV = 0.12415_V / 1_tps;
+	inline constexpr robotixLib::templateUnits::VoltageInverse<units::turns_per_second_squared> kA = 0.016967_V / 1_tr_per_s_sq;
 
 	inline constexpr bool kInverted = false;
 	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
