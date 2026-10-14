@@ -142,29 +142,35 @@ namespace Configs
 
 	class Pivot {
 	 public:
-		static SparkMaxConfig& LeaderConfig()
+		static SparkMaxConfig& LeftConfig()
 		{
-			static SparkMaxConfig pivotConfig{};
+			static SparkMaxConfig pivotLeftConfig{};
 			constexpr double pivotFactor = (2 * std::numbers::pi) / PivotConstants::kGearRatio;
 
-			pivotConfig.Inverted(PivotConstants::kInverted);
-			pivotConfig.SetIdleMode(PivotConstants::kIdleMode);
+			pivotLeftConfig.Inverted(PivotConstants::Left::kInverted);
+			pivotLeftConfig.SetIdleMode(PivotConstants::kIdleMode);
 
-			pivotConfig.encoder.PositionConversionFactor(pivotFactor);
-			pivotConfig.encoder.VelocityConversionFactor(pivotFactor / 60);
+			pivotLeftConfig.encoder.PositionConversionFactor(pivotFactor);
+			pivotLeftConfig.encoder.VelocityConversionFactor(pivotFactor / 60);
 
-			pivotConfig.SmartCurrentLimit(PivotConstants::kCurrentLimit.value());
+			pivotLeftConfig.SmartCurrentLimit(PivotConstants::kCurrentLimit.value());
 
-			return pivotConfig;
+			return pivotLeftConfig;
 		}
-		static SparkMaxConfig& FollowerConfig()
+		static SparkMaxConfig& RightConfig()
 		{
-			static SparkMaxConfig followerConfig{};
+			static SparkMaxConfig pivotRightConfig{};
+			constexpr double pivotFactor = (2 * std::numbers::pi) / PivotConstants::kGearRatio;
 
-			followerConfig.Apply(Configs::Intake::Config());
-			followerConfig.Follow(CANid::kLeaderMotorPivotID, PivotConstants::kFollowerinverted);
+			pivotRightConfig.Inverted(PivotConstants::Right::kInverted);
+			pivotRightConfig.SetIdleMode(PivotConstants::kIdleMode);
 
-			return followerConfig;
+			pivotRightConfig.encoder.PositionConversionFactor(pivotFactor);
+			pivotRightConfig.encoder.VelocityConversionFactor(pivotFactor / 60);
+
+			pivotRightConfig.SmartCurrentLimit(PivotConstants::kCurrentLimit.value());
+
+			return pivotRightConfig;
 		}
 	};
 } // namespace Configs

@@ -312,22 +312,35 @@ namespace IntakeConstants
 
 namespace PivotConstants
 {
+	namespace Left {
+		inline constexpr double kOffset = 1.39127516746521;
+		inline constexpr double kP = 0.0;
+		inline constexpr double kI = 0.0;
+		inline constexpr double kD = 0.0;
+		inline constexpr bool kInverted = true;
+		inline constexpr units::volt_t kG = 0.0_V;
+		inline constexpr units::volt_t kS = 0.0_V;
+		inline constexpr robotixLib::templateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
+	}
+
+	namespace Right {
+		inline constexpr double kOffset = 1.39127516746521;
+		inline constexpr double kP = 0.0;
+		inline constexpr double kI = 0.0;
+		inline constexpr double kD = 0.0;
+		inline constexpr bool kInverted = false;
+		inline constexpr units::volt_t kG = 0.0_V;
+		inline constexpr units::volt_t kS = 0.0_V;
+		inline constexpr robotixLib::templateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
+	}
+
 	inline constexpr double kGearRatio = 20;
-	inline constexpr double kOffset = 1.39127516746521;
-	inline constexpr double kP = 0.0;
-	inline constexpr double kI = 0.0;
-	inline constexpr double kD = 0.0;
-	inline constexpr units::volt_t kG = 0.0_V;
-	inline constexpr units::volt_t kS = 0.0_V;
-	inline constexpr robotixLib::templateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
-	inline constexpr double setpointUp = std::numbers::pi / 6;     // 30 deg up
-	inline constexpr double setpointIn = std::numbers::pi / 3;     // 60 deg up
-	inline constexpr double setpointDown = std::numbers::pi / 18;  // 10 deg up
+	inline constexpr double kSetpointUp = std::numbers::pi / 6;     // 30 deg up
+	inline constexpr double kSetpointIn = std::numbers::pi / 3;     // 60 deg up
+	inline constexpr double kSetpointDown = std::numbers::pi / 18;  // 10 deg up
 	inline constexpr units::ampere_t kCurrentLimit = 40_A;
 
-	inline constexpr bool kInverted = true;
 	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
 	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
 	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
-	inline constexpr bool kFollowerinverted = true;
 } // namespace PivotConstants

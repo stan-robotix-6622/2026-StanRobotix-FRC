@@ -47,9 +47,9 @@ RobotContainer::RobotContainer()
 	frc::SmartDashboard::PutNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value());
 	frc::SmartDashboard::PutNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value());
 	frc::SmartDashboard::PutNumber("tunable/Time of Flight", 0);
-	frc::SmartDashboard::PutNumber("tunable/Pivot kg", PivotConstants::kG.value());
+	frc::SmartDashboard::PutNumber("tunable/Pivot Left kg", PivotConstants::Left::kG.value());
+	frc::SmartDashboard::PutNumber("tunable/Pivot Right kg", PivotConstants::Right::kG.value());
 	frc::SmartDashboard::PutNumber("tunable/Shooter tolerance", ShooterConstants::PIDConstants::kTolerance.value());
-	frc::SmartDashboard::PutNumber("tunable/Offset pivot", PivotConstants::kOffset);
 
 	mSubShooter = new SubShooter{};
 	mSubFeeder = new SubFeeder{};
@@ -90,7 +90,10 @@ void RobotContainer::SetSubsystemDefaultCommands()
 			{mDrivetrain}));
 
 	// mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
-	// mSubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this] {mSubPivotIntake->SetVoltage(units::volt_t(frc::SmartDashboard::GetNumber("tunable/Pivot kg", PivotConstants::kG.value()) * cos(mSubPivotIntake->GetAngle().value())));}, {mSubPivotIntake}));
+	mSubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this] {
+		mSubPivotIntake->SetLeftVoltage(units::volt_t(frc::SmartDashboard::GetNumber("tunable/Pivot Left kg", PivotConstants::Left::kG.value()) * cos(mSubPivotIntake->GetLeftAngle().value())));
+		mSubPivotIntake->SetRightVoltage(units::volt_t(frc::SmartDashboard::GetNumber("tunable/Pivot Right kg", PivotConstants::Right::kG.value()) * cos(mSubPivotIntake->GetRightAngle().value())));
+	}, {mSubPivotIntake}));
 
 	mSubShooter->SetDefaultCommand(mSubShooter->Run([this] {mSubShooter->setVoltage(0_V);}));
 	mSubFeeder->SetDefaultCommand(mSubFeeder->Run([this] {mSubFeeder->setVoltage(0_V);}));

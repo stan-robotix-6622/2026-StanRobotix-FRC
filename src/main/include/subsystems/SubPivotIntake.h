@@ -23,11 +23,14 @@ class SubPivotIntake : public frc2::SubsystemBase {
 
 	void KeepPosition();
 
-	void SetVoltage(units::volt_t iVoltage);
+	void SetLeftVoltage(units::volt_t iVoltage);
+	void SetRightVoltage(units::volt_t iVoltage);
 
-	void SetVelocity(units::radians_per_second_t iVelocity);
+	void SetLeftVelocity(units::radians_per_second_t iVelocity);
+	void SetRightVelocity(units::radians_per_second_t iVelocity);
 
-	units::radian_t GetAngle();
+	units::radian_t GetLeftAngle();
+	units::radian_t GetRightAngle();
 
 	void Periodic() override;
 
@@ -36,15 +39,22 @@ class SubPivotIntake : public frc2::SubsystemBase {
 	std::array<frc::Alert*, 2> Configure();
 
  private:
-	rev::spark::SparkMax* mPivotLeaderMotor;
-	rev::spark::SparkMax* mPivotFollowerMotor;
-	rev::spark::SparkRelativeEncoder* mEncoder;
-	frc::ArmFeedforward* mFeedForward;
+	rev::spark::SparkMax* mLeftPivotMotor;
+	rev::spark::SparkMax* mRightPivotMotor;
+	rev::spark::SparkRelativeEncoder* mLeftEncoder;
+	rev::spark::SparkRelativeEncoder* mRightEncoder;
+	frc::ArmFeedforward* mLeftFeedForward;
+	frc::ArmFeedforward* mRightFeedForward;
 
 	// For simulation
-	units::kilogram_square_meter_t kMOI = (2_lb * 12_in * 12_in) / 3;
-	frc::DCMotor* mGearBox;
-	rev::spark::SparkMaxSim* mMotorSim;
-	frc::sim::SingleJointedArmSim* mArmSim;
-	frc::LinearSystem<2, 1, 2>* mArmPlant;
+	units::kilogram_square_meter_t kLeftMOI = (1.5_lb * 15_in * 15_in) / 3;
+	units::kilogram_square_meter_t kRightMOI = (1.5_lb * 15_in * 15_in) / 3;
+	frc::DCMotor* mLeftGearBox;
+	frc::DCMotor* mRightGearBox;
+	rev::spark::SparkMaxSim* mLeftMotorSim;
+	rev::spark::SparkMaxSim* mRightMotorSim;
+	frc::sim::SingleJointedArmSim* mLeftArmSim;
+	frc::sim::SingleJointedArmSim* mRightArmSim;
+	frc::LinearSystem<2, 1, 2>* mLeftArmPlant;
+	frc::LinearSystem<2, 1, 2>* mRightArmPlant;
 };
