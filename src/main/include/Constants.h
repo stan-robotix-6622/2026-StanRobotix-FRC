@@ -313,7 +313,7 @@ namespace IntakeConstants
 namespace PivotConstants
 {
 	namespace Left {
-		inline constexpr double kOffset = 1.39127516746521;
+		inline constexpr double kOffset = 1.7278738021850586;
 		inline constexpr double kP = 0.0;
 		inline constexpr double kI = 0.0;
 		inline constexpr double kD = 0.0;
@@ -324,7 +324,7 @@ namespace PivotConstants
 	}
 
 	namespace Right {
-		inline constexpr double kOffset = 1.39127516746521;
+		inline constexpr double kOffset = 1.6979539394378662;
 		inline constexpr double kP = 0.0;
 		inline constexpr double kI = 0.0;
 		inline constexpr double kD = 0.0;
