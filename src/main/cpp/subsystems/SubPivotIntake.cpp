@@ -25,7 +25,7 @@ SubPivotIntake::SubPivotIntake()
 
 	Configure();
 
-	mConfig = new frc2::sysid::Config{std::nullopt, std::nullopt, std::nullopt, nullptr};
+	mConfig = new frc2::sysid::Config{0.2_V / 1_s, 0.5_V, 15_s, nullptr};
 	mMechanism = new frc2::sysid::Mechanism{
 		[this] (units::volt_t iVoltage) {
 			mRightPivotMotor->SetVoltage(iVoltage);
@@ -33,13 +33,13 @@ SubPivotIntake::SubPivotIntake()
 		}, [this] (frc::sysid::SysIdRoutineLog * log)
 		{
 			log->Motor("Left Pivot Motor")
-					.position(units::turn_t(mLeftEncoder->GetPosition()))
-					.velocity(units::turns_per_second_t(mLeftEncoder->GetVelocity()))
+					.position(units::radian_t(mLeftEncoder->GetPosition()))
+					.velocity(units::radians_per_second_t(mLeftEncoder->GetVelocity()))
 					.current(units::ampere_t(mLeftPivotMotor->GetOutputCurrent()))
 					.voltage(units::volt_t(mLeftPivotMotor->Get() * mLeftPivotMotor->GetBusVoltage()));
 			log->Motor("Right Pivot Motor")
-					.position(units::turn_t(mRightEncoder->GetPosition()))
-					.velocity(units::turns_per_second_t(mRightEncoder->GetVelocity()))
+					.position(units::radian_t(mRightEncoder->GetPosition()))
+					.velocity(units::radians_per_second_t(mRightEncoder->GetVelocity()))
 					.current(units::ampere_t(mRightPivotMotor->GetOutputCurrent()))
 					.voltage(units::volt_t(mRightPivotMotor->Get() * mRightPivotMotor->GetBusVoltage()));
 		},
