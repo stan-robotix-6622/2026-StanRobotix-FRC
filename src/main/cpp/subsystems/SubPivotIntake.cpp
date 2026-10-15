@@ -33,13 +33,13 @@ SubPivotIntake::SubPivotIntake()
 		}, [this] (frc::sysid::SysIdRoutineLog * log)
 		{
 			log->Motor("Left Pivot Motor")
-					.position(units::turn_t(mLeftEncoder->GetPosition()))
-					.velocity(units::revolutions_per_minute_t(mLeftEncoder->GetVelocity()))
+					.position(units::radian_t(mLeftEncoder->GetPosition()))
+					.velocity(units::radians_per_second_t(mLeftEncoder->GetVelocity()))
 					.current(units::ampere_t(mLeftPivotMotor->GetOutputCurrent()))
 					.voltage(units::volt_t(mLeftPivotMotor->Get() * mLeftPivotMotor->GetBusVoltage()));
 			log->Motor("Right Pivot Motor")
-					.position(units::turn_t(mRightEncoder->GetPosition()))
-					.velocity(units::revolutions_per_minute_t(mRightEncoder->GetVelocity()))
+					.position(units::radian_t(mRightEncoder->GetPosition()))
+					.velocity(units::radians_per_second_t(mRightEncoder->GetVelocity()))
 					.current(units::ampere_t(mRightPivotMotor->GetOutputCurrent()))
 					.voltage(units::volt_t(mRightPivotMotor->Get() * mRightPivotMotor->GetBusVoltage()));
 		},
