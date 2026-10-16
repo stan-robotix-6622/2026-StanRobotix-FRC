@@ -297,47 +297,46 @@ namespace FieldConstants
 
 namespace IntakeConstants
 {
-	inline constexpr bool kInverted = false;
+	inline constexpr bool kInverted = true;
 	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
 	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
 	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
 	inline constexpr units::ampere_t kCurrentLimit = 80_A;
 
-	inline constexpr double kSpeed = 0.7;
+	inline constexpr double kSpeed = 0.9;
 
 	inline constexpr double kGearRatio = 3;
 	inline constexpr units::meter_t kWheelRadius = 1.5_in;
-	
 } // namespace IntakeConstants
 
 namespace PivotConstants
 {
 	namespace Left {
 		inline constexpr double kOffset = 1.7278738021850586;
-		inline constexpr double kP = 0.0;
+		inline constexpr double kP = 3;
 		inline constexpr double kI = 0.0;
 		inline constexpr double kD = 0.0;
 		inline constexpr bool kInverted = true;
-		inline constexpr units::volt_t kG = 0.0_V;
+		inline constexpr units::volt_t kG = 0.5_V;
 		inline constexpr units::volt_t kS = 0.0_V;
 		inline constexpr robotixLib::templateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
 	}
 
 	namespace Right {
 		inline constexpr double kOffset = 1.6979539394378662;
-		inline constexpr double kP = 0.0;
+		inline constexpr double kP = 3;
 		inline constexpr double kI = 0.0;
 		inline constexpr double kD = 0.0;
 		inline constexpr bool kInverted = false;
-		inline constexpr units::volt_t kG = 0.0_V;
+		inline constexpr units::volt_t kG = 0.8_V;
 		inline constexpr units::volt_t kS = 0.0_V;
 		inline constexpr robotixLib::templateUnits::VoltageInverse<units::radians_per_second> kV = 1.0_V / 1.0_rad_per_s;
 	}
 
 	inline constexpr double kGearRatio = 20;
-	inline constexpr double kSetpointUp = std::numbers::pi / 6;     // 30 deg up
-	inline constexpr double kSetpointIn = std::numbers::pi / 3;     // 60 deg up
-	inline constexpr double kSetpointDown = std::numbers::pi / 18;  // 10 deg up
+	inline constexpr double kSetpointUp = std::numbers::pi * 45 / 180;   // 45 deg up
+	inline constexpr double kSetpointIn = std::numbers::pi * 75 / 180;   // 75 deg up
+	inline constexpr double kSetpointDown = std::numbers::pi * 8 / 180;  // 5 deg up
 	inline constexpr units::ampere_t kCurrentLimit = 40_A;
 
 	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;

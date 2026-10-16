@@ -25,7 +25,7 @@ SubPivotIntake::SubPivotIntake()
 
 	Configure();
 
-	mConfig = new frc2::sysid::Config{0.2_V / 1_s, 0.5_V, 15_s, nullptr};
+	mConfig = new frc2::sysid::Config{0.5_V / 1_s, 1_V, 15_s, nullptr};
 	mMechanism = new frc2::sysid::Mechanism{
 		[this] (units::volt_t iVoltage) {
 			mRightPivotMotor->SetVoltage(iVoltage);

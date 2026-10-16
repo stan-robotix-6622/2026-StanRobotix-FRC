@@ -22,6 +22,8 @@ Robot::Robot()
 
 	wpi::WebServer::GetInstance().Start(5800, frc::filesystem::GetDeployDirectory());
 
+	frc::DriverStation::SilenceJoystickConnectionWarning(true);
+
 	// frc::SmartDashboard::PutData("CommandScheduler", &frc2::CommandScheduler::GetInstance());
 }
 
