@@ -44,7 +44,7 @@ SubShooter::SubShooter()
 		mFollowGearBox = new frc::DCMotor{frc::DCMotor::NEO()};
 		mLeaderMotorSim = new rev::spark::SparkMaxSim{mLeaderShooterController, mLeaderGearBox};
 		mFollowMotorSim = new rev::spark::SparkMaxSim{mFollowerShooterController, mFollowGearBox};
-		mFlywheelPlant = new frc::LinearSystem<1, 1, 1>{frc::LinearSystemId::FlywheelSystem(frc::DCMotor::NEO(2), kMOI, ShooterConstants::kGearRatio)};
+		mFlywheelPlant = new frc::LinearSystem<1, 1, 1>{frc::LinearSystemId::IdentifyVelocitySystem<units::radians>(ShooterConstants::kV, ShooterConstants::kA)};
 		mFlywheelSim = new frc::sim::FlywheelSim{*mFlywheelPlant, frc::DCMotor::NEO(2), {0.0}};
 	}
 }

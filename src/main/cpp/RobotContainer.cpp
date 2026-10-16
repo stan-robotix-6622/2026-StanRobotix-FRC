@@ -136,47 +136,29 @@ void RobotContainer::ConfigureBindings()
 	mCommandXboxController->Button(OperatorConstants::Button::Y).WhileTrue(Shoot(mSubShooter).ToPtr());
 	mCommandXboxController->Button(OperatorConstants::Button::B).WhileTrue(mSubFeeder->getFeedShooterCommand(FeederConstants::kDesiredVoltage));
 
-	// (mCommandXboxController->Button(OperatorConstants::Button::Y) && mCommandXboxController->Button(OperatorConstants::Button::LeftBumper))
-	// 	.WhileTrue(mSubShooter->SysIdQuasistatic(frc2::sysid::Direction::kForward)).OnTrue(frc2::cmd::Print("Shooter Forward Quasistatic SysId"));
-	// (mCommandXboxController->Button(OperatorConstants::Button::A) && mCommandXboxController->Button(OperatorConstants::Button::LeftBumper))
-	// 	.WhileTrue(mSubShooter->SysIdQuasistatic(frc2::sysid::Direction::kReverse)).OnTrue(frc2::cmd::Print("Shooter Reverse Quasistatic SysId"));
-	// (mCommandXboxController->Button(OperatorConstants::Button::X) && mCommandXboxController->Button(OperatorConstants::Button::LeftBumper))
-	// 	.WhileTrue(mSubShooter->SysIdDynamic(frc2::sysid::Direction::kForward)).OnTrue(frc2::cmd::Print("Shooter Forward Dynamic SysId"));
-	// (mCommandXboxController->Button(OperatorConstants::Button::B) && mCommandXboxController->Button(OperatorConstants::Button::LeftBumper))
-	// 	.WhileTrue(mSubShooter->SysIdDynamic(frc2::sysid::Direction::kReverse)).OnTrue(frc2::cmd::Print("Shooter Reverse Dynamic SysId"));
-
-	// (mCommandXboxController->Button(OperatorConstants::Button::Y) && mCommandXboxController->Button(OperatorConstants::Button::RightBumper))
-	// 	.WhileTrue(mSubPivotIntake->SysIdQuasistatic(frc2::sysid::Direction::kForward)).OnTrue(frc2::cmd::Print("Pivot Forward Quasistatic SysId"));
-	// (mCommandXboxController->Button(OperatorConstants::Button::A) && mCommandXboxController->Button(OperatorConstants::Button::RightBumper))
-	// 	.WhileTrue(mSubPivotIntake->SysIdQuasistatic(frc2::sysid::Direction::kReverse)).OnTrue(frc2::cmd::Print("Pivot Reverse Quasistatic SysId"));
-	// (mCommandXboxController->Button(OperatorConstants::Button::X) && mCommandXboxController->Button(OperatorConstants::Button::RightBumper))
-	// 	.WhileTrue(mSubPivotIntake->SysIdDynamic(frc2::sysid::Direction::kForward)).OnTrue(frc2::cmd::Print("Pivot Forward Dynamic SysId"));
-	// (mCommandXboxController->Button(OperatorConstants::Button::B) && mCommandXboxController->Button(OperatorConstants::Button::RightBumper))
-	// 	.WhileTrue(mSubPivotIntake->SysIdDynamic(frc2::sysid::Direction::kReverse)).OnTrue(frc2::cmd::Print("Pivot Reverse Dynamic SysId"));
-
 	// mCommandXboxController->Button(OperatorConstants::Button::RightBumper).OnTrue(frc2::cmd::RunOnce([this] { if (frc::DriverStation::GetAlliance() && frc::DriverStation::GetAlliance().value() == frc::DriverStation::kBlue)
 	//     {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 0_deg));}
 	//     else {mDrivetrain->resetPose(frc::Pose2d(mDrivetrain->getPose().Translation(), 180_deg));} }));
 
-	// mCommandXboxController->Button(OperatorConstants::Button::Back).OnTrue(frc2::cmd::RunOnce([this] {
-  //   std::vector<LookupTable::ShooterStatus> vector = mShooterStatusSubscriber.Get();
-  //   units::meter_t distance = mDrivetrain->getTranslationToHub().Norm();
-  //   units::turns_per_second_t velocity = units::turns_per_second_t(frc::SmartDashboard::GetNumber("tunable/Shooter Setpoint", 0));
-  //   units::second_t TOF = units::second_t(frc::SmartDashboard::GetNumber("tunable/Time of Flight", 0));
-  //   vector.emplace_back(LookupTable::ShooterStatus{distance, velocity, TOF});
-  //   std::cout << "ShooterLookupTable new values:\n";
-  //   for (unsigned int i = 0; i < vector.size(); i++)
-  //   {
-	// 		std::cout << "		ShooterStatus{" << vector[i].distanceToTarget.value() << "_m, "
-	// 		<< vector[i].shooterVelocity.value() << "_tps, "
-	// 		<< vector[i].timeOfFlight.value() << "_s}";
-	// 		if (i != vector.size()) {
-	// 			std::cout << ",";
-	// 		}
-	// 		std::cout << "\n";
-	// 	}
-	// 	std::cout << "}\n";
-  //   mShooterStatusPublisher.Set(vector); }));
+	mCommandXboxController->Button(OperatorConstants::Button::Back).OnTrue(frc2::cmd::RunOnce([this] {
+    std::vector<LookupTable::ShooterStatus> vector = mShooterStatusSubscriber.Get();
+    units::meter_t distance = mDrivetrain->getTranslationToHub().Norm();
+    units::turns_per_second_t velocity = units::turns_per_second_t(frc::SmartDashboard::GetNumber("tunable/Shooter Setpoint", 0));
+    units::second_t TOF = units::second_t(frc::SmartDashboard::GetNumber("tunable/Time of Flight", 0));
+    vector.emplace_back(LookupTable::ShooterStatus{distance, velocity, TOF});
+    std::cout << "ShooterLookupTable new values:\n";
+    for (unsigned int i = 0; i < vector.size(); i++)
+    {
+			std::cout << "		ShooterStatus{" << vector[i].distanceToTarget.value() << "_m, "
+			<< vector[i].shooterVelocity.value() << "_tps, "
+			<< vector[i].timeOfFlight.value() << "_s}";
+			if (i != vector.size()) {
+				std::cout << ",";
+			}
+			std::cout << "\n";
+		}
+		std::cout << "}\n";
+    mShooterStatusPublisher.Set(vector); }));
 
 	(*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Start))
 			.WhileTrue(ShootInPlace(mSubShooter, mDrivetrain).ToPtr());
@@ -187,9 +169,8 @@ void RobotContainer::ConfigureBindings()
 	// (*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Back))
 	// 		.WhileTrue(ShootDynamically(mSubShooter, mDrivetrain, mCommandXboxController).ToPtr());
 
-	// mCommandXboxController->Button(OperatorConstants::Button::RightJoystick).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
-	// 		(units::meter_t)frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value())); }));
-
+	mCommandXboxController->Button(OperatorConstants::Button::RightJoystick).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
+			(units::meter_t)frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value())); }));
 }
 
 void RobotContainer::ConfigureBindingsCopilot()
