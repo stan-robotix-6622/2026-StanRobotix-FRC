@@ -192,7 +192,7 @@ namespace DrivetrainConstants
 
 namespace LimelightConstants
 {
-	inline constexpr bool kUseMegaTag2 = true;
+	inline constexpr bool kUseMegaTag2 = false;
 
 	inline constexpr std::string_view kName = "limelight";
 

@@ -26,10 +26,10 @@ SubDrivetrain::SubDrivetrain()
 	mBackLeftLocation = new frc::Translation2d{ChassisConstants::kBackLeftTranslation};
 	mBackRightLocation = new frc::Translation2d{ChassisConstants::kBackRightTranslation};
 
-	mFrontLeftModule = new SwerveModule{CANid::kFrontLeftMotorID, CANid::kFrontLeftMotor550ID, SwerveModule::Position::FrontLeft, false};
-	mFrontRightModule = new SwerveModule{CANid::kFrontRightMotorID, CANid::kFrontRightMotor550ID, SwerveModule::Position::FrontRight, true};
-	mBackLeftModule = new SwerveModule{CANid::kBackLeftMotorID, CANid::kBackLeftMotor550ID, SwerveModule::Position::BackLeft, false};
-	mBackRightModule = new SwerveModule{CANid::kBackRightMotorID, CANid::kBackRightMotor550ID, SwerveModule::Position::BackRight, true};
+	mFrontLeftModule = new SwerveModule{CANid::kFrontLeftMotorID, CANid::kFrontLeftMotor550ID, SwerveModule::Position::FrontLeft, true};
+	mFrontRightModule = new SwerveModule{CANid::kFrontRightMotorID, CANid::kFrontRightMotor550ID, SwerveModule::Position::FrontRight, false};
+	mBackLeftModule = new SwerveModule{CANid::kBackLeftMotorID, CANid::kBackLeftMotor550ID, SwerveModule::Position::BackLeft, true};
+	mBackRightModule = new SwerveModule{CANid::kBackRightMotorID, CANid::kBackRightMotor550ID, SwerveModule::Position::BackRight, false};
 
 	mCurrentModuleStatesPublisher = mNTDrivetrainTable->GetStructArrayTopic<frc::SwerveModuleState>("Current SwerveModuleStates").Publish();
 	mCurrentChassisSpeedsPublisher = mNTDrivetrainTable->GetStructTopic<frc::ChassisSpeeds>("Current ChassisSpeeds").Publish();
