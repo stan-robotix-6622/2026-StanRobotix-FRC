@@ -196,13 +196,13 @@ namespace LimelightConstants
 
 	inline constexpr std::string_view kName = "limelight";
 
-	inline constexpr units::meter_t kForward = 13.6875_in;
-	inline constexpr units::meter_t kRight = -11.875_in;
-	inline constexpr units::meter_t kUp = 20.875_in;
+	inline constexpr units::meter_t kForward = 0_in;
+	inline constexpr units::meter_t kRight = -11_in;
+	inline constexpr units::meter_t kUp = 19_in;
 
 	inline constexpr units::degree_t kRoll = 0_deg;
 	inline constexpr units::degree_t kPitch = 0_deg;
-	inline constexpr units::degree_t kYaw = 0_deg;
+	inline constexpr units::degree_t kYaw = 90_deg;
 
 	inline constexpr double kPoseEstimatorStandardDeviationX = 0.7;      // Default/Recommended values
 	inline constexpr double kPoseEstimatorStandardDeviationY = 0.7;      // Default/Recommended values
