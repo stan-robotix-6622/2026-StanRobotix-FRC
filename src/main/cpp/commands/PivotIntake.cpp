@@ -59,11 +59,10 @@ void PivotIntake::Execute()
 	frc::SmartDashboard::PutNumber("commands/pivot intake/Left PID Setpoint", mLeftPIDController->GetSetpoint());
 	frc::SmartDashboard::PutNumber("commands/pivot intake/Right PID Setpoint", mRightPIDController->GetSetpoint());
 	frc::SmartDashboard::PutNumber("commands/pivot intake/Left PID Angle", mPivotIntake->GetLeftAngle().value());
-	frc::SmartDashboard::PutNumber("commands/pivot intake/Right PID Angle", mPivotIntake->GetRightAngle().value());
-	frc::SmartDashboard::PutNumber("commands/pivot intake/Left PID Calculate", mLeftPIDController->Calculate(mPivotIntake->GetLeftAngle().value()));
-	frc::SmartDashboard::PutNumber("commands/pivot intake/Right PID Calculate", mRightPIDController->Calculate(mPivotIntake->GetRightAngle().value()));
 	units::volt_t wLeftVoltage = units::volt_t(mLeftPIDController->Calculate(mPivotIntake->GetLeftAngle().value()));
 	units::volt_t wRightVoltage = units::volt_t(mRightPIDController->Calculate(mPivotIntake->GetRightAngle().value()));
+	frc::SmartDashboard::PutNumber("commands/pivot intake/Left PID Calculate", wLeftVoltage.value());
+	frc::SmartDashboard::PutNumber("commands/pivot intake/Right PID Calculate", wRightVoltage.value());
 	frc::SmartDashboard::PutNumber("commands/pivot intake/Left PID Voltage", wLeftVoltage.value());
 	frc::SmartDashboard::PutNumber("commands/pivot intake/Right PID Voltage", wRightVoltage.value());
 	mPivotIntake->SetLeftVoltage(wLeftVoltage + (PivotConstants::Left::kG * cos(mPivotIntake->GetLeftAngle().value())));

@@ -66,7 +66,7 @@ frc2::CommandPtr SubIntake::getIntakeCommand(double iSpeed)
 			[this] {
 				Stop();
 			},
-			{});
+			{this});
 }
 
 bool SubIntake::isIntakeOn()

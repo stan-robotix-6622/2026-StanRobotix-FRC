@@ -17,8 +17,9 @@ Robot::Robot()
 {
 	frc::DataLogManager::Start();
 	frc::DriverStation::StartDataLog(frc::DataLogManager::GetLog());
-	ctre::phoenix6::SignalLogger::Start();
-	StatusLogger::Start();
+	// Signal loggers disabled by default to prevent roboRIO CPU and storage saturation
+	// ctre::phoenix6::SignalLogger::Start();
+	// StatusLogger::Start();
 
 	wpi::WebServer::GetInstance().Start(5800, frc::filesystem::GetDeployDirectory());
 
@@ -100,10 +101,7 @@ void Robot::SimulationInit() {}
 /**
  * This function is called periodically whilst in simulation.
  */
-void Robot::SimulationPeriodic()
-{
-	frc2::CommandScheduler::GetInstance().Run();
-}
+void Robot::SimulationPeriodic() {}
 
 void Robot::DriverStationConnected()
 {

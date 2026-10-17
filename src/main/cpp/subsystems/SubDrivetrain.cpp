@@ -77,7 +77,7 @@ void SubDrivetrain::Periodic()
 	mPoseEstimator->Update(mCurrentRotation2d, getSwerveModulePositions());
 	mField2d->SetRobotPose(getPose());
 
-	mLimelightEstimatedPose = mLimelight->getPoseEstimation(getPose(), mIMU->getYawRate(), mFieldRelative);
+	mLimelightEstimatedPose = mLimelight->getPoseEstimation(getPose(), mIMU->getYawRate(), LimelightConstants::kUseMegaTag2);
 	if (mLimelightEstimatedPose) {
 		mPoseEstimator->AddVisionMeasurement(mLimelightEstimatedPose.value(), frc::Timer::GetFPGATimestamp());
 	}
@@ -176,15 +176,17 @@ wpi::array<frc::SwerveModulePosition, 4> SubDrivetrain::getSwerveModulePositions
 void SubDrivetrain::driveFieldRelative(float iX, float iY, float i0, double iSpeedModulation)
 {
 	if (mFieldRelative) {
-		if (frc::DriverStation::GetAlliance().value() == frc::DriverStation::Alliance::kBlue) {
-			mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iX,
-			                                                                    iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iY,
+		auto alliance = frc::DriverStation::GetAlliance();
+		bool isRed = alliance.has_value() && (alliance.value() == frc::DriverStation::Alliance::kRed);
+		if (isRed) {
+			mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * -iX,
+			                                                                    iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * -iY,
 			                                                                    iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
 			                                                                    getPose().Rotation());
 		}
 		else {
-			mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * -iX,
-			                                                                    iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * -iY,
+			mDesiredChassisSpeeds = frc::ChassisSpeeds::FromFieldRelativeSpeeds(iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iX,
+			                                                                    iSpeedModulation * DrivetrainConstants::kMaxDesiredSpeed * iY,
 			                                                                    iSpeedModulation * DrivetrainConstants::kMaxDesiredAngularSpeed * i0,
 			                                                                    getPose().Rotation());
 		}

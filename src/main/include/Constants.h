@@ -126,7 +126,7 @@ namespace ModuleConstants
 	inline constexpr rev::spark::SparkLowLevel::MotorType kDrivingMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
 	inline constexpr rev::spark::SparkLowLevel::MotorType kTurningMotorType = rev::spark::SparkLowLevel::MotorType::kBrushless;
 
-	inline constexpr units::ampere_t kDrivingCurrentLimit = 80_A;
+	inline constexpr units::ampere_t kDrivingCurrentLimit = 40_A;
 	inline constexpr units::ampere_t kTurningCurrentLimit = 20_A;
 
 	inline constexpr rev::ResetMode kDrivingResetMode = rev::ResetMode::kResetSafeParameters;
@@ -248,7 +248,7 @@ namespace ShooterConstants
 
 	inline constexpr rev::spark::SparkLowLevel::ControlType kShooterClosedLoopControlType = rev::spark::SparkLowLevel::ControlType::kVelocity;
 
-	inline constexpr units::ampere_t kCurrentLimit = 80_A;
+	inline constexpr units::ampere_t kCurrentLimit = 40_A;
 
 	namespace PIDConstants
 	{
@@ -282,7 +282,7 @@ namespace FeederConstants
 	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
 	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
 	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kBrake;
-	inline constexpr units::ampere_t kCurrentLimit = 80_A;
+	inline constexpr units::ampere_t kCurrentLimit = 40_A;
 } // namespace FeederConstants
 
 // Values found at https://firstfrc.blob.core.windows.net/frc2026/FieldAssets/2026-field-dimension-dwgs.pdf#page=3
@@ -301,7 +301,7 @@ namespace IntakeConstants
 	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
 	inline constexpr rev::PersistMode kPersist = rev::PersistMode::kPersistParameters;
 	inline constexpr rev::spark::SparkBaseConfig::IdleMode kIdleMode = rev::spark::SparkBaseConfig::IdleMode::kCoast;
-	inline constexpr units::ampere_t kCurrentLimit = 80_A;
+	inline constexpr units::ampere_t kCurrentLimit = 40_A;
 
 	inline constexpr double kSpeed = 0.9;
 

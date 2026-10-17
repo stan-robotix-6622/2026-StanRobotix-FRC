@@ -91,7 +91,7 @@ void RobotContainer::SetSubsystemDefaultCommands()
 			},
 			{mDrivetrain}));
 
-	mSubPivotIntake->SetDefaultCommand(FullIntake::FullIntakeCommand(mSubIntake, mSubPivotIntake, PivotIntake::StatePivotIntake::kUp));
+	mSubPivotIntake->SetDefaultCommand(PivotIntake(mSubPivotIntake, PivotIntake::StatePivotIntake::kUp).ToPtr());
 	// mSubPivotIntake->SetDefaultCommand(frc2::cmd::Run([this] {
 	// 	mSubPivotIntake->SetLeftVoltage(units::volt_t(frc::SmartDashboard::GetNumber("tunable/Pivot Left kG", PivotConstants::Left::kG.value()) * cos(mSubPivotIntake->GetLeftAngle().value())));
 	// 	mSubPivotIntake->SetRightVoltage(units::volt_t(frc::SmartDashboard::GetNumber("tunable/Pivot Right kG", PivotConstants::Right::kG.value()) * cos(mSubPivotIntake->GetRightAngle().value())));

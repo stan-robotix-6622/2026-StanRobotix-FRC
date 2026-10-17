@@ -17,7 +17,7 @@ Rebuilt::Match::Status Rebuilt::getMatchStatus()
 		status.timeLeftInMatch = matchTime;
 
 		if (matchTime <= 30_s) {
-			if (gameData[0] != 'B' && gameData[0] != 'R') {
+			if (gameData.empty() || (gameData[0] != 'B' && gameData[0] != 'R')) {
 				status.timeLeftInMatch = matchTime + 140_s;
 				status.timeLeftInPeriod = matchTime;
 				status.matchPeriod = Rebuilt::Match::Period::Autonomous;
@@ -56,7 +56,7 @@ Rebuilt::Match::Status Rebuilt::getMatchStatus()
 			status.hubActive = true;
 		}
 		else {
-			if (gameData[0] == 'B') { // Blue starts inactive
+			if (!gameData.empty() && gameData[0] == 'B') { // Blue starts inactive
 				if (status.matchPeriod == Rebuilt::Match::Period::Shift2 || status.matchPeriod == Rebuilt::Match::Period::Shift4) {
 					status.hubActive = mAlliance.value() == frc::DriverStation::kBlue;
 				}
@@ -64,7 +64,7 @@ Rebuilt::Match::Status Rebuilt::getMatchStatus()
 					status.hubActive = mAlliance.value() == frc::DriverStation::kRed;
 				}
 			}
-			else if (gameData[0] == 'R') { // Red starts inactive
+			else if (!gameData.empty() && gameData[0] == 'R') { // Red starts inactive
 				if (status.matchPeriod == Rebuilt::Match::Period::Shift2 || status.matchPeriod == Rebuilt::Match::Period::Shift4) {
 					status.hubActive = mAlliance.value() == frc::DriverStation::kRed;
 				}

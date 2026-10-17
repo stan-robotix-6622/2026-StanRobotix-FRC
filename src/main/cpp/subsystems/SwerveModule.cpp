@@ -70,8 +70,8 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, SwerveModul
 	// };
 	// mDriveRoutine = new frc2::sysid::SysIdRoutine{*mConfig, *mMechanism};
 
+	seedEncoder();
 	refreshModule();
-	// seedEncoder();
 }
 
 void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
