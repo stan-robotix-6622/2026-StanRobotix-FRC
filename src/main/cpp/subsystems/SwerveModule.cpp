@@ -76,10 +76,16 @@ SwerveModule::SwerveModule(int iDrivingMotorID, int iTurningMotorID, SwerveModul
 
 void SwerveModule::setDesiredState(frc::SwerveModuleState iDesiredState)
 {
-	mTurningCurrentAngle = frc::Rotation2d(units::radian_t(mTurningEncoder->GetPosition()));
+	mTurningCurrentAngle = frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()));
 	mOptimizedState = iDesiredState;
 	mOptimizedState.Optimize(mTurningCurrentAngle);
 	mOptimizedState.CosineScale(mTurningCurrentAngle);
+
+	if (units::math::abs(mOptimizedState.speed) < 0.01_mps) {
+		mDrivingMotor->SetVoltage(0_V);
+		mTurningMotor->SetVoltage(0_V);
+		return;
+	}
 
 	mTurningClosedLoopController->SetSetpoint(mOptimizedState.angle.Radians().value(), ModuleConstants::kTurningClosedLoopControlType);
 	mDrivingClosedLoopController->SetSetpoint(mOptimizedState.speed.value(), ModuleConstants::kDrivingClosedLoopControlType);
@@ -129,7 +135,7 @@ frc::SwerveModulePosition SwerveModule::getModulePosition()
 
 units::radians_per_second_t SwerveModule::getTurningVelocity()
 {
-	return units::radians_per_second_t(mTurningEncoder->GetVelocity());
+	return units::radians_per_second_t(mTurningAbsoluteEncoder->GetVelocity());
 }
 
 void SwerveModule::seedEncoder()
@@ -140,9 +146,9 @@ void SwerveModule::seedEncoder()
 void SwerveModule::refreshModule()
 {
 	mModuleState = frc::SwerveModuleState{units::meters_per_second_t(mDrivingEncoder->GetVelocity()),
-	                                      frc::Rotation2d(units::radian_t(mTurningEncoder->GetPosition()))};
+	                                      frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
 	mModulePosition = frc::SwerveModulePosition{units::meter_t(mDrivingEncoder->GetPosition()),
-	                                            frc::Rotation2d(units::radian_t(mTurningEncoder->GetPosition()))};
+	                                            frc::Rotation2d(units::radian_t(mTurningAbsoluteEncoder->GetPosition()))};
 }
 
 std::string SwerveModule::getModuleName(SwerveModule::Position iPosition)
@@ -169,7 +175,7 @@ std::string SwerveModule::getModuleName()
 void SwerveModule::InitSendable(wpi::SendableBuilder& builder)
 {
 	builder.SetSmartDashboardType("swerve/module");
-	builder.AddDoubleProperty("turning velocity", [this] { return mTurningEncoder->GetVelocity(); }, nullptr);
-	builder.AddDoubleProperty("turning position", [this] { return mTurningEncoder->GetPosition(); }, nullptr);
+	builder.AddDoubleProperty("turning velocity", [this] { return mTurningAbsoluteEncoder->GetVelocity(); }, nullptr);
+	builder.AddDoubleProperty("turning position", [this] { return mTurningAbsoluteEncoder->GetPosition(); }, nullptr);
 	builder.AddDoubleProperty("driving velocity", [this] { return mDrivingEncoder->GetVelocity(); }, nullptr);
 }
