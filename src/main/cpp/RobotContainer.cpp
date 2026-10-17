@@ -84,10 +84,21 @@ void RobotContainer::SetSubsystemDefaultCommands()
 {
 	mDrivetrain->SetDefaultCommand(frc2::cmd::Run(
 			[this] {
+				std::string controllerName = mCommandXboxController->GetHID().GetName();
+				bool isPSController = (controllerName.find("PS") != std::string::npos ||
+				                       controllerName.find("Wireless") != std::string::npos ||
+				                       controllerName.find("DualShock") != std::string::npos);
+
+				double rotAxis = isPSController ? mCommandXboxController->GetHID().GetRawAxis(2) : mCommandXboxController->GetRightX();
+				double triggerVal = isPSController ? (mCommandXboxController->GetHID().GetRawAxis(4) + 1.0) / 2.0 : mCommandXboxController->GetRightTriggerAxis();
+				if (triggerVal < 0.0) { triggerVal = 0.0; }
+				if (triggerVal > 1.0) { triggerVal = 1.0; }
+				double speedModulation = 0.6 + (triggerVal / 4.0);
+
 				mDrivetrain->driveFieldRelative(robotixLib::deadband(-mCommandXboxController->GetLeftY(), 0.05),
-		                                    robotixLib::deadband(-mCommandXboxController->GetLeftX(), 0.05),
-		                                    robotixLib::deadband(-mCommandXboxController->GetRightX(), 0.05),
-		                                    (0.6 + (mCommandXboxController->GetRightTriggerAxis() / 4)));
+				                                robotixLib::deadband(-mCommandXboxController->GetLeftX(), 0.05),
+				                                robotixLib::deadband(-rotAxis, 0.05),
+				                                speedModulation);
 			},
 			{mDrivetrain}));
 

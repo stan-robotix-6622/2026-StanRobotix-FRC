@@ -336,7 +336,7 @@ namespace PivotConstants
 	inline constexpr double kGearRatio = 20;
 	inline constexpr double kSetpointUp = std::numbers::pi * 45 / 180;   // 45 deg up
 	inline constexpr double kSetpointIn = std::numbers::pi * 75 / 180;   // 75 deg up
-	inline constexpr double kSetpointDown = std::numbers::pi * 8 / 180;  // 5 deg up
+	inline constexpr double kSetpointDown = std::numbers::pi * 14 / 180; // 14 deg up
 	inline constexpr units::ampere_t kCurrentLimit = 40_A;
 
 	inline constexpr rev::ResetMode kReset = rev::ResetMode::kResetSafeParameters;
