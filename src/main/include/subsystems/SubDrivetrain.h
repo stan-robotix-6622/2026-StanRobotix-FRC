@@ -16,6 +16,7 @@
 #include <networktables/NetworkTableInstance.h>
 #include <networktables/StructArrayTopic.h>
 #include <networktables/StructTopic.h>
+#include <frc2/command/sysid/SysIdRoutine.h>
 
 #include <memory>
 #include <string>
@@ -121,4 +122,7 @@ class SubDrivetrain : public frc2::SubsystemBase {
 	                                                              frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
 	                                                              frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)},
 	                                                              frc::SwerveModuleState{0_mps, frc::Rotation2d(0_rad)}};
+
+	frc2::sysid::Config* mConfig;
+	frc2::sysid::Mechanism* mMechanism;
 };

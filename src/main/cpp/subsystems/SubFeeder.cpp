@@ -17,6 +17,23 @@ SubFeeder::SubFeeder()
 
 	Configure();
 
+		mConfig = new frc2::sysid::Config{0.5_V / 1_s, 1_V, 15_s, nullptr};
+		mMechanism = new frc2::sysid::Mechanism{
+		[this] (units::volt_t iVoltage) {
+			mFeederController->SetVoltage(iVoltage);
+		}, [this] (frc::sysid::SysIdRoutineLog * log)
+		{
+			log->Motor("Feeder Motor")
+					.position(units::radian_t(mEncoder->GetPosition()))
+					.velocity(units::radians_per_second_t(mEncoder->GetVelocity()))
+					.current(units::ampere_t(mFeederController->GetOutputCurrent()))
+					.voltage(units::volt_t(mFeederController->Get() * mFeederController->GetBusVoltage()));
+		},
+		this,
+		"SubFeeder"
+	};
+
+
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
 		mGearBox = new frc::DCMotor{frc::DCMotor::NEO()};

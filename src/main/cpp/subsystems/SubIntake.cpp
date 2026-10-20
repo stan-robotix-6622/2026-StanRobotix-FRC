@@ -21,6 +21,22 @@ SubIntake::SubIntake()
 		mIntakeMotor->Configure(Configs::Intake::Config(), IntakeConstants::kReset, IntakeConstants::kPersist),
 		"Intake");
 
+		mConfig = new frc2::sysid::Config{0.5_V / 1_s, 1_V, 15_s, nullptr};
+		mMechanism = new frc2::sysid::Mechanism{
+		[this] (units::volt_t iVoltage) {
+			mIntakeMotor->SetVoltage(iVoltage);
+		}, [this] (frc::sysid::SysIdRoutineLog * log)
+		{
+			log->Motor("Intake Motor")
+					.position(units::radian_t(mEncoder->GetPosition()))
+					.velocity(units::radians_per_second_t(mEncoder->GetVelocity()))
+					.current(units::ampere_t(mIntakeMotor->GetOutputCurrent()))
+					.voltage(units::volt_t(mIntakeMotor->Get() * mIntakeMotor->GetBusVoltage()));
+		},
+		this,
+		"SubIntake"
+	};
+
 	// Simulation
 	if (frc::RobotBase::IsSimulation()) {
 		mGearBox = new frc::DCMotor{frc::DCMotor::NEO()};

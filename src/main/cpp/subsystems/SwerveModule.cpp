@@ -117,6 +117,26 @@ void SwerveModule::setDrivingVoltage(units::volt_t iVoltage)
 	mDrivingMotor->SetVoltage(iVoltage);
 }
 
+units::volt_t SwerveModule::getTurningVoltage()
+{
+	return units::volt_t(mTurningMotor->GetBusVoltage() * mTurningMotor->Get());
+}
+
+units::volt_t SwerveModule::getDrivingVoltage()
+{
+	return units::volt_t(mDrivingMotor->GetBusVoltage() * mDrivingMotor->Get());
+}
+
+units::ampere_t SwerveModule::getTurningCurrent()
+{
+	return units::ampere_t(mTurningMotor->GetOutputCurrent());
+}
+
+units::ampere_t SwerveModule::getDrivingCurrent()
+{
+	return units::ampere_t(mDrivingMotor->GetOutputCurrent());
+}
+
 frc::SwerveModuleState SwerveModule::getModuleState()
 {
 	return mModuleState;

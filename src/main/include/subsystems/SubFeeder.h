@@ -10,7 +10,7 @@
 #include <frc2/command/SubsystemBase.h>
 #include <rev/sim/SparkMaxSim.h>
 #include <rev/SparkMax.h>
-
+#include <frc2/command/sysid/SysIdRoutine.h>
 #include <units/voltage.h>
 
 class SubFeeder : public frc2::SubsystemBase {
@@ -26,8 +26,11 @@ class SubFeeder : public frc2::SubsystemBase {
 
  private:
 	rev::spark::SparkMax* mFeederController;
+	rev::spark::SparkRelativeEncoder* mEncoder;
 
 	// For simulation
 	frc::DCMotor* mGearBox;
 	rev::spark::SparkMaxSim* mMotorSim;
+	frc2::sysid::Config* mConfig;
+	frc2::sysid::Mechanism* mMechanism;
 };

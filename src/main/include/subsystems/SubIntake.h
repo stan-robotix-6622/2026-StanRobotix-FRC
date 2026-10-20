@@ -11,6 +11,7 @@
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 #include <wpi/sendable/SendableBuilder.h>
+#include <frc2/command/sysid/SysIdRoutine.h>
 
 class SubIntake : public frc2::SubsystemBase {
  public:
@@ -34,4 +35,6 @@ class SubIntake : public frc2::SubsystemBase {
 	// For simulation
 	frc::DCMotor* mGearBox;
 	rev::spark::SparkMaxSim* mMotorSim;
+	frc2::sysid::Config* mConfig;
+	frc2::sysid::Mechanism* mMechanism;
 };

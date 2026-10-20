@@ -27,6 +27,7 @@
 #include <units/angular_velocity.h>
 #include <units/velocity.h>
 #include <units/voltage.h>
+#include <units/current.h>
 
 class SwerveModule : public wpi::Sendable {
  public:
@@ -51,6 +52,12 @@ class SwerveModule : public wpi::Sendable {
 
 	void setTurningVoltage(units::volt_t iVoltage);
 	void setDrivingVoltage(units::volt_t iVoltage);
+
+	units::ampere_t getTurningCurrent();
+	units::ampere_t getDrivingCurrent();
+
+	units::volt_t getTurningVoltage();
+	units::volt_t  getDrivingVoltage();
 
 	void seedEncoder();
 	void refreshModule();

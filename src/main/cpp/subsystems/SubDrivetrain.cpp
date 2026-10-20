@@ -66,6 +66,45 @@ SubDrivetrain::SubDrivetrain()
 	frc::SmartDashboard::PutData("drivetrain/Field2d", mField2d);
 
 	ConfigurePathplanner();
+
+	mConfig = new frc2::sysid::Config{std::nullopt, std::nullopt, std::nullopt, nullptr};
+	mMechanism = new frc2::sysid::Mechanism{
+		[this] (units::volt_t iVoltage) {
+			mFrontLeftModule->setDrivingVoltage(iVoltage);
+			mFrontLeftModule->setTurningVoltage(iVoltage);
+			mFrontRightModule->setDrivingVoltage(iVoltage);
+			mFrontRightModule->setTurningVoltage(iVoltage);
+			mBackLeftModule->setDrivingVoltage(iVoltage);
+			mBackLeftModule->setTurningVoltage(iVoltage);
+			mBackRightModule->setDrivingVoltage(iVoltage);
+			mBackRightModule->setTurningVoltage(iVoltage);
+			
+		}, [this] (frc::sysid::SysIdRoutineLog * log)
+		{
+			log->Motor("FrontLeft DrivingMotor")
+					.position(mFrontLeftModule->getModulePosition().distance)
+					.velocity(mFrontLeftModule->getModuleState().speed)
+					.current(mFrontLeftModule->getDrivingCurrent())
+					.voltage(mFrontLeftModule->getDrivingVoltage());
+			log->Motor("FrontRight DrivingMotor")
+					.position(mFrontRightModule->getModulePosition().distance)
+					.velocity(mFrontRightModule->getModuleState().speed)
+					.current(mFrontRightModule->getDrivingCurrent())
+					.voltage(mFrontRightModule->getDrivingVoltage());
+			log->Motor("BackLeft DrivingMotor")
+					.position(mBackLeftModule->getModulePosition().distance)
+					.velocity(mBackLeftModule->getModuleState().speed)
+					.current(mBackLeftModule->getDrivingCurrent())
+					.voltage(mBackLeftModule->getDrivingVoltage());
+			log->Motor("BackRight DrivingMotor")
+					.position(mBackRightModule->getModulePosition().distance)
+					.velocity(mBackRightModule->getModuleState().speed)
+					.current(mBackRightModule->getDrivingCurrent())
+					.voltage(mBackRightModule->getDrivingVoltage());
+		},
+		this,
+		"SubDrivetrain"
+	};
 }
 
 void SubDrivetrain::Periodic()
