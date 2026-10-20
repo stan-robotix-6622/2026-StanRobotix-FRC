@@ -18,7 +18,7 @@ PointTowardsZone::PointTowardsZone(SubDrivetrain* iDrivetrain)
 
 	mRotationPIDController = new frc::PIDController{DrivetrainConstants::PIDs::kRotationP, DrivetrainConstants::PIDs::kRotationI, DrivetrainConstants::PIDs::kRotationD};
 	mRotationPIDController->EnableContinuousInput(0, std::numbers::pi * 2);
-	frc::SmartDashboard::PutData("commands/point towards hub/rotation PID", mRotationPIDController);
+	// frc::SmartDashboard::PutData("commands/point towards hub/rotation PID", mRotationPIDController);
 }
 
 // Called when the command is initially scheduled.

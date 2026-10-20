@@ -15,7 +15,7 @@ ShootVariable::ShootVariable(SubShooter* iShooter, SubDrivetrain* iDrivetrain)
 	AddRequirements(mShooter);
 
 	mShooterPIDController = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
-	frc::SmartDashboard::PutData("commands/shoot in place/shooter PID", mShooterPIDController);
+	// frc::SmartDashboard::PutData("commands/shoot in place/shooter PID", mShooterPIDController);
 }
 
 // Called when the command is initially scheduled.

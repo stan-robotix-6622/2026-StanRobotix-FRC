@@ -40,18 +40,18 @@ RobotContainer::RobotContainer()
 {
 	mCommandXboxController = new frc2::CommandXboxController{OperatorConstants::kDriverControllerPort};
 	mCommandXboxControllerCopilot = new frc2::CommandGenericHID{OperatorConstants::kCopilotControllerPort};
-	frc::SmartDashboard::PutData("Pilot Controller", &mCommandXboxController->GetHID());
+	// frc::SmartDashboard::PutData("Pilot Controller", &mCommandXboxController->GetHID());
 	// frc::SmartDashboard::PutData("Copilot Controller", &mCommandXboxControllerCopilot->GetHID());
 
-	// frc::SmartDashboard::PutNumber("tunable/Shooter Setpoint", ShooterConstants::PIDConstants::setpoint.value());
-	// frc::SmartDashboard::PutNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value());
-	// frc::SmartDashboard::PutNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value());
-	// frc::SmartDashboard::PutNumber("tunable/Time of Flight", 0);
-	// frc::SmartDashboard::PutNumber("tunable/Pivot Left kG", PivotConstants::Left::kG.value());
-	// frc::SmartDashboard::PutNumber("tunable/Pivot Right kG", PivotConstants::Right::kG.value());
-	// frc::SmartDashboard::PutNumber("tunable/Pivot Left kP", PivotConstants::Left::kP);
-	// frc::SmartDashboard::PutNumber("tunable/Pivot Right kP", PivotConstants::Right::kP);
-	// frc::SmartDashboard::PutNumber("tunable/Shooter tolerance", ShooterConstants::PIDConstants::kTolerance.value());
+	frc::SmartDashboard::PutNumber("tunable/Shooter Setpoint", ShooterConstants::PIDConstants::setpoint.value());
+	frc::SmartDashboard::PutNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value());
+	frc::SmartDashboard::PutNumber("tunable/Feeder Voltage", FeederConstants::kDesiredVoltage.value());
+	frc::SmartDashboard::PutNumber("tunable/Time of Flight", 0);
+	frc::SmartDashboard::PutNumber("tunable/Pivot Left kG", PivotConstants::Left::kG.value());
+	frc::SmartDashboard::PutNumber("tunable/Pivot Right kG", PivotConstants::Right::kG.value());
+	frc::SmartDashboard::PutNumber("tunable/Pivot Left kP", PivotConstants::Left::kP);
+	frc::SmartDashboard::PutNumber("tunable/Pivot Right kP", PivotConstants::Right::kP);
+	frc::SmartDashboard::PutNumber("tunable/Shooter tolerance", ShooterConstants::PIDConstants::kTolerance.value());
 
 	mSubShooter = new SubShooter{};
 	mSubFeeder = new SubFeeder{};
@@ -60,9 +60,9 @@ RobotContainer::RobotContainer()
 	mSubPivotIntake = new SubPivotIntake{};
 
 	// frc::SmartDashboard::PutData("swerve", mDrivetrain);
-	// frc::SmartDashboard::PutData("shooter", mSubShooter);
-	// frc::SmartDashboard::PutData("intake", mSubIntake);
-	// frc::SmartDashboard::PutData("pivot", mSubPivotIntake);
+	frc::SmartDashboard::PutData("shooter", mSubShooter);
+	frc::SmartDashboard::PutData("intake", mSubIntake);
+	frc::SmartDashboard::PutData("pivot", mSubPivotIntake);
 
 	mDriveCommands = new DriveCommands{mDrivetrain};
 
@@ -74,7 +74,7 @@ RobotContainer::RobotContainer()
 	ConfigureBindingsCopilot();
 
 	mAutoChooser = pathplanner::AutoBuilder::buildAutoChooserFilter([this](const pathplanner::PathPlannerAuto& autoCommand) { return autoCommand.GetName().starts_with("Comp"); });
-	// frc::SmartDashboard::PutData("Auto Chooser", &mAutoChooser);
+	frc::SmartDashboard::PutData("Auto Chooser", &mAutoChooser);
 
 	mShooterStatusPublisher = mNTShooterStatusTable->GetStructArrayTopic<LookupTable::ShooterStatus>("status array").Publish();
 	mShooterStatusSubscriber = mNTShooterStatusTable->GetStructArrayTopic<LookupTable::ShooterStatus>("status array").Subscribe(std::span<const LookupTable::ShooterStatus>());
