@@ -166,8 +166,8 @@ void RobotContainer::ConfigureBindings()
 	// mCommandXboxController->Button(OperatorConstants::Button::Start).WhileTrue(mDriveCommands->getFeedforwardCharacterizationCommand());
 	// mCommandXboxController->Button(OperatorConstants::Button::Back).WhileTrue(mDriveCommands->getWheelRadiusCharacterizationCommand());
 
-	// (*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::Back))
-	// 		.WhileTrue(ShootDynamically(mSubShooter, mDrivetrain, mCommandXboxController).ToPtr());
+	(*mIsInAllianceZoneTrigger && mCommandXboxController->Button(OperatorConstants::Button::LeftJoystick))
+			.WhileTrue(ShootDynamically(mSubShooter, mDrivetrain, mCommandXboxController).ToPtr());
 
 	mCommandXboxController->Button(OperatorConstants::Button::RightJoystick).WhileTrue(mDrivetrain->Defer([this] { return mDrivetrain->getGoToDistanceFromHubCommand(
 			(units::meter_t)frc::SmartDashboard::GetNumber("tunable/Drivetrain Distance Setpoint", DrivetrainDefaultSetpoint.value())); }));
