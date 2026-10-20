@@ -55,7 +55,7 @@ frc2::CommandPtr SubFeeder::getFeedShooterCommand(units::volt_t iVoltage)
 			[this] {
 				setVoltage(0_V);
 			},
-			{});
+			{this});
 }
 
 bool SubFeeder::isFeederOn()

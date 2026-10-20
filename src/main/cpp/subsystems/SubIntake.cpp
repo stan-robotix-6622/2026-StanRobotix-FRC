@@ -42,12 +42,12 @@ void SubIntake::Stop()
 	}
 }
 
-void SubIntake::SetVoltage(double iVoltage)
+void SubIntake::setVoltage(units::volt_t iVoltage)
 {
-	mIntakeMotor->SetVoltage(units::volt_t(iVoltage));
+	mIntakeMotor->SetVoltage(iVoltage);
 }
 
-void SubIntake::SetSpeed(double iSpeed)
+void SubIntake::setSpeed(double iSpeed)
 {
 	mIntakeMotor->Set(iSpeed);
 
@@ -60,13 +60,13 @@ frc2::CommandPtr SubIntake::getIntakeCommand(double iSpeed)
 {
 	return frc2::cmd::RunEnd(
 			[this, iSpeed] {
-				SetSpeed(iSpeed);
+				setSpeed(iSpeed);
 			},
 
 			[this] {
 				Stop();
 			},
-			{});
+			{this});
 }
 
 bool SubIntake::isIntakeOn()
