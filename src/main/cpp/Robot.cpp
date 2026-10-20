@@ -100,10 +100,7 @@ void Robot::SimulationInit() {}
 /**
  * This function is called periodically whilst in simulation.
  */
-void Robot::SimulationPeriodic()
-{
-	frc2::CommandScheduler::GetInstance().Run();
-}
+void Robot::SimulationPeriodic() {}
 
 void Robot::DriverStationConnected()
 {
