@@ -8,41 +8,44 @@
 
 IMU::IMU()
 {
-	mIMU = new ctre::phoenix6::hardware::Pigeon2{CANid::kIMUPigeonID};
-	mSimIMU = &mIMU->GetSimState();
+	// mIMU = new ctre::phoenix6::hardware::Pigeon2{CANid::kIMUPigeonID};
+	// mSimIMU = &mIMU->GetSimState();
 }
 
 void IMU::advanceSimulation(units::radians_per_second_t iYawVelocity)
 {
-	mSimIMU->SetAngularVelocityX(0_rad_per_s);
-	mSimIMU->SetAngularVelocityY(0_rad_per_s);
-	mSimIMU->AddYaw(iYawVelocity * 0.02_s);
-	mSimIMU->SetAngularVelocityZ(iYawVelocity);
+	// mSimIMU->SetAngularVelocityX(0_rad_per_s);
+	// mSimIMU->SetAngularVelocityY(0_rad_per_s);
+	// mSimIMU->AddYaw(iYawVelocity * 0.02_s);
+	// mSimIMU->SetAngularVelocityZ(iYawVelocity);
 }
 
 frc::Rotation2d IMU::getRotation2d()
 {
-	return mIMU->GetRotation2d();
+	// return mIMU->GetRotation2d();
+	return 0_deg;
 }
 
 units::degree_t IMU::getAngleYaw()
 {
-	return mIMU->GetYaw().GetValue();
+	// return mIMU->GetYaw().GetValue();
+	return 0_deg;
 }
 
 units::degrees_per_second_t IMU::getYawRate()
 {
-	return mIMU->GetAngularVelocityZWorld().GetValue();
+	// return mIMU->GetAngularVelocityZWorld().GetValue();
+	return 0_deg_per_s;
 }
 
 void IMU::reset()
 {
-	mIMU->Reset();
+	// mIMU->Reset();
 }
 
 void IMU::setAngleYaw(units::degree_t iAngle)
 {
-	mIMU->SetYaw(iAngle);
+	// mIMU->SetYaw(iAngle);
 }
 
 void IMU::InitSendable(wpi::SendableBuilder& builder)

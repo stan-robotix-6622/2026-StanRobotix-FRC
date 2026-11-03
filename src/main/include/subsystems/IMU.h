@@ -29,6 +29,6 @@ class IMU : public wpi::Sendable {
 	void InitSendable(wpi::SendableBuilder& builder) override;
 
  private:
-	ctre::phoenix6::hardware::Pigeon2* mIMU;
-	ctre::phoenix6::sim::Pigeon2SimState* mSimIMU;
+	// ctre::phoenix6::hardware::Pigeon2* mIMU;
+	// ctre::phoenix6::sim::Pigeon2SimState* mSimIMU;
 };
