@@ -113,5 +113,6 @@
 	},
 	"wpilib.autoStartRioLog": false,
 	"wpilib.skipSelectSimulateExtension": true,
-	"wpilib.selectDefaultSimulateExtension": true
+	"wpilib.selectDefaultSimulateExtension": true,
+	"C_Cpp.errorSquiggles": "enabled"
 }

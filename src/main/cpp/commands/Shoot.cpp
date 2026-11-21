@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "commands/Shoot.h"
+#include "subsystems/SubShooter.h"
 
 #include <frc/smartdashboard/SmartDashboard.h>
 
@@ -13,7 +14,7 @@ Shoot::Shoot(SubShooter* iSubShooter)
 	mSubShooter = iSubShooter;
 	AddRequirements(iSubShooter);
 
-	mPIDController = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
+	mPIDController = mSubShooter->getNewShooterPID();
 	frc::SmartDashboard::PutData("commands/shoot/shooter PID", mPIDController);
 }
 

@@ -14,6 +14,7 @@
 #include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 #include <wpi/sendable/SendableBuilder.h>
+#include <frc/controller/PIDController.h>
 
 #include <units/angle.h>
 #include <units/angular_velocity.h>
@@ -26,6 +27,8 @@ class SubShooter : public frc2::SubsystemBase {
 
 	void setVelocity(units::turns_per_second_t iNextVelocity);
 	void setTargetVelocity(units::turns_per_second_t iTargetVelocity);
+	frc::PIDController* getNewShooterPID();
+	frc::PIDController* getNewRotationPID();
 	void setVoltage(units::volt_t iVoltage);
 	units::turns_per_second_t getVelocity();
 
@@ -58,4 +61,7 @@ class SubShooter : public frc2::SubsystemBase {
 	frc::LinearSystem<1, 1, 1>* mFlywheelPlant;
 
 	units::turns_per_second_t mTargetVelocity = 0_tps;
+
+	frc::PIDController* mShooterPIDController;
+	frc::PIDController* mRotationPIDController;
 };

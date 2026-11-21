@@ -38,10 +38,21 @@ void SubShooter::Periodic()
 	frc::SmartDashboard::PutBoolean("Dashboard/atDesiredVelocity", atDesiredVelocity());
 }
 
+frc::PIDController* SubShooter::getNewShooterPID(){
+	mShooterPIDController = new frc::PIDController{ShooterConstants::PIDConstants::kP,ShooterConstants::PIDConstants::kI,ShooterConstants::PIDConstants::kD};
+	return mShooterPIDController;
+}
+
+frc::PIDController* SubShooter::getNewRotationPID(){
+	mRotationPIDController = new frc::PIDController{DrivetrainConstants::PIDs::kRotationP, DrivetrainConstants::PIDs::kRotationI, DrivetrainConstants::PIDs::kRotationD};
+	return mRotationPIDController;
+}
+
+
 void SubShooter::setVoltage(units::volt_t iVoltage)
 {
 	mLeaderShooterController->SetVoltage(iVoltage);
-};
+}
 
 void SubShooter::setVelocity(units::turns_per_second_t iNextVelocity)
 {
@@ -53,7 +64,7 @@ void SubShooter::setVelocity(units::turns_per_second_t iNextVelocity)
 		mLeaderMotorSim->iterate(units::turns_per_second_t(mFlywheelSim->GetAngularVelocity()).value(), 12, 0.02);
 		mFollowMotorSim->iterate(units::turns_per_second_t(mFlywheelSim->GetAngularVelocity()).value(), 12, 0.02);
 	}
-};
+}
 
 void SubShooter::setTargetVelocity(units::turns_per_second_t iTargetVelocity)
 {
@@ -63,14 +74,14 @@ void SubShooter::setTargetVelocity(units::turns_per_second_t iTargetVelocity)
 units::turns_per_second_t SubShooter::getVelocity()
 {
 	return units::turns_per_second_t(mRelativeEncoder->GetVelocity());
-};
+}
 
 std::array<rev::REVLibError, 2> SubShooter::Configure()
 {
 	return {
 		mLeaderShooterController->Configure(Configs::Shooter::LeaderConfig(), ShooterConstants::kReset, ShooterConstants::kPersist),
 		mFollowerShooterController->Configure(Configs::Shooter::FollowerConfig(), ShooterConstants::kReset, ShooterConstants::kPersist)};
-};
+}
 
 void SubShooter::InitSendable(wpi::SendableBuilder& builder)
 {

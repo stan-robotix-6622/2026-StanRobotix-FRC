@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "commands/ShootInPlace.h"
-
+#include "subsystems/Subshooter.h"
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "Constants.h"
@@ -14,8 +14,8 @@ ShootInPlace::ShootInPlace(SubShooter* iShooter, SubDrivetrain* iDrivetrain)
 	mDrivetrain = iDrivetrain;
 	AddRequirements({mShooter, mDrivetrain});
 
-	mShooterPIDController = new frc::PIDController{ShooterConstants::PIDConstants::kP, ShooterConstants::PIDConstants::kI, ShooterConstants::PIDConstants::kD};
-	mRotationPIDController = new frc::PIDController{DrivetrainConstants::PIDs::kRotationP, DrivetrainConstants::PIDs::kRotationI, DrivetrainConstants::PIDs::kRotationD};
+	mShooterPIDController = mShooter->getNewShooterPID();
+	mRotationPIDController = mShooter->getNewRotationPID();
 	mRotationPIDController->EnableContinuousInput(0, std::numbers::pi * 2);
 	frc::SmartDashboard::PutData("commands/shoot in place/shooter PID", mShooterPIDController);
 	frc::SmartDashboard::PutData("commands/shoot in place/rotation PID", mRotationPIDController);
